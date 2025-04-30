@@ -1,0 +1,41 @@
+﻿
+                   +-------------------------------+
+                   |        Instruction Fetch       |
+                   +-------------------------------+
+                                 |
+                                 v
+                   +-------------------------------+
+                   |         Decode Stage           |
+                   +-------------------------------+
+                                 |
+                                 v
+        +----------------------------+       +-------------------------------+
+        |  Branch Prediction Engine   |------>|      Speculative Execution     |
+        +----------------------------+       +-------------------------------+
+                                 |
+                                 v
+                   +-------------------------------+
+                   |      Reservation Stations      |
+                   | (Wait for operands, renaming)   |
+                   +-------------------------------+
+                                 |
+                                 v
+                   +-------------------------------+
+                   |      Out-of-Order Execution     |
+                   +-------------------------------+
+                                 |
+                                 v
+                   +-------------------------------+
+                   |        Memory Disambiguation    |
+                   +-------------------------------+
+                                 |
+                                 v
+                   +-------------------------------+
+                   |         Instruction Commit     |
+                   +-------------------------------+
+
+Notes:
+- Superscalar dispatch affects Fetch, Decode, and Issue stages.
+- Register Renaming occurs during Decode → Reservation Station transition.
+- Memory Disambiguation protects correct load/store behavior across OoO.
+- Deep Pipelines subdivide each major box above into sub-stages.

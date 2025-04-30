@@ -1,0 +1,13 @@
+﻿Group			Action Needed
+Missing			Integer Special Ops (AMASK, IMPLVER)	Should be added
+Missing			Memory Hints (FETCH, MB2)	Optional but good for accuracy
+Missing			Trap Controls (TRAPB)	Must add for full correct trap handling
+RPCC			Should add if cycle counters needed
+Extended		VAX FP	Optional if you fully support G_FLOAT conversions
+
+ChatGPT:  (How to incorporate and how is there value in having it?)
+✅ I can show you how to create an Exception Vector Table map (e.g., 0x100 → handler, 0x180 → handler)?
+I can help you generate default handler functions at each vector address (like pal_arithmetic_trap(), pal_illegal_instruction(), etc)?
+✅ Or show how to build a dynamic PC Handler Table to dispatch automatically based on
+
+ I can generate a stub AlphaKernelExceptionHandler.S (assembler-like) file showing how the kernel handlers could look at 0x100, 0x180, 0x200?
