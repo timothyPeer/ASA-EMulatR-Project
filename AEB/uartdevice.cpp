@@ -288,42 +288,42 @@ bool UartDevice::hasDataToReceive() const
 	return !rxFifo.isEmpty();
 }
 
-uint8_t UartDevice::mmioReadIUnt8(quint64 addr)
+uint8_t UartDevice::mmioReadUInt8(quint64 addr)
 {
 	return readGeneric<uint8_t >(addr, 0xFFu);
 }
 
-uint16_t UartDevice::mmioReadIUnt16(quint64 addr)
+uint16_t UartDevice::mmioReadUInt16(quint64 addr)
 {
 	return readGeneric<uint16_t>(addr, 0xFFFFu);
 }
 
-uint32_t UartDevice::mmioReadIUnt32(quint64 addr)
+uint32_t UartDevice::mmioReadUInt32(quint64 addr)
 {
 	return readGeneric<uint32_t>(addr, 0xFFFFFFFFu);
 }
 
-quint64 UartDevice::mmioReadIUnt64(quint64 addr)
+quint64 UartDevice::mmioReadUInt64(quint64 addr)
 {
 	return readGeneric<quint64 >(addr, 0xFFFFFFFFFFFFFFFFULL);
 }
 
-void UartDevice::mmioWriteIUnt8(quint64 addr, uint8_t val)
+void UartDevice::mmioWriteUInt8(quint64 addr, uint8_t val)
 {
 	writeGeneric(addr, val);
 }
 
-void UartDevice::mmioWriteIUnt16(quint64 addr, uint16_t val)
+void UartDevice::mmioWriteUInt16(quint64 addr, uint16_t val)
 {
 	writeGeneric(addr, val);
 }
 
-void UartDevice::mmioWriteIUnt32(quint64 addr, uint32_t val)
+void UartDevice::mmioWriteUInt32(quint64 addr, uint32_t val)
 {
 	writeGeneric(addr, val);
 }
 
-void UartDevice::mmioWriteIUnt64(quint64 addr, quint64 val)
+void UartDevice::mmioWriteUInt64(quint64 addr, quint64 val)
 {
 	writeGeneric(addr, val);
 }

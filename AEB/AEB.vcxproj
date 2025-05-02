@@ -66,7 +66,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir);$(Qt_INCLUDEPATH_);$(SolutionDir)AEE\;$(SolutionDir)AESH\;$(SolutionDir)AEC\;$(SolutionDir)AES\;$(SolutionDir)AEJ\;$(SolutionDir)AEM\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir);$(Qt_INCLUDEPATH_);$(SolutionDir)AEE\;$(SolutionDir)AESH\;$(SolutionDir)AEC\;$(SolutionDir)AES\;$(SolutionDir)AEJ\;$(SolutionDir)AEM\;C:\Users\tim\source\repos\vs2017\Claude\Alpha\Pcap\npcap-1.82\wpcap\libpcap;</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -100,12 +100,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="hostnetworkinterface.cpp" />
     <ClCompile Include="ScsiBusController.cpp" />
     <ClCompile Include="uartdevice.cpp" />
     <ClInclude Include="aeb_global.h" />
     <ClInclude Include="DeviceInterface.h" />
+    <QtMoc Include="hostnetworkinterface.h" />
     <QtMoc Include="testmmiodevices.h" />
-    <QtMoc Include="tulipnic.h" />
+    <QtMoc Include="TulipNIC_DC21040.h" />
     <QtMoc Include="ScsiBusController.h" />
     <QtMoc Include="devicemanager.h" />
     <QtMoc Include="IRQController.h" />

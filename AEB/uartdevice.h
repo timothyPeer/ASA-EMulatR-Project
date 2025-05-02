@@ -140,28 +140,28 @@ public:
 	}
 
 	/// Read an 8-bit value from MMIO or return 0xFF if unmapped.
-	uint8_t mmioReadIUnt8(quint64 addr) override;
+	uint8_t mmioReadUInt8(quint64 addr) override;
 
 	/// Read a 16-bit value from MMIO or return 0xFFFF if unmapped.
-	uint16_t mmioReadIUnt16(quint64 addr) override;
+	uint16_t mmioReadUInt16(quint64 addr) override;
 
 	/// Read a 32-bit value from MMIO or return 0xFFFFFFFF if unmapped.
-	uint32_t mmioReadIUnt32(quint64 addr) override;
+	uint32_t mmioReadUInt32(quint64 addr) override;
 
 	/// Read a 64-bit value from MMIO or return all-ones if unmapped.
-	quint64 mmioReadIUnt64(quint64 addr) override;
+	quint64 mmioReadUInt64(quint64 addr) override;
 
     /// Write an 8-bit value to MMIO if mapped.
-	void mmioWriteIUnt8(quint64 addr, uint8_t val) override;
+	void mmioWriteUInt8(quint64 addr, uint8_t val) override;
 
 	/// Write a 16-bit value to MMIO if mapped.
-	void mmioWriteIUnt16(quint64 addr, uint16_t val) override;
+	void mmioWriteUInt16(quint64 addr, uint16_t val) override;
 
 	/// Write a 32-bit value to MMIO if mapped.
-	void mmioWriteIUnt32(quint64 addr, uint32_t val) override;
+	void mmioWriteUInt32(quint64 addr, uint32_t val) override;
 
 	/// Write a 64-bit value to MMIO if mapped.
-	void mmioWriteIUnt64(quint64 addr, quint64 val) override;
+	void mmioWriteUInt64(quint64 addr, quint64 val) override;
 
 signals:
     /**
@@ -209,10 +209,10 @@ private:
 		for (const auto& r : m_regions) {
 			if (addr >= r.start && addr <= r.end) {
 				auto off = addr - r.start;
-				if constexpr (std::is_same_v<T, uint8_t >) return r.handler->mmioRead8(off);
-				if constexpr (std::is_same_v<T, uint16_t>) return r.handler->mmioRead16(off);
-				if constexpr (std::is_same_v<T, uint32_t>) return r.handler->mmioRead32(off);
-				if constexpr (std::is_same_v<T, quint64>) return r.handler->mmioRead64(off);
+				if constexpr (std::is_same_v<T, uint8_t >) return r.handler->mmioReadUInt8(off);
+				if constexpr (std::is_same_v<T, uint16_t>) return r.handler->mmioReadUInt16(off);
+				if constexpr (std::is_same_v<T, uint32_t>) return r.handler->mmioReadUInt32(off);
+				if constexpr (std::is_same_v<T, quint64>) return r.handler->mmioReadUInt64(off);
 			}
 		}
 		return defaultVal;
@@ -225,10 +225,10 @@ private:
 		for (const auto& r : m_regions) {
 			if (addr >= r.start && addr <= r.end) {
 				auto off = addr - r.start;
-				if constexpr (std::is_same_v<V, uint8_t >) r.handler->mmioWrite8(off, val);
-				if constexpr (std::is_same_v<V, uint16_t>) r.handler->mmioWrite16(off, val);
-				if constexpr (std::is_same_v<V, uint32_t>) r.handler->mmioWrite32(off, val);
-				if constexpr (std::is_same_v<V, quint64>) r.handler->mmioWrite64(off, val);
+				if constexpr (std::is_same_v<V, uint8_t >) r.handler->mmioWriteUInt8(off, val);
+				if constexpr (std::is_same_v<V, uint16_t>) r.handler->mmioWriteUInt16(off, val);
+				if constexpr (std::is_same_v<V, uint32_t>) r.handler->mmioWriteUInt32(off, val);
+				if constexpr (std::is_same_v<V, quint64>) r.handler->mmioWriteUInt64(off, val);
 				return;
 			}
 		}

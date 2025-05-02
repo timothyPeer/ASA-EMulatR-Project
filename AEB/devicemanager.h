@@ -16,7 +16,7 @@
 #include "BusInterface.h"
 #include "..\AEE\MMIOManager.h"
 #include "ScsiBusController.h"
-#include "TulipNIC.h"
+#include "TulipNIC_DC21040.h"
 #include "UartDevice.h"
 #include "IRQController.h"
 #include "SystemBus.h"
@@ -119,7 +119,7 @@ public:
             }
             else if (type == "NIC") {
                 QString mac = obj["mac"].toString();
-                dev = new TulipNIC(irq, irqVec, mac);
+                dev = new TulipNIC_DC21040(irq, irqVec, mac);
             }
             else {
                 qWarning() << "Unknown device type in config:" << type;

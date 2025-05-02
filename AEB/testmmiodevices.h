@@ -12,7 +12,7 @@
 
 #include <QObject>
 #include "ScsiBusController.h"
-#include "tulipnic.h"
+#include "TulipNIC_DC21040.h"
 #include <QtTest/QtTest>
 
 class TestMMIODevices : public QObject {
@@ -32,14 +32,14 @@ private slots:
 	}
 
 	void testTulipByteRW() {
-		TulipNIC nic;
+		TulipNIC_DC21040 nic;
 		nic.setMemoryMapping(0x2000, 256);
 		nic.write(0x04, 0xAABBCCDD, 4);
 		QCOMPARE(nic.read(0x04, 4), quint64(0xAABBCCDD));
 	}
 
 	void testOutOfBoundsAccess() {
-		TulipNIC nic;
+		TulipNIC_DC21040 nic;
 		nic.setMemoryMapping(0x3000, 256);
 		nic.write(0xFF, 0x1122334455667788, 8); // this should not write full value
 		QVERIFY(nic.read(0xFF, 8) != 0x1122334455667788);

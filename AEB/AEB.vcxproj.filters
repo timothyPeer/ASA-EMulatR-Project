@@ -49,6 +49,9 @@
     <ClCompile Include="uartdevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hostnetworkinterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="basedevice.h">
@@ -69,10 +72,13 @@
     <QtMoc Include="ScsiBusController.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="tulipnic.h">
+    <QtMoc Include="TulipNIC_DC21040.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="testmmiodevices.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="hostnetworkinterface.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

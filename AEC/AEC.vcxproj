@@ -107,8 +107,6 @@
     <ClInclude Include="dt_gfloat.h" />
     <ClInclude Include="FPCRContext.h" />
     <QtMoc Include="fpRegisterBankCls.h" />
-    <ClInclude Include="StackFrame.h" />
-    <QtMoc Include="UnifiedExecutors.h" />
     <QtMoc Include="RegisterBank.h" />
     <ClInclude Include="aec_global.h" />
     <QtMoc Include="aec.h" />

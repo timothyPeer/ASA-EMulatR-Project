@@ -38,6 +38,16 @@
 #include "mmiomanager.h"
 #include "BusInterface.h"
 #include "mmiohandler.h"
+#include "alphamemorysystem.h"
+
+
+/*
+Tulip uses two circular rings in host memory:
+Rx ring of Receive Frame Descriptors (RFDs)
+Tx ring of Transmit Frame Descriptors (TFDs)
+*/
+
+
 
   //
   // TulipNIC - Emulated DEC 21140 Tulip Ethernet Controller
@@ -61,11 +71,11 @@
   *
   * Reference: DEC 21140A Hardware Reference Manual
   */
-class TulipNIC : public QObject, public DeviceInterface, public BusInterface, public MmioHandler {
+class TulipNIC_DC21040 : public QObject, public DeviceInterface, public BusInterface, public MmioHandler {
     Q_OBJECT
 
 public:
-    explicit TulipNIC(int index = 0, QObject* parent = nullptr)
+    explicit TulipNIC_DC21040(int index = 0, QObject* parent = nullptr)
         : QObject(parent), deviceIndex(index)
     {
         csr.fill(0);
@@ -73,8 +83,15 @@ public:
         macAddress = QByteArray::fromHex("08002BDEADBE");
         qDebug() << "[TulipNIC] Created instance" << identifier();
     }
+#pragma pack(1)
+	struct TulipDesc {
+		quint32 status;      // ownership bit, errors, length
+		quint32 control;     // buffer length, end-of-ring flag
+		quint64 bufferPhys;  // guest-physical address of packet buffer
+	};
+#pragma pack()
 
-	explicit TulipNIC(IRQController* irq, int irqVector, const QString& mac, QObject* parent = nullptr)
+	explicit TulipNIC_DC21040(IRQController* irq, int irqVector, const QString& mac, QObject* parent = nullptr)
 		: QObject(parent), irqLine(irqVector)
 	{
 		Q_UNUSED(irq); // Hook later if IRQController integration is needed
@@ -111,20 +128,20 @@ public:
 		quint32 index = static_cast<quint32>(offset >> 2);
 		csr[index] = static_cast<quint32>(value);
 	}
-    uint32_t mmioRead(uint64_t addr) override {
-        QMutexLocker lock(&mutex);
-        quint32 index = static_cast<quint32>((addr - baseAddress) >> 2);
-        if (index >= csr.size()) return 0xFFFFFFFF;
-        return csr[index];
-    }
-
-    void mmioWrite(uint64_t addr, uint32_t value) override {
-        QMutexLocker lock(&mutex);
-        quint32 index = static_cast<quint32>((addr - baseAddress) >> 2);
-        if (index >= csr.size()) return;
-        csr[index] = value;
-        handleCSRWrite(index, value);
-    }
+//     uint32_t mmioRead(uint64_t addr) override {
+//         QMutexLocker lock(&mutex);
+//         quint32 index = static_cast<quint32>((addr - baseAddress) >> 2);
+//         if (index >= csr.size()) return 0xFFFFFFFF;
+//         return csr[index];
+//     }
+// 
+//     void mmioWrite(uint64_t addr, uint32_t value) override {
+//         QMutexLocker lock(&mutex);
+//         quint32 index = static_cast<quint32>((addr - baseAddress) >> 2);
+//         if (index >= csr.size()) return;
+//         csr[index] = value;
+//         handleCSRWrite(index, value);
+//     }
 
 	quint64 read(quint64 offset) override {
 		return read(offset, 4); // Assume 4-byte access default
@@ -170,19 +187,55 @@ public:
 		return mappedSize;
 	}
 
+
+    uint8_t mmioReadUInt8(quint64 offset) override;
+
+
+    uint16_t mmioReadUInt16(quint64 offset) override;
+
+
+    uint32_t mmioReadUInt32(quint64 offset) override;
+
+
+    quint64 mmioReadUInt64(quint64 offset) override;
+
+
+    void mmioWriteUInt8(quint64 offset, uint8_t value) override;
+
+
+    void mmioWriteUInt16(quint64 offset, uint16_t value) override;
+
+
+    void mmioWriteUInt32(quint64 offset, uint32_t value) override;
+
+
+    void mmioWriteUInt64(quint64 offset, quint64 value) override;
+
+	void initRings(int entries, AlphaMemorySystem* memorySys);
 private:
     QMutex mutex;
     quint64 baseAddress = 0;
     quint64 mappedSize = 0;
+
 
     std::array<quint32, 16> csr{}; // 16 CSR registers
     int deviceIndex = 0;
     int irqLine = -1;
     QByteArray macAddress;
 
+	// Ring Buffer Support:
+
+	QVector<TulipDesc> rxRing, txRing;
+	int rxIndex = 0, txIndex = 0;
+	quint64 rxRingPhys, txRingPhys;			// guest-physical addresses
+	AlphaMemorySystem* memory;				// <— Route to MMIO
+	int ringSize;							// power-of-two count
+
     void handleCSRWrite(quint32 index, quint32 value) {
         qDebug() << "[TulipNIC] handleCSRWrite index=" << index << " value=" << value;
     }
+	void serviceRx();
+	void injectFrame(const QByteArray& frame);
 };
 
 #endif // TULIPNIC_H
