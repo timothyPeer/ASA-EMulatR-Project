@@ -10,10 +10,10 @@
 #include <QString>
 #include "Helpers.h"
 #include "alphapalinterpreter.h"
-#include "UnifiedExecutors.h"
-#include "TraceManager.h"
 #include <QCoreApplication>
 #include "StackFrame.h"
+#include "IntegerExecutor.h"
+#include <QMutexLocker>
 
 
 AlphaCPU::AlphaCPU(int cpuId, AlphaMemorySystem* memSystem, QObject* parent)
@@ -41,11 +41,23 @@ AlphaCPU::AlphaCPU(int cpuId, AlphaMemorySystem* memSystem, QObject* parent)
     registerBank.reset(new RegisterBank(this));
     fpRegisterBank.reset(new FpRegisterBankcls(this));
     
+  
     // configure the executors
 	floatingpointExecutor.reset(new FloatingPointExecutor(this, m_memorySystem, registerBank.data(), fpRegisterBank.data(), parent));
-	integerExecutor.reset(new IntegerExecutor(this, m_memorySystem, registerBank.data(), fpRegisterBank.data(), parent));
-	controlExecutor.reset(new ControlExecutor(this, m_memorySystem, registerBank.data(), fpRegisterBank.data(), parent));
-	vectorExecutor.reset(new VectorExecutor(this, m_memorySystem, registerBank.data(), fpRegisterBank.data(), parent));
+	integerExec.reset(new IntegerExecutor(this, m_memorySystem, this, registerBank.data(), fpRegisterBank.data(), parent));
+	controlExecutor.reset(new ControlExecutor(this, m_memorySystem, this, registerBank.data(), fpRegisterBank.data(), parent));
+	vecExec.reset(new VectorExecutor(this, m_memorySystem, this, registerBank.data(), fpRegisterBank.data(), parent));
+
+
+}
+
+
+void AlphaCPU::buildDispatchTable()
+{
+    buildIntegerDispatchTable();
+    buildFloatingPointDispatchTable();
+    buildVectorDispatchTable();
+    buildControlDispatchTable();
 
 
 }
@@ -87,25 +99,24 @@ void AlphaCPU::Initialize_SignalsAndSlots()
             this, &AlphaCPU::handleReset);
 
         // Connect IntegerExecutor traps
-     if (integerExecutor) {
+     if (integerExec) {
             //             connect(integerExecutor.data(), &IntegerExecutor::trapRaised,
             //                 this, &AlphaCPU::raiseTrap);
 
                         // Connect executor's illegalInstruction to AlphaCPU handler
-            connect(integerExecutor.data(), &IntegerExecutor::illegalInstruction,
+            connect(integerExec.data(), &IntegerExecutor::illegalInstruction,
                 this, &AlphaCPU::handleIllegalInstruction);
 
 
             // Connect trapRaised to AlphaCPU
-            connect(integerExecutor.data(), &IntegerExecutor::trapRaised,
+            connect(integerExec.data(), &IntegerExecutor::trapRaised,
                 this, &AlphaCPU::handleTrapRaised);
      }
+	 if (vecExec)
+	 {
 
-     if (vectorExecutor)
-     {
-            connect(integerExecutor.data(), &IntegerExecutor::trapRaised, this, &AlphaCPU::handleTrapRaised);
-            connect(integerExecutor.data(), &IntegerExecutor::illegalInstruction, this, &AlphaCPU::handleIllegalInstruction);
-     }
+		 connect(vecExec.data(), &VectorExecutor::trapRaised, this, &AlphaCPU::handleTrapRaised);
+	 }
 
 
    
@@ -155,14 +166,7 @@ void AlphaCPU::iplChanged(int oldIPL, int newIPL)
 }
 
 
-void AlphaCPU::trapOccurred_(helpers_JIT::ExceptionType trapType, quint64 pc, int cpuId_)
-{
-	TraceManager::logInfo(QString("AlphaCPU%1: trapOccurred %2")
-		.arg(this->m_cpuId)
-		.arg(static_cast<int>(trapType)));
-	raiseTrap(trapType);
-	//TODO trapOccurred()
-}
+
 
 
 
@@ -179,7 +183,7 @@ void AlphaCPU::systemInitialized()
 {
     //TODO AlphaCPU::systemInitialized()
 }
-void AlphaCPU::trapOccurred(helpers_JIT::ExceptionType trapType, quint64 pc, int cpuId_)
+void AlphaCPU::trapOccurred(helpers_JIT::ExceptionType trapType, quint64 pc)
 {
 	//TODO AlphaCPU::trapOccurred()
 }
@@ -349,7 +353,7 @@ void AlphaCPU::initialize()
 		}
 		return stack.takeLast();  // Pop the most recent frame
 	}
-
+    //TODO - haltExecution is not validated
 	void AlphaCPU::haltExecution()
 	{
 		QMutexLocker locker(&m_stateLock);
@@ -469,7 +473,7 @@ void AlphaCPU::initialize()
         m_intRegisters[31] = 0; //In Alpha AXP, register R31 is always zero.
 
 		// Optionally reset internal JIT counters
-		if (m_jitCompiler) m_jitCompiler->clear();
+		//if (m_jitCompiler) m_jitCompiler->clear();
 
 		// Reset execution control flags
 		stopRequested.storeRelaxed(false);
@@ -480,7 +484,56 @@ void AlphaCPU::initialize()
 	}
 
 
-    void AlphaCPU::setPC(quint64 pc)
+	void AlphaCPU::resetCPU()
+	{
+		qDebug() << QString("[AlphaCPU%1] Resetting CPU state").arg(m_cpuId);
+
+		// Clear general-purpose and FP registers
+		registerBank->clear();
+		fpRegisterBank->clear();
+
+		// Reset processor state
+		m_pc = 0x0;
+		m_fp = 0x0;
+		m_currentIPL = 0;
+		m_kernelMode = true;
+		m_palMode = false;
+		m_lockFlag = false;
+		m_lockedPhysicalAddress = 0;
+
+		// Clear traps/exceptions
+		m_exceptionPending = false;
+		m_exceptionVector = 0;
+		m_excSum.fill(false);
+
+		// Reset FPCR
+		m_fpcr.setRaw(0);
+
+		// Clear stack frames
+		m_stacks.clear();
+
+		// Restore PSR defaults
+		m_psr = 0;
+		m_savedPsr = 0;
+		m_astEnable = false;
+		m_asn = 0;
+		m_uniqueValue = 0;
+		m_processorStatus = 0;
+		m_usp = 0;
+		m_vptptr = 0;
+
+		// Optionally reset internal JIT counters
+		if (m_jitCompiler) m_jitCompiler->clear();
+
+		// Reset execution control flags
+		stopRequested.storeRelaxed(false);
+
+		// Optional: reinitialize PAL vector (if booting from reset)
+		if (m_cpuId == 0)
+			m_pc = 0x21000000;  // Default SRM PAL reset vector
+	}
+
+	void AlphaCPU::setPC(quint64 pc)
     {
         QMutexLocker locker(&m_stateLock);
         m_pc = pc;
@@ -582,7 +635,7 @@ void AlphaCPU::initialize()
                 executeBlock(m_pc);
 
                 // Allow other events to be processed
-                //QCoreApplication::processEvents();
+                QCoreApplication::processEvents();
                 emit processingProgress((m_currentCycle * 100) / m_maxCycles);
 
             }
@@ -667,7 +720,7 @@ void AlphaCPU::initialize()
             m_blockHitCounter[startAddr] = 0;
         }
     }
-
+    //TODO - executeCompiledBlock
     void AlphaCPU::executeCompiledBlock(quint64 startAddr)
     {
         // In a real implementation, this would execute the native code
@@ -684,32 +737,26 @@ void AlphaCPU::initialize()
 
 	quint32 AlphaCPU::fetchInstruction(quint64 address)
 	{
-		// Attempt to fetch the instruction from memory
+		// 1) translate virtual→physical, trapping on failure
+		quint64 paddr = 0;
+		if (!translate(address, paddr, /*execute-access*/1)) {
+			handleMemoryException(address, 4);
+			return 0;
+		}
+
+		// 2) fetch the 32-bit instruction from the memory system
 		quint32 instruction = 0;
-
 		try {
-			// Read a 32-bit instruction from the memory system
-			if (!m_memorySystem->readVirtualMemory(this,address, &instruction, 4)) {
-				// Failed to read, handle as memory exception
-				handleMemoryException(address, 4); // 4 bytes for instruction access
-
-				// Since handleMemoryException will raise an exception, 
-				// we won't normally reach here, but return 0 just in case
-				return 0;
-			}
-
-			// Log instruction fetch if debug tracing is enabled
-			// qDebug() << "CPU" << m_cpuId << "fetched instruction" << Qt::hex << instruction << "at" << address;
-
+			instruction = getSafeMemory()->readUInt32(paddr);
 			return instruction;
 		}
-		catch (const std::exception& e) {
-			// Handle any other exceptions that might occur
-			qDebug() << "CPU" << m_cpuId << "exception during instruction fetch:" << e.what();
+		catch (...) {
+			// any fault during the read becomes a memory exception
 			handleMemoryException(address, 4);
 			return 0;
 		}
 	}
+
 
 
 //     bool AlphaCPU::decodeAndExecute(quint32 instruction)
@@ -796,9 +843,9 @@ void AlphaCPU::initialize()
 #endif
 
 		// Dispatch based on primary opcode
-		if (primaryOpcode <= 0x0F && integerExecutor) {
+		if (primaryOpcode <= 0x0F && this->integerExec) {
 			// Integer Operate instructions (ADD, SUB, CMP, etc.)
-            integerExecutor->execute(instruction);
+            integerExec->execute(instruction);
 		}
 		else if (primaryOpcode >= 0x20 && primaryOpcode <= 0x2F && floatingpointExecutor) {
 			// Floating-point instructions (ADDF, MULF, CVTGF, etc.)
@@ -809,9 +856,9 @@ void AlphaCPU::initialize()
             controlExecutor->execute(instruction);
             return true;
 		}
-		else if (primaryOpcode >= 0x18 && primaryOpcode <= 0x1F && vectorExecutor) {
+		else if (primaryOpcode >= 0x18 && primaryOpcode <= 0x1F && vecExec) {
 			// Vector/SIMD instructions (if implemented)
-            vectorExecutor->execute(instruction);
+            vecExec->execute(instruction);
 		}
 		else {
 			// Unknown or reserved instruction
@@ -822,7 +869,7 @@ void AlphaCPU::initialize()
         return false;
 	}
 
-
+    /*
     void AlphaCPU::executeIntegerOperation(quint32 instruction)
     {
         // Extract fields
@@ -928,78 +975,73 @@ void AlphaCPU::initialize()
         setRegister(fc, conv.u, helpers_JIT::RegisterType::FLOAT_REG);
     }
 
-    void AlphaCPU::executeMemoryOperation(quint32 instruction)
-    {
-        // Extract fields
-        quint32 opcode = (instruction >> 26) & 0x3F;
-        quint32 ra = (instruction >> 21) & 0x1F;
-        quint32 rb = (instruction >> 16) & 0x1F;
-        qint16 displacement = instruction & 0xFFFF; // 16-bit signed displacement
+    */
+    /*
+	    Uses MMU’s translate() to go from virtual→physical (so you get proper traps on faults)
+        Uses the SafeMemory API (readUInt32/readUInt64/writeUInt32/writeUInt64) instead of the old readVirtualMemory_bool (which had the wrong signature)
+        Emits your memoryAccessed signal with the original virtual address
+    */
+	void AlphaCPU::executeMemoryOperation(quint32 instruction)
+	{
+		// Decode the instruction fields
+		quint8  opcode = (instruction >> 26) & 0x3F;
+		quint8  ra = (instruction >> 21) & 0x1F;
+		quint8  rb = (instruction >> 16) & 0x1F;
+		qint16  disp = instruction & 0xFFFF;        // 16-bit signed displacement
+		bool    isLoad = (opcode >= 0x28 && opcode <= 0x2B);
+		bool    isQuad = (opcode == 0x29 || opcode == 0x2B || opcode == 0x2D || opcode == 0x2F);
+		bool    isWrite = !isLoad;
+		int     size = isQuad ? 8 : 4;
 
-        // Calculate effective address
-        quint64 address = m_intRegisters[rb] + displacement;
+		// Compute the virtual address
+		quint64 vaddr = m_intRegisters[rb] + static_cast<qint64>(disp);
 
-        // Determine operation type
-        bool isLoad = (opcode >= 0x28 && opcode <= 0x2B);
-        bool isQuadword = (opcode == 0x29 || opcode == 0x2B || opcode == 0x2D || opcode == 0x2F);
-        bool isLocked = (opcode == 0x2A || opcode == 0x2B || opcode == 0x2E || opcode == 0x2F);
+		// 1) translate V→P, trap on failure
+		quint64 paddr = 0;
+        /*
+        Translation first: we call your translate(...) to get a physical address or immediately trap on failure, rather than blindly poking the memory system.
+        */
+		if (!translate(vaddr, paddr, /*accessType=*/ isLoad ? 1 : 2)) {
+			// translation fault → trap
+			handleMemoryException(vaddr, size);
+			return;
+		}
 
-        // Size of access
-        int size = isQuadword ? 8 : 4; // 8 bytes for quadword, 4 bytes for longword
+		// 2) perform the actual memory access via SafeMemory
+		try {
+			if (isLoad) {
+				if (isQuad) {
+					quint64 val = getSafeMemory()->readUInt64(paddr);
+					setRegister(ra, val, helpers_JIT::RegisterType::INTEGER_REG);
+				}
+				else {
+					quint32 val32 = getSafeMemory()->readUInt32(paddr);
+					// sign-extend 32→64
+					qint64 sval = static_cast<qint32>(val32);
+					setRegister(ra, static_cast<quint64>(sval),
+						helpers_JIT::RegisterType::INTEGER_REG);
+				}
+			}
+			else { // store
+				if (isQuad) {
+					quint64 val = m_intRegisters[ra];
+					getSafeMemory()->writeUInt64(paddr, val);
+				}
+				else {
+					quint32 val32 = static_cast<quint32>(m_intRegisters[ra]);
+					getSafeMemory()->writeUInt32(paddr, val32);
+				}
+			}
 
-        try {
-            if (isLoad) {
-                // Load operation
-                if (isQuadword) {
-                    // Quadword load
-                    quint64 value = 0;
-                    if (m_memorySystem->readVirtualMemory(this,address, &value, 8)) {
-                        setRegister(ra, value, helpers_JIT::RegisterType::INTEGER_REG);
-                    }
-                }
-                else {
-                    // Longword load
-                    quint32 value = 0;
-                    if (m_memorySystem->readVirtualMemory(this,address, &value,  4)) {
-                        // Sign-extend to 64 bits
-                        qint64 signExtended = (qint32)value;
-                        setRegister(ra, signExtended, helpers_JIT::RegisterType::INTEGER_REG);
-                    }
-                }
+			// 3) notify watchers
+			emit memoryAccessed(vaddr, isWrite, size);
+		}
+		catch (...) {
+			// any SafeMemory exception → memory fault
+			handleMemoryException(vaddr, size);
+		}
+	}
 
-                // Emit memory access signal
-                emit memoryAccessed(address, false, size);
-
-            }
-            else {
-                // Store operation
-                if (isQuadword) {
-                    // Quadword store
-                    quint64 value = m_intRegisters[ra];
-                    m_memorySystem->writeVirtualMemory(this,address, value, 8);
-                }
-                else {
-                    // Longword store
-                    quint64 value = (quint64)m_intRegisters[ra];
-                    m_memorySystem->writeVirtualMemory(this,address, value, 4);
-                }
-
-                // Emit memory access signal
-                emit memoryAccessed(address, true, size);
-
-                // For conditional stores, we would set a success/failure indicator in ra
-                // This is simplified here
-                if (opcode == 0x2E || opcode == 0x2F) {
-                    // Always indicate success for this implementation
-                    setRegister(ra, 1, helpers_JIT::RegisterType::INTEGER_REG);
-                }
-            }
-        }
-        catch (...) {
-            // Handle memory access error
-            handleMemoryException(address, size);
-        }
-    }
 	void AlphaCPU::setMode(helpers_JIT::MmuMode mode_)
 	{
 		m_psr = (m_psr & ~0x3) | (static_cast<quint8>(mode_) & 0x3);
@@ -1020,6 +1062,7 @@ void AlphaCPU::initialize()
 	{
 		m_state = state;
 	}
+    /*
     void AlphaCPU::executeBranchOperation(quint32 instruction)
     {
         // Extract fields
@@ -1113,7 +1156,7 @@ void AlphaCPU::initialize()
 //             break;
 //         }
 //     }
-
+*/
     void AlphaCPU::checkForHotSpots()
     {
         // Find blocks that are executed frequently but not yet compiled
@@ -1323,6 +1366,158 @@ void AlphaCPU::executePALOperation(quint32 instruction)
     }
 }
 
+//----------------------------------------------------------------------
+// Bind each OP_* to the corresponding IntegerExecutor::execXXX()
+//----------------------------------------------------------------------
+void AlphaCPU::buildIntegerDispatchTable()
+{
+	using IO = IntegerOpcode;
+
+	// ensure size
+	intDispatch.resize(static_cast<int>(IO::OP_INT_COUNT));
+
+	intDispatch[static_cast<uint8_t>(IO::OP_ADDL)] = [this](const OperateInstruction& op) { integerExec->execADDL(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_ADDQ)] = [this](const OperateInstruction& op) { integerExec->execADDQ(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_SUB)] = [this](const OperateInstruction& op) { integerExec->execSUB(op);  };
+	intDispatch[static_cast<uint8_t>(IO::OP_MUL)] = [this](const OperateInstruction& op) { integerExec->execMUL(op);  };
+	intDispatch[static_cast<uint8_t>(IO::OP_DIV)] = [this](const OperateInstruction& op) { integerExec->execDIV(op);  };
+	intDispatch[static_cast<uint8_t>(IO::OP_MOD)] = [this](const OperateInstruction& op) { integerExec->execMOD(op);  };
+
+	// Logical
+	intDispatch[static_cast<uint8_t>(IO::OP_AND)] = [this](const OperateInstruction& op) { integerExec->execAND(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_OR)] = [this](const OperateInstruction& op) { integerExec->execOR(op);  };
+	intDispatch[static_cast<uint8_t>(IO::OP_XOR)] = [this](const OperateInstruction& op) { integerExec->execXOR(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_NOT)] = [this](const OperateInstruction& op) { integerExec->execNOT(op); };
+
+	// Shifts
+	intDispatch[static_cast<uint8_t>(IO::OP_SLL)] = [this](const OperateInstruction& op) { integerExec->execSLL(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_SRL)] = [this](const OperateInstruction& op) { integerExec->execSRL(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_SRA)] = [this](const OperateInstruction& op) { integerExec->execSRA(op); };
+
+	// Memory operations (custom internal mapping)
+	intDispatch[static_cast<uint8_t>(IO::OP_LDB)] = [this](const OperateInstruction& op) { integerExec->execLDB(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_LDBU)] = [this](const OperateInstruction& op) { integerExec->execLDBU(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_LDW)] = [this](const OperateInstruction& op) { integerExec->execLDW(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_LDWU)] = [this](const OperateInstruction& op) { integerExec->execLDWU(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_STB)] = [this](const OperateInstruction& op) { integerExec->execSTB(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_STW)] = [this](const OperateInstruction& op) { integerExec->execSTW(op); };
+
+	// Comparisons
+	intDispatch[static_cast<uint8_t>(IO::OP_CMP_EQ)] = [this](const OperateInstruction& op) { integerExec->execCMPEQ(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_CMP_LT)] = [this](const OperateInstruction& op) { integerExec->execCMPLT(op); };
+	intDispatch[static_cast<uint8_t>(IO::OP_CMP_LE)] = [this](const OperateInstruction& op) { integerExec->execCMPLE(op); };
+
+}
+
+
+
+
+void AlphaCPU::buildControlDispatchTable() {
+	using CTRL = AlphaControlOpcode;
+    
+
+	ctrlDispatch.resize(64); // Alpha primary opcodes are 6 bits wide (0x00–0x3F)
+
+	// Unconditional Branches
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BR)] = [this](quint32 instr) { controlExecutor->execBR(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BSR)] = [this](quint32 instr) { controlExecutor->execBSR(helpers_JIT::decodeBranch(instr)); };
+
+	// Conditional Integer Branches
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BEQ)] = [this](quint32 instr) { controlExecutor->execBEQ(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BNE)] = [this](quint32 instr) { controlExecutor->execBNE(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BLT)] = [this](quint32 instr) { controlExecutor->execBLT(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BLE)] = [this](quint32 instr) { controlExecutor->execBLE(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BGT)] = [this](quint32 instr) { controlExecutor->execBGT(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BGE)] = [this](quint32 instr) { controlExecutor->execBGE(helpers_JIT::decodeBranch(instr)); };
+
+	// Conditional Bit Branches
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BLBC)] = [this](quint32 instr) { controlExecutor->execBLBC(helpers_JIT::decodeBranch(instr)); };
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_BLBS)] = [this](quint32 instr) { controlExecutor->execBLBS(helpers_JIT::decodeBranch(instr)); };
+
+	// REI — Return from Exception
+	ctrlDispatch[static_cast<uint8_t>(CTRL::OP_CTRL_REI)] = [this](quint32 instr) { controlExecutor->execREI(); };
+}
+
+// ----------------------------------------------------------------------
+// Build the vector‐opcode dispatch table by binding each OP_* to the
+// corresponding VectorExecutor::exec…() method.
+//----------------------------------------------------------------------  
+void AlphaCPU::buildVectorDispatchTable() {
+    
+	using VO = VectorOpcode;
+    vecDispatch.resize(static_cast<int>(VO::OP_COUNT));
+
+	// — Memory / sign-extend
+    vecDispatch[VO::OP_VADD] = [this](const OperateInstruction& op) { vecExec->execVADD(op);    };
+	vecDispatch[VO::OP_LDBU] = [this](const OperateInstruction& op) { vecExec->execLDBU(op);   };
+	vecDispatch[VO::OP_LDWU] = [this](const OperateInstruction& op) { vecExec->execLDWU(op);   };
+	vecDispatch[VO::OP_STB] = [this](const OperateInstruction& op) { vecExec->execSTB(op);    };
+	vecDispatch[VO::OP_STW] = [this](const OperateInstruction& op) { vecExec->execSTW(op);    };
+	vecDispatch[VO::OP_SEXTW] = [this](const OperateInstruction& op) { vecExec->execSEXTW(op);  };
+	vecDispatch[VO::OP_SEXTBU] = [this](const OperateInstruction& op) { vecExec->execSEXTBU(op); };
+
+	// — Core vector ALU
+	vecDispatch[VO::OP_VADD] = [this](const OperateInstruction& op) { vecExec->execVADD(op);   };
+	vecDispatch[VO::OP_VSUB] = [this](const OperateInstruction& op) { vecExec->execVSUB(op);   };
+	vecDispatch[VO::OP_VAND] = [this](const OperateInstruction& op) { vecExec->execVAND(op);   };
+	vecDispatch[VO::OP_VOR] = [this](const OperateInstruction& op) { vecExec->execVOR(op);    };
+	vecDispatch[VO::OP_VXOR] = [this](const OperateInstruction& op) { vecExec->execVXOR(op);   };
+	vecDispatch[VO::OP_VMUL] = [this](const OperateInstruction& op) { vecExec->execVMUL(op);   };
+
+	// — MVI (MAX/MIN) extensions
+	vecDispatch[VO::OP_MAXSB8] = [this](const OperateInstruction& op) { vecExec->execMAXSB8(op); };
+	vecDispatch[VO::OP_MINUB8] = [this](const OperateInstruction& op) { vecExec->execMINSB8(op); };
+	vecDispatch[VO::OP_MAXUB8] = [this](const OperateInstruction& op) { vecExec->execMAXUB8(op); };
+	vecDispatch[VO::OP_MINUB8] = [this](const OperateInstruction& op) { vecExec->execMINUB8(op); };
+	// …add the rest of your MAX/MIN variants…
+
+	// — Packing / unpacking
+	vecDispatch[VO::OP_PKLB] = [this](const OperateInstruction& op) { vecExec->execPKLB(op);   };
+	vecDispatch[VO::OP_PKWB] = [this](const OperateInstruction& op) { vecExec->execPKWB(op);   };
+	vecDispatch[VO::OP_UNPKBL] = [this](const OperateInstruction& op) { vecExec->execUNPKBL(op); };
+	vecDispatch[VO::OP_UNPKBW] = [this](const OperateInstruction& op) { vecExec->execUNPKBW(op); };
+	vecDispatch[VO::OP_PERR] = [this](const OperateInstruction& op) { vecExec->execPERR(op);   };
+
+	// Any slots you don’t use can remain default-initialized to a “not supported” stub.
+}
+
+void AlphaCPU::buildFloatingPointDispatchTable() {
+	
+	using FP = AlphaFPOpcode;
+    fpDispatch.resize(static_cast<int>(FP::OP_FP_COUNT)) ; // Use full 6-bit function field width (0x00 - 0x3F)
+
+	// — Arithmetic
+	fpDispatch[static_cast<uint8_t>(FP::ADDF)] = [this](const OperateInstruction& op) { floatingpointExecutor->execADDF(op); };
+	fpDispatch[static_cast<uint8_t>(FP::SUBF)] = [this](const OperateInstruction& op) { floatingpointExecutor->execSUBF(op); };
+	fpDispatch[static_cast<uint8_t>(FP::MULF)] = [this](const OperateInstruction& op) { floatingpointExecutor->execMULF(op); };
+	fpDispatch[static_cast<uint8_t>(FP::DIVF)] = [this](const OperateInstruction& op) { floatingpointExecutor->execDIVF(op); };
+
+	// — Conversion
+	fpDispatch[static_cast<uint8_t>(FP::CVTQS)] = [this](const OperateInstruction& op) { floatingpointExecutor->execCVTQS(op); };
+	fpDispatch[static_cast<uint8_t>(FP::CVTTQ)] = [this](const OperateInstruction& op) { floatingpointExecutor->execCVTTQ(op); };
+
+	// — Sign manipulation
+	fpDispatch[static_cast<uint8_t>(FP::CPYS)] = [this](const OperateInstruction& op) { floatingpointExecutor->execCPYS(op);  };
+	fpDispatch[static_cast<uint8_t>(FP::CPYSN)] = [this](const OperateInstruction& op) { floatingpointExecutor->execCPYSN(op); };
+	fpDispatch[static_cast<uint8_t>(FP::CPYSE)] = [this](const OperateInstruction& op) { floatingpointExecutor->execCPYSE(op); };
+
+	// — Floating-point conditionals
+	fpDispatch[static_cast<uint8_t>(FP::FCMOVEQ)] = [this](const OperateInstruction& op) { floatingpointExecutor->execFCMOVEQ(op); };
+	fpDispatch[static_cast<uint8_t>(FP::FCMOVNE)] = [this](const OperateInstruction& op) { floatingpointExecutor->execFCMOVNE(op); };
+	fpDispatch[static_cast<uint8_t>(FP::FCMOVLT)] = [this](const OperateInstruction& op) { floatingpointExecutor->execFCMOVLT(op); };
+	fpDispatch[static_cast<uint8_t>(FP::FCMOVLE)] = [this](const OperateInstruction& op) { floatingpointExecutor->execFCMOVLE(op); };
+	fpDispatch[static_cast<uint8_t>(FP::FCMOVGT)] = [this](const OperateInstruction& op) { floatingpointExecutor->execFCMOVGT(op); };
+	fpDispatch[static_cast<uint8_t>(FP::FCMOVGE)] = [this](const OperateInstruction& op) { floatingpointExecutor->execFCMOVGE(op); };
+
+	// — FPCR
+	fpDispatch[static_cast<uint8_t>(FP::MT_FPCR)] = [this](const OperateInstruction& op) { floatingpointExecutor->execMT_FPCR(op); };
+	fpDispatch[static_cast<uint8_t>(FP::MF_FPCR)] = [this](const OperateInstruction& op) { floatingpointExecutor->execMF_FPCR(op); };
+
+	// All undefined entries will default to nullptr. Be sure to check before dispatching.
+}
+
+
+
 // Floating Point Exception Handling
 
 void AlphaCPU::handleFpTrap(const QString& reason) {
@@ -1406,46 +1601,49 @@ void AlphaCPU::resetRequested()
 
 void AlphaCPU::executeNextInstruction()
 {
-	if (!m_memorySystem) {
-		qWarning() << "[AlphaCPU] SafeMemory not available!";
-		stopRequested.storeRelaxed(true);
-		return;
-	}
+    if (!m_memorySystem) {
+        qWarning() << "[AlphaCPU] SafeMemory not available!";
+        stopRequested.storeRelaxed(true);
+        return;
+    }
 
-	// 🔥 Step 1: Try JIT compiled block
-	if (m_jitCompiler && m_jitCompiler->hasBlock(m_pc)) {
-		m_jitCompiler->runBlock(m_pc, this);
-		return;
-	}
+    // 🔥 Step 1: Try JIT compiled block
+    if (m_jitEnabled && m_jitCompiler && m_jitCompiler->hasBlock(m_pc)) {
+        // run the compiled block
+        m_pc = m_jitCompiler->runBlock(m_pc);
+        return;
+    }
 
-	// 🔎 Step 2: Translate virtual PC to physical instruction address
-	quint64 physAddr = 0;
-	if (!translate(m_pc, physAddr, /*accessType=*/2)) {
-		raiseTrap(helpers_JIT::TrapType::MMUAccessFault);
-		return;
-	}
+    // 🔎 Step 2: Translate virtual PC to physical instruction address
+    quint64 physAddr = 0;
+    if (!translate(m_pc, physAddr, /*accessType=*/2)) {
+        raiseTrap(helpers_JIT::TrapType::MMUAccessFault);
+        return;
+    }
 
-	// 📦 Step 3: Fetch instruction
-	quint32 instruction = getSafeMemory()->readUInt32(physAddr);
+    // 📦 Step 3: Fetch instruction
+    quint32 instruction = getSafeMemory()->readUInt32(physAddr);
 
-	// 🛠 Step 4: Debug trace (before PC changes)
-	TraceManager::logDebug(
-		QString("AlphaCPU%1: Executing PC=0x%2 INST=0x%3")
-		.arg(m_cpuId)
-		.arg(m_pc, 8, 16, QChar('0'))
-		.arg(instruction, 8, 16, QChar('0'))
-	);
+    // 🛠 Step 4: Debug trace (before PC changes)
+    TraceManager::logDebug(
+        QString("AlphaCPU%1: Executing PC=0x%2 INST=0x%3")
+        .arg(m_cpuId)
+        .arg(m_pc, 8, 16, QChar('0'))
+        .arg(instruction, 8, 16, QChar('0'))
+    );
 
-	// 🧠 Step 5: Execute instruction
-	bool branched = decodeAndExecute(instruction);
+    // 🧠 Step 5: Execute instruction
+    bool branched = decodeAndExecute(instruction);
 
-	// ➡️ Step 6: Advance PC only if not branched
-	if (!branched) m_pc += 4;
+    // ➡️ Step 6: Advance PC only if not branched
+    if (!branched) m_pc += 4;
 
-	// 🔁 Step 7: Trigger JIT compilation if hot
-	if (++m_jitHitCounter[m_pc] > m_jitThreshold) {
-		m_jitCompiler->compileBlock(m_pc);
-	}
+    // 🔁 Step 7: Trigger JIT compilation if hot
+    if (m_jitEnabled && m_jitCompiler) {
+        // replace compileBlock with compileOrGetBlock
+        m_pc = m_jitCompiler->compileOrGetBlock(m_pc)();
+        return;
+    }
 }
 
 
@@ -1482,5 +1680,43 @@ void AlphaCPU::handleReset()
 	qInfo() << "[AlphaCPU] CPU reset requested.";
 	// TODO: Perform reset (e.g., clear state, reset PC to PAL base)
 }
+#pragma region Event Wrappers
 
+void AlphaCPU::notifyRegisterUpdated(bool isFp, quint8 reg, quint64 value) {
+	emit registerUpdated(reg, value);  // extend later if needed
+}
+
+void AlphaCPU::notifyRegisterUpdated(bool isFp, unsigned idx, uint64_t raw)
+{
+	emit registerChanged(idx,
+		isFp ? helpers_JIT::RegisterType::FLOATING_REG
+		: helpers_JIT::RegisterType::INTEGER_REG,
+		raw);
+}
+
+void AlphaCPU::notifyMemoryAccessed(quint64 addr, quint64 value, bool isWrite) {
+	emit memoryAccessed(addr, value, isWrite);
+}
+
+void AlphaCPU::notifyTrapRaised(helpers_JIT::TrapType type) {
+	emit trapRaised(type);
+}
+
+void AlphaCPU::notifyFpRegisterUpdated(unsigned idx, double value)
+{
+	uint64_t raw;
+	static_assert(sizeof(raw) == sizeof(value), "");
+	std::memcpy(&raw, &value, sizeof(raw));
+	notifyRegisterUpdated(true, idx, raw);
+}
+
+void AlphaCPU::notifyIllegalInstruction(quint64 instructionWord, quint64 pc)
+{
+// 	TraceManager::logInfo(QString("AlphaCPU%1: Illegal instruction 0x%2 at PC=0x%3")
+// 		.arg(cpuId)
+// 		.arg(instructionWord, 8, 16, QChar('0'))
+// 		.arg(pc, 8, 16, QChar('0')));
+	raiseTrap(helpers_JIT::TrapType::ReservedInstruction);
+}
+#pragma endregion Event Wrappers
 

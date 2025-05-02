@@ -9,7 +9,7 @@ AlphaPALInterpreter::AlphaPALInterpreter(QObject* parent)
 /**
  * Dispatch the PAL instruction
  */
-//<AlphaPALInterpreter::processPALInstruction(AlphaCPU* cpu, quint32 palFunction)
+void AlphaPALInterpreter::processPALInstruction(AlphaCPU* cpu, quint32 palFunction)
 {
 	if (!cpu)
 		return;
@@ -50,7 +50,7 @@ AlphaPALInterpreter::AlphaPALInterpreter(QObject* parent)
 }
 
 // CPU Specific handlers for halt conditions
-//<AlphaPALInterpreter::handleHalt(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleHalt(AlphaCPU* cpu)
 {
     cpu->setRunning(false);
     cpu->setState(helpers_JIT::CPUState::HALTED);
@@ -58,47 +58,47 @@ AlphaPALInterpreter::AlphaPALInterpreter(QObject* parent)
     emit cpu->stateChanged(helpers_JIT::CPUState::HALTED);
 }
 
-//<AlphaPALInterpreter::handlePrivilegedContextSwitch(AlphaCPU* cpu)
+void AlphaPALInterpreter::handlePrivilegedContextSwitch(AlphaCPU* cpu)
 {
     // Placeholder - In real Alpha, switch process context
     // Here you can just log or simulate a dummy switch
 }
 
-//<AlphaPALInterpreter::handleSystemCall(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleSystemCall(AlphaCPU* cpu)
 {
     // Raise a system call exception
     cpu->raiseException(helpers_JIT::ExceptionType::SYSTEM_CALL, cpu->getPC());
 }
 
-//<AlphaPALInterpreter::handleUnknownPAL(AlphaCPU* cpu, quint32 palFunction)
+void AlphaPALInterpreter::handleUnknownPAL(AlphaCPU* cpu, quint32 palFunction)
 {
     // Raise Illegal Instruction or Privileged Instruction Exception
     cpu->raiseException(helpers_JIT::ExceptionType::ILLEGAL_INSTRUCTION, cpu->getPC());
 }
 
-//<AlphaPALInterpreter::handleWriteKernelGP(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleWriteKernelGP(AlphaCPU* cpu)
 {
 	quint64 gpValue = cpu->readRegister(0); // In Alpha, R0 carries arguments
 	cpu->setKernelGP(gpValue);
 }
 
-//<AlphaPALInterpreter::handleWriteUserSP(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleWriteUserSP(AlphaCPU* cpu)
 {
 	quint64 spValue = cpu->readRegister(0); // Assume R0 carries new USP
 	cpu->setUserSP(spValue);
 }
 
-//<AlphaPALInterpreter::handleReadUserSP(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleReadUserSP(AlphaCPU* cpu)
 {
 	cpu->writeRegister(0, cpu->getUserSP()); // Write current USP into R0
 }
 
-//<AlphaPALInterpreter::handleMachineCheck(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleMachineCheck(AlphaCPU* cpu)
 {
 	raiseException(helpers_JIT::ExceptionType::MACHINE_CHECK, cpu->getPC());
 }
 
-//<AlphaPALInterpreter::handleBusError(AlphaCPU* cpu)
+void AlphaPALInterpreter::handleBusError(AlphaCPU* cpu)
 {
 	raiseException(helpers_JIT::ExceptionType::BUS_ERROR, cpu->getPC());
 }

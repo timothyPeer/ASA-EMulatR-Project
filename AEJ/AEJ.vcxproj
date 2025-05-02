@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.9_msvc20122_64</QtInstall>
-    <QtModules>core</QtModules>
+    <QtModules>core;network</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -101,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="alphabasicblock.cpp" />
+    <ClCompile Include="alphacoreadapter.cpp" />
     <ClCompile Include="alphacpu.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
@@ -109,7 +110,6 @@
     </ClCompile>
     <ClCompile Include="alphaexceptionhandler.cpp" />
     <ClCompile Include="alphaexceptionvectors.cpp" />
-    <ClCompile Include="AlphaInstruction.cpp" />
     <ClCompile Include="alphainstructiondecoder.cpp" />
     <ClCompile Include="alphajitcompiler.cpp" />
     <ClCompile Include="alphajitexecutionengine.cpp" />
@@ -120,14 +120,30 @@
     <ClCompile Include="alphasmpmanager.cpp" />
     <ClCompile Include="alphasystem.cpp" />
     <ClCompile Include="alphatrace.cpp" />
+    <ClCompile Include="floatingpointexecutor.cpp" />
+    <ClCompile Include="IExecutionContext.cpp" />
     <ClCompile Include="instructiondefinition.cpp" />
     <ClCompile Include="instructionset.cpp" />
+    <ClCompile Include="StackFrame.cpp" />
+    <ClCompile Include="VectorExecutor.cpp" />
     <ClInclude Include="aej_global.h" />
     <ClInclude Include="aej.h" />
+    <QtMoc Include="alphacoreadapter.h" />
+    <ClInclude Include="AlphaCPUFactory.h" />
     <ClInclude Include="alphaexceptionvectors.h" />
     <ClInclude Include="alphajitprofiler.h" />
+    <QtMoc Include="ControlExecutor.h" />
+    <ClInclude Include="decodeMemoryOffset.h" />
+    <ClInclude Include="decodeOperate.h" />
+    <ClInclude Include="ExecutorOpcodeEnumeration.h" />
+    <QtMoc Include="VectorRegisterBank.h" />
+    <QtMoc Include="IntegerExecutor.h" />
+    <QtMoc Include="floatingpointexecutor.h" />
+    <ClInclude Include="StackFrame.h" />
+    <QtMoc Include="VectorExecutor.h" />
     <QtMoc Include="alphapalinterpreter.h" />
     <QtMoc Include="instructionset.h" />
+    <ClInclude Include="IExecutionContext.h" />
     <ClInclude Include="instructiondefinition.h" />
     <QtMoc Include="alphajitsystem.h" />
     <QtMoc Include="alphajitexecutionengine.h" />
@@ -135,12 +151,11 @@
     <QtMoc Include="alphatrace.h" />
     <QtMoc Include="alphainstructiondecoder.h" />
     <QtMoc Include="alphasystem.h" />
-    <ClInclude Include="alphajitcompiler.h" />
+    <QtMoc Include="alphajitcompiler.h" />
     <QtMoc Include="alphamemorysystem.h" />
     <QtMoc Include="alphasmpmanager.h" />
     <QtMoc Include="alphacpu.h" />
     <QtMoc Include="alphaexceptionhandler.h" />
-    <QtMoc Include="AlphaInstruction.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AlphaKernelExceptionHandlers.s" />

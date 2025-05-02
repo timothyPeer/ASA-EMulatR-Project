@@ -1,12 +1,10 @@
-
-
 // AlphaSMPManager.cpp - SMP management implementation
 #include "AlphaSMPManager.h"
 #include "AlphaCPU.h"
 #include "AlphaMemorySystem.h"
 #include <QDebug>
 #include <QThread>
-#include "Helpers.h"
+
 
 AlphaSMPManager::AlphaSMPManager(int cpuCount, QObject* parent)
 	: QObject(parent),
@@ -31,56 +29,37 @@ AlphaSMPManager::~AlphaSMPManager()
    This function relies on two vectors.		
    For each CPU, it will be launched through a dedicated thread.
 */
-//<AlphaSMPManager::startAllCPUs_MoveToThread()
+void AlphaSMPManager::startAllCPUs_MoveToThread()
 {
 	if (m_moved_cpus.count()==0)
 		m_moved_cpus.resize(m_cpus.size());			// Initialize the vector size to match the CPU count
 	for (int i = 0; i < m_cpus.size(); i++) {
-		
+		AlphaCPU* alphaCPU = m_cpus[i];
 		m_moved_cpus[i]  = new QThread(this);		// Move this thread to the Moved CPU threads vector
 		m_cpus[i]->moveToThread(m_moved_cpus[i]);
+
 		connect(m_moved_cpus[i], &QThread::started, m_cpus[i], &AlphaCPU::startExecution);
 		connect(m_cpus[i], &AlphaCPU::executionFinished, m_moved_cpus[i], &QThread::quit);
 		connect(m_moved_cpus[i], &QThread::finished, m_moved_cpus[i], &QObject::deleteLater);
 		connect(m_cpus[i], &AlphaCPU::halted, m_moved_cpus[i], &QThread::quit);
+		connect(this, &AlphaSMPManager::signalStartAll, alphaCPU, &AlphaCPU::startExecution);
+		connect(this, &AlphaSMPManager::signalStopAll, alphaCPU, &AlphaCPU::stopExecution);
+		connect(this, &AlphaSMPManager::signalResetAll, alphaCPU, &AlphaCPU::resetCPU);
+		connect(this, &AlphaSMPManager::signalPauseAll, alphaCPU, &AlphaCPU::pauseExecution);
+		connect(this, &AlphaSMPManager::signalResumeAll, alphaCPU, &AlphaCPU::resumeExecution);
+		connect(this, &AlphaSMPManager::signalSendInterrupt, alphaCPU, [=](int cpuId, int vector) {
+			if (cpuId == i) alphaCPU->receiveInterrupt(vector);
+			});
+
+		connect(this, &AlphaSMPManager::signalResumeAll, alphaCPU, &AlphaCPU::resumeExecution);
+		connect(alphaCPU, &AlphaCPU::finished, m_moved_cpus[i], &QThread::quit);
+		connect(m_moved_cpus[i], &QThread::finished, m_moved_cpus[i], &QObject::deleteLater);
 		m_moved_cpus[i]->start();
 	}
 }
 
-//<AlphaSMPManager::stopAllCPUs()
-{
-	for (int i = 0; i < m_cpus.size(); ++i) {
-		AlphaCPU* alphaCPU = m_cpus[i];
-		QThread* thread = m_moved_cpus[i];
 
-		if (alphaCPU && thread) {
-			qDebug() << QString("[AlphaSMP] Requesting CPU%1 to stop").arg(i);
-			QMetaObject::invokeMethod(alphaCPU, "requestStop", Qt::QueuedConnection);  // ensures it runs in the CPU's thread
-
-			// Optionally emit a custom signal if cpu->requestStop() isn't public
-			// emit signalStopCpu(i);
-		}
-	}
-
-	// Give CPUs time to stop gracefully
-	QThread::msleep(10);
-
-	// Wait for all threads to finish
-	for (int i = 0; i < m_moved_cpus.size(); ++i) {
-		QThread* thread = m_moved_cpus[i];
-		if (thread) {
-			qDebug() << QString("[AlphaSMP] Waiting for CPU thread %1 to finish...").arg(i);
-			thread->quit();
-			thread->wait();  // Blocks until thread completes
-			thread->deleteLater();
-		}
-	}
-
-	m_moved_cpus.clear();  // Clean up thread list
-}
-
-
-//<AlphaSMPManager::applyConfiguration(QString lastLoadedConfig)
+void AlphaSMPManager::applyConfiguration(QString lastLoadedConfig)
 {
 
 }
@@ -118,8 +97,63 @@ bool AlphaSMPManager::applyConfiguration(const QJsonObject& config)
 	return true;
 }
 
+void AlphaSMPManager::reset()
+{
+	stopExecution();
 
-//<AlphaSMPManager::initialize()
+	// Clean up all CPU threads
+	for (QThread* thread : m_moved_cpus) {
+		if (thread) {
+			thread->quit();
+			thread->wait();
+			thread->deleteLater();
+		}
+	}
+
+	m_moved_cpus.clear();
+
+	// Clear CPU objects
+	for (AlphaCPU* cpu : m_cpus) {
+		delete cpu;
+	}
+
+	m_cpus.clear();
+
+	// Reload configuration (e.g., from file)
+	applyConfiguration(lastLoadedConfig);
+
+	// Optionally: start all again
+	startExecution();
+}
+
+void AlphaSMPManager::startCpu(int cpuId, quint64 pc)
+{
+	if (cpuId < 0 || cpuId >= m_cpus.size()) {
+		qWarning() << "[AlphaSMP] Invalid CPU index:" << cpuId;
+		return;
+	}
+
+	AlphaCPU* cpu = m_cpus[cpuId];
+	if (!cpu) return;
+
+	// Set the program counter
+	QMetaObject::invokeMethod(cpu, "setPC", Qt::QueuedConnection, Q_ARG(quint64, pc));
+
+	// Start CPU execution
+	QMetaObject::invokeMethod(cpu, "resumeExecution", Qt::QueuedConnection);
+}
+
+void AlphaSMPManager::setIoThreadCount(int count)
+{
+	ioThreadCount = count;
+}
+
+void AlphaSMPManager::initializeSignalsAndSlots()
+{
+
+}
+
+void AlphaSMPManager::initialize()
 {
 	// Create the memory system if not provided
 	if (!memorySystem) {
@@ -162,6 +196,11 @@ bool AlphaSMPManager::applyConfiguration(const QJsonObject& config)
 			connect(m_cpus[i], &AlphaCPU::stateChanged, this, [this, i](helpers_JIT::CPUState newState) {
 				emit cpuStateChanged(i, newState); });
 			connect(m_cpus[i], &AlphaCPU::halted, this, &AlphaSMPManager::handleCpuHalted);
+			connect(this, &AlphaSMPManager::signalSendInterrupt, m_cpus[i], [=](int cpuId, int vector) {
+				if (cpuId == i)
+					m_cpus[i]->receiveInterrupt(vector);
+				});
+			connect(m_cpus[i], &AlphaCPU::finished, thread, &QThread::quit);
 
 			// Connect global control signals
 			connect(this, &AlphaSMPManager::signalStartAll, m_cpus[i], &AlphaCPU::startExecution);
@@ -169,13 +208,11 @@ bool AlphaSMPManager::applyConfiguration(const QJsonObject& config)
 			connect(this, &AlphaSMPManager::signalResetAll, m_cpus[i], &AlphaCPU::resetCPU);
 			connect(this, &AlphaSMPManager::signalPauseAll, m_cpus[i], &AlphaCPU::pauseExecution);
 			connect(this, &AlphaSMPManager::signalResumeAll, m_cpus[i], &AlphaCPU::resumeExecution);
-			
+	
+
+		
 			// Connect per-CPU interrupt
-			connect(this, &AlphaSMPManager::signalSendInterrupt, m_cpus[i], [=](int cpuId, int vector) {
-				if (cpuId == i) 
-					m_cpus[i]->receiveInterrupt(vector);
-					});
-			connect(m_cpus[i], &AlphaCPU::finished, thread, &QThread::quit);
+		
 			connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
 				// Initialize the CPU
@@ -194,11 +231,34 @@ bool AlphaSMPManager::applyConfiguration(const QJsonObject& config)
 	//<setJitProperties(bool jitEnabled, int jitThreshold_) {
 
 	}
-//<AlphaSMPManager::cycleExecuted()
+void AlphaSMPManager::cycleExecuted()
 {
 	//TODO
 }
-//<AlphaSMPManager::shutdown()
+
+void configureSystem(int cpuCount, quint64 ramSizeMB, quint64 startPC)
+{
+	if (!memorySystem) {
+		memorySystem = new AlphaMemorySystem(this);
+	}
+
+	memorySystem->initialize(ramSizeMB);
+
+	for (int i = 0; i < cpuCount; ++i) {
+		AlphaCPU* cpu = new AlphaCPU(i, memorySystem, this);
+		cpu->setPC(startPC);
+
+		// Connect critical CPU signals to AlphaSMPManager slots
+		connect(cpu, &AlphaCPU::halted, this, &AlphaSMPManager::handleCpuHalted);
+		connect(cpu, &AlphaCPU::trapRaised, this, &AlphaSMPManager::handleTrapRaised);
+		connect(cpu, &AlphaCPU::stateChanged, this, &AlphaSMPManager::handleCpuStateChanged);
+		connect(cpu, &AlphaCPU::memoryAccessed, this, &AlphaSMPManager::handleMemoryAccessed);
+
+		m_cpus.append(cpu);
+	}
+}
+
+void AlphaSMPManager::shutdown()
 {
 	// Stop all CPUs
 	stopAllCPUs();
@@ -214,7 +274,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	return nullptr;
 }
 
-//<AlphaSMPManager::startSystem(quint64 entryPoint)
+void AlphaSMPManager::startSystem(quint64 entryPoint)
 {
 	// Set entry point for all CPUs
 	for (int i = 0; i < m_cpus.size(); i++) {
@@ -229,21 +289,26 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	qDebug() << "System started at entry point" << Qt::hex << entryPoint;
 }
 
-//<AlphaSMPManager::pauseSystem()
+void AlphaSMPManager::startSystem()
+{
+
+}
+
+void AlphaSMPManager::pauseSystem()
 {
 	// Pause all CPUs
-	pauseAllCPUs();
+	pausedAllCPUs();
 
 	emit systemPaused();
 
 	qDebug() << "System paused";
 }
 
-//<AlphaSMPManager::resumeSystem()
+void AlphaSMPManager::resumeSystem()
 {
 	// Resume all CPUs
 	for (int i = 0; i < m_cpus.size(); i++) {
-		if (m_cpus[i]->state() == helpers_JIT::CPUState::PAUSED) {
+		if (m_cpus[i]->getState() == helpers_JIT::CPUState::PAUSED) {
 			m_cpus[i]->startExecution();
 		}
 	}
@@ -253,7 +318,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	qDebug() << "System resumed";
 }
 
-//<AlphaSMPManager::stopSystem()
+void AlphaSMPManager::stopSystem()
 {
 	// Stop all CPUs
 	stopAllCPUs();
@@ -262,18 +327,25 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 
 	qDebug() << "System stopped";
 }
+void AlphaSMPManager::stoppedSystem()
+{
+// TODO
+}
 
-//<AlphaSMPManager::startFromPALBase()
+void AlphaSMPManager::startFromPALBase()
 {
 
 }
 
-//<AlphaSMPManager::setTraceLevel(int traceLevel)
+void AlphaSMPManager::cpusAllStarted() {
+
+}
+void AlphaSMPManager::setTraceLevel(int traceLevel)
 {
 	throw std::logic_error("The method or operation is not implemented.");
 }
 
-//<AlphaSMPManager::startAllCPUs()
+void AlphaSMPManager::startAllCPUs()
 {
 	// Start all CPUs
 	for (int i = 0; i < m_cpus.size(); i++) {
@@ -288,7 +360,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	qDebug() << "All CPUs started";
 }
 
-//<AlphaSMPManager::pauseAllCPUs()
+void AlphaSMPManager::pauseAllCPUs()
 {
 	// Pause all CPUs
 	for (int i = 0; i < m_cpus.size(); i++) {
@@ -301,8 +373,44 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 }
 
 
+void AlphaSMPManager::pausedAllCPUs()
+{
+	//TODO - allCPUsPaused slot
+}
 
-//<AlphaSMPManager::sendInterprocessorInterrupt(int sourceCPU, int targetCPU, int interruptVector)
+void AlphaSMPManager::stopAllCPUs()
+{
+	for (int i = 0; i < m_cpus.size(); ++i) {
+		AlphaCPU* alphaCPU = m_cpus[i];
+		QThread* thread = m_moved_cpus[i];
+
+		if (alphaCPU && thread) {
+			qDebug() << QString("[AlphaSMP] Requesting CPU%1 to stop").arg(i);
+			QMetaObject::invokeMethod(alphaCPU, "requestStop", Qt::QueuedConnection);  // ensures it runs in the CPU's thread
+
+			// Optionally emit a custom signal if cpu->requestStop() isn't public
+			// emit signalStopCpu(i);
+		}
+	}
+
+	// Give CPUs time to stop gracefully
+	QThread::msleep(10);
+
+	// Wait for all threads to finish
+	for (int i = 0; i < m_moved_cpus.size(); ++i) {
+		QThread* thread = m_moved_cpus[i];
+		if (thread) {
+			qDebug() << QString("[AlphaSMP] Waiting for CPU thread %1 to finish...").arg(i);
+			thread->quit();
+			thread->wait();  // Blocks until thread completes
+			thread->deleteLater();
+		}
+	}
+
+	m_moved_cpus.clear();  // Clean up thread list
+}
+
+void AlphaSMPManager::sendInterprocessorInterrupt(int sourceCPU, int targetCPU, int interruptVector)
 {
 	// Validate CPU indices
 	if (targetCPU < 0 || targetCPU >= m_cpus.size()) {
@@ -318,7 +426,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	qDebug() << "CPU" << sourceCPU << "sent interrupt vector" << interruptVector << "to CPU" << targetCPU;
 }
 
-//<AlphaSMPManager::broadcastInterprocessorInterrupt(int sourceCPU, int interruptVector)
+void AlphaSMPManager::broadcastInterprocessorInterrupt(int sourceCPU, int interruptVector)
 {
 	// Send interrupt to all CPUs except source
 	for (int i = 0; i < m_cpus.size(); i++) {
@@ -330,19 +438,60 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	qDebug() << "CPU" << sourceCPU << "broadcast interrupt vector" << interruptVector;
 }
 
-//<AlphaSMPManager::handleMemoryWrite(int cpuId, quint64 address, int size)
+
+
+void AlphaSMPManager::handleMemoryWrite(int cpuId, quint64 address, int size)
 {
 	// Handle cache coherency
 	handleMemoryCoherency(address, cpuId);
 }
 
-//<AlphaSMPManager::invalidateCacheLine(int cpuId, quint64 address)
+void AlphaSMPManager::invalidateCacheLine(int cpuId, quint64 address)
 {
 	// In a real implementation, this would invalidate the cache line on the specified CPU
 	qDebug() << "Invalidating cache line at address" << Qt::hex << address << "on CPU" << cpuId;
 }
 
-//<AlphaSMPManager::waitForAllCPUs()
+void AlphaSMPManager::resetCPUs()
+{
+	for (int i = 0; i < m_cpus.size(); ++i) {
+		QMetaObject::invokeMethod(m_cpus[i], "resetCPU", Qt::QueuedConnection);
+	}
+}
+
+void AlphaSMPManager::resumeExecution()
+{
+	for (int i = 0; i < m_cpus.size(); ++i) {
+		QMetaObject::invokeMethod(m_cpus[i], "resumeExecution", Qt::QueuedConnection);
+	}
+}
+
+void AlphaSMPManager::startExecution()
+{
+	for (int i = 0; i < m_cpus.size(); ++i) {
+		if (m_moved_cpus[i] && m_moved_cpus[i]->isRunning()) {
+			QMetaObject::invokeMethod(m_cpus[i], "startExecution", Qt::QueuedConnection);
+		}
+	}
+}
+
+void AlphaSMPManager::stopExecution()
+{
+	for (int i = 0; i < m_cpus.size(); ++i) {
+		QMetaObject::invokeMethod(m_cpus[i], "requestStop", Qt::QueuedConnection);
+	}
+
+	QThread::msleep(10);
+
+	for (auto* thread : m_moved_cpus) {
+		if (thread) {
+			thread->quit();
+			thread->wait();
+		}
+	}
+}
+
+void AlphaSMPManager::waitForAllCPUs()
 {
 	QMutexLocker locker(&m_barrierLock);
 
@@ -362,7 +511,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	}
 }
 
-//<AlphaSMPManager::releaseAllCPUs()
+void AlphaSMPManager::releaseAllCPUs()
 {
 	QMutexLocker locker(&m_barrierLock);
 
@@ -375,19 +524,19 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	qDebug() << "Released all CPUs from barrier";
 }
 
-//<AlphaSMPManager::synchronizeBarrier()
+void AlphaSMPManager::synchronizeBarrier()
 {
 	// This is a simple implementation of a barrier synchronization
 	waitForAllCPUs();
 }
 
-//<AlphaSMPManager::resetBarrier()
+void AlphaSMPManager::resetBarrier()
 {
 	// Reset the waiting count
 	m_waitingCPUCount = 0;
 }
 
-//<AlphaSMPManager::handleMemoryCoherency(quint64 address, int sourceCPU)
+void AlphaSMPManager::handleMemoryCoherency(quint64 address, int sourceCPU)
 {
 	QMutexLocker locker(&m_smpLock);
 
@@ -412,7 +561,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	emit cacheCoherencyEvent(sourceCPU, cacheLine);
 }
 
-//<AlphaSMPManager::updateSharedCacheStatus(quint64 address, int cpuId, bool isSharing)
+void AlphaSMPManager::updateSharedCacheStatus(quint64 address, int cpuId, bool isSharing)
 {
 	// Get the cache line address
 	quint64 cacheLine = address & ~0x3F;
@@ -444,7 +593,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 	 * @brief Notify that a CPU halted.
 	 *
  */
-//<AlphaSMPManager::handleCpuHalted()
+void AlphaSMPManager::handleCpuHalted()
 {
 	//// Notify that a CPU halted. You could check if all CPUs halted together.
 #ifdef QT_DEBUG
@@ -463,7 +612,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 		FloatingPointDisabled, ///< FP instruction when FP disabled
 		ReservedInstruction    ///< Unimplemented instruction)
  */
-//<AlphaSMPManager::handleTrapRaised(helpers_JIT::TrapType trap)
+void AlphaSMPManager::handleTrapRaised(helpers_JIT::TrapType trap)
 {
 #ifdef QT_DEBUG
 	qDebug() << "[AlphaSMPManager] Trap raised:" << static_cast<int>(trap);
@@ -482,7 +631,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
 		EXCEPTION_HANDLING,
 		HALTED
  */
-//<AlphaSMPManager::handleCpuStateChanged(int newState)
+void AlphaSMPManager::handleCpuStateChanged(int newState)
 {
 #ifdef QT_DEBUG
 	qDebug() << "[AlphaSMPManager] CPU state changed to:" << newState;
@@ -495,7 +644,7 @@ AlphaCPU* AlphaSMPManager::getCPU(int index)
  *
  *	This is a convenience event only.
  */
-//<AlphaSMPManager::handleMemoryAccessed(quint64 address, quint64 value, int size, bool isWrite)
+void AlphaSMPManager::handleMemoryAccessed(quint64 address, quint64 value, int size, bool isWrite)
 {
 #ifdef QT_DEBUG
 	QString accessType = isWrite ? "Write" : "Read";

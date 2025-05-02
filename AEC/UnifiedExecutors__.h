@@ -195,7 +195,7 @@ private:
 		quint8 func = instr & 0x3F; // lower 6 bits
 		quint8 minorFunc = (instr >> 5) & 0x7; // minor subfields if needed
 
-		auto op = decodeOperate(instr);
+		auto op = helpers_JIT::decodeOperate(instr);
 
 		// 🆕 Add decoding for CMPLE vs CVTQL disambiguation
 		IntegerSubType subtype = decodeIntegerSubtype(instr);
@@ -228,7 +228,7 @@ private:
 	 * @brief Dispatches integer logical instructions (Opcode 0x11).
 	 */
 	void dispatchLogical(quint32 instr) {
-		auto op = decodeOperate(instr);
+		auto op = helpers_JIT::decodeOperate(instr);
 		switch (op.function) {
 		case 0x00: execAND(op); break; // AND
 		case 0x08: execBIC(op); break; // BIC
@@ -246,7 +246,7 @@ private:
 		emit registerUpdated(op.rc, result);
 	}
 
-	void execADDQ(const :OperateInstruction& op) {
+	void execADDQ(const helpers_JIT::OperateInstruction& op) {
 		quint64 result = regs->readIntReg(op.ra) + regs->readIntReg(op.rb);
 		regs->writeIntReg(op.rc, result);
 		emit registerUpdated(op.rc, result);

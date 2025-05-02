@@ -6,12 +6,23 @@
 #include <QPair>
 #include <QMutex>
 #include <QByteArray>
+
+class AlphaCPU;          // as a replacement to a full definition include
+
+// Define MappingEntry here:
+struct MappingEntry {
+	quint64 physicalBase;
+	quint64 size;
+	int     protectionFlags;
+};
+
 #include "SafeMemory.h"
 #include "MMIOManager.h"
 #include <QMutexLocker>
 #include <QDebug>
 #include <QVector>
-#include "alphacpu.h"
+//#include "alphacpu.h"  // Do not include this as it will create a circular reference in AMS
+
 
 /*
 
@@ -49,12 +60,12 @@ public:
 
 //     quint64 readMemory(quint64 virtualAddress, int size);
 //     void writeMemory(quint64 virtualAddress, quint64 value, int size);
-    quint64 readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddress, int size);
-    bool readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint32& value, int size);
+    bool readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint64& value, int size);
+    bool readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, void* value, size_t size);
     void clearMappings();
-    QJsonDocument getMappedRegionsJson() const;
-    void writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddress, quint64 value, int size);
+    bool writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddress, quint64 value, int size);
 
+    bool writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, void* value, int size);
     bool isMapped(quint64 vaddr) const;
     bool checkAccess(quint64 vaddr, int accessType) const;
     void mapMemory(quint64 virtualAddr, quint64 physicalAddr, quint64 size, int protectionFlags);
@@ -88,4 +99,5 @@ private:
     // Configured via setMemory(qUInt64)
     void initialize(quint64 size_mb) { m_memorySystem->resize(size_mb); } // Initialize Physical Memory (SafeMemory)
     bool isMMIOAddress(quint64 physicalAddr) ;
+  
 };

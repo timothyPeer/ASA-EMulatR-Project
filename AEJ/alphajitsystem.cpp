@@ -26,8 +26,8 @@ AlphaJITSystem::AlphaJITSystem(const QVariantMap& customOptions /*= QVariantMap(
 	// Initialize the execution engine
 	engine = new AlphaJITExecutionEngine();
 	// Assume options.optimizationLevel is of type AlphaJITCompiler::OptimizationLevel
-	engine->getAlphaJITCompiler()->setOptimizationLevel(static_cast<int>(options.optimizationLevel));
-	engine->getAlphaJITCompiler()->setOptimizationLevel(options.optimizationLevel);
+// 	engine->getAlphaJITCompiler()->setOptimizationLevel(static_cast<int>(options.optimizationLevel));
+// 	engine->getAlphaJITCompiler()->setOptimizationLevel(options.optimizationLevel);
 	engine->getAlphaJITProfiler()->setHotThreshold(options.blockCompilationThreshold);
 	engine->setTraceThreshold(options.traceCompilationThreshold);
 }

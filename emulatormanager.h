@@ -16,8 +16,7 @@
 #include "DeviceManager.h"
 #include "IRQController.h"
 #include "SystemBus.h"
-#include "ExecutorManager.h"
-#include "AEJ/alphasmpmanager.h"
+#include "alphasmpmanager.h"
 
 /**
  * @brief Central manager for the Alpha emulator system
@@ -173,6 +172,7 @@ public:
      */
     void setCPUSpeed(int mips);
     
+    void createExecutors(int cpuId);
     /**
      * @brief Set Memory in MB or GB
      * @param Memory Formats will be converted to MB

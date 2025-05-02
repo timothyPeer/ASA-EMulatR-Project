@@ -1,151 +1,94 @@
+// AlphaJITCompiler.h
 #pragma once
-// AlphaJITCompiler.h - JIT compiler header
-#ifndef ALPHAJITCOMPILER_H
-#define ALPHAJITCOMPILER_H
+
+#ifndef ALPHA_JIT_COMPILER_H
+#define ALPHA_JIT_COMPILER_H
 
 #include <QObject>
-#include <QThread>
+#include <QHash>
 #include <QMutex>
-#include <QWaitCondition>
-#include <QQueue>
-#include <QAtomicInt>
-#include <QPair>
-#include <QByteArray>
-#include "..\AESH\Helpers.h"
+#include <functional>
+#include "RegisterBank.h"
+#include "FpRegisterBankcls.h"
+#include "helpers.h"
+#include "AlphaJITProfiler.h"
+#include "safememory.h"
 
 /**
- * @brief AlphaJITCompiler - Just-In-Time compiler for Alpha instructions
+ * @brief Just-In-Time (JIT) compiler for Alpha instruction blocks with profiling.
  *
- * This class translates Alpha instructions to native code for efficient execution.
- * It runs in a separate thread to avoid blocking CPU execution.
+ * Integrates runtime profiling (hit counters) to auto-trigger compilation of hot blocks,
+ * plus a simple branch predictor for future execution hints.
  */
-// class AlphaJITCompiler : public QObject
-// {
-//     Q_OBJECT
-// 
-// public:
-//    
-// 
-//     explicit AlphaJITCompiler(QObject* parent = nullptr);
-//     ~AlphaJITCompiler();
-// 
-//     void initialize();
-//     void shutdown();
-// 
-//     // Configuration - provides compatibility with both class versions
-// 
-// 	/// Returns true if this PC has been compiled to native code
-// 	bool hasBlock(quint64 pc) const;
-// 
-// 	/// Executes a compiled block
-// 	void runBlock(quint64 pc, AlphaCPU* cpu);
-// 
-// 	/// Compile a block if needed (e.g., hot path)
-// 	void compileBlock(quint64 pc);
-// 
-// 
-// 
-// 	void setOptimizationLevel(int level) {
-// 		m_optimizationLevel = static_cast<helpers_JIT::OptimizationLevel>(level);
-// 	}
-//     void setOptimizationLevel(helpers_JIT::OptimizationLevel level);
-//     //void setOptimizationLevel(helpers_JIT::OptimizationLevel level) { (m_optimizationLevel = level); }
-//     helpers_JIT::OptimizationLevel getOptimizationLevel_toEnum() const { return m_optimizationLevel; }
-//     int getOptimizationLevel_toInt() const { return static_cast<int>(m_optimizationLevel); }
-// 
-// public slots:
-//     // Compilation requests
-//     void compileBlock(quint64 startAddr, const QByteArray& instructions);
-//     bool compileInstruction(quint64 address, quint32 instruction);
-//     void invalidateBlock(quint64 startAddr);
-//     void prioritizeCompilation(quint64 startAddr);
-// 
-//     // Control
-//     void startCompiler();
-//     void stopCompiler();
-//     void pauseCompiler();
-//     void resumeCompiler();
-//     void trapRaised(helpers_JIT::TrapType trapType);
-//     void handleTrap(helpers_JIT::TrapType trapType);
-// 
-// signals:
-//     // Compilation status
-//     void blockCompiled(quint64 startAddr, const QByteArray& nativeCode);
-//     void compilationProgress(int percentComplete);
-//     void compilationError(quint64 startAddr, const QString& errorMessage);
-//     void compilerStatusChanged(bool running);
-// 
-// private:
-//     // Thread control
-//     QThread* m_compilerThread;
-//     QAtomicInt m_running;
-//     QAtomicInt m_paused;
-// 
-//     // Compilation queue and synchronization
-//     QMutex m_compilerLock;
-//     QQueue<QPair<quint64, QByteArray>> m_compilationQueue;
-//     QQueue<quint64> m_priorityQueue;
-//     QWaitCondition m_workAvailable;
-// 
-//     // Configuration
-//     helpers_JIT::OptimizationLevel m_optimizationLevel;
-// 
-//     // Compiler execution
-//     void compilerThreadMain();
-// 
-// 	// Stores a mapping from PC to function pointer or code blob
-// 	QHash<quint64, std::function<void(AlphaCPU*)>> m_compiledBlocks;
-// 
-//     // Compilation steps
-//     QByteArray generateNativeCode(quint64 startAddr, const QByteArray& alphaCode);
-//     QByteArray decodeToIntermediateRepresentation(const QByteArray& alphaCode);
-//     void applyOptimizations(QByteArray& ir);
-//     QByteArray generateMachineCode(const QByteArray& ir);
-// 
-//     // Optimization passes
-//     void applyConstantFolding(QByteArray& ir);
-//     void eliminateDeadCode(QByteArray& ir);
-//     void emitFallbackCall(quint64 address, quint32 instruction);
-//     void applyCommonSubexpressionElimination(QByteArray& ir);
-//     void applyRegisterAllocation(QByteArray& ir);
-//     void applyInstructionScheduling(QByteArray& ir);
-// 
-//     // Helper methods
-//     QPair<quint64, QByteArray> getNextCompilationJob();
-// };
+class AlphaJITCompiler : public QObject {
+    Q_OBJECT
 
-
-#include <QHash>
-#include <functional>
-
-class AlphaCPU;
-
-class AlphaJITCompiler {
 public:
-	AlphaJITCompiler();
+    using BlockFunc = std::function<quint64()>;
 
-	void setJitThreshold(int threshold_) {
-		m_threshold = threshold_;
+	explicit AlphaJITCompiler(RegisterBank* intRegs,
+		FpRegisterBankcls* fpRegs,
+		SafeMemory* memory,
+		QObject* parent = nullptr);
+
+    /**
+     * @brief Get or compile a block at `pc` based on hit counters.
+     */
+    BlockFunc compileOrGetBlock(quint64 pc);
+    // compile the instruction to a block (Legacy Support)  
+    inline BlockFunc compileBlock(quint64 pc) { return compileOrGetBlock(pc); }
+
+	// In AlphaJITCompiler.h, public:
+	/// Returns true if we have a compiled lambda cached
+	bool hasBlock(quint64 pc) const {
+		QMutexLocker l(&cacheMutex);
+		return cache.contains(pc);
 	}
 
-	bool hasBlock(quint64 pc) const;
-	void runBlock(quint64 pc, AlphaCPU* cpu);
+	/// Run the compiled block (must exist) and return next PC
+	quint64 runBlock(quint64 pc) {
+		return compileBlock(pc)();    // compileBlock is our alias for compileOrGetBlock
+	}
 
-	void recordHit(quint64 pc);
-	bool shouldCompile(quint64 pc) const;
 
-	void compileBlock(quint64 pc);
-	void installStub(quint64 pc, std::function<void(AlphaCPU*)> handler);
+    /**
+     * @brief Execute a block (interpreted or JIT-compiled).
+     */
+    quint64 executeBlock(quint64 pc);
 
-	void clear();					// Clear the HitCounters
-	void clearAll();				// Clear the JIT Block and HitCounters
-	void setOptimizationLevel(int optimizationLevel);
 private:
-	QHash<quint64, std::function<void(AlphaCPU*)>> m_blocks;
-	QHash<quint64, int> m_hitCount;
-	int m_threshold = 50;
-	
+    RegisterBank* integerRegs;                  ///< Integer registers & memory accessor
+    FpRegisterBankcls* floatingRegs;               ///< Floating-point registers
+    SafeMemory* memory;
+
+    AlphaJITProfiler profiler;                  ///< Profiler (hot threshold)
+    QHash<quint64, quint64> hitCounters;        ///< Execution count per PC
+
+    QHash<quint64, BlockFunc> cache;            ///< Cached JIT-compiled blocks
+    QMutex cacheMutex;                          ///< Protects cache
+
+    QHash<quint64, quint64> branchPredictor;    ///< Last observed branch target
+
+    /**
+     * @brief Create a JIT-compiled block lambda for `pc`.
+     */
+    BlockFunc createJITBlock(quint64 pc);
+
+    /**
+     * @brief Create an interpreter-only block lambda for `pc`.
+     */
+    BlockFunc createInterpreterBlock(quint64 pc);
+
+    /**
+     * @brief Fallback interpreter for a block starting at `pc`.
+     */
+    quint64 interpretBlock(quint64 pc);
+
+    /**
+     * @brief Update branch predictor with actual target for block at `pc`.
+     */
+    void updateBranchPredictor(quint64 pc, quint64 actualTarget);
 };
+#endif // ALPHA_JIT_COMPILER_H
 
 
-#endif // ALPHAJITCOMPILER_H

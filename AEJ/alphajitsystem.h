@@ -8,8 +8,9 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include "alphajitexecutionengine.h"
-#include "..\AESH\Helpers.h"
+#include "Helpers.h"
 #include "instructiondefinition.h"
+#include "fpRegisterBankCls.h"
 
 
 /**
@@ -41,6 +42,7 @@ private:
    
 	helpers_JIT::Options options;
 	AlphaJITExecutionEngine* engine;
+
     QMap<QString, InstructionDefinition> instructionMap; // Store parsed CSV data as a map
 public:
     /**
@@ -48,6 +50,7 @@ public:
      * @param customOptions - Optional configuration parameters
      */
     explicit AlphaJITSystem(const QVariantMap& customOptions = QVariantMap());
+
     /**
      * Destructor
      */
@@ -100,6 +103,14 @@ public:
         auto instructionDefs = parseInstructionDefinitions(csvData);
         return loadInstructionDefinitions(instructionDefs);
     }
+
+
+	/// Return the integer-register snapshot
+	QVector<quint64> getRegisters() const { return engine->getRegisters(); }
+
+	/// Return the floating-point register snapshot
+	QVector<double> getFpRegisters() const { return engine->getFpRegisters(); }
+
 
     /**
      * Parse a CSV containing Alpha instruction definitions

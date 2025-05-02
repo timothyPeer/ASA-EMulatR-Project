@@ -1,155 +1,66 @@
-#pragma once
-#ifndef TRACEMANAGER_H
-#define TRACEMANAGER_H
-
+﻿#pragma once
 #include <QObject>
-#include <QDebug>
-#include <QString>
-#include <QFile>
-
-/**
- * @brief TraceManager provides centralized runtime tracing control for the emulator.
- * Allows dynamic enabling/disabling of debug output based on trace levels.
-
-
-Main Emulator Threads
-(AlphaCPUs, IOManager, SMPManager, Devices)
-	|
-	|  --> TraceManager::logXXX("message")
-	|
-	|  --> [ QMutex + QQueue<QString> ] buffer
-		  |
-		  |  (background thread)
-		  v
-[TraceWorker QThread]
-	|
-	|---> Write to File
-	|---> Or Console
-	|---> (Future: network UDP)
-
-
-
- */
-
-
-#include <QTextStream>
 #include <QMutex>
+#include <QThread>
 #include <QWaitCondition>
 #include <QQueue>
-#include <QThread>
+#include <QTimer>
+#include <QFile>
+#include <QTextStream>
 
- /**
-  * @brief TraceWorker processes log messages asynchronously in a background thread.
-  */
-class TraceWorker : public QObject
-{
-    Q_OBJECT
 
-public:
-    explicit TraceWorker(QQueue<QString>* sharedQueue, QMutex* lock, QWaitCondition* waitCond, QObject* parent = nullptr)
-        : QObject(parent), m_queue(sharedQueue), m_lock(lock), m_waitCondition(waitCond)
-    {
-        m_logFile.setFileName("trace_output.log");
-        m_logFile.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-        m_outputStream.setDevice(&m_logFile);
-    }
 
-public slots:
-    void process();
-   
-
-private:
-    QQueue<QString>* m_queue;
-    QMutex* m_lock;
-    QWaitCondition* m_waitCondition;
-    QFile m_logFile;
-    QTextStream m_outputStream;
-};
-
-/**
- * @brief TraceManager provides centralized, thread-safe tracing with async background worker.
- */
-class TraceManager : public QObject
-{
-    Q_OBJECT
+class TraceManager : public QObject {
+	Q_OBJECT
+	Q_DISABLE_COPY(TraceManager)
 
 public:
-    static TraceManager& instance()
-    {
-        static TraceManager instance;
-        return instance;
-    }
+	static TraceManager& instance();
+	~TraceManager();
 
-    static void setTraceLevel(int level) { instance().m_traceLevel = level; }
-    static int getTraceLevel() { return instance().m_traceLevel; }
+	enum LogLevel {
+		TRACE = 0,
+		DEBUG = 1,
+		INFO = 2,
+		WARN = 3,  // ← NEW
+		ERROR = 4,
+		CRITICAL = 5
+	};
 
-    static void logInfo(const QString& message)
-    {
-        if (instance().m_traceLevel >= 1) {
-            instance().enqueueMessage("[INFO] " + message);
-        }
-    }
+	void trace(const QString& msg);
+	void debug(const QString& msg);
+	void info(const QString& msg);
+	void error(const QString& msg);
+	void critical(const QString& msg);
+	void warn(const QString& msg);
 
-    static void logDebug(const QString& message)
-    {
-        if (instance().m_traceLevel >= 2) {
-            instance().enqueueMessage("[DEBUG] " + message);
-        }
-    }
+	void setLogLevel(int level);
+	bool isLevelEnabled(int level) const;
 
-    static void logVerbose(const QString& message)
-    {
-        if (instance().m_traceLevel >= 3) {
-            instance().enqueueMessage("[VERBOSE] " + message);
-        }
-    }
+	void enableFileLogging(const QString& path);
+	void disableFileLogging();
 
-    void startWorker()
-    {
-        m_worker = new TraceWorker(&m_logQueue, &m_queueLock, &m_waitCondition);
-        m_workerThread = new QThread(this);
-        m_worker->moveToThread(m_workerThread);
+signals:
+	void messageLogged(QString level, QString message);
 
-        connect(m_workerThread, &QThread::started, m_worker, &TraceWorker::process);
-
-        m_workerThread->start();
-    }
-
-    void stopWorker()
-    {
-        if (m_workerThread) {
-            m_workerThread->quit();
-            m_workerThread->wait();
-            delete m_worker;
-            delete m_workerThread;
-        }
-    }
+private slots:
+	void flushQueuedMessages();
 
 private:
-    explicit TraceManager(QObject* parent = nullptr)
-        : QObject(parent), m_traceLevel(0), m_worker(nullptr), m_workerThread(nullptr)
-    {
-    }
+	TraceManager();
+	void enqueueLog(const QString& level, const QString& message);
+	void startWorker();
 
-    void enqueueMessage(const QString& message)
-    {
-        QMutexLocker locker(&m_queueLock);
-        m_logQueue.enqueue(message);
-        m_waitCondition.wakeOne(); // Wake the worker thread
-    }
+	mutable QMutex mutex;
+	int currentLevel;
+	QFile logFile;
+	QTextStream logStream;
 
-    int m_traceLevel;
-    QQueue<QString> m_logQueue;
-    QMutex m_queueLock;
-    QWaitCondition m_waitCondition;
-
-    TraceWorker* m_worker;
-    QThread* m_workerThread;
+	// Background queue and thread
+	QQueue<QString> messageQueue;
+	QMutex queueMutex;
+	QWaitCondition queueNotEmpty;
+	QThread workerThread;
+	QTimer* flushTimer;
+	bool exitRequested;
 };
-
-#endif // TRACEMANAGER_H
-
-
-
-
-

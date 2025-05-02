@@ -49,7 +49,6 @@ public:
 
         // Initialize the execution engine
         engine = new AlphaJITExecutionEngine();
-        engine->getAlphaJITCompiler()->setOptimizationLevel(options.optimizationLevel);
         engine->getAlphaJITProfiler()->setHotThreshold(options.blockCompilationThreshold);
         engine->setTraceThreshold(options.traceCompilationThreshold);
     }

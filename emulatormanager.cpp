@@ -60,116 +60,116 @@ bool EmulatorManager::initialize(quint64 memorySize, int cpuCount)
 
 void EmulatorManager::initialize_signalsAndSlots() {
 
-
+	
 }
 
 bool EmulatorManager::start()
 {
-	if (state != EmulationState::Initialized && state != EmulationState::Stopped) {
-		qWarning() << "EmulatorManager: Cannot start from current state";
-		return false;
-	}
-
-	// Start all CPU threads
-	for (int i = 0; i < cpus.size(); ++i) {
-		cpus[i]->run();
-	}
-
-	state = EmulationState::Running;
-	emit emulationStarted();
-	emit statusChanged("Emulation started");
-
-	qDebug() << "EmulatorManager: Emulation started";
-	return true;
+// 	if (state != EmulationState::Initialized && state != EmulationState::Stopped) {
+// 		qWarning() << "EmulatorManager: Cannot start from current state";
+// 		return false;
+// 	}
+// 
+// 	// Start all CPU threads
+// 	for (int i = 0; i < cpus.size(); ++i) {
+// 		cpus[i]->run();
+// 	}
+// 
+// 	state = EmulationState::Running;
+// 	emit emulationStarted();
+// 	emit statusChanged("Emulation started");
+// 
+// 	qDebug() << "EmulatorManager: Emulation started";
+// 	return true;
 }
 
 void EmulatorManager::pause()
 {
-	if (state != EmulationState::Running) {
-		qWarning() << "EmulatorManager: Not running, cannot pause";
-		return;
-	}
-
-	// Pause all CPUs
-	for (int i = 0; i < cpus.size(); ++i) {
-		cpus[i]->requestStop();
-	}
-
-	// Wait for all CPU threads to stop
-	for (int i = 0; i < cpuThreads.size(); ++i) {
-		cpuThreads[i]->wait(1000);
-	}
-
-	state = EmulationState::Paused;
-	emit emulationPaused();
-	emit statusChanged("Emulation paused");
-
-	qDebug() << "EmulatorManager: Emulation paused";
+// 	if (state != EmulationState::Running) {
+// 		qWarning() << "EmulatorManager: Not running, cannot pause";
+// 		return;
+// 	}
+// 
+// 	// Pause all CPUs
+// 	for (int i = 0; i < cpus.size(); ++i) {
+// 		cpus[i]->requestStop();
+// 	}
+// 
+// 	// Wait for all CPU threads to stop
+// 	for (int i = 0; i < cpuThreads.size(); ++i) {
+// 		cpuThreads[i]->wait(1000);
+// 	}
+// 
+// 	state = EmulationState::Paused;
+// 	emit emulationPaused();
+// 	emit statusChanged("Emulation paused");
+// 
+// 	qDebug() << "EmulatorManager: Emulation paused";
 }
 
 void EmulatorManager::resume()
 {
-	if (state != EmulationState::Paused) {
-		qWarning() << "EmulatorManager: Not paused, cannot resume";
-		return;
-	}
-
-	// Resume all CPUs
-	for (int i = 0; i < cpus.size(); ++i) {
-		cpus[i]->run();
-	}
-
-	state = EmulationState::Running;
-	emit emulationResumed();
-	emit statusChanged("Emulation resumed");
-
-	qDebug() << "EmulatorManager: Emulation resumed";
+// 	if (state != EmulationState::Paused) {
+// 		qWarning() << "EmulatorManager: Not paused, cannot resume";
+// 		return;
+// 	}
+// 
+// 	// Resume all CPUs
+// 	for (int i = 0; i < cpus.size(); ++i) {
+// 		cpus[i]->run();
+// 	}
+// 
+// 	state = EmulationState::Running;
+// 	emit emulationResumed();
+// 	emit statusChanged("Emulation resumed");
+// 
+// 	qDebug() << "EmulatorManager: Emulation resumed";
 }
 
 void EmulatorManager::stop()
 {
-	if (state != EmulationState::Running && state != EmulationState::Paused) {
-		qWarning() << "EmulatorManager: Not running or paused, cannot stop";
-		return;
-	}
-
-	// Stop all CPUs
-	for (int i = 0; i < cpus.size(); ++i) {
-		cpus[i]->requestStop();
-	}
-
-	// Wait for all CPU threads to stop
-	for (int i = 0; i < cpuThreads.size(); ++i) {
-		cpuThreads[i]->wait(1000);
-	}
-
-	state = EmulationState::Stopped;
-	emit emulationStopped();
-	emit statusChanged("Emulation stopped");
-
-	qDebug() << "EmulatorManager: Emulation stopped";
+// 	if (state != EmulationState::Running && state != EmulationState::Paused) {
+// 		qWarning() << "EmulatorManager: Not running or paused, cannot stop";
+// 		return;
+// 	}
+// 
+// 	// Stop all CPUs
+// 	for (int i = 0; i < cpus.size(); ++i) {
+// 		cpus[i]->requestStop();
+// 	}
+// 
+// 	// Wait for all CPU threads to stop
+// 	for (int i = 0; i < cpuThreads.size(); ++i) {
+// 		cpuThreads[i]->wait(1000);
+// 	}
+// 
+// 	state = EmulationState::Stopped;
+// 	emit emulationStopped();
+// 	emit statusChanged("Emulation stopped");
+// 
+// 	qDebug() << "EmulatorManager: Emulation stopped";
 }
 
 void EmulatorManager::reset()
 {
-	// First stop emulation if it's running
-	if (state == EmulationState::Running || state == EmulationState::Paused) {
-		stop();
-	}
-
-// 	Reset all CPUs
-// 		for (int i = 0; i < cpus.size(); ++i) {
-// 			cpus[i]->reset();
-// 		}
-
-	this->m_smpManager.data()->reset();
-	// Reset devices
-	// Typically, we would loop through devices and call a reset method
-
-	state = EmulationState::Initialized;
-	emit statusChanged("System reset");
-
-	qDebug() << "EmulatorManager: System reset";
+// 	// First stop emulation if it's running
+// 	if (state == EmulationState::Running || state == EmulationState::Paused) {
+// 		stop();
+// 	}
+// 
+// // 	Reset all CPUs
+// // 		for (int i = 0; i < cpus.size(); ++i) {
+// // 			cpus[i]->reset();
+// // 		}
+// 
+// 	this->m_smpManager.data()->reset();
+// 	// Reset devices
+// 	// Typically, we would loop through devices and call a reset method
+// 
+// 	state = EmulationState::Initialized;
+// 	emit statusChanged("System reset");
+// 
+// 	qDebug() << "EmulatorManager: System reset";
 }
 
 // AlphaCoreContext* EmulatorManager::getCPU(int index) const
@@ -201,97 +201,97 @@ void EmulatorManager::reset()
 // }
 
 bool EmulatorManager::loadProgram(const QString& filename, quint64 loadAddress, bool setCPUPC)
-{
-	if (!memory) {
-		qWarning() << "EmulatorManager: No memory system available";
-		return false;
-	}
-
-	if (!memory->loadBinary(filename, loadAddress)) {
-		qWarning() << "EmulatorManager: Failed to load program" << filename;
-		return false;
-	}
-
-	if (setCPUPC && !cpus.isEmpty()) {
-		// Set PC of first CPU to the load address
-		cpus[0]->setPC(loadAddress);
-		qDebug() << "EmulatorManager: Set CPU 0 PC to" << QString("0x%1").arg(loadAddress, 0, 16);
-	}
-
-	emit statusChanged(QString("Program loaded: %1").arg(filename));
-	return true;
+ {
+// 	if (!memory) {
+// 		qWarning() << "EmulatorManager: No memory system available";
+// 		return false;
+// 	}
+// 
+// 	if (!memory->loadBinary(filename, loadAddress)) {
+// 		qWarning() << "EmulatorManager: Failed to load program" << filename;
+// 		return false;
+// 	}
+// 
+// 	if (setCPUPC && !cpus.isEmpty()) {
+// 		// Set PC of first CPU to the load address
+// 		cpus[0]->setPC(loadAddress);
+// 		qDebug() << "EmulatorManager: Set CPU 0 PC to" << QString("0x%1").arg(loadAddress, 0, 16);
+// 	}
+// 
+// 	emit statusChanged(QString("Program loaded: %1").arg(filename));
+// 	return true;
 }
 
 bool EmulatorManager::saveState(const QString& filename)
-{
-	QJsonObject state;
-	QJsonArray cpuStates;
-
-	// Save all CPU states
-	for (int i = 0; i < cpus.size(); ++i) {
-		AlphaCPUState cpuState = cpus[i]->captureState();
-		// Convert CPU state to JSON
-		QJsonObject cpuJson = cpuState.toJson();
-		cpuStates.append(cpuJson);
-	}
-
-	state["cpuStates"] = cpuStates;
-
-	// Save memory state (this would be large, so in practice might use
-	// a binary format or compression)
-
-	// Write to file
-	QFile file(filename);
-	if (!file.open(QIODevice::WriteOnly)) {
-		qWarning() << "EmulatorManager: Failed to open save state file" << filename;
-		return false;
-	}
-
-	QJsonDocument doc(state);
-	file.write(doc.toJson());
-	file.close();
-
-	emit statusChanged(QString("State saved to %1").arg(filename));
-	qDebug() << "EmulatorManager: State saved to" << filename;
-	return true;
+ {
+// 	QJsonObject state;
+// 	QJsonArray cpuStates;
+// 
+// 	// Save all CPU states
+// 	for (int i = 0; i < cpus.size(); ++i) {
+// 		AlphaCPUState cpuState = cpus[i]->captureState();
+// 		// Convert CPU state to JSON
+// 		QJsonObject cpuJson = cpuState.toJson();
+// 		cpuStates.append(cpuJson);
+// 	}
+// 
+// 	state["cpuStates"] = cpuStates;
+// 
+// 	// Save memory state (this would be large, so in practice might use
+// 	// a binary format or compression)
+// 
+// 	// Write to file
+// 	QFile file(filename);
+// 	if (!file.open(QIODevice::WriteOnly)) {
+// 		qWarning() << "EmulatorManager: Failed to open save state file" << filename;
+// 		return false;
+// 	}
+// 
+// 	QJsonDocument doc(state);
+// 	file.write(doc.toJson());
+// 	file.close();
+// 
+// 	emit statusChanged(QString("State saved to %1").arg(filename));
+// 	qDebug() << "EmulatorManager: State saved to" << filename;
+// 	return true;
 }
 
 bool EmulatorManager::loadState(const QString& filename)
 {
-	QFile file(filename);
-	if (!file.open(QIODevice::ReadOnly)) {
-		qWarning() << "EmulatorManager: Failed to open save state file" << filename;
-		return false;
-	}
-
-	QByteArray data = file.readAll();
-	file.close();
-
-	QJsonDocument doc = QJsonDocument::fromJson(data);
-	if (doc.isNull() || !doc.isObject()) {
-		qWarning() << "EmulatorManager: Invalid save state format";
-		return false;
-	}
-
-	QJsonObject state = doc.object();
-
-	// Load CPU states
-	QJsonArray cpuStates = state["cpuStates"].toArray();
-	if (cpuStates.size() != cpus.size()) {
-		qWarning() << "EmulatorManager: CPU count mismatch in save state";
-		return false;
-	}
-
-	for (int i = 0; i < cpus.size(); ++i) {
-		AlphaCPUState cpuState = AlphaCPUState::fromJson(cpuStates[i].toObject());
-		cpus[i]->applyState(cpuState);
-	}
-
-	// Load memory state (would need to handle binary data)
-
-	emit statusChanged(QString("State loaded from %1").arg(filename));
-	qDebug() << "EmulatorManager: State loaded from" << filename;
-	return true;
+// 	QFile file(filename);
+// 	if (!file.open(QIODevice::ReadOnly)) {
+// 		qWarning() << "EmulatorManager: Failed to open save state file" << filename;
+// 		return false;
+// 	}
+// 
+// 	QByteArray data = file.readAll();
+// 	file.close();
+// 
+// 	QJsonDocument doc = QJsonDocument::fromJson(data);
+// 	if (doc.isNull() || !doc.isObject()) {
+// 		qWarning() << "EmulatorManager: Invalid save state format";
+// 		return false;
+// 	}
+// 
+// 	QJsonObject state = doc.object();
+// 
+// 	// Load CPU states
+// 	QJsonArray cpuStates = state["cpuStates"].toArray();
+// 	if (cpuStates.size() != cpus.size()) {
+// 		qWarning() << "EmulatorManager: CPU count mismatch in save state";
+// 		return false;
+// 	}
+// 
+// 	for (int i = 0; i < cpus.size(); ++i) {
+// 		AlphaCPUState cpuState = AlphaCPUState::fromJson(cpuStates[i].toObject());
+// 		cpus[i]->applyState(cpuState);
+// 	}
+// 
+// 	// Load memory state (would need to handle binary data)
+// 
+// 	emit statusChanged(QString("State loaded from %1").arg(filename));
+// 	qDebug() << "EmulatorManager: State loaded from" << filename;
+// 	return true;
 }
 
 void EmulatorManager::setCPUSpeed(int mips)
@@ -359,78 +359,78 @@ void EmulatorManager::setCPUSpeed(int mips)
 
 void EmulatorManager::createExecutors(int cpuId)
 {
-	// Create executors for the CPU
-	RegisterBank* regBank = cpus[cpuId]->getIntegerBank();
-
-	IntegerExecutor* intExec = new IntegerExecutor(cpus[cpuId], memory.data(), regBank);
-	FloatingPointExecutor* fpExec = new FloatingPointExecutor(cpus[cpuId], memory.data(), regBank);
-	VectorExecutor* vecExec = new VectorExecutor(cpus[cpuId], memory.data(), regBank);
-	ControlExecutor* ctrlExec = new ControlExecutor(cpus[cpuId], memory.data(), regBank);
-
-	// Store executors for cleanup
-	intExecutors.append(intExec);
-	fpExecutors.append(fpExec);
-	vecExecutors.append(vecExec);
-	ctrlExecutors.append(ctrlExec);
-
-	// Attach executors to CPU
-	cpus[cpuId]->attachExecutors(intExec, fpExec, vecExec, ctrlExec);
+// 	Create executors for the CPU
+// 		RegisterBank* regBank = cpus[cpuId]->getIntegerBank();
+// 	
+// 		IntegerExecutor* intExec = new IntegerExecutor(cpus[cpuId], memory.data(), regBank);
+// 		FloatingPointExecutor* fpExec = new FloatingPointExecutor(cpus[cpuId], memory.data(), regBank);
+// 		VectorExecutor* vecExec = new VectorExecutor(cpus[cpuId], memory.data(), regBank);
+// 		ControlExecutor* ctrlExec = new ControlExecutor(cpus[cpuId], memory.data(), regBank);
+// 	
+// 		// Store executors for cleanup
+// 		intExecutors.append(intExec);
+// 		fpExecutors.append(fpExec);
+// 		vecExecutors.append(vecExec);
+// 		ctrlExecutors.append(ctrlExec);
+// 	
+// 		// Attach executors to CPU
+// 		cpus[cpuId]->attachExecutors(intExec, fpExec, vecExec, ctrlExec);
 }
 
 void EmulatorManager::createCPUThreads(int count)
 {
-	for (int i = 0; i < count; ++i) {
-		// Create CPU
-		AlphaCoreContext* cpu = createCPU(i);
-
-		// Create thread for CPU
-		QThread* thread = new QThread();
-		cpu->moveToThread(thread);
-
-		// Connect thread start/stop signals
-		connect(thread, &QThread::started, cpu, &AlphaCoreContext::run);
-		connect(cpu, &AlphaCoreContext::halted, thread, &QThread::quit);
-
-		// Store thread
-		cpuThreads.append(thread);
-	}
+// 	for (int i = 0; i < count; ++i) {
+// 		// Create CPU
+// 		AlphaCoreContext* cpu = createCPU(i);
+// 
+// 		// Create thread for CPU
+// 		QThread* thread = new QThread();
+// 		cpu->moveToThread(thread);
+// 
+// 		// Connect thread start/stop signals
+// 		connect(thread, &QThread::started, cpu, &AlphaCoreContext::run);
+// 		connect(cpu, &AlphaCoreContext::halted, thread, &QThread::quit);
+// 
+// 		// Store thread
+// 		cpuThreads.append(thread);
+// 	}
 }
 
 void EmulatorManager::cleanup()
 {
-	// Stop emulation first
-	if (state == EmulationState::Running || state == EmulationState::Paused) {
-		stop();
-	}
-
-	// Delete CPU threads
-	for (QThread* thread : cpuThreads) {
-		if (thread->isRunning()) {
-			thread->quit();
-			thread->wait(1000);
-		}
-		delete thread;
-	}
-	cpuThreads.clear();
-
-	// Delete CPUs
-	qDeleteAll(cpus);
-	cpus.clear();
-
-	// Delete executors
-	qDeleteAll(intExecutors);
-	intExecutors.clear();
-
-	qDeleteAll(fpExecutors);
-	fpExecutors.clear();
-
-	qDeleteAll(vecExecutors);
-	vecExecutors.clear();
-
-	qDeleteAll(ctrlExecutors);
-	ctrlExecutors.clear();
-
-	// QScopedPointer will handle the rest of the components
-
-	state = EmulationState::Uninitialized;
+// 	Stop emulation first
+// 		if (state == EmulationState::Running || state == EmulationState::Paused) {
+// 			stop();
+// 		}
+// 	
+// 		// Delete CPU threads
+// 		for (QThread* thread : cpuThreads) {
+// 			if (thread->isRunning()) {
+// 				thread->quit();
+// 				thread->wait(1000);
+// 			}
+// 			delete thread;
+// 		}
+// 		cpuThreads.clear();
+// 	
+// 		// Delete CPUs
+// 		qDeleteAll(cpus);
+// 		cpus.clear();
+// 	
+// 		// Delete executors
+// 		qDeleteAll(intExecutors);
+// 		intExecutors.clear();
+// 	
+// 		qDeleteAll(fpExecutors);
+// 		fpExecutors.clear();
+// 	
+// 		qDeleteAll(vecExecutors);
+// 		vecExecutors.clear();
+// 	
+// 		qDeleteAll(ctrlExecutors);
+// 		ctrlExecutors.clear();
+// 	
+// 		// QScopedPointer will handle the rest of the components
+// 	
+// 		state = EmulationState::Uninitialized;
 }

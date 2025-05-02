@@ -1,74 +1,65 @@
+// AlphaJITExecutionEngine.h
 #pragma once
 
 #include <QObject>
-#include <QVector>
 #include <QMap>
-#include "alphajitcompiler.h"
+#include <QVariantList>
+#include <QVector>
+#include "AlphaJITCompiler.h"
 #include "AlphaBasicBlock.h"
-#include "alphatrace.h"
-#include "alphajitprofiler.h"
-#include "..\AESH\Helpers.h"
-
-AlphaJITCompiler compiler;
+#include "AlphaTrace.h"
+#include "AlphaJITProfiler.h"
+#include "RegisterBank.h"
+#include "FpRegisterBankcls.h"
+#include "SafeMemory.h"
 
 /**
- * Alpha JIT Execution Engine - manages execution of Alpha code
+ * @brief Manages execution of Alpha code with JIT and profiling.
  */
-class AlphaJITExecutionEngine : public QObject
-{
+class AlphaJITExecutionEngine : public QObject {
     Q_OBJECT
 
 public:
+    explicit AlphaJITExecutionEngine(RegisterBank* regs,
+        FpRegisterBankcls* fpRegs,
+        SafeMemory* memory,
+        QObject* parent = nullptr);
+    ~AlphaJITExecutionEngine() override;
 
-    explicit AlphaJITExecutionEngine(QObject* parent = nullptr) : QObject(parent)
-    {
-        // Initialize registers
-        registers.fill(0, 32);
-        fpRegisters.fill(0.0, 32);
-    }
+    void loadCode(const QVector<quint32>& code, quint64 baseAddress = 0);
+    helpers_JIT::ExecutionResult execute(quint64 startAddress,
+        int maxInstructions = 1000000);
 
-    ~AlphaJITExecutionEngine()
-    {
-		delete   alphaProfiler;
-        delete   alphaCompiler;
-    }
-    void loadCode(const QVector<quint32>& code, quint64 baseAddress = 0) {
-        // Implementation
-    }
+	AlphaJITCompiler* getAlphaJITCompiler() const { return alphaCompiler; }
+	AlphaJITProfiler* getAlphaJITProfiler() const { return alphaProfiler; }
 
-    helpers_JIT::ExecutionResult execute(quint64 startAddress, int maxInstructions = 1000000) {
-        // Placeholder implementation
-        helpers_JIT::ExecutionResult result;
-        result.instructionsExecuted = 0;
-        result.finalPC = startAddress;
-        result.registers = getRegisters();
-        result.fpRegisters = getFpRegisters();
-        result.compiledBlocks = 0;
-        result.compiledTraces = 0;
-        return result;
-    }
+	/// Return the integer-register snapshot for UI/serialization
+	QVector<quint64> getRegisters() const { return registers; }
+	/// Return the floating-point register snapshot
+	QVector<double> getFpRegisters() const { return fpRegisters; }
 
-    void setTraceThreshold(int threshold) { traceThreshold = threshold; }
-    int getTraceThreshold() const { return traceThreshold; }
+	void setTraceThreshold(int threshold) { traceThreshold = threshold; }
+	int getTraceThreshold() const { return traceThreshold; }
 
-    QVector<int> getRegisters() const { return registers; }
-    QVector<double> getFpRegisters() const { return fpRegisters; }
-    quint64 getPC() const { return pc; }
+    QMap<quint64, AlphaBasicBlock*>& getBasicBlocks();
+    QMap<QString, AlphaTrace*>& getTraces();
 
-    QMap<quint64, AlphaBasicBlock*>& getBasicBlocks() ;
-    QMap<QString, AlphaTrace*>& getTraces() ;
-    void setAlphaProfiler(AlphaJITProfiler* profiler) { alphaProfiler = profiler; }
-    void setAlphaCompiler(AlphaJITCompiler* compiler) { alphaCompiler = compiler;  }
-    AlphaJITProfiler* getAlphaJITProfiler() { return alphaProfiler; }
-    AlphaJITCompiler* getAlphaJITCompiler() { return alphaCompiler; }
+    FpRegisterBankcls* getFpRegisterBank();
+    quint64 getPC();
 private:
-    QVector<int> registers = QVector<int>(32, 0);  // 32 Alpha registers
-    QVector<double> fpRegisters = QVector<double>(32, 0.0);  // 32 Alpha FP registers
-    quint64 pc = 0;  // Program counter
-    int traceThreshold = 50;  // Threshold for trace formation
+    RegisterBank* registerBank;
+    FpRegisterBankcls* fpRegisterBank;
+    SafeMemory* memory;
+
+    AlphaJITProfiler* alphaProfiler;
+    AlphaJITCompiler* alphaCompiler;
+
+    QVariantList registersList;
+    QVector<quint64> registers;
+    QVector<double> fpRegisters;
+    quint64 pc;
+    int traceThreshold;
 
     QMap<quint64, AlphaBasicBlock*> basicBlocks;
     QMap<QString, AlphaTrace*> traces;
-    AlphaJITProfiler* alphaProfiler;
-    AlphaJITCompiler* alphaCompiler;
 };

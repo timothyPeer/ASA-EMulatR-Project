@@ -16,13 +16,13 @@
 class MmioHandler {
 public:
     virtual ~MmioHandler() {}
-    virtual uint8_t  mmioReadIUnt8(quint64 offset) = 0;
-    virtual uint16_t mmioReadIUnt16(quint64 offset) = 0;
-    virtual uint32_t mmioReadIUnt32(quint64 offset) = 0;
-    virtual quint64  mmioReadIUnt64(quint64 offset) = 0;
-    virtual void     mmioWriteIUnt8(quint64 offset, uint8_t  value) = 0;
-    virtual void     mmioWriteIUnt16(quint64 offset, uint16_t value) = 0;
-    virtual void     mmioWriteIUnt32(quint64 offset, uint32_t value) = 0;
-    virtual void     mmioWriteIUnt64(quint64 offset, quint64  value) = 0;
+    virtual uint8_t  mmioReadUInt8(quint64 offset) = 0;
+    virtual uint16_t mmioReadUInt16(quint64 offset) = 0;
+    virtual uint32_t mmioReadUInt32(quint64 offset) = 0;
+    virtual quint64  mmioReadUInt64(quint64 offset) = 0;
+    virtual void     mmioWriteUInt8(quint64 offset, uint8_t  value) = 0;
+    virtual void     mmioWriteUInt16(quint64 offset, uint16_t value) = 0;
+    virtual void     mmioWriteUInt32(quint64 offset, uint32_t value) = 0;
+    virtual void     mmioWriteUInt64(quint64 offset, quint64  value) = 0;
 };
 #endif // mmiohandler_h__

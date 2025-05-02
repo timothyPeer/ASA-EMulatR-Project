@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef MMIOManager_h__
 #define MMIOManager_h__
 
@@ -35,6 +35,48 @@
     mmioManager->mapDevice(scsiController, 0x10000200, 0x100);
 
  */
+// TODO MMIOManager Checklist
+ // ============================================================================
+ // MMIOManager Maintenance Guidance
+ // ----------------------------------------------------------------------------
+ //
+ // 1. ResetHandler() wrong syntax
+ //    - Issue: Original code used regions.Clear();
+ //    - Fix: QVector uses lowercase clear(), not Clear().
+ //      ➔ Change regions.Clear() → regions.clear();
+ //
+ // 2. handler field unused
+ //    - Issue: A 'handler' pointer was declared globally but never used.
+ //    - Fix: This field is unnecessary and has been removed.
+ //      ➔ Only Region::handler is used per mapped device.
+ //
+ // 3. Only 32-bit read/write supported
+ //    - Issue: Early version only had uint32_t read(uint64_t addr).
+ //    - Guidance: Expand support for 8-bit, 16-bit, 64-bit MMIO accesses
+ //      if devices require it (e.g., UARTs are often 8-bit).
+ //      ➔ Add overloaded read8(), read16(), read32(), read64() methods.
+ //
+ // 4. No isMMIOAddress() helper
+ //    - Issue: No fast way to check if an address is MMIO-mapped.
+ //    - Fix: Added bool isMMIOAddress(uint64_t addr) method.
+ //      ➔ This is critical for SafeMemory or AlphaMemorySystem
+ //         to distinguish RAM from device accesses.
+ //
+ // 5. No thread safety (multi-core/SMP risk)
+ //    - Issue: QVector regions is not protected against concurrent modification.
+ //      Alpha SMP systems (2+ CPUs) may race on MMIO lookup.
+ //    - Fix: Added QMutex lock around mapDevice(), read(), write(), reset(), isMMIOAddress().
+ //      ➔ Guarantees safe concurrent access from multiple AlphaCPU instances.
+ //
+ // ----------------------------------------------------------------------------
+ // Design Principles:
+ // - MMIOManager owns no devices; it maps handlers.
+ // - Device handlers must be stable during system lifetime.
+ // - AlphaCPU, SafeMemory, and AlphaMemorySystem must call MMIOManager
+ //   for all MMIO-mapped address ranges.
+ //
+ // ----------------------------------------------------------------------------
+
 class MMIOManager : public QObject {
     Q_OBJECT
 

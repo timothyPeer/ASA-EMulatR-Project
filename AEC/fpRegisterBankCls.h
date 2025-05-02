@@ -44,7 +44,7 @@ public:
 	// FPCR accessors
 	void setFpcr(quint64 value);
 	quint64 getFpcr() const;
-
+	QVector<dt_gfloat> getVectorFpRegister() { return fpRegisters; }
 	FPCRContext& getFpcrContext();
 	const FPCRContext& getFpcrContext() const;
 

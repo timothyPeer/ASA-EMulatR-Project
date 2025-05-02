@@ -11,10 +11,22 @@
 #include <QMap>
 #include <QHash>
 #include <QByteArray>
-#include "..\AESH\Helpers.h"
-#include "..\AEC\AlphaCPUInterface.h"
-#include "..\AEC\UnifiedExecutors.h"
+#include <QMutexLocker>
+
+class AlphaCPUInterface;
+
+#include "Helpers.h"
+//#include "UnifiedExecutors.h"
 #include "StackFrame.h"
+#include "alphamemorysystem.h"
+#include "vectorExecutor.h"
+#include "IExecutionContext.h"
+#include "ExecutorOpcodeEnumeration.h"
+#include "decodeOperate.h"
+#include "IntegerExecutor.h"
+#include "floatingpointexecutor.h"
+#include "ControlExecutor.h"
+#include "SafeMemory.h"
 
 /// <summary>
 /// Enumerator which informs AlphaCPU which executor to use for an instruction
@@ -34,6 +46,8 @@ enum class ExecutorType {
 };
 
 
+
+
 // Forward declarations
 class AlphaMemorySystem;
 class AlphaJITCompiler;
@@ -45,17 +59,62 @@ class AlphaPALInterpreter;
  * register state, execution control, and exception handling.
  * Each CPU runs in its own QThread.
  */
-class AlphaCPU : public QObject, public AlphaCPUInterface
+//class AlphaCPU : public QObject, public AlphaCPUInterface
+
+class AlphaCPU : public QObject, public IExecutionContext
 {
     Q_OBJECT
 
 public:
-    // Enum definitions
-  
-
+ 
     // Constructor/Destructor
     explicit AlphaCPU(int cpuId, AlphaMemorySystem* memSystem, QObject* parent = nullptr);
 
+
+    // IExecutionContext Overrides
+
+	// Register access  
+	uint64_t readIntReg(unsigned idx) override {
+		return m_intRegisters.value(idx, 0);
+	}
+	void writeIntReg(unsigned idx, uint64_t v) override {
+		// update storage  
+		if (idx < m_intRegisters.size()) m_intRegisters[idx] = v;
+		emit registerChanged(idx, helpers_JIT::RegisterType::INTEGER_REG, v);
+	}
+
+	double readFpReg(unsigned idx) override {
+		return m_fpRegisters.value(idx, 0.0);
+	}
+	void writeFpReg(unsigned idx, double f) override {
+		if (idx < m_fpRegisters.size()) m_fpRegisters[idx] = f;
+		// bit-cast to raw for notification  
+		uint64_t raw;
+		static_assert(sizeof(raw) == sizeof(f), "");
+		std::memcpy(&raw, &f, sizeof(raw));
+		emit registerChanged(idx, helpers_JIT::RegisterType::FLOATING_REG, raw);
+	}
+
+	// Memory  
+	bool readMemory(uint64_t addr, void* buf, size_t sz) override {
+		return m_memorySystem->readVirtualMemory(this, addr, buf, sz);
+	}
+	bool writeMemory(uint64_t addr, void* buf, size_t sz) override {
+		return m_memorySystem->writeVirtualMemory(this, addr, buf, sz);
+	}
+
+	// Control/status  
+	void raiseTrap(int trapCode) override {
+		// map your int to TrapType, then…  
+		dispatchException(static_cast<helpers_JIT::ExceptionType>(trapCode), m_pc);
+	}
+
+	// Events  
+	void notifyRegisterUpdated(bool isFp, unsigned idx, uint64_t raw) override;
+
+
+
+  
     ~AlphaCPU();
 
     // Initialization and configuration
@@ -133,7 +192,7 @@ public:
 
 
     //  
-    quint64 getPC() const override { return m_pc; }
+    quint64 getPC() const { return m_pc; }
 
     /*
     * The JIT Compiler should be passed into the class
@@ -147,15 +206,15 @@ public:
     void setOptimizationLevels(int level_) { jitOptimizationLevel = level_; }
     void setJitEnabled(bool bEnabled) { m_jitEnabled = bEnabled; }
     
-    bool isKernelMode() const override { return m_kernelMode; }
+    bool isKernelMode() const  { return m_kernelMode; }
 
-	void writeRegister(int regNum, quint64 value) override
+	void writeRegister(int regNum, quint64 value) 
 	{
 		if (regNum >= 0 && regNum < 32)
             m_intRegisters[regNum] = value;
 	}
 
-	quint64 readRegister(int regNum) const override
+	quint64 readRegister(int regNum) const 
 	{
 		if (regNum >= 0 && regNum < 32)
 			return m_intRegisters[regNum];
@@ -163,10 +222,19 @@ public:
 	}
 
     void pushFrame(const StackFrame& frame);
-
+    void raiseException(helpers_JIT::ExceptionType type, quint64 faultAddr);
 
 
     bool isMMUEnabled();
+
+
+	void notifyRegisterUpdated(bool isFp, quint8 reg, quint64 value);
+	void notifyMemoryAccessed(quint64 addr, quint64 value, bool isWrite);
+	void notifyTrapRaised(helpers_JIT::TrapType type);
+	void buildDispatchTable();
+
+	void notifyFpRegisterUpdated(unsigned idx, double value) override;
+    void notifyIllegalInstruction(quint64 instructionWord, quint64 pc);
 public slots:
     // Execution control
     void startExecution();
@@ -217,10 +285,7 @@ public slots:
     void handleReset();
     void raiseTrap(helpers_JIT::TrapType trapType);
     void returnFromTrap();
-    void trapRaised();
     void trapRaised(helpers_JIT::TrapType type, quint64 currentPC);
-    void trapOccurred_(helpers_JIT::ExceptionType trapType, quint64 pc, int cpuId_);
-    void trapOccurred_(helpers_JIT::ExceptionType trapType, quint64 pc);
     void trapOccurred(helpers_JIT::ExceptionType trapType, quint64 pc, quint8 cpuId_);
     void resetRequested();
     void handleTrapRaised(helpers_JIT::TrapType type);  // IntegerExecutor
@@ -229,7 +294,8 @@ public slots:
     void executionFinished();
 
     // CPU Signal-Slots
-    void resetCPU();
+
+	void resetCPU();
 
 signals:
     // State changes
@@ -247,7 +313,9 @@ signals:
     void exceptionRaised(helpers_JIT::ExceptionType exceptionType, quint64 pc, quint64 faultAddr);
     void iplChanged(int oldIPL, int newIPL);
     void trapOccurred(helpers_JIT::ExceptionType trapType, quint64 pc);
-    void trapOccurred(helpers_JIT::ExceptionType trapType, quint64 pc, int cpuId_);
+    void trapOccurred(helpers_JIT::ExceptionType trapType, quint64 pc, quint8 cpuId_);
+
+  
     void instructionFaulted(quint64 pc, quint32 inst);
 
 
@@ -255,6 +323,13 @@ signals:
     void instructionExecuted(quint64 pc, quint32 instruction);
     void memoryAccessed(quint64 address, bool isWrite, int size);
  
+    //TODO - receiveInterrupt  /* cpuId check on processor zero   */
+	void receiveInterrupt(int cpuId, int vector) {
+		if (m_cpuId >= 0 ) {
+			QMetaObject::invokeMethod(this, "receiveInterrupt",
+				Qt::QueuedConnection, Q_ARG(int, vector));
+		}
+	}
     void registerChanged(int regNum, helpers_JIT::RegisterType type, quint64 value);
 
     // JIT compilation requests
@@ -312,10 +387,20 @@ private:
     AlphaPALInterpreter* m_palInterpreter;
     // Executors
     QScopedPointer<FloatingPointExecutor> floatingpointExecutor;
-    QScopedPointer<IntegerExecutor> integerExecutor;
     QScopedPointer<ControlExecutor> controlExecutor;
-    QScopedPointer<VectorExecutor> vectorExecutor;
+    QScopedPointer<VectorExecutor> vecExec;
+    QScopedPointer<IntegerExecutor> integerExec;
 
+    public:
+	// dispatch arrays
+    QVector<std::function<void(const OperateInstruction&)>> vecDispatch;
+	QVector<std::function<void(const OperateInstruction&)>> intDispatch;
+    QVector<std::function<void(const OperateInstruction&)>> fpDispatch;
+    QVector<std::function<void(quint32)>> ctrlDispatch;
+
+
+
+    private:
 
     // Stack 
 
@@ -338,6 +423,14 @@ private:
 
     // Synchronization 
     QWaitCondition m_waitForInterrupt;
+
+    // Executors
+//     QHash<quint8, std::function<void(quint32)>> dispatchIntegerTable;
+//     QHash<quint8, std::function<void(quint32)>> dispatchFloatingPointTable;
+//     QHash<quint8, std::function<void(quint32)>> dispatchVectorTable;
+//     QHash<quint8, std::function<void(quint32)>> dispatchControlTable;
+
+		
 
     // Memory system reference
     AlphaMemorySystem*  m_memorySystem;    // Memory Manager - is passed in.
@@ -379,9 +472,9 @@ private:
 
     // Instruction helpers
     bool decodeAndExecute(quint32 instruction);
-    void executeBranchOperation(quint32 instruction);
-    void executeFloatingPointOperation(quint32 instruction);
-    void executeIntegerOperation(quint32 instruction);
+    //void executeBranchOperation(quint32 instruction);
+    //void executeFloatingPointOperation(quint32 instruction);
+   // void executeIntegerOperation(quint32 instruction);
    
     void executeMemoryOperation(quint32 instruction);
  
@@ -393,7 +486,7 @@ private:
 
     // Exception handling
     void dispatchException(helpers_JIT::ExceptionType type, quint64 faultAddr);
-    void raiseException(helpers_JIT::ExceptionType type, quint64 faultAddr);
+
     
     // Processor Operations
     StackFrame popFrame();                  // Used to return the processor to Processing status
@@ -406,6 +499,11 @@ private:
     bool m_bMMUEnabled = true;             // Uses AlphaMemorySystem::translate()   
                                            // or Flat Mode (Virtual Addr = Physical Addr)
                                            // TODO  m_bMMUEnabled = true;    
+    void buildIntegerDispatchTable();
+    void buildControlDispatchTable();
+    void buildVectorDispatchTable();
+    void buildFloatingPointDispatchTable();
+    
 };
 
 #endif // ALPHACPU_H

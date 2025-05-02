@@ -41,7 +41,22 @@
     <ClInclude Include="alphaexceptionvectors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="alphajitcompiler.h">
+    <ClInclude Include="IExecutionContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecutorOpcodeEnumeration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decodeOperate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StackFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decodeMemoryOffset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaCPUFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -55,9 +70,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AlphaInstruction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="alphasmpmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,6 +118,21 @@
     <ClCompile Include="alphapalinterpreter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IExecutionContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StackFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="floatingpointexecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alphacoreadapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="alphacpu.h">
@@ -132,9 +159,6 @@
     <QtMoc Include="alphatrace.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="AlphaInstruction.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="alphajitexecutionengine.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -145,6 +169,27 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="alphapalinterpreter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="alphajitcompiler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="VectorExecutor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="floatingpointexecutor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="IntegerExecutor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="VectorRegisterBank.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ControlExecutor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="alphacoreadapter.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

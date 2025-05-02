@@ -35,9 +35,6 @@
     <ClInclude Include="AlphaVax_DataTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StackFrame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AlphaCPUState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -53,9 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="RegisterBank.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="UnifiedExecutors.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="fpRegisterBankCls.h">

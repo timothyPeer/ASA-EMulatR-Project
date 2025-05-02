@@ -34,15 +34,17 @@ bool AlphaMemorySystem::isMMIOAddress(quint64 physicalAddr)
 	return mmioManager && mmioManager->isMMIOAddress(physicalAddr);
 }
 
-
-quint64 AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, int size)
+bool AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU,
+	quint64    virtualAddr,
+	void* value,
+	size_t     size)
 {
 	quint64 physicalAddr;
 
 	// Translate virtual address to physical address (read access = 0)
 	if (!translate(alphaCPU, virtualAddr, physicalAddr, 0)) {
 		emit protectionFault(virtualAddr, size);
-		return 0xFFFFFFFFFFFFFFFFULL; // Fault marker
+		value = (void*) 0xFFFFFFFFFFFFFFFFULL; // Fault marker
 	}
 
 	// Determine if MMIO or RAM
@@ -54,7 +56,7 @@ quint64 AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtual
 		case 8: return m_memorySystem->readUInt64(physicalAddr);
 		default:
 			qWarning() << "[AlphaMemorySystem] Invalid MMIO read size:" << size;
-			return 0;
+			value = 0;
 		}
 	}
 	else {
@@ -65,12 +67,41 @@ quint64 AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtual
 		case 8: return m_memorySystem->readUInt64(physicalAddr);
 		default:
 			qWarning() << "[AlphaMemorySystem] Invalid memory read size:" << size;
-			return 0;
+			value = 0;
 		}
 	}
-	emit memoryRead(virtualAddr,physicalAddr,size);
+	emit memoryRead(virtualAddr, physicalAddr, size);
 }
-bool AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint32& value, int size)
+/**
+ * @brief Reads a value from virtual memory after MMU translation and protection checks.
+ *
+ * This function translates a virtual address to a physical address using the current
+ * MMU context provided by the specified AlphaCPU. If translation is successful and
+ * access is allowed, it reads a value of the requested size from either system RAM
+ * or MMIO space and places the result into the referenced output parameter.
+ *
+ * Emits protection faults or translation misses as needed, based on MMU rules.
+ *
+ * @param alphaCPU       Pointer to the calling AlphaCPU instance (provides MMU mode, PSR, etc.)
+ * @param virtualAddr    The virtual address to be translated and read
+ * @param value          Output parameter receiving the loaded value (zero-extended)
+ * @param size           Size in bytes of the read (must be 1, 2, 4, or 8)
+ * @return true          If the read was successful and data is valid
+ * @return false         If a translation or protection fault occurred
+ * 
+ * Size					Cast Type	    Representing
+ *    1					quint8			1-Byte
+ *    2					quint16			2-Bytes
+ *    2					qint16			2-Bytes
+ *    1					quint8			1-Bytes
+ *    2					quint16			2-Bytes
+ *    8					quint64			8-Bytes
+ * 
+ * @see AlphaCPU::isMMUEnabled()
+ * @see AlphaMemorySystem::translate()
+ * @see SafeMemory::readUInt64()
+ */
+bool AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint64& value, int size)
 {
 	quint64 physicalAddr;
 
@@ -114,48 +145,7 @@ void AlphaMemorySystem::clearMappings()
 	emit mappingsCleared();
 }
 
-// JSON output of mapped regions for debugging
-QJsonDocument AlphaMemorySystem::getMappedRegionsJson() const
-{
-	QReadLocker locker(&memoryLock);
-	QJsonArray regionArray;
-
-	for (auto it = memoryMap.constBegin(); it != memoryMap.constEnd(); ++it) {
-		QJsonObject region;
-		region["virtual"] = QString("0x%1").arg(it.key(), 0, 16);
-		region["physical"] = QString("0x%1").arg(it.value().physicalBase, 0, 16);
-		region["size"] = it.value().size;
-		region["permissions"] = it.value().protectionFlags;
-		regionArray.append(region);
-	}
-
-	QJsonObject result;
-	result["mappings"] = regionArray;
-	return QJsonDocument(result);
-}
-
 // Overload with reference + signal support
-bool AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint32& value, int size)
-{
-	quint64 physicalAddr;
-	if (!translate(alphaCPU, virtualAddr, physicalAddr, 0)) {
-		emit translationMiss(virtualAddr);
-		return false;
-	}
-
-	value = 0;
-	switch (size) {
-	case 1: value = m_memorySystem->readUInt8(physicalAddr); break;
-	case 2: value = m_memorySystem->readUInt16(physicalAddr); break;
-	case 4: value = m_memorySystem->readUInt32(physicalAddr); break;
-	default:
-		qWarning() << "[AlphaMemorySystem] Invalid read size:" << size;
-		return false;
-	}
-
-	emit memoryRead(physicalAddr, value, size);
-	return true;
-}
 
 //////////////////////////////////////////////////////////////////////////
 /// </summary> Write Virtual Memory
@@ -163,14 +153,56 @@ bool AlphaMemorySystem::readVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAdd
 /// <param name="value"></param> 
 /// <param name="size"></param> data type size 8/16/32/64
 
-void AlphaMemorySystem::writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint64 value, int size)
+bool AlphaMemorySystem::writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, void* value, int size)
+{
+	quint64 physicalAddr;
+
+	// Translate virtual address to physical address (write access = 1)
+	if (!translate(alphaCPU, virtualAddr, physicalAddr, 1)) {
+		emit protectionFault(virtualAddr, size);
+		return false;
+	}
+
+	// Dispatch based on access target (SafeMemory handles MMIO transparently)
+	switch (size) {
+	case 1: {
+		//-m_memorySystem->writeUInt8(physicalAddr, static_cast<quint8>(value));
+		auto p = reinterpret_cast<const quint8*>(value);
+		m_memorySystem->writeUInt8(physicalAddr, *p);
+		break;
+	}
+	case 2: {
+		//-m_memorySystem->writeUInt16(physicalAddr, static_cast<quint16>(value));
+		auto p = reinterpret_cast<const quint16*>(value);
+		m_memorySystem->writeUInt16(physicalAddr, *p);
+		break;
+	}
+	case 4: {
+		//-m_memorySystem->writeUInt32(physicalAddr, static_cast<quint32>(value));
+		auto p = reinterpret_cast<const quint32*>(value);
+		m_memorySystem->writeUInt32(physicalAddr, *p);
+		break;
+	}
+	case 8: {
+		//-m_memorySystem->writeUInt64(physicalAddr, static_cast<quint64>(value));
+		auto p = reinterpret_cast<const quint64*>(value);
+		m_memorySystem->writeUInt64(physicalAddr, *p);
+		break;
+	}
+	default:
+		qWarning() << "[AlphaMemorySystem] Invalid memory write size:" << size;
+		return false;
+	}
+	return true;
+}
+bool AlphaMemorySystem::writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAddr, quint64 value, int size)
 {
 	quint64 physicalAddr;
 
 	// Translate virtual address to physical address (write access = 1)
 	if (!translate(alphaCPU,virtualAddr, physicalAddr, 1)) {
-		emit protectionFault(virtualAddr, size, /*isWrite=*/true);
-		return;
+		emit protectionFault(virtualAddr, size);
+		return false;
 	}
 
 	// Dispatch based on access target (SafeMemory handles MMIO transparently)
@@ -181,8 +213,9 @@ void AlphaMemorySystem::writeVirtualMemory(AlphaCPU* alphaCPU, quint64 virtualAd
 	case 8: m_memorySystem->writeUInt64(physicalAddr, static_cast<quint64>(value)); break;
 	default:
 		qWarning() << "[AlphaMemorySystem] Invalid memory write size:" << size;
-		return;
+		return false;
 	}
+	return true;
 }
 
 bool AlphaMemorySystem::isMapped(quint64 vaddr) const
@@ -242,11 +275,11 @@ QVector<QPair<quint64, MappingEntry>> AlphaMemorySystem::getMappedRegions() cons
 */
 // VA-> PA Translation Mapping
 
-bool AlphaMemorySystem::translate(AlphaCPU* cpu, quint64 virtualAddr, quint64& physicalAddr, int accessType)
+bool AlphaMemorySystem::translate(AlphaCPU* alphaCpu, quint64 virtualAddr, quint64& physicalAddr, int accessType)
 {
 	QMutexLocker locker(&memoryLock);
 
-	if (!cpu || !cpu->isMMUEnabled()) {
+	if (!alphaCpu || !alphaCpu->isMMUEnabled()) {
 		physicalAddr = virtualAddr;  // 1:1 mapping
 		return true;
 	}

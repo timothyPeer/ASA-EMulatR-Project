@@ -10,7 +10,6 @@
 #include <QMap>
 #include <QSet>
 #include <QWaitCondition>
-#include "helpers.h"
 #include "alphamemorysystem.h"
 #include "AlphaCPU.h"
 
@@ -31,57 +30,19 @@ public:
     explicit AlphaSMPManager(int cpuCount, QObject* parent = nullptr);
     ~AlphaSMPManager();
 
+
+
 	// Configuration Loader
 	bool applyConfiguration(const QJsonObject& config);  // or a custom ConfigObject
 	void applyConfiguration(QString lastLoadedConfig);
 
+	
+
 	////////////////////////////////////////
-	// Reset the SMP Manager
-	void reset()
-	{
-		stopExecution();
+	// Reset and reload configuration (JSON or programmatic)
+	void reset();
 
-		// Clean up all CPU threads
-		for (QThread* thread : m_moved_cpus) {
-			if (thread) {
-				thread->quit();
-				thread->wait();
-				thread->deleteLater();
-			}
-		}
-
-		m_moved_cpus.clear();
-
-		// Clear CPU objects
-		for (AlphaCPU* cpu : m_cpus) {
-			delete cpu;
-		}
-
-		m_cpus.clear();
-
-		// Reload configuration (e.g., from file)
-		applyConfiguration(lastLoadedConfig);
-
-		// Optionally: start all again
-		startExecution();
-	}
-
-	void startCpu(int cpuId, quint64 pc)
-	{
-		if (cpuId < 0 || cpuId >= m_cpus.size()) {
-			qWarning() << "[AlphaSMP] Invalid CPU index:" << cpuId;
-			return;
-		}
-
-		AlphaCPU* cpu = m_cpus[cpuId];
-		if (!cpu) return;
-
-		// Set the program counter
-		QMetaObject::invokeMethod(cpu, "setPC", Qt::QueuedConnection, Q_ARG(quint64, pc));
-
-		// Start CPU execution
-		QMetaObject::invokeMethod(cpu, "resumeExecution", Qt::QueuedConnection);
-	}
+	void startCpu(int cpuId, quint64 pc);
 
 
 	void startPC(quint64 startPC_)
@@ -91,38 +52,15 @@ public:
 			cpu->setPC(startPC_);
 		}
 	}
-// 	void configureSystem(int cpuCount, quint64 ramSizeMB, quint64 startPC)
-// 	{
-// 		if (!memorySystem) {
-// 			memorySystem = new AlphaMemorySystem(this);
-// 		}
-// 
-// 		//memorySystem->initialize(ramSizeMB);
-// 
-// 		for (int i = 0; i < cpuCount; ++i) {
-// 			AlphaCPU* cpu = new AlphaCPU(i, memorySystem, this);
-// 			cpu->setPC(startPC);
-// 
-// // 			// Connect critical CPU signals to AlphaSMPManager slots
-// // 			connect(cpu, &AlphaCPU::halted, this, &AlphaSMPManager::handleCpuHalted);
-// // 			connect(cpu, &AlphaCPU::trapRaised, this, &AlphaSMPManager::handleTrapRaised);
-// // 			connect(cpu, &AlphaCPU::stateChanged, this, &AlphaSMPManager::handleCpuStateChanged);
-// // 			connect(cpu, &AlphaCPU::memoryAccessed, this, &AlphaSMPManager::handleMemoryAccessed);
-// 
-// 			m_cpus.append(cpu);
-// 		}
-// 	}
 
-	void setIoThreadCount(int count)
-	{
-		ioThreadCount = count;
-	}
+	void setIoThreadCount(int count);
 
+	void initializeSignalsAndSlots();
 	// Set Memory
 	void setMemoryAlloc(qint64 _memory) {
 		this->memorySystem->setMemoryAlloc(_memory);
 	}
-	// Create a placeholder for Alpha CPUs up to the count indidicated. 
+	// Create a placeholder for Alpha CPUs up to the count indicated. 
 	bool setCPUVectorPlaceHolder(quint8 cpuCnt_) {
 		if (cpuCnt_ > 4)  return false;
 		// Create CPUs
@@ -163,13 +101,13 @@ public:
 	void addSerialInterface(const QString& name, const QString& iface, const QString& port = "", const QString& app = "")
 	{
 		qInfo() << "[AlphaSMPManager] Serial Interface added:" << name << iface << port << app;
-		// Future implementation: Store or connect serial device
+		// TODO Future implementation: Store or connect serial device
 	}
 
 	void addNetworkInterface(const QString& name, const QString& iface)
 	{
 		qInfo() << "[AlphaSMPManager] Network Interface added:" << name << iface;
-		// Future implementation: Store or connect network device
+		// TODO Future implementation: Store or connect network device
 	}
 
 	void addScsiController(const QString& controllerName, int scsiId, const QList<QPair<int, QString>>& devices)
@@ -178,7 +116,7 @@ public:
 		for (const auto& unit : devices) {
 			qInfo() << "   Unit" << unit.first << ":" << unit.second;
 		}
-		// Future implementation: Create and connect SCSI controller and devices
+		// TODO Future implementation: Create and connect SCSI controller and devices
 	}
 
     void initialize();
@@ -191,100 +129,104 @@ public:
 	int getjitOptimizationLevel() { return jitOptimizationLevel; }
 
     // Execution control
-    void startSystem(quint64 entryPoint);
+
     void pauseSystem();
     void resumeSystem();
+	void startSystem(quint64 entryPoint);
     void stopSystem();
 
+	// TODO // Move to emulator manager
+	void setTraceLevel(int traceLevel); // we should implement this in emulator manager
     void startFromPALBase();
 	  
-	void setTraceLevel(int traceLevel);
+
+
 public slots:
     // CPU control
+
+	void cpusAllStarted();
     void startAllCPUs();
 	void startAllCPUs_MoveToThread();
-    void pauseAllCPUs();
-    void stopAllCPUs();
+	void startSystem();
+	void pauseSystem();
+
+	void pausedAllCPUs();
+
+	void stopAllCPUs();
+
+		void requestStop() {
+			stopRequested.storeRelaxed(true);
+			qDebug() << "[AlphaCPU] Stop requested";
+		}
+
+
+	void stoppedSystem();
+
     void handleCpuHalted();
-	void handleTrapRaised(helpers_JIT::TrapType trap);
 	void handleCpuStateChanged(int newState);
+	void handleTrapRaised(helpers_JIT::TrapType trap);
+
 
     // Inter-processor communication
     void sendInterprocessorInterrupt(int sourceCPU, int targetCPU, int interruptVector);
     void broadcastInterprocessorInterrupt(int sourceCPU, int interruptVector);
 
     // Memory coherency
+	void handleMemoryAccessed(quint64 address, quint64 value, int size, bool isWrite);
     void handleMemoryWrite(int cpuId, quint64 address, int size);
     void invalidateCacheLine(int cpuId, quint64 address);
 
-	void handleMemoryAccessed(quint64 address, quint64 value, int size, bool isWrite);
+
     // Synchronization
-    void waitForAllCPUs();
+	void cycleExecuted();
     void releaseAllCPUs();
-    void cycleExecuted();
+  
 
-		//Control State
-	void startExecution()	{
-		for (int i = 0; i < m_cpus.size(); ++i) {
-			if (m_moved_cpus[i] && m_moved_cpus[i]->isRunning()) {
-				QMetaObject::invokeMethod(m_cpus[i], "startExecution", Qt::QueuedConnection);
-			}
-		}
-	}
-	void stopExecution() {
-		for (int i = 0; i < m_cpus.size(); ++i) {
-			QMetaObject::invokeMethod(m_cpus[i], "requestStop", Qt::QueuedConnection);
-		}
 
-		QThread::msleep(10);
-
-		for (auto* thread : m_moved_cpus) {
-			if (thread) {
-				thread->quit();
-				thread->wait();
-			}
-		}
-	}
-	void resetCPUs()	{
-		for (int i = 0; i < m_cpus.size(); ++i) {
-			QMetaObject::invokeMethod(m_cpus[i], "resetCPU", Qt::QueuedConnection);
-		}
-	}
-	;		// reset state of each CPU only
-	void pauseExecution() {
+	void pauseExecution()	// Slot: Pause CPUs
+	{		
 		for (int i = 0; i < m_cpus.size(); ++i) {
 			QMetaObject::invokeMethod(m_cpus[i], "pauseExecution", Qt::QueuedConnection);
 		}
 	}
-	void resumeExecution() {
-		for (int i = 0; i < m_cpus.size(); ++i) {
-			QMetaObject::invokeMethod(m_cpus[i], "resumeExecution", Qt::QueuedConnection);
-		}
-	}
-
-	void receiveInterrupt(int cpuId, int vector) {
+	void receiveInterrupt(int cpuId, int vector) //Slot: Deliver IRQ to CPU
+	{
 		if (cpuId >= 0 && cpuId < m_cpus.size()) {
 			QMetaObject::invokeMethod(m_cpus[cpuId], "receiveInterrupt",
 				Qt::QueuedConnection, Q_ARG(int, vector));
 		}
 	}
+	void resetCPUs();		//Slot: Reset internal CPU state
+
+
+	void resumeExecution();		// Slot: Resume CPUs
+	//Control State
+	
+	void startExecution();		// Slot: Start all CPUs
+	void stopExecution();		// 	Slot: Stop all CPUs
+	
+
+	void waitForAllCPUs();
 
 signals:
     // System state
     void systemInitialized();
-    void systemStarted();
-    void systemPaused();
-    void systemResumed();
-    void systemStopped();
+    void systemStarted(); // connect to startSystem();
+    void systemPaused(); // connect to pauseSystem()
+    void systemResumed(); // connect to resumeSystem()
+    void systemStopped(); // connect to stoppedSystem()
 
     // CPU state aggregation
-    void allCPUsStarted();
-    void allCPUsPaused();
+    void allCPUsStarted(); //	void cpusAllStarted();
+
+	void allCPUsPaused(); // pausedAllCPUs
+
     void allCPUsStopped();
 
     // SMP events
     void interprocessorInterruptSent(int sourceCPU, int targetCPU, int interruptVector);
     void cacheCoherencyEvent(int cpuId, quint64 address);
+	void configureSystem(int cpuCount, quint64 ramSizeMB, quint64 startPC);
 
 	// New signals for CPU progress and status
 	void cpuProgress(int cpuId, int percentComplete);

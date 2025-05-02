@@ -3,13 +3,15 @@
 #include <QFile>
 #include <QDebug>
 #include "TraceManager.h"
+#include "GlobalMacro.h"
 
 SafeMemory::SafeMemory( QObject* parent)
 	: QObject(parent)
 {
 	//memory.resize(static_cast<int>(initialSize)); 
 	memory.fill(0);		// Memory should have been initialize in AlphaMemorySystem
-	qDebug() << "SafeMemory: Constructed and Initialized ";
+	//qDebug() << "SafeMemory: Constructed and Initialized ";
+	TRACE_LOG(QString("[SafeMemory:Ctor()] Memory Size: %1").arg(memory.size()));
 }
 
 void SafeMemory::resize(quint64 newSize)
@@ -27,8 +29,9 @@ void SafeMemory::resize(quint64 newSize)
 	else {
 		// Shrinking memory - truncate
 		memory.resize(static_cast<int>(newSize));
+		TRACE_LOG(QString("[SafeMemory:resize(SHRINK)] allocation complete :%1").arg(newSize));
 	}
-	qDebug() << "SafeMemory: Resized to" << newSize << "bytes";
+	TRACE_LOG(QString("[SafeMemory:resize()] allocation complete :%1").arg(memory.size()));
 }
 
 quint64 SafeMemory::size() const
@@ -68,9 +71,13 @@ quint8 SafeMemory::readUInt8(quint64 address)
 	QReadLocker locker(&memoryLock);
 
 	if (!isValidAddress(address, 1)) {
-		qWarning() << "[SafeMemory] Read8 out of bounds:"
-			<< QString("0x%1").arg(address, 0, 16)
-			<< "(RAM Size:" << memory.size() << "bytes)";
+// 		qWarning() << "[SafeMemory] Read8 out of bounds:"
+// 			<< QString("0x%1").arg(address, 0, 16)
+// 			<< "(RAM Size:" << memory.size() << "bytes)";
+		WARN_LOG(QString("[SafeMemory:readUInt8()] out of bounds: 0x%1  RAM Size: %2 bytes")
+			.arg(address, 0, 16)
+			.arg(memory.size())
+		);
 		return 0;
 	}
 
@@ -109,9 +116,13 @@ quint16 SafeMemory::readUInt16(quint64 address)
 	QReadLocker locker(&memoryLock);
 
 	if (!isValidAddress(address, 2)) {
-		qWarning() << "[SafeMemory] Read16 out of bounds:"
-			<< QString("0x%1").arg(address, 0, 16)
-			<< "(RAM Size:" << memory.size() << "bytes)";
+// 		qWarning() << "[SafeMemory] Read16 out of bounds:"
+// 			<< QString("0x%1").arg(address, 0, 16)
+// 			<< "(RAM Size:" << memory.size() << "bytes)";
+		WARN_LOG(QString("[SafeMemory:readUInt16()] out of bounds: 0x%1  RAM Size: %2 bytes")
+			.arg(address, 0, 16)
+			.arg(memory.size())		
+		);
 		return 0;
 	}
 
@@ -120,6 +131,10 @@ quint16 SafeMemory::readUInt16(quint64 address)
 		(static_cast<quint16>(memory[static_cast<int>(address + 1)]) << 8);
 
 	emit memoryRead(address, value, 2);
+	TRACE_LOG(QString("[SafeMemory:readUInt16()] Load-Little-Endian: 0x%1  RAM Size: %2 bytes")
+		.arg(address, 0, 16)
+		.arg(memory.size())
+	);
 	return value;
 }
 
@@ -154,10 +169,15 @@ quint32 SafeMemory::readUInt32(quint64 address)
 	QReadLocker locker(&memoryLock);
 
 	if (!isValidAddress(address, 4)) {
-		qWarning() << "[SafeMemory] Read32 out of bounds:"
-			<< QString("0x%1").arg(address, 0, 16)
-			<< "(RAM Size:" << memory.size() << "bytes)";
+// 		qWarning() << "[SafeMemory] Read32 out of bounds:"
+// 			<< QString("0x%1").arg(address, 0, 16)
+// 			<< "(RAM Size:" << memory.size() << "bytes)";
+		WARN_LOG(QString("[SafeMemory:readUInt32()] out of bounds: 0x%1  RAM Size: %2 bytes")
+			.arg(address, 0, 16)
+			.arg(memory.size())
+		);
 		return 0;
+
 	}
 
 	quint32 value = static_cast<quint32>(memory[static_cast<int>(address)]) |
@@ -165,8 +185,11 @@ quint32 SafeMemory::readUInt32(quint64 address)
 		(static_cast<quint32>(memory[static_cast<int>(address + 2)]) << 16) |
 		(static_cast<quint32>(memory[static_cast<int>(address + 3)]) << 24);
 
-	TraceManager::logVerbose(QString("SafeMemory: Read32 from 0x%1").arg(address, 8, 16, QChar('0')));
+	TRACE_LOG(QString("SafeMemory: Read32 from 0x%1").arg(address, 8, 16, QChar('0')));
 	emit memoryRead(address, value, 4);
+	TRACE_LOG(QString("[SafeMemory:readUInt32()] Load-Little-Endian: from 0x%1 : %2 bytes")
+		.arg(address, 8, 16, QChar('0'))
+	);
 	return value;
 }
 
@@ -217,9 +240,10 @@ quint64 SafeMemory::readUInt64(quint64 address)
 	QReadLocker locker(&memoryLock);
 
 	if (!isValidAddress(address, 8)) {
-		qWarning() << "[SafeMemory] Read64 out of bounds:"
-			<< QString("0x%1").arg(address, 0, 16)
-			<< "(RAM Size:" << memory.size() << "bytes)";
+		WARN_LOG(QString("[SafeMemory:readUInt64()] out of bounds: 0x%1  RAM Size: %2 bytes")
+			.arg(address, 0, 16)
+			.arg(memory.size())
+		);
 		return 0;
 	}
 
@@ -262,9 +286,10 @@ void SafeMemory::writeUInt8(quint64 address, quint8 value)
 	QWriteLocker locker(&memoryLock);
 
 	if (!isValidAddress(address, 1)) {
-		qWarning() << "[SafeMemory] Write8 out of bounds:"
-			<< QString("0x%1").arg(address, 0, 16)
-			<< "(RAM Size:" << memory.size() << "bytes)";
+		WARN_LOG(QString("[SafeMemory:writeUInt64()] out of bounds: 0x%1  RAM Size: %2 bytes")
+			.arg(address, 0, 16)
+			.arg(memory.size())
+		);
 		return;
 	}
 
@@ -364,7 +389,7 @@ void SafeMemory::writeUInt32(quint64 address, quint32 value)
 	memory[static_cast<int>(address + 2)] = static_cast<quint8>(value >> 16);
 	memory[static_cast<int>(address + 3)] = static_cast<quint8>(value >> 24);
 
-	TraceManager::logVerbose(QString("SafeMemory: Write32 to 0x%1 = 0x%2").arg(address, 8, 16).arg(value, 8, 16));
+	TRACE_LOG(QString("SafeMemory: Write32 to 0x%1 = 0x%2").arg(address, 8, 16).arg(value, 8, 16));
 
 	emit memoryWritten(address, value, 4);
 }

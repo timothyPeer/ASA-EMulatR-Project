@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.9_msvc20122_64</QtInstall>
-    <QtModules>core</QtModules>
+    <QtModules>core; network</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -103,6 +103,7 @@
     <ClCompile Include="safememory.cpp" />
     <ClCompile Include="TraceManager.cpp" />
     <ClInclude Include="aesh_global.h" />
+    <ClInclude Include="GlobalMacro.h" />
     <ClInclude Include="Helpers.h" />
     <QtMoc Include="TraceManager.h" />
     <QtMoc Include="safememory.h" />
