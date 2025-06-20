@@ -1,0 +1,1670 @@
+
+void ExecuteStage::executeLoad(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Calculate effective address
+    quint64 baseValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 effectiveAddress = baseValue + instruction.immediate;
+
+    DEBUG_LOG(QString("ExecuteStage: Load from EA=0x%1 (base=0x%2 + disp=%3)")
+                  .arg(effectiveAddress, 16, 16, QChar('0'))
+                  .arg(baseValue, 16, 16, QChar('0'))
+                  .arg(instruction.immediate));
+
+    switch (instruction.opcode)
+    {
+    case 0x28: // LDL - Load Longword
+    {
+        qint32 value;
+        if (m_cpu->readMemory32(effectiveAddress, reinterpret_cast<quint32 &>(value)))
+        {
+            // Sign-extend to 64 bits
+            quint64 result = static_cast<quint64>(static_cast<qint64>(value));
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, result);
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDL R%1 = 0x%2").arg(instruction.ra).arg(result, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+
+    case 0x29: // LDQ - Load Quadword
+    {
+        quint64 value;
+        if (m_cpu->readMemory64(effectiveAddress, value))
+        {
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, value);
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDQ R%1 = 0x%2").arg(instruction.ra).arg(value, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+
+    case 0x2A: // LDL_L - Load Longword Locked
+    {
+        qint32 value;
+        if (m_cpu->readMemory32Locked(effectiveAddress, reinterpret_cast<quint32 &>(value)))
+        {
+            quint64 result = static_cast<quint64>(static_cast<qint64>(value));
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, result);
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDL_L R%1 = 0x%2").arg(instruction.ra).arg(result, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+
+    case 0x2B: // LDQ_L - Load Quadword Locked
+    {
+        quint64 value;
+        if (m_cpu->readMemory64Locked(effectiveAddress, value))
+        {
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, value);
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDQ_L R%1 = 0x%2").arg(instruction.ra).arg(value, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+    }
+}
+
+void ExecuteStage::executeStore(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Calculate effective address
+    quint64 baseValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 effectiveAddress = baseValue + instruction.immediate;
+    quint64 storeValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+
+    DEBUG_LOG(QString("ExecuteStage: Store to EA=0x%1, value=0x%2")
+                  .arg(effectiveAddress, 16, 16, QChar('0'))
+                  .arg(storeValue, 16, 16, QChar('0')));
+
+    switch (instruction.opcode)
+    {
+    case 0x2C: // STL - Store Longword
+    {
+        quint32 value = static_cast<quint32>(storeValue);
+        if (!m_cpu->writeMemory32(effectiveAddress, value))
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        DEBUG_LOG("ExecuteStage: STL completed");
+        break;
+    }
+
+    case 0x2D: // STQ - Store Quadword
+    {
+        if (!m_cpu->writeMemory64(effectiveAddress, storeValue))
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        DEBUG_LOG("ExecuteStage: STQ completed");
+        break;
+    }
+
+    case 0x2E: // STL_C - Store Longword Conditional
+    {
+        quint32 value = static_cast<quint32>(storeValue);
+        bool success = m_cpu->writeMemory32Conditional(effectiveAddress, value);
+
+        // Store success/failure in Ra (0 = failed, 1 = succeeded)
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, success ? 1 : 0);
+        }
+        DEBUG_LOG(QString("ExecuteStage: STL_C %1").arg(success ? "succeeded" : "failed"));
+        break;
+    }
+
+    case 0x2F: // STQ_C - Store Quadword Conditional
+    {
+        bool success = m_cpu->writeMemory64Conditional(effectiveAddress, storeValue);
+
+        // Store success/failure in Ra (0 = failed, 1 = succeeded)
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, success ? 1 : 0);
+        }
+        DEBUG_LOG(QString("ExecuteStage: STQ_C %1").arg(success ? "succeeded" : "failed"));
+        break;
+    }
+    }
+}
+
+void ExecuteStage::executeIntegerArithmetic(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    quint64 rbValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+
+    // Handle immediate mode
+    if (instruction.rawInstruction & 0x1000) // Bit 12 = immediate mode
+    {
+        rbValue = instruction.immediate;
+    }
+
+    quint64 result = 0;
+    bool overflow = false;
+
+    switch (instruction.function)
+    {
+    case 0x00: // ADDL
+    {
+        qint32 a = static_cast<qint32>(raValue);
+        qint32 b = static_cast<qint32>(rbValue);
+        qint32 res = a + b;
+        result = static_cast<quint64>(static_cast<qint64>(res)); // Sign-extend
+        DEBUG_LOG(QString("ExecuteStage: ADDL %1 + %2 = %3").arg(a).arg(b).arg(res));
+        break;
+    }
+
+    case 0x02: // S4ADDL
+    {
+        qint32 a = static_cast<qint32>(raValue);
+        qint32 b = static_cast<qint32>(rbValue);
+        qint32 res = (a << 2) + b;
+        result = static_cast<quint64>(static_cast<qint64>(res));
+        DEBUG_LOG(QString("ExecuteStage: S4ADDL (%1 << 2) + %2 = %3").arg(a).arg(b).arg(res));
+        break;
+    }
+
+    case 0x09: // SUBL
+    {
+        qint32 a = static_cast<qint32>(raValue);
+        qint32 b = static_cast<qint32>(rbValue);
+        qint32 res = a - b;
+        result = static_cast<quint64>(static_cast<qint64>(res));
+        DEBUG_LOG(QString("ExecuteStage: SUBL %1 - %2 = %3").arg(a).arg(b).arg(res));
+        break;
+    }
+
+    case 0x0B: // S4SUBL
+    {
+        qint32 a = static_cast<qint32>(raValue);
+        qint32 b = static_cast<qint32>(rbValue);
+        qint32 res = (a << 2) - b;
+        result = static_cast<quint64>(static_cast<qint64>(res));
+        DEBUG_LOG(QString("ExecuteStage: S4SUBL (%1 << 2) - %2 = %3").arg(a).arg(b).arg(res));
+        break;
+    }
+
+    case 0x0F: // CMPBGE
+    {
+        // Compare bytes greater than or equal
+        result = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            quint8 aByte = (raValue >> (i * 8)) & 0xFF;
+            quint8 bByte = (rbValue >> (i * 8)) & 0xFF;
+            if (aByte >= bByte)
+            {
+                result |= (1ULL << i);
+            }
+        }
+        DEBUG_LOG(QString("ExecuteStage: CMPBGE result = 0x%1").arg(result, 2, 16, QChar('0')));
+        break;
+    }
+
+    case 0x20: // ADDQ
+    {
+        result = raValue + rbValue;
+        // Check for overflow (simplified)
+        overflow = ((raValue ^ result) & (rbValue ^ result)) >> 63;
+        DEBUG_LOG(QString("ExecuteStage: ADDQ 0x%1 + 0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+    }
+
+    case 0x29: // SUBQ
+    {
+        result = raValue - rbValue;
+        DEBUG_LOG(QString("ExecuteStage: SUBQ 0x%1 - 0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+    }
+
+    case 0x2D: // CMPEQ
+    {
+        result = (raValue == rbValue) ? 1 : 0;
+        DEBUG_LOG(QString("ExecuteStage: CMPEQ 0x%1 == 0x%2 ? %3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result));
+        break;
+    }
+
+    case 0x4D: // CMPLT
+    {
+        result = (static_cast<qint64>(raValue) < static_cast<qint64>(rbValue)) ? 1 : 0;
+        DEBUG_LOG(QString("ExecuteStage: CMPLT (signed) result = %1").arg(result));
+        break;
+    }
+
+    case 0x6D: // CMPLE
+    {
+        result = (static_cast<qint64>(raValue) <= static_cast<qint64>(rbValue)) ? 1 : 0;
+        DEBUG_LOG(QString("ExecuteStage: CMPLE (signed) result = %1").arg(result));
+        break;
+    }
+
+    default:
+        DEBUG_LOG(
+            QString("ExecuteStage: Unimplemented INTA function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        return;
+    }
+
+    // Store result
+    if (instruction.rc != 31)
+    {
+        m_cpu->setRegister(instruction.rc, result);
+    }
+
+    // Handle overflow trap variants (functions with bit 6 set)
+    if (overflow && (instruction.function & 0x40))
+    {
+        m_cpu->triggerException(AlphaCPU::ARITHMETIC_TRAP, m_cpu->getPC());
+    }
+}
+
+void ExecuteStage::executeIntegerLogical(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    quint64 rbValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+
+    // Handle immediate mode
+    if (instruction.rawInstruction & 0x1000)
+    {
+        rbValue = instruction.immediate;
+    }
+
+    quint64 result = 0;
+
+    switch (instruction.function)
+    {
+    case 0x00: // AND
+        result = raValue & rbValue;
+        DEBUG_LOG(QString("ExecuteStage: AND 0x%1 & 0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x08: // BIC (Bit Clear)
+        result = raValue & ~rbValue;
+        DEBUG_LOG(QString("ExecuteStage: BIC 0x%1 & ~0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x20: // BIS (OR)
+        result = raValue | rbValue;
+        DEBUG_LOG(QString("ExecuteStage: BIS 0x%1 | 0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x40: // XOR
+        result = raValue ^ rbValue;
+        DEBUG_LOG(QString("ExecuteStage: XOR 0x%1 ^ 0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x48: // EQV (Equivalence - NOT XOR)
+        result = ~(raValue ^ rbValue);
+        DEBUG_LOG(QString("ExecuteStage: EQV ~(0x%1 ^ 0x%2) = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x28: // ORNOT
+        result = raValue | ~rbValue;
+        DEBUG_LOG(QString("ExecuteStage: ORNOT 0x%1 | ~0x%2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    // Conditional move instructions
+    case 0x14: // CMOVLBS - Move if Low Bit Set
+        result = (raValue & 1) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVLBS %1").arg((raValue & 1) ? "moved" : "not moved"));
+        break;
+
+    case 0x16: // CMOVLBC - Move if Low Bit Clear
+        result = (raValue & 1) ? m_cpu->getRegister(instruction.rc) : rbValue;
+        DEBUG_LOG(QString("ExecuteStage: CMOVLBC %1").arg((raValue & 1) ? "not moved" : "moved"));
+        break;
+
+    case 0x24: // CMOVEQ - Move if Equal to zero
+        result = (raValue == 0) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVEQ %1").arg((raValue == 0) ? "moved" : "not moved"));
+        break;
+
+    case 0x26: // CMOVNE - Move if Not Equal to zero
+        result = (raValue != 0) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVNE %1").arg((raValue != 0) ? "moved" : "not moved"));
+        break;
+
+    case 0x44: // CMOVLT - Move if Less Than zero (signed)
+        result = (static_cast<qint64>(raValue) < 0) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVLT %1").arg((static_cast<qint64>(raValue) < 0) ? "moved" : "not moved"));
+        break;
+
+    case 0x46: // CMOVGE - Move if Greater than or Equal to zero (signed)
+        result = (static_cast<qint64>(raValue) >= 0) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVGE %1").arg((static_cast<qint64>(raValue) >= 0) ? "moved" : "not moved"));
+        break;
+
+    case 0x64: // CMOVLE - Move if Less than or Equal to zero (signed)
+        result = (static_cast<qint64>(raValue) <= 0) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVLE %1").arg((static_cast<qint64>(raValue) <= 0) ? "moved" : "not moved"));
+        break;
+
+    case 0x66: // CMOVGT - Move if Greater Than zero (signed)
+        result = (static_cast<qint64>(raValue) > 0) ? rbValue : m_cpu->getRegister(instruction.rc);
+        DEBUG_LOG(QString("ExecuteStage: CMOVGT %1").arg((static_cast<qint64>(raValue) > 0) ? "moved" : "not moved"));
+        break;
+
+    // Architecture-specific instructions
+    case 0x61: // AMASK - Architecture Mask
+        // Return implemented architecture features
+        // This is implementation-specific
+        result = ~0ULL; // Indicate all features unimplemented (conservative)
+        DEBUG_LOG("ExecuteStage: AMASK returning 0xFFFFFFFFFFFFFFFF");
+        break;
+
+    case 0x6C: // IMPLVER - Implementation Version
+        // Return implementation version
+        result = 0; // EV4 implementation version
+        DEBUG_LOG("ExecuteStage: IMPLVER returning 0");
+        break;
+
+    default:
+        DEBUG_LOG(
+            QString("ExecuteStage: Unimplemented INTL function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        return;
+    }
+
+    // Store result
+    if (instruction.rc != 31)
+    {
+        m_cpu->setRegister(instruction.rc, result);
+    }
+}
+
+void ExecuteStage::executeConditionalBranch(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    bool takeBranch = false;
+    QString conditionName;
+
+    switch (instruction.opcode)
+    {
+    case 0x39: // BEQ - Branch if Equal
+        takeBranch = (raValue == 0);
+        conditionName = "BEQ";
+        break;
+
+    case 0x3D: // BNE - Branch if Not Equal
+        takeBranch = (raValue != 0);
+        conditionName = "BNE";
+        break;
+
+    case 0x3A: // BLT - Branch if Less Than
+        takeBranch = (static_cast<qint64>(raValue) < 0);
+        conditionName = "BLT";
+        break;
+
+    case 0x3E: // BGE - Branch if Greater than or Equal
+        takeBranch = (static_cast<qint64>(raValue) >= 0);
+        conditionName = "BGE";
+        break;
+
+    case 0x3B: // BLE - Branch if Less than or Equal
+        takeBranch = (static_cast<qint64>(raValue) <= 0);
+        conditionName = "BLE";
+        break;
+
+    case 0x3F: // BGT - Branch if Greater Than
+        takeBranch = (static_cast<qint64>(raValue) > 0);
+        conditionName = "BGT";
+        break;
+    }
+
+    if (takeBranch)
+    {
+        quint64 currentPC = m_cpu->getPC();
+        quint64 targetPC = currentPC + instruction.immediate;
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline(); // Branch taken - flush pipeline
+
+        DEBUG_LOG(
+            QString("ExecuteStage: %1 taken, jumping to 0x%2").arg(conditionName).arg(targetPC, 16, 16, QChar('0')));
+    }
+    else
+    {
+        DEBUG_LOG(QString("ExecuteStage: %1 not taken").arg(conditionName));
+    }
+}
+
+void ExecuteStage::executeBranch(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 currentPC = m_cpu->getPC();
+    quint64 targetPC = currentPC + instruction.immediate;
+
+    switch (instruction.opcode)
+    {
+    case 0x30: // BR - Unconditional Branch
+    {
+        // Store return address in Ra if not R31
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, currentPC + 4);
+        }
+
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(QString("ExecuteStage: BR to 0x%1, return address in R%2")
+                      .arg(targetPC, 16, 16, QChar('0'))
+                      .arg(instruction.ra));
+        break;
+    }
+
+    case 0x34: // BSR - Branch to Subroutine
+    {
+        // Always store return address (even if Ra is 31)
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, currentPC + 4);
+        }
+
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(QString("ExecuteStage: BSR to 0x%1, return address 0x%2 in R%3")
+                      .arg(targetPC, 16, 16, QChar('0'))
+                      .arg(currentPC + 4, 16, 16, QChar('0'))
+                      .arg(instruction.ra));
+        break;
+    }
+    }
+}
+
+void ExecuteStage::executeBitTestBranch(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    bool takeBranch = false;
+    QString conditionName;
+
+    switch (instruction.opcode)
+    {
+    case 0x38: // BLBC - Branch if Low Bit Clear
+        takeBranch = ((raValue & 1) == 0);
+        conditionName = "BLBC";
+        break;
+
+    case 0x3C: // BLBS - Branch if Low Bit Set
+        takeBranch = ((raValue & 1) == 1);
+        conditionName = "BLBS";
+        break;
+    }
+
+    if (takeBranch)
+    {
+        quint64 currentPC = m_cpu->getPC();
+        quint64 targetPC = currentPC + instruction.immediate;
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(QString("ExecuteStage: %1 taken (bit = %2), jumping to 0x%3")
+                      .arg(conditionName)
+                      .arg(raValue & 1)
+                      .arg(targetPC, 16, 16, QChar('0')));
+    }
+    else
+    {
+        DEBUG_LOG(QString("ExecuteStage: %1 not taken (bit = %2)").arg(conditionName).arg(raValue & 1));
+    }
+}
+
+void ExecuteStage::executeJump(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    quint64 rbValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 currentPC = m_cpu->getPC();
+
+    // Calculate target address
+    quint64 targetPC = (rbValue + (instruction.immediate & 0x3FFF)) & ~0x3ULL; // Align to 4 bytes
+
+    switch (instruction.function)
+    {
+    case 0: // JMP
+    {
+        // Store PC+4 in Ra (prediction base for returns)
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, currentPC + 4);
+        }
+
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(QString("ExecuteStage: JMP to 0x%1 (Ra=%2)").arg(targetPC, 16, 16, QChar('0')).arg(instruction.ra));
+        break;
+    }
+
+    case 1: // JSR - Jump to Subroutine
+    {
+        // Store return address in Ra
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, currentPC + 4);
+        }
+
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        // Push return address onto hardware return stack (if implemented)
+        m_cpu->pushReturnStack(currentPC + 4);
+
+        DEBUG_LOG(QString("ExecuteStage: JSR to 0x%1, return address 0x%2")
+                      .arg(targetPC, 16, 16, QChar('0'))
+                      .arg(currentPC + 4, 16, 16, QChar('0')));
+        break;
+    }
+
+    case 2: // RET - Return from Subroutine
+    {
+        // Pop return address from hardware return stack (if implemented)
+        quint64 predictedReturn = m_cpu->popReturnStack();
+
+        // Store PC+4 in Ra (usually not used for RET)
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, currentPC + 4);
+        }
+
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(QString("ExecuteStage: RET to 0x%1 (predicted: 0x%2)")
+                      .arg(targetPC, 16, 16, QChar('0'))
+                      .arg(predictedReturn, 16, 16, QChar('0')));
+
+        // Check if prediction was correct
+        if (targetPC != predictedReturn)
+        {
+            DEBUG_LOG("ExecuteStage: Return stack misprediction detected");
+            m_cpu->incrementReturnMispredictions();
+        }
+        break;
+    }
+
+    case 3: // JSR_COROUTINE
+    {
+        // Coroutine jump - similar to JSR but for coroutines
+        if (instruction.ra != 31)
+        {
+            m_cpu->setRegister(instruction.ra, currentPC + 4);
+        }
+
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(QString("ExecuteStage: JSR_COROUTINE to 0x%1").arg(targetPC, 16, 16, QChar('0')));
+        break;
+    }
+
+    default:
+        DEBUG_LOG(QString("ExecuteStage: Unknown jump function %1").arg(instruction.function));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, currentPC);
+        break;
+    }
+}
+
+void ExecuteStage::executeIntegerShift(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    quint64 rbValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+
+    // Handle immediate mode
+    if (instruction.rawInstruction & 0x1000)
+    {
+        rbValue = instruction.immediate;
+    }
+
+    quint64 result = 0;
+    quint32 shiftAmount = rbValue & 0x3F; // Only lower 6 bits used for shift amount
+
+    switch (instruction.function)
+    {
+    case 0x39: // SLL - Shift Left Logical
+        result = raValue << shiftAmount;
+        DEBUG_LOG(QString("ExecuteStage: SLL 0x%1 << %2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(shiftAmount)
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x3C: // SRA - Shift Right Arithmetic
+        result = static_cast<quint64>(static_cast<qint64>(raValue) >> shiftAmount);
+        DEBUG_LOG(QString("ExecuteStage: SRA 0x%1 >> %2 = 0x%3 (arithmetic)")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(shiftAmount)
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x34: // SRL - Shift Right Logical
+        result = raValue >> shiftAmount;
+        DEBUG_LOG(QString("ExecuteStage: SRL 0x%1 >> %2 = 0x%3 (logical)")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(shiftAmount)
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+
+    case 0x12: // EXTBL - Extract Byte Low
+    {
+        quint32 bytePos = shiftAmount & 0x7; // Only lower 3 bits
+        result = (raValue >> (bytePos * 8)) & 0xFF;
+        DEBUG_LOG(QString("ExecuteStage: EXTBL byte %1 from 0x%2 = 0x%3")
+                      .arg(bytePos)
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(result, 2, 16, QChar('0')));
+        break;
+    }
+
+    case 0x16: // EXTWL - Extract Word Low
+    {
+        quint32 wordPos = (shiftAmount >> 1) & 0x3; // Word position
+        result = (raValue >> (wordPos * 16)) & 0xFFFF;
+        DEBUG_LOG(QString("ExecuteStage: EXTWL word %1 from 0x%2 = 0x%3")
+                      .arg(wordPos)
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(result, 4, 16, QChar('0')));
+        break;
+    }
+
+    case 0x1A: // EXTLL - Extract Longword Low
+    {
+        quint32 longwordPos = (shiftAmount >> 2) & 0x1; // Longword position
+        result = (raValue >> (longwordPos * 32)) & 0xFFFFFFFF;
+        // Sign-extend result to 64 bits
+        result = static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result)));
+        DEBUG_LOG(QString("ExecuteStage: EXTLL longword %1 from 0x%2 = 0x%3")
+                      .arg(longwordPos)
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(result, 8, 16, QChar('0')));
+        break;
+    }
+
+    case 0x1E: // EXTQL - Extract Quadword Low
+    {
+        // For quadword, shift amount determines byte boundary
+        result = raValue >> ((shiftAmount & 0x7) * 8);
+        DEBUG_LOG(QString("ExecuteStage: EXTQL from 0x%1 shift %2 = 0x%3")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(shiftAmount & 0x7)
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+    }
+
+    default:
+        DEBUG_LOG(
+            QString("ExecuteStage: Unimplemented INTS function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        return;
+    }
+
+    // Store result
+    if (instruction.rc != 31)
+    {
+        m_cpu->setRegister(instruction.rc, result);
+    }
+}
+
+void ExecuteStage::executeIntegerMultiply(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    quint64 rbValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+
+    // Handle immediate mode
+    if (instruction.rawInstruction & 0x1000)
+    {
+        rbValue = instruction.immediate;
+    }
+
+    quint64 result = 0;
+
+    switch (instruction.function)
+    {
+    case 0x00: // MULL - Multiply Longword
+    {
+        qint32 a = static_cast<qint32>(raValue);
+        qint32 b = static_cast<qint32>(rbValue);
+        qint64 res = static_cast<qint64>(a) * static_cast<qint64>(b);
+        result = static_cast<quint64>(res);
+
+        DEBUG_LOG(QString("ExecuteStage: MULL %1 * %2 = %3").arg(a).arg(b).arg(static_cast<qint64>(result)));
+        break;
+    }
+
+    case 0x20: // MULQ - Multiply Quadword
+    {
+        qint64 a = static_cast<qint64>(raValue);
+        qint64 b = static_cast<qint64>(rbValue);
+
+        // For 64-bit multiplication, we need to check for overflow
+        __int128 fullResult = static_cast<__int128>(a) * static_cast<__int128>(b);
+        result = static_cast<quint64>(fullResult);
+
+        // Check for overflow (simplified)
+        bool overflow = (fullResult != static_cast<__int128>(static_cast<qint64>(result)));
+
+        DEBUG_LOG(QString("ExecuteStage: MULQ 0x%1 * 0x%2 = 0x%3 %4")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0'))
+                      .arg(overflow ? "(overflow)" : ""));
+
+        // Handle overflow trap variant
+        if (overflow && (instruction.function & 0x40))
+        {
+            m_cpu->triggerException(AlphaCPU::ARITHMETIC_TRAP, m_cpu->getPC());
+            return;
+        }
+        break;
+    }
+
+    case 0x30: // UMULH - Unsigned Multiply High
+    {
+        // Multiply and return upper 64 bits
+        __uint128_t fullResult = static_cast<__uint128_t>(raValue) * static_cast<__uint128_t>(rbValue);
+        result = static_cast<quint64>(fullResult >> 64);
+
+        DEBUG_LOG(QString("ExecuteStage: UMULH 0x%1 * 0x%2 = 0x%3 (high)")
+                      .arg(raValue, 16, 16, QChar('0'))
+                      .arg(rbValue, 16, 16, QChar('0'))
+                      .arg(result, 16, 16, QChar('0')));
+        break;
+    }
+
+    default:
+        DEBUG_LOG(
+            QString("ExecuteStage: Unimplemented INTM function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        return;
+    }
+
+    // Store result
+    if (instruction.rc != 31)
+    {
+        m_cpu->setRegister(instruction.rc, result);
+    }
+}
+
+void ExecuteStage::executePAL(const DecodeStage::DecodedInstruction &instruction)
+{
+    // PAL (Privileged Architecture Library) calls
+    // These are system calls and privileged operations
+
+    quint32 palFunction = instruction.function & 0x3FFFFFF;
+
+    DEBUG_LOG(QString("ExecuteStage: PAL call 0x%1").arg(palFunction, 6, 16, QChar('0')));
+
+    // Check if in kernel mode
+    if (!m_cpu->isKernelMode())
+    {
+        DEBUG_LOG("ExecuteStage: PAL call in user mode - triggering privilege violation");
+        m_cpu->triggerException(AlphaCPU::PRIVILEGE_VIOLATION, m_cpu->getPC());
+        return;
+    }
+
+    // Common PAL functions (OpenVMS/Digital UNIX style)
+    switch (palFunction)
+    {
+    case 0x000000: // HALT
+        DEBUG_LOG("ExecuteStage: PAL HALT");
+        m_cpu->halt();
+        break;
+
+    case 0x000001: // CFLUSH - Cache Flush
+        DEBUG_LOG("ExecuteStage: PAL CFLUSH");
+        m_cpu->flushCaches();
+        break;
+
+    case 0x000002: // DRAINA - Drain Aborts
+        DEBUG_LOG("ExecuteStage: PAL DRAINA");
+        m_cpu->drainAborts();
+        break;
+
+    case 0x000009: // CSERVE - Console Service
+        DEBUG_LOG("ExecuteStage: PAL CSERVE");
+        m_cpu->executeConsoleService();
+        break;
+
+    case 0x00000D: // WRIPIR - Write Interprocessor Interrupt Request
+        DEBUG_LOG("ExecuteStage: PAL WRIPIR");
+        m_cpu->writeIPIR(m_cpu->getRegister(16)); // R16 contains processor mask
+        break;
+
+    case 0x00000E: // RDMCES - Read Machine Check Error Summary
+        DEBUG_LOG("ExecuteStage: PAL RDMCES");
+        if (16 != 31) // Store in R0
+        {
+            m_cpu->setRegister(0, m_cpu->readMCES());
+        }
+        break;
+
+    case 0x00000F: // WRMCES - Write Machine Check Error Summary
+        DEBUG_LOG("ExecuteStage: PAL WRMCES");
+        m_cpu->writeMCES(m_cpu->getRegister(16)); // R16 contains value
+        break;
+
+    case 0x000010: // WRFEN - Write Floating-Point Enable
+        DEBUG_LOG("ExecuteStage: PAL WRFEN");
+        m_cpu->writeFEN(m_cpu->getRegister(16) & 1); // R16 contains enable bit
+        break;
+
+    case 0x000030: // SWPIRQL - Swap IRQ Level
+        DEBUG_LOG("ExecuteStage: PAL SWPIRQL");
+        {
+            quint64 newLevel = m_cpu->getRegister(16) & 0x1F; // R16 contains new level
+            quint64 oldLevel = m_cpu->swapIRQL(newLevel);
+            if (0 != 31) // Store old level in R0
+            {
+                m_cpu->setRegister(0, oldLevel);
+            }
+        }
+        break;
+
+    case 0x000035: // RDIRQL - Read IRQ Level
+        DEBUG_LOG("ExecuteStage: PAL RDIRQL");
+        if (0 != 31) // Store current IRQL in R0
+        {
+            m_cpu->setRegister(0, m_cpu->readIRQL());
+        }
+        break;
+
+    case 0x000036: // DI - Disable Interrupts
+        DEBUG_LOG("ExecuteStage: PAL DI");
+        m_cpu->disableInterrupts();
+        break;
+
+    case 0x000037: // EI - Enable Interrupts
+        DEBUG_LOG("ExecuteStage: PAL EI");
+        m_cpu->enableInterrupts();
+        break;
+
+    case 0x000038: // SWPPAL - Swap PAL Base
+        DEBUG_LOG("ExecuteStage: PAL SWPPAL");
+        {
+            quint64 newBase = m_cpu->getRegister(16); // R16 contains new PAL base
+            quint64 oldBase = m_cpu->swapPALBase(newBase);
+            if (0 != 31) // Store old base in R0
+            {
+                m_cpu->setRegister(0, oldBase);
+            }
+        }
+        break;
+
+    case 0x00003D: // WRVPTPTR - Write Virtual Page Table Pointer
+        DEBUG_LOG("ExecuteStage: PAL WRVPTPTR");
+        m_cpu->writeVPTPtr(m_cpu->getRegister(16)); // R16 contains pointer
+        break;
+
+    case 0x00003F: // WTKTRP - Write TLB Trap
+        DEBUG_LOG("ExecuteStage: PAL WTKTRP");
+        m_cpu->writeTLBTrap(m_cpu->getRegister(16)); // R16 contains trap address
+        break;
+
+    case 0x000040: // SWPCTX - Swap Process Context
+        DEBUG_LOG("ExecuteStage: PAL SWPCTX");
+        {
+            quint64 newContext = m_cpu->getRegister(16); // R16 contains new PCB address
+            quint64 oldContext = m_cpu->swapContext(newContext);
+            if (0 != 31) // Store old context in R0
+            {
+                m_cpu->setRegister(0, oldContext);
+            }
+        }
+        break;
+
+    case 0x000041: // WRVAL - Write Virtual Address Cache
+        DEBUG_LOG("ExecuteStage: PAL WRVAL");
+        m_cpu->writeVAL(m_cpu->getRegister(16)); // R16 contains value
+        break;
+
+    case 0x000042: // RDVAL - Read Virtual Address Cache
+        DEBUG_LOG("ExecuteStage: PAL RDVAL");
+        if (0 != 31) // Store VAL in R0
+        {
+            m_cpu->setRegister(0, m_cpu->readVAL());
+        }
+        break;
+
+    case 0x000043: // TBI - TB Invalidate
+        DEBUG_LOG("ExecuteStage: PAL TBI");
+        {
+            quint64 type = m_cpu->getRegister(16);    // R16 contains invalidation type
+            quint64 address = m_cpu->getRegister(17); // R17 contains address
+            m_cpu->invalidateTB(type, address);
+        }
+        break;
+
+    case 0x000044: // WRENT - Write System Entry Address
+        DEBUG_LOG("ExecuteStage: PAL WRENT");
+        {
+            quint64 address = m_cpu->getRegister(16); // R16 contains entry address
+            quint64 type = m_cpu->getRegister(17);    // R17 contains entry type
+            m_cpu->writeSystemEntry(address, type);
+        }
+        break;
+
+    case 0x000046: // RDPS - Read Processor Status
+        DEBUG_LOG("ExecuteStage: PAL RDPS");
+        if (0 != 31) // Store PS in R0
+        {
+            m_cpu->setRegister(0, m_cpu->readProcessorStatus());
+        }
+        break;
+
+    case 0x000047: // WRKGP - Write Kernel Global Pointer
+        DEBUG_LOG("ExecuteStage: PAL WRKGP");
+        m_cpu->writeKGP(m_cpu->getRegister(16)); // R16 contains KGP value
+        break;
+
+    case 0x000048: // WRUSP - Write User Stack Pointer
+        DEBUG_LOG("ExecuteStage: PAL WRUSP");
+        m_cpu->writeUSP(m_cpu->getRegister(16)); // R16 contains USP value
+        break;
+
+    case 0x000049: // WRPERFMON - Write Performance Monitor
+        DEBUG_LOG("ExecuteStage: PAL WRPERFMON");
+        {
+            quint64 function = m_cpu->getRegister(16); // R16 contains function
+            quint64 value = m_cpu->getRegister(17);    // R17 contains value
+            m_cpu->writePerfMon(function, value);
+        }
+        break;
+
+    case 0x00004A: // RDUSP - Read User Stack Pointer
+        DEBUG_LOG("ExecuteStage: PAL RDUSP");
+        if (0 != 31) // Store USP in R0
+        {
+            m_cpu->setRegister(0, m_cpu->readUSP());
+        }
+        break;
+
+    default:
+        DEBUG_LOG(QString("ExecuteStage: Unknown PAL function 0x%1").arg(palFunction, 6, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        break;
+    }
+}
+
+// Forward declaration for floating point methods
+void ExecuteStage::executeFloatingPointLoad(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Calculate effective address
+    quint64 baseValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 effectiveAddress = baseValue + instruction.immediate;
+
+    DEBUG_LOG(QString("ExecuteStage: FP Load from EA=0x%1").arg(effectiveAddress, 16, 16, QChar('0')));
+
+    switch (instruction.opcode)
+    {
+    case 0x20: // LDF - Load F_floating (32-bit VAX format)
+    case 0x22: // LDS - Load S_floating (32-bit IEEE format)
+    {
+        quint32 value;
+        if (m_cpu->readMemory32(effectiveAddress, value))
+        {
+            // Store in floating-point register
+            m_cpu->setFloatRegister(instruction.ra, value);
+            DEBUG_LOG(QString("ExecuteStage: %1 F%2 = 0x%3")
+                          .arg(instruction.opcode == 0x20 ? "LDF" : "LDS")
+                          .arg(instruction.ra)
+                          .arg(value, 8, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+
+    case 0x21: // LDG - Load G_floating (64-bit VAX format)
+    case 0x23: // LDT - Load T_floating (64-bit IEEE format)
+    {
+        quint64 value;
+        if (m_cpu->readMemory64(effectiveAddress, value))
+        {
+            // Store in floating-point register
+            m_cpu->setFloatRegister(instruction.ra, value);
+            DEBUG_LOG(QString("ExecuteStage: %1 F%2 = 0x%3")
+                          .arg(instruction.opcode == 0x21 ? "LDG" : "LDT")
+                          .arg(instruction.ra)
+                          .arg(value, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+    }
+}
+
+void ExecuteStage::executeFloatingPointStore(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Calculate effective address
+    quint64 baseValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 effectiveAddress = baseValue + instruction.immediate;
+
+    DEBUG_LOG(QString("ExecuteStage: FP Store to EA=0x%1").arg(effectiveAddress, 16, 16, QChar('0')));
+
+    switch (instruction.opcode)
+    {
+    case 0x24: // STF - Store F_floating (32-bit VAX format)
+    case 0x26: // STS - Store S_floating (32-bit IEEE format)
+    {
+        quint32 value = m_cpu->getFloatRegister32(instruction.ra);
+        if (!m_cpu->writeMemory32(effectiveAddress, value))
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        DEBUG_LOG(QString("ExecuteStage: %1 F%2 (0x%3) stored")
+                      .arg(instruction.opcode == 0x24 ? "STF" : "STS")
+                      .arg(instruction.ra)
+                      .arg(value, 8, 16, QChar('0')));
+        break;
+    }
+
+    case 0x25: // STG - Store G_floating (64-bit VAX format)
+    case 0x27: // STT - Store T_floating (64-bit IEEE format)
+    {
+        quint64 value = m_cpu->getFloatRegister64(instruction.ra);
+        if (!m_cpu->writeMemory64(effectiveAddress, value))
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        DEBUG_LOG(QString("ExecuteStage: %1 F%2 (0x%3) stored")
+                      .arg(instruction.opcode == 0x25 ? "STG" : "STT")
+                      .arg(instruction.ra)
+                      .arg(value, 16, 16, QChar('0')));
+        break;
+    }
+    }
+}
+void ExecuteStage::executeFloatingPointBranch(const DecodeStage::DecodedInstruction &instruction)
+{
+    quint64 faValue = m_cpu->getFloatRegister64(instruction.ra);
+    bool takeBranch = false;
+    QString conditionName;
+
+    switch (instruction.opcode)
+    {
+    case 0x31: // FBEQ - Floating Branch if Equal
+        // Check if floating-point value equals zero
+        takeBranch = m_cpu->isFloatZero(faValue);
+        conditionName = "FBEQ";
+        break;
+
+    case 0x32: // FBLT - Floating Branch if Less Than
+        // Check if floating-point value is less than zero
+        takeBranch = m_cpu->isFloatNegative(faValue) && !m_cpu->isFloatZero(faValue);
+        conditionName = "FBLT";
+        break;
+
+    case 0x33: // FBLE - Floating Branch if Less Than or Equal
+        // Check if floating-point value is less than or equal to zero
+        takeBranch = m_cpu->isFloatNegative(faValue) || m_cpu->isFloatZero(faValue);
+        conditionName = "FBLE";
+        break;
+
+    case 0x35: // FBNE - Floating Branch if Not Equal
+        // Check if floating-point value is not zero
+        takeBranch = !m_cpu->isFloatZero(faValue);
+        conditionName = "FBNE";
+        break;
+
+    case 0x36: // FBGE - Floating Branch if Greater Than or Equal
+        // Check if floating-point value is greater than or equal to zero
+        takeBranch = !m_cpu->isFloatNegative(faValue);
+        conditionName = "FBGE";
+        break;
+
+    case 0x37: // FBGT - Floating Branch if Greater Than
+        // Check if floating-point value is greater than zero
+        takeBranch = !m_cpu->isFloatNegative(faValue) && !m_cpu->isFloatZero(faValue);
+        conditionName = "FBGT";
+        break;
+    }
+
+    if (takeBranch)
+    {
+        quint64 currentPC = m_cpu->getPC();
+        quint64 targetPC = currentPC + instruction.immediate;
+        m_cpu->setPC(targetPC);
+        m_cpu->flushPipeline();
+
+        DEBUG_LOG(
+            QString("ExecuteStage: %1 taken, jumping to 0x%2").arg(conditionName).arg(targetPC, 16, 16, QChar('0')));
+    }
+    else
+    {
+        DEBUG_LOG(QString("ExecuteStage: %1 not taken").arg(conditionName));
+    }
+}
+
+void ExecuteStage::executeLoadUnaligned(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Calculate effective address
+    quint64 baseValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 effectiveAddress = baseValue + instruction.immediate;
+
+    DEBUG_LOG(QString("ExecuteStage: Unaligned load from EA=0x%1").arg(effectiveAddress, 16, 16, QChar('0')));
+
+    switch (instruction.opcode)
+    {
+    case 0x0A: // LDBU - Load Byte Unsigned
+    {
+        quint8 value;
+        if (m_cpu->readMemory8(effectiveAddress, value))
+        {
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, static_cast<quint64>(value));
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDBU R%1 = 0x%2").arg(instruction.ra).arg(value, 2, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+
+    case 0x0C: // LDWU - Load Word Unsigned
+    {
+        quint16 value;
+        if (m_cpu->readMemory16(effectiveAddress, value))
+        {
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, static_cast<quint64>(value));
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDWU R%1 = 0x%2").arg(instruction.ra).arg(value, 4, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        break;
+    }
+
+    case 0x0B: // LDQ_U - Load Quadword Unaligned
+    {
+        // Alpha LDQ_U loads from quadword boundary, ignoring low 3 bits of address
+        quint64 alignedAddress = effectiveAddress & ~0x7ULL;
+        quint64 value;
+        if (m_cpu->readMemory64(alignedAddress, value))
+        {
+            if (instruction.ra != 31)
+            {
+                m_cpu->setRegister(instruction.ra, value);
+            }
+            DEBUG_LOG(QString("ExecuteStage: LDQ_U R%1 = 0x%2 (from aligned 0x%3)")
+                          .arg(instruction.ra)
+                          .arg(value, 16, 16, QChar('0'))
+                          .arg(alignedAddress, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, alignedAddress);
+        }
+        break;
+    }
+    }
+}
+
+void ExecuteStage::executeStoreUnaligned(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Calculate effective address
+    quint64 baseValue = (instruction.rb == 31) ? 0 : m_cpu->getRegister(instruction.rb);
+    quint64 effectiveAddress = baseValue + instruction.immediate;
+    quint64 storeValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+
+    DEBUG_LOG(QString("ExecuteStage: Unaligned store to EA=0x%1, value=0x%2")
+                  .arg(effectiveAddress, 16, 16, QChar('0'))
+                  .arg(storeValue, 16, 16, QChar('0')));
+
+    switch (instruction.opcode)
+    {
+    case 0x0E: // STB - Store Byte
+    {
+        quint8 value = static_cast<quint8>(storeValue);
+        if (!m_cpu->writeMemory8(effectiveAddress, value))
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        DEBUG_LOG(QString("ExecuteStage: STB stored 0x%1").arg(value, 2, 16, QChar('0')));
+        break;
+    }
+
+    case 0x0D: // STW - Store Word
+    {
+        quint16 value = static_cast<quint16>(storeValue);
+        if (!m_cpu->writeMemory16(effectiveAddress, value))
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, effectiveAddress);
+        }
+        DEBUG_LOG(QString("ExecuteStage: STW stored 0x%1").arg(value, 4, 16, QChar('0')));
+        break;
+    }
+
+    case 0x0F: // STQ_U - Store Quadword Unaligned
+    {
+        // Alpha STQ_U stores to quadword boundary, ignoring low 3 bits of address
+        quint64 alignedAddress = effectiveAddress & ~0x7ULL;
+
+        // For unaligned store, we need to read-modify-write
+        // This is a simplified implementation - real Alpha would use byte masks
+        quint64 currentValue;
+        if (m_cpu->readMemory64(alignedAddress, currentValue))
+        {
+            // Calculate byte offset within quadword
+            quint32 offset = effectiveAddress & 0x7;
+            quint64 mask = 0xFFULL << (offset * 8);
+            quint64 shiftedValue = (storeValue & 0xFF) << (offset * 8);
+
+            quint64 newValue = (currentValue & ~mask) | (shiftedValue & mask);
+
+            if (!m_cpu->writeMemory64(alignedAddress, newValue))
+            {
+                m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, alignedAddress);
+            }
+            DEBUG_LOG(QString("ExecuteStage: STQ_U stored byte 0x%1 at offset %2 (result: 0x%3)")
+                          .arg(storeValue & 0xFF, 2, 16, QChar('0'))
+                          .arg(offset)
+                          .arg(newValue, 16, 16, QChar('0')));
+        }
+        else
+        {
+            m_cpu->triggerException(AlphaCPU::MEMORY_ACCESS_FAULT, alignedAddress);
+        }
+        break;
+    }
+    }
+}
+
+void ExecuteStage::executeIntegerToFloat(const DecodeStage::DecodedInstruction &instruction)
+{
+    // ITFP - Integer to Floating-Point conversions
+    quint64 raValue = (instruction.ra == 31) ? 0 : m_cpu->getRegister(instruction.ra);
+    quint64 result = 0;
+
+    switch (instruction.function)
+    {
+    case 0x04: // ITOFS - Integer to F_floating Single
+    {
+        qint32 intValue = static_cast<qint32>(raValue);
+        result = m_cpu->convertToFFormat(intValue);
+        DEBUG_LOG(QString("ExecuteStage: ITOFS %1 -> F%2").arg(intValue).arg(instruction.rc));
+        break;
+    }
+
+    case 0x0A: // ITOFF - Integer to F_floating
+    {
+        qint64 intValue = static_cast<qint64>(raValue);
+        result = m_cpu->convertToFFormat(intValue);
+        DEBUG_LOG(QString("ExecuteStage: ITOFF %1 -> F%2").arg(intValue).arg(instruction.rc));
+        break;
+    }
+
+    case 0x0C: // ITOFT - Integer to T_floating
+    {
+        qint64 intValue = static_cast<qint64>(raValue);
+        result = m_cpu->convertToTFormat(intValue);
+        DEBUG_LOG(QString("ExecuteStage: ITOFT %1 -> F%2").arg(intValue).arg(instruction.rc));
+        break;
+    }
+
+    case 0x14: // ITOFS/U - Integer to F_floating Single (unsigned)
+    {
+        quint32 intValue = static_cast<quint32>(raValue);
+        result = m_cpu->convertToFFormat(intValue);
+        DEBUG_LOG(QString("ExecuteStage: ITOFS/U %1 -> F%2").arg(intValue).arg(instruction.rc));
+        break;
+    }
+
+    case 0x1A: // ITOFF/U - Integer to F_floating (unsigned)
+    {
+        result = m_cpu->convertToFFormat(raValue);
+        DEBUG_LOG(QString("ExecuteStage: ITOFF/U %1 -> F%2").arg(raValue).arg(instruction.rc));
+        break;
+    }
+
+    case 0x1C: // ITOFT/U - Integer to T_floating (unsigned)
+    {
+        result = m_cpu->convertToTFormat(raValue);
+        DEBUG_LOG(QString("ExecuteStage: ITOFT/U %1 -> F%2").arg(raValue).arg(instruction.rc));
+        break;
+    }
+
+    default:
+        DEBUG_LOG(
+            QString("ExecuteStage: Unimplemented ITFP function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        return;
+    }
+
+    // Store result in floating-point register
+    if (instruction.rc != 31)
+    {
+        m_cpu->setFloatRegister(instruction.rc, result);
+    }
+}
+
+void ExecuteStage::executeFloatingPointOperate(const DecodeStage::DecodedInstruction &instruction)
+{
+    // Get floating-point operands
+    quint64 faValue = m_cpu->getFloatRegister64(instruction.ra);
+    quint64 fbValue = m_cpu->getFloatRegister64(instruction.rb);
+    quint64 result = 0;
+
+    // Check for floating-point exceptions enabled
+    if (!m_cpu->isFloatingPointEnabled())
+    {
+        DEBUG_LOG("ExecuteStage: Floating-point operation with FP disabled");
+        m_cpu->triggerException(AlphaCPU::FLOATING_POINT_DISABLED, m_cpu->getPC());
+        return;
+    }
+
+    switch (instruction.opcode)
+    {
+    case 0x15: // FLTV - VAX Floating-Point
+    {
+        switch (instruction.function)
+        {
+        case 0x00: // ADDF - Add F_floating
+            result = m_cpu->addFFormat(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: ADDF");
+            break;
+
+        case 0x01: // SUBF - Subtract F_floating
+            result = m_cpu->subFFormat(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: SUBF");
+            break;
+
+        case 0x02: // MULF - Multiply F_floating
+            result = m_cpu->mulFFormat(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: MULF");
+            break;
+
+        case 0x03: // DIVF - Divide F_floating
+            result = m_cpu->divFFormat(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: DIVF");
+            break;
+
+        case 0x1E: // CVTFQ - Convert F_floating to Quadword
+            result = m_cpu->convertFToQuad(faValue);
+            DEBUG_LOG("ExecuteStage: CVTFQ");
+            break;
+
+        case 0x2A: // CMPFEQ - Compare F_floating Equal
+            result = m_cpu->compareFFormat(faValue, fbValue, AlphaCPU::FP_EQUAL);
+            DEBUG_LOG("ExecuteStage: CMPFEQ");
+            break;
+
+        case 0x2B: // CMPFLT - Compare F_floating Less Than
+            result = m_cpu->compareFFormat(faValue, fbValue, AlphaCPU::FP_LESS);
+            DEBUG_LOG("ExecuteStage: CMPFLT");
+            break;
+
+        case 0x2C: // CMPFLE - Compare F_floating Less Than or Equal
+            result = m_cpu->compareFFormat(faValue, fbValue, AlphaCPU::FP_LESS_EQUAL);
+            DEBUG_LOG("ExecuteStage: CMPFLE");
+            break;
+
+        default:
+            DEBUG_LOG(
+                QString("ExecuteStage: Unimplemented FLTV function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+            m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+            return;
+        }
+        break;
+    }
+
+    case 0x16: // FLTI - IEEE Floating-Point
+    {
+        switch (instruction.function)
+        {
+        case 0x00: // ADDS/C - Add S_floating (Chopped)
+        case 0x40: // ADDS/M - Add S_floating (Round to Minus Infinity)
+        case 0x60: // ADDS - Add S_floating (Round to Nearest)
+        case 0x80: // ADDS/D - Add S_floating (Round to Plus Infinity)
+            result = m_cpu->addSFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: ADDS");
+            break;
+
+        case 0x01: // SUBS/C - Subtract S_floating (Chopped)
+        case 0x41: // SUBS/M - Subtract S_floating (Round to Minus Infinity)
+        case 0x61: // SUBS - Subtract S_floating (Round to Nearest)
+        case 0x81: // SUBS/D - Subtract S_floating (Round to Plus Infinity)
+            result = m_cpu->subSFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: SUBS");
+            break;
+
+        case 0x02: // MULS/C - Multiply S_floating (Chopped)
+        case 0x42: // MULS/M - Multiply S_floating (Round to Minus Infinity)
+        case 0x62: // MULS - Multiply S_floating (Round to Nearest)
+        case 0x82: // MULS/D - Multiply S_floating (Round to Plus Infinity)
+            result = m_cpu->mulSFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: MULS");
+            break;
+
+        case 0x03: // DIVS/C - Divide S_floating (Chopped)
+        case 0x43: // DIVS/M - Divide S_floating (Round to Minus Infinity)
+        case 0x63: // DIVS - Divide S_floating (Round to Nearest)
+        case 0x83: // DIVS/D - Divide S_floating (Round to Plus Infinity)
+            result = m_cpu->divSFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: DIVS");
+            break;
+
+        case 0x20: // ADDT/C - Add T_floating (Chopped)
+        case 0x60: // ADDT/M - Add T_floating (Round to Minus Infinity)
+        case 0x60: // ADDT - Add T_floating (Round to Nearest)
+        case 0xA0: // ADDT/D - Add T_floating (Round to Plus Infinity)
+            result = m_cpu->addTFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: ADDT");
+            break;
+
+        case 0x21: // SUBT/C - Subtract T_floating (Chopped)
+        case 0x61: // SUBT/M - Subtract T_floating (Round to Minus Infinity)
+        case 0x61: // SUBT - Subtract T_floating (Round to Nearest)
+        case 0xA1: // SUBT/D - Subtract T_floating (Round to Plus Infinity)
+            result = m_cpu->subTFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: SUBT");
+            break;
+
+        case 0x22: // MULT/C - Multiply T_floating (Chopped)
+        case 0x62: // MULT/M - Multiply T_floating (Round to Minus Infinity)
+        case 0x62: // MULT - Multiply T_floating (Round to Nearest)
+        case 0xA2: // MULT/D - Multiply T_floating (Round to Plus Infinity)
+            result = m_cpu->mulTFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: MULT");
+            break;
+
+        case 0x23: // DIVT/C - Divide T_floating (Chopped)
+        case 0x63: // DIVT/M - Divide T_floating (Round to Minus Infinity)
+        case 0x63: // DIVT - Divide T_floating (Round to Nearest)
+        case 0xA3: // DIVT/D - Divide T_floating (Round to Plus Infinity)
+            result = m_cpu->divTFormat(faValue, fbValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: DIVT");
+            break;
+
+        case 0x24: // CMPTUN - Compare T_floating Unordered
+            result = m_cpu->compareTFormat(faValue, fbValue, AlphaCPU::FP_UNORDERED);
+            DEBUG_LOG("ExecuteStage: CMPTUN");
+            break;
+
+        case 0x25: // CMPTEQ - Compare T_floating Equal
+            result = m_cpu->compareTFormat(faValue, fbValue, AlphaCPU::FP_EQUAL);
+            DEBUG_LOG("ExecuteStage: CMPTEQ");
+            break;
+
+        case 0x26: // CMPTLT - Compare T_floating Less Than
+            result = m_cpu->compareTFormat(faValue, fbValue, AlphaCPU::FP_LESS);
+            DEBUG_LOG("ExecuteStage: CMPTLT");
+            break;
+
+        case 0x27: // CMPTLE - Compare T_floating Less Than or Equal
+            result = m_cpu->compareTFormat(faValue, fbValue, AlphaCPU::FP_LESS_EQUAL);
+            DEBUG_LOG("ExecuteStage: CMPTLE");
+            break;
+
+        default:
+            DEBUG_LOG(
+                QString("ExecuteStage: Unimplemented FLTI function 0x%1").arg(instruction.function, 2, 16, QChar('0')));
+            m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+            return;
+        }
+        break;
+    }
+
+    case 0x17: // FLTL - Floating-Point Conversion and Move
+    {
+        switch (instruction.function)
+        {
+        case 0x010: // CVTTQ/C - Convert T_floating to Quadword (Chopped)
+        case 0x030: // CVTTQ/V/C - Convert T_floating to Quadword with overflow trap (Chopped)
+        case 0x050: // CVTTQ/S/C - Convert T_floating to Quadword with software completion (Chopped)
+        case 0x070: // CVTTQ/S/V/C - Convert T_floating to Quadword, both traps (Chopped)
+        case 0x010: // CVTTQ - Convert T_floating to Quadword (Round to Nearest)
+        case 0x030: // CVTTQ/V - Convert T_floating to Quadword with overflow trap
+        case 0x050: // CVTTQ/S - Convert T_floating to Quadword with software completion
+        case 0x070: // CVTTQ/S/V - Convert T_floating to Quadword, both traps
+            result = m_cpu->convertTToQuad(faValue, instruction.function);
+            DEBUG_LOG("ExecuteStage: CVTTQ");
+            break;
+
+        case 0x020: // CVTQF/C - Convert Quadword to F_floating (Chopped)
+        case 0x020: // CVTQF - Convert Quadword to F_floating (Round to Nearest)
+            result = m_cpu->convertQuadToF(faValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: CVTQF");
+            break;
+
+        case 0x024: // CVTQS/C - Convert Quadword to S_floating (Chopped)
+        case 0x064: // CVTQS/M - Convert Quadword to S_floating (Round to Minus Infinity)
+        case 0x024: // CVTQS - Convert Quadword to S_floating (Round to Nearest)
+        case 0x0A4: // CVTQS/D - Convert Quadword to S_floating (Round to Plus Infinity)
+            result = m_cpu->convertQuadToS(faValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: CVTQS");
+            break;
+
+        case 0x02C: // CVTQT/C - Convert Quadword to T_floating (Chopped)
+        case 0x06C: // CVTQT/M - Convert Quadword to T_floating (Round to Minus Infinity)
+        case 0x02C: // CVTQT - Convert Quadword to T_floating (Round to Nearest)
+        case 0x0AC: // CVTQT/D - Convert Quadword to T_floating (Round to Plus Infinity)
+            result = m_cpu->convertQuadToT(faValue, instruction.function >> 6);
+            DEBUG_LOG("ExecuteStage: CVTQT");
+            break;
+
+        case 0x120: // FCMOV - Floating Conditional Move
+        case 0x121: // FCMOVNE - Floating Conditional Move if Not Equal
+        case 0x122: // FCMOVLT - Floating Conditional Move if Less Than
+        case 0x123: // FCMOVGE - Floating Conditional Move if Greater Equal
+        case 0x124: // FCMOVLE - Floating Conditional Move if Less Equal
+        case 0x125: // FCMOVGT - Floating Conditional Move if Greater Than
+            result = m_cpu->floatConditionalMove(faValue, fbValue, (instruction.function & 0x7),
+                                                 m_cpu->getFloatRegister64(instruction.rc));
+            DEBUG_LOG(QString("ExecuteStage: FCMOV variant 0x%1").arg(instruction.function & 0x7, 1, 16));
+            break;
+
+        case 0x21: // CPYS - Copy Sign
+            result = m_cpu->copySign(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: CPYS");
+            break;
+
+        case 0x22: // CPYSN - Copy Sign Negate
+            result = m_cpu->copySignNegate(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: CPYSN");
+            break;
+
+        case 0x23: // CPYSE - Copy Sign and Exponent
+            result = m_cpu->copySignExponent(faValue, fbValue);
+            DEBUG_LOG("ExecuteStage: CPYSE");
+            break;
+
+        case 0x24: // MT_FPCR - Move to Floating-Point Control Register
+            m_cpu->setFPCR(faValue);
+            result = 0; // No destination register
+            DEBUG_LOG("ExecuteStage: MT_FPCR");
+            break;
+
+        case 0x25: // MF_FPCR - Move from Floating-Point Control Register
+            result = m_cpu->getFPCR();
+            DEBUG_LOG("ExecuteStage: MF_FPCR");
+            break;
+
+        default:
+            DEBUG_LOG(
+                QString("ExecuteStage: Unimplemented FLTL function 0x%1").arg(instruction.function, 3, 16, QChar('0')));
+            m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+            return;
+        }
+        break;
+    }
+
+    default:
+        DEBUG_LOG(
+            QString("ExecuteStage: Unknown floating-point opcode 0x%1").arg(instruction.opcode, 2, 16, QChar('0')));
+        m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+        return;
+    }
+
+    // Store result in floating-point register
+    if (instruction.rc != 31)
+    {
+        m_cpu->setFloatRegister(instruction.rc, result);
+    }
+
+    // Check for floating-point exceptions
+    if (m_cpu->checkFloatingPointExceptions())
+    {
+        m_cpu->triggerException(AlphaCPU::FLOATING_POINT_EXCEPTION, m_cpu->getPC());
+    }
+}

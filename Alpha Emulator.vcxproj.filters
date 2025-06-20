@@ -29,7 +29,7 @@
     <ClCompile Include="emulatormanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SystemLoader.cpp">
+    <ClCompile Include="intelhexloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -37,8 +37,16 @@
     <QtMoc Include="emulatormanager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="SystemLoader.h">
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="test_inqInstructionSet.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
+    </ClInclude>
+    <ClInclude Include="intelhexloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ASA_Emulator.QT.ini" />
   </ItemGroup>
 </Project>

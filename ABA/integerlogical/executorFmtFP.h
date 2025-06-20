@@ -1,0 +1,458 @@
+// executorFmtMbr.h
+// executorFmtMbr using QVector instead of std::array for its dispatch table
+// Eliminates “incomplete array” errors by building the table at runtime.
+
+// Note: requires QtCore/QVector
+
+#pragma once
+
+#include <QtCore/QVector>
+#include "Assembler.h"
+#include "structs/floatingPointInstruction.h"
+
+using Assembler = assemblerSpace::Assembler;
+
+
+
+class executorFmtFP {
+public:
+	using handler = void (executorFmtFP::*)(const FloatingPointInstruction&);
+
+
+	/// Build a ModR/M byte for register-to-register operations:
+	///   mod=11? (register), reg=src, rm=dst
+	/// See Intel® SDM, “ModR/M Byte” :contentReference[oaicite:2]{index=2}
+	inline uint8_t modRmGp(int dst, int src) {
+		return static_cast<uint8_t>(0xC0 | ((src & 0x7) << 3) | (dst & 0x7));
+	}
+
+	explicit executorFmtFP(Assembler& assembler)
+		: assembler(assembler)
+	{
+	}
+
+	/**
+	 * Decode inst, look up the handler in a QVector, and dispatch.
+	 */
+	 // Decode & dispatch
+	void execute(const FloatingPointInstruction& inst) {
+		FloatingPointInstruction i = inst;
+		i.decode();
+
+		// Map primary opcode to subtable index
+		static const QVector<quint8> primaries = { 0x14, 0x15, 0x16, 0x17};
+		int pidx = primaries.indexOf(i.opcode);
+		if (pidx < 0) return;  // unsupported opcode
+
+		// Lookup in subtable, then by function code
+		const auto& sub = dispatchTable()[pidx];
+		int fidx = i.fnc & 0x7F;       // lower 7 bits
+		handler h = sub.at(fidx);      // safe: sub is QVector<handler>
+		if (h) (this->*h)(i);
+	}
+	
+
+
+private:
+	Assembler& assembler;
+
+	/**
+	 * Build the 64-entry dispatch table once at startup.
+	 * Entries default to nullptr, with only the implemented opcodes set.
+	 */
+	static QVector<QVector<handler>> createDispatchTable() {
+		QVector<QVector<handler>> table;
+		table.resize(5);            // five primary-opcode subtables
+		for (auto& sub : table) {
+			sub.resize(128, nullptr);   // fnc codes 0..0x7F
+		}
+
+		auto& t14 = all[0]; // primary opcode 0x14
+
+		t14[0x00B] = &FloatingPointInstruction::emitSQRTS_C;   // 
+		t14[0x02B] = &FloatingPointInstruction::emitSQRTT_C;   // 
+		t14[0x04B] = &FloatingPointInstruction::emitSQRTS_M;   // 
+		t14[0x06B] = &FloatingPointInstruction::emitSQRTT_M;   // 
+		t14[0x08B] = &FloatingPointInstruction::emitSQRTS;   // 
+		t14[0x0A4] = &FloatingPointInstruction::emitCMPTUN;   // 
+		t14[0x0A5] = &FloatingPointInstruction::emitCMPTEQ;   //
+		t14[0x0A6] = &FloatingPointInstruction::emitCMPTLT;   // 
+		t14[0x0A7] = &FloatingPointInstruction::emitCMPTLE;  // 
+		t14[0x0AB] = &FloatingPointInstruction::emitSQRTT;   // 
+		t14[0x0CB] = &FloatingPointInstruction::emitSQRTS_D;   // 
+		t14[0x0EB] = &FloatingPointInstruction::emitSQRTT_D;   // 
+		t14[0x10B] = &FloatingPointInstruction::emitSQRTS_UC;   // 
+		t14[0x12B] = &FloatingPointInstruction::emitSQRTT_UC;   // 
+		t14[0x14B] = &FloatingPointInstruction::emitSQRTS_UM;   // 
+		t14[0x16B] = &FloatingPointInstruction::emitSQRTT_UM;   // 
+		t14[0x18B] = &FloatingPointInstruction::emitSQRTS_U;   // 
+		t14[0x1AB] = &FloatingPointInstruction::emitSQRTT_U;   // 
+		t14[0x1CB] = &FloatingPointInstruction::emitSQRTS_UD;   // 
+		t14[0x1EB] = &FloatingPointInstruction::emitSQRTT_UD;   // 
+		t14[0x50B] = &FloatingPointInstruction::emitSQRTS_SUC;   // 
+		t14[0x52B] = &FloatingPointInstruction::emitSQRTT_SUC;   // 
+		t14[0x54B] = &FloatingPointInstruction::emitSQRTS_SUM;   // 
+		t14[0x56B] = &FloatingPointInstruction::emitSQRTT_SUM;   // 
+		t14[0x58B] = &FloatingPointInstruction::emitSQRTS_SU;   // 
+		t14[0x5A4] = &FloatingPointInstruction::emitCMPTUN_SU;   // 
+		t14[0x5A5] = &FloatingPointInstruction::emitCMPTEQ_SU;   //
+		t14[0x5A6] = &FloatingPointInstruction::emitCMPTLT_SU;   // 
+		t14[0x5A7] = &FloatingPointInstruction::emitCMPTLE_SU;  // 
+		t14[0x5AB] = &FloatingPointInstruction::emitSQRTT_SU;   // 
+		t14[0x5CB] = &FloatingPointInstruction::emitSQRTS_SUD;   // 
+		t14[0x5EB] = &FloatingPointInstruction::emitSQRTT_SUD;   // 
+		t14[0x70B] = &FloatingPointInstruction::emitSQRTS_SUIC;   // 
+		t14[0x72B] = &FloatingPointInstruction::emitSQRTT_SUIC;   // 
+		t14[0x74B] = &FloatingPointInstruction::emitSQRTS_SUIMM;   // 
+		t14[0x76B] = &FloatingPointInstruction::emitSQRTT_SUIMM;   // 
+		t14[0x78B] = &FloatingPointInstruction::emitSQRTS_SUI;   // 
+		t14[0x7AB] = &FloatingPointInstruction::emitSQRTT_SUI;   // 
+		t14[0x7CB] = &FloatingPointInstruction::emitSQRTS_SUID;   // 
+		t14[0x7EB] = &FloatingPointInstruction::emitSQRTT_SUID;   // 
+
+		auto& t15 = all[1]; // opcode 0x15 = ADDG, SUBG, ...
+
+		t15[0x000] = &FloatingPointInstruction::emitAddF_C;   // 
+		t15[0x001] = &FloatingPointInstruction::emitSUBF_C;   // 
+		t15[0x002] = &FloatingPointInstruction::emitMULF_C;   //  VAX 
+		t15[0x003] = &FloatingPointInstruction::emitDIVF_C;   //  VAX
+		t15[0x004] = &FloatingPointInstruction::emitITOFS;  // Convert quadword?S :contentReference[oaicite:2]{index=2}
+		t15[0x00A] = &FloatingPointInstruction::emitSQRTF_C;   // 
+		t15[0x014] = &FloatingPointInstruction::emitITOFF;  // Convert quadword?F (ITOFF) :contentReference[oaicite:1]{index=1}
+		t15[0x020] = &FloatingPointInstruction::emitAddG_C;   // 
+		t15[0x021] = &FloatingPointInstruction::emitSUBG_C;   // 
+		t15[0x022] = &FloatingPointInstruction::emitMULG_C;   // 
+		t15[0x023] = &FloatingPointInstruction::emitDIVG_C;   // 
+		t15[0x024] = &FloatingPointInstruction::emitITOFT;  // Convert quadword?T :contentReference[oaicite:3]{index=3}
+		t15[0x02A] = &FloatingPointInstruction::emitSQRTG_C;   // 
+		t15[0x02C] = &FloatingPointInstruction::emitCVTGF_C;   // 
+		t15[0x02D] = &FloatingPointInstruction::emitCVTGD_C;   // 
+		t15[0x02F] = &FloatingPointInstruction::emitCVTGQ_C;   // 
+		t15[0x03C] = &FloatingPointInstruction::emitCVTQF_C;   // 
+		t15[0x03E] = &FloatingPointInstruction::emitCVTQG_C;   // 
+		t15[0x080] = &FloatingPointInstruction::emitAddF;   // 
+		t15[0x081] = &FloatingPointInstruction::emitSUBF;   // 
+		t15[0x082] = &FloatingPointInstruction::emitMULF;   // 
+		t15[0x083] = &FloatingPointInstruction::emitDIVF;   // 
+		t15[0x08A] = &FloatingPointInstruction::emitSQRTF;   // 
+		t15[0x09E] = &FloatingPointInstruction::emitCVTDG;   // 
+		t15[0x0A0] = &FloatingPointInstruction::emitAddG;   // 
+		t15[0x0A1] = &FloatingPointInstruction::emitSUBG;   // 
+		t15[0x0A2] = &FloatingPointInstruction::emitMULG;   // 
+		t15[0x0A3] = &FloatingPointInstruction::emitDIVG;   // 
+		t15[0x0A5] = &FloatingPointInstruction::emitCMPGEQ;   // 
+		t15[0x0A6] = &FloatingPointInstruction::emitCMPGLT;   // 
+		t15[0x0A7] = &FloatingPointInstruction::emitCMPGLE;   // 
+		t15[0x0AA] = &FloatingPointInstruction::emitSQRTG;   // 
+		t15[0x0AB] = &FloatingPointInstruction::emitSQRTT;   // 
+		t15[0x0AC] = &FloatingPointInstruction::emitCVTGF;   // 
+		t15[0x0AD] = &FloatingPointInstruction::emitCVTGD;   // 
+		t15[0x0AF] = &FloatingPointInstruction::emitCVTGQ;   // 
+		t15[0x0AF] = &FloatingPointInstruction::emitCVTGQ;     // Convert G ? Quadword :contentReference[oaicite:8]{index=8}
+		t15[0x0BC] = &FloatingPointInstruction::emitCVTQF;   // 
+		t15[0x0BE] = &FloatingPointInstruction::emitCVTQG;   //
+		t15[0x100] = &FloatingPointInstruction::emitAddF_UC;   // 
+		t15[0x101] = &FloatingPointInstruction::emitSUBF_UC;   // 
+		t15[0x102] = &FloatingPointInstruction::emitMULF_UC;   // 
+		t15[0x103] = &FloatingPointInstruction::emitDIVF_UC;   // 
+		t15[0x10A] = &FloatingPointInstruction::emitSQRTF_UC;   // 
+		t15[0x120] = &FloatingPointInstruction::emitAddG_UC;   // 
+		t15[0x121] = &FloatingPointInstruction::emitSUBG_UC;   // 
+		t15[0x122] = &FloatingPointInstruction::emitMULG_UC;   // 
+		t15[0x123] = &FloatingPointInstruction::emitDIVG_UC;   // 
+		t15[0x12A] = &FloatingPointInstruction::emitSQRTG_UC;   // 
+		t15[0x12C] = &FloatingPointInstruction::emitCVTGF_UC;   // 
+		t15[0x12D] = &FloatingPointInstruction::emitCVTGD_UC;   // 
+		t15[0x12F] = &FloatingPointInstruction::emitCVTGQ_UC;   // 
+		t15[0x180] = &FloatingPointInstruction::emitAddF_U;   // 
+		t15[0x181] = &FloatingPointInstruction::emitSUBF_U;   // 
+		t15[0x182] = &FloatingPointInstruction::emitMULF_U;   // 
+		t15[0x183] = &FloatingPointInstruction::emitDIVF_U;   // 
+		t15[0x18A] = &FloatingPointInstruction::emitSQRTF_U;   // 
+		t15[0x1A0] = &FloatingPointInstruction::emitAddG_U;   // 
+		t15[0x1A1] = &FloatingPointInstruction::emitSUBG_U;   // 
+		t15[0x1A2] = &FloatingPointInstruction::emitMULG_U;   // 
+		t15[0x1A3] = &FloatingPointInstruction::emitDIVG_U;   // 
+		t15[0x1AA] = &FloatingPointInstruction::emitSQRTG_U;   // 
+		t15[0x1AC] = &FloatingPointInstruction::emitCVTGF_U;   // 
+		t15[0x1AD] = &FloatingPointInstruction::emitCVTGD_U;   // 
+		t15[0x1AF] = &FloatingPointInstruction::emitCVTGQ_U;   // 
+		t15[0x400] = &FloatingPointInstruction::emitAddF_SC;   // 
+		t15[0x401] = &FloatingPointInstruction::emitSUBF_SC;   // 
+		t15[0x402] = &FloatingPointInstruction::emitMULF_SC;   // 
+		t15[0x403] = &FloatingPointInstruction::emitDIVF_SC;   // 
+		t15[0x40A] = &FloatingPointInstruction::emitSQRTF_SC;   // 
+		t15[0x420] = &FloatingPointInstruction::emitAddG_SC;   // 
+		t15[0x421] = &FloatingPointInstruction::emitSUBG_SC;   // 
+		t15[0x422] = &FloatingPointInstruction::emitMULG_SC;   // 
+		t15[0x423] = &FloatingPointInstruction::emitDIVG_SC;   // 
+		t15[0x42A] = &FloatingPointInstruction::emitSQRTG_SC;   // 
+		t15[0x42C] = &FloatingPointInstruction::emitCVTGF_SC;   // 
+		t15[0x42D] = &FloatingPointInstruction::emitCVTGD_SC;   // 
+		t15[0x42F] = &FloatingPointInstruction::emitCVTGQ_CS;   // 
+		t15[0x480] = &FloatingPointInstruction::emitAddF_S;   // 
+		t15[0x481] = &FloatingPointInstruction::emitSUBF_S;   // 
+		t15[0x482] = &FloatingPointInstruction::emitMULF_S;   // 
+		t15[0x483] = &FloatingPointInstruction::emitDIVF_S;   // 
+		t15[0x48A] = &FloatingPointInstruction::emitSQRTF_S;   // 
+		t15[0x4A0] = &FloatingPointInstruction::emitAddG_S;   // 
+		t15[0x4A1] = &FloatingPointInstruction::emitSUBG_S;   // 
+		t15[0x4A2] = &FloatingPointInstruction::emitMULG_S;   // 
+		t15[0x4A3] = &FloatingPointInstruction::emitDIVG_S;   // 
+		t15[0x4A5] = &FloatingPointInstruction::emitCMPGEQ_S;   // 
+		t15[0x4A6] = &FloatingPointInstruction::emitCMPGLT_S;   // 
+		t15[0x4A7] = &FloatingPointInstruction::emitCMPGLE_S;   // 
+		t15[0x4AA] = &FloatingPointInstruction::emitSQRTG_S;   // 
+		t15[0x4AC] = &FloatingPointInstruction::emitCVTGF_S;   // 
+		t15[0x4AD] = &FloatingPointInstruction::emitCVTGD_S;   // 
+		t15[0x4AF] = &FloatingPointInstruction::emitCVTGQ_S;   // 
+		t15[0x500] = &FloatingPointInstruction::emitAddF_SUC; //
+		t15[0x501] = &FloatingPointInstruction::emitSUBF_SUC;   // 
+		t15[0x502] = &FloatingPointInstruction::emitMULF_SUC;   // 
+		t15[0x503] = &FloatingPointInstruction::emitDIVF_SUC;   // 
+		t15[0x50A] = &FloatingPointInstruction::emitSQRTF_SUC;   // 
+		t15[0x520] = &FloatingPointInstruction::emitAddG_SUC; //
+		t15[0x521] = &FloatingPointInstruction::emitSUBG_SUC;   // 
+		t15[0x522] = &FloatingPointInstruction::emitMULG_SUC;   // 
+		t15[0x523] = &FloatingPointInstruction::emitDIVG_SUC;   // 
+		t15[0x52A] = &FloatingPointInstruction::emitSQRTG_SUC;   // 
+		t15[0x52C] = &FloatingPointInstruction::emitCVTGF_SUC; //
+		t15[0x52D] = &FloatingPointInstruction::emitCVTGD_SUC; //
+		t15[0x52F] = &FloatingPointInstruction::emitCVTGQ_SUC; //
+		t15[0x580] = &FloatingPointInstruction::emitAddF_SU;   // 
+		t15[0x581] = &FloatingPointInstruction::emitSUBF_SU;   // 
+		t15[0x582] = &FloatingPointInstruction::emitMULF_SU;   // 
+		t15[0x583] = &FloatingPointInstruction::emitDIVF_SU;   // 
+		t15[0x58A] = &FloatingPointInstruction::emitSQRTF_SU;   // 
+		t15[0x5A0] = &FloatingPointInstruction::emitAddG_SU;   // 
+		t15[0x5A1] = &FloatingPointInstruction::emitSUBG_SU;   // 
+		t15[0x5A2] = &FloatingPointInstruction::emitMULG_SU;   // 
+		t15[0x5A3] = &FloatingPointInstruction::emitDIVG_SU;   // 
+		t15[0x5AA] = &FloatingPointInstruction::emitSQRTG_SU;   // 
+		t15[0x5AC] = &FloatingPointInstruction::emitCVTGF_SU;   // 
+		t15[0x5AD] = &FloatingPointInstruction::emitCVTGD_SU;   // 
+		t15[0x5AF] = &FloatingPointInstruction::emitCVTGQ_SU;   // 
+
+
+		auto& t16 = all[2]; // opcode 0x16 = 
+		t16[0x000] = &FloatingPointInstruction::emitAddS_C;   // 
+		t16[0x001] = &FloatingPointInstruction::emitSUBS_VD;   // 
+		t16[0x002] = &FloatingPointInstruction::emitMULS_C;   //  IEEE
+		t16[0x003] = &FloatingPointInstruction::emitDIVS_C;   //
+		t16[0x020] = &FloatingPointInstruction::emitAddT_C;   // 
+		t16[0x021] = &FloatingPointInstruction::emitCVTST;   //
+		t16[0x021] = &FloatingPointInstruction::emitSUBT_VD;   // 
+		t16[0x022] = &FloatingPointInstruction::emitMULT_C;   //
+		t16[0x023] = &FloatingPointInstruction::emitDIVT_C;   //
+		t16[0x02C] = &FloatingPointInstruction::emitCVTTQ_VD;   // 
+		t16[0x02C] = &FloatingPointInstruction::emitCVTTS;    // T?S (chopped) :contentReference[oaicite:4]{index=4}  
+		t16[0x02F] = &FloatingPointInstruction::emitCVTTQ_C;   // 
+		t16[0x03C] = &FloatingPointInstruction::emitCVTQS_C;   // 
+		t16[0x03E] = &FloatingPointInstruction::emitCVTQT_C;   // 
+		t16[0x040] = &FloatingPointInstruction::emitAddS_M;   // 
+		t16[0x041] = &FloatingPointInstruction::emitSUBS_SVD;   // 
+		t16[0x042] = &FloatingPointInstruction::emitMULS_M;   //
+		t16[0x043] = &FloatingPointInstruction::emitDIVS_M;   //
+		t16[0x060] = &FloatingPointInstruction::emitAddT_M;   // 
+		t16[0x061] = &FloatingPointInstruction::emitSUBT_SVD;   // 
+		t16[0x062] = &FloatingPointInstruction::emitMULT_M;   //
+		t16[0x063] = &FloatingPointInstruction::emitDIVT_M;   //
+		t16[0x06C] = &FloatingPointInstruction::emitCVTTQ_SVD;   // 
+		t16[0x06F] = &FloatingPointInstruction::emitCVTTQ_M;   // 
+		t16[0x07C] = &FloatingPointInstruction::emitCVTQS_M;   // 
+		t16[0x07E] = &FloatingPointInstruction::emitCVTQT_M;   // 
+		t16[0x080] = &FloatingPointInstruction::emitAddS;   // 
+		t16[0x081] = &FloatingPointInstruction::emitSUBS;   // 
+		t16[0x082] = &FloatingPointInstruction::emitMULS;   //
+		t16[0x083] = &FloatingPointInstruction::emitDIVS;   // 
+		t16[0x0A0] = &FloatingPointInstruction::emitAddT;
+		t16[0x0A1] = &FloatingPointInstruction::emitSUBT;   // 
+		t16[0x0A2] = &FloatingPointInstruction::emitMULT;   //
+		t16[0x0A3] = &FloatingPointInstruction::emitDIVT;   //
+		t16[0x0AC] = &FloatingPointInstruction::emitCVTTS;    // T?S (default) :contentReference[oaicite:5]{index=5}  
+		t16[0x0AF] = &FloatingPointInstruction::emitCVTTQ;   // 
+		t16[0x0BC] = &FloatingPointInstruction::emitCVTQS;   // 
+		t16[0x0BE] = &FloatingPointInstruction::emitCVTQT;   // 
+		t16[0x0C0] = &FloatingPointInstruction::emitAddS_D;   // 
+		t16[0x0C1] = &FloatingPointInstruction::emitSUBS_SVID;   // 
+		t16[0x0C2] = &FloatingPointInstruction::emitMULS_D;   //
+		t16[0x0C3] = &FloatingPointInstruction::emitDIVS_D;   //
+		t16[0x0E0] = &FloatingPointInstruction::emitAddT_D;   // 
+		t16[0x0E1] = &FloatingPointInstruction::emitSUBT_SVID;   // 
+		t16[0x0E2] = &FloatingPointInstruction::emitMULT_D;   //
+		t16[0x0E3] = &FloatingPointInstruction::emitDIVT_D;   //
+		t16[0x0EC] = &FloatingPointInstruction::emitCVTTQ_SVID;   // 
+		t16[0x0EF] = &FloatingPointInstruction::emitCVTTQ_D;   // 
+		t16[0x0FC] = &FloatingPointInstruction::emitCVTQS_D;   //
+		t16[0x0FE] = &FloatingPointInstruction::emitCVTQT_D;  // CVTQT /D :contentReference[oaicite:6]{index=6}
+		t16[0x100] = &FloatingPointInstruction::emitAddS_UC;   // 
+		t16[0x101] = &FloatingPointInstruction::emitSUBS_VM;   // 
+		t16[0x102] = &FloatingPointInstruction::emitMULS_UC;   //
+		t16[0x103] = &FloatingPointInstruction::emitDIVS_UC;   //
+		t16[0x120] = &FloatingPointInstruction::emitAddT_UC;   // 
+		t16[0x121] = &FloatingPointInstruction::emitSUBT_VM;   // 
+		t16[0x122] = &FloatingPointInstruction::emitMULT_UC;   //
+		t16[0x123] = &FloatingPointInstruction::emitDIVT_UC;   //
+		t16[0x12C] = &FloatingPointInstruction::emitCVTTQ_VM;   // 
+		t16[0x12F] = &FloatingPointInstruction::emitCVTTQ_VC;   // 
+		t16[0x140] = &FloatingPointInstruction::emitAddS_UM;   // 
+		t16[0x141] = &FloatingPointInstruction::emitSUBS_SVM;   // 
+		t16[0x142] = &FloatingPointInstruction::emitMULS_UM;   //
+		t16[0x143] = &FloatingPointInstruction::emitDIVS_UM;   //
+		t16[0x160] = &FloatingPointInstruction::emitAddT_UM;   // 
+		t16[0x161] = &FloatingPointInstruction::emitSUBT_SVM;   // 
+		t16[0x162] = &FloatingPointInstruction::emitMULT_UM;   //
+		t16[0x163] = &FloatingPointInstruction::emitDIVT_UM;   //
+		t16[0x16C] = &FloatingPointInstruction::emitCVTTQ_SVM;   // 
+		t16[0x16F] = &FloatingPointInstruction::emitCVTTQ_VM;   // 
+		t16[0x180] = &FloatingPointInstruction::emitAddS_U;   // 
+		t16[0x181] = &FloatingPointInstruction::emitSUBS_M;   // 
+		t16[0x182] = &FloatingPointInstruction::emitMULS_U;   //
+		t16[0x183] = &FloatingPointInstruction::emitDIVS_U;   //
+		t16[0x1A0] = &FloatingPointInstruction::emitAddT_U;   // 
+		t16[0x1A1] = &FloatingPointInstruction::emitSUBT_M;   // 
+		t16[0x1A2] = &FloatingPointInstruction::emitMULT_U;   //
+		t16[0x1A3] = &FloatingPointInstruction::emitDIVT_U;   //
+		t16[0x1AC] = &FloatingPointInstruction::emitCVTTQ_M;   // 
+		t16[0x1AF] = &FloatingPointInstruction::emitCVTTQ_V;   // 
+		t16[0x1C0] = &FloatingPointInstruction::emitAddS_UD;   // 
+		t16[0x1C1] = &FloatingPointInstruction::emitSUBS_SVIM;   //
+		t16[0x1C2] = &FloatingPointInstruction::emitMULS_UD;   //
+		t16[0x1C3] = &FloatingPointInstruction::emitDIVS_UD;   //
+		t16[0x1E0] = &FloatingPointInstruction::emitAddT_UD;   // 
+		t16[0x1E1] = &FloatingPointInstruction::emitSUBT_SVIM;   // 
+		t16[0x1E2] = &FloatingPointInstruction::emitMULT_UD;   //
+		t16[0x1E3] = &FloatingPointInstruction::emitDIVT_UD;   //
+		t16[0x1EC] = &FloatingPointInstruction::emitCVTTQ_SVIM;   //
+		t16[0x1EF] = &FloatingPointInstruction::emitCVTTQ_VD;   // 
+		t16[0x500] = &FloatingPointInstruction::emitAddS_SUC;   // 
+		t16[0x501] = &FloatingPointInstruction::emitSUBS_SUC;   // 
+		t16[0x502] = &FloatingPointInstruction::emitMULS_SUC;   //
+		t16[0x520] = &FloatingPointInstruction::emitAddT_SUC;   // 
+		t16[0x521] = &FloatingPointInstruction::emitSUBT_SUC;   // 
+		t16[0x522] = &FloatingPointInstruction::emitMULT_SUC;   //
+		t16[0x523] = &FloatingPointInstruction::emitDIVT_SUC;   //
+		t16[0x52C] = &FloatingPointInstruction::emitCVTTQ_SUC;   // 
+		t16[0x52F] = &FloatingPointInstruction::emitCVTTQ_SVC;   // 
+		t16[0x540] = &FloatingPointInstruction::emitAddS_SUM;   // 
+		t16[0x541] = &FloatingPointInstruction::emitSUBS_SUM;   // 
+		t16[0x542] = &FloatingPointInstruction::emitMULS_SUM;   //
+		t16[0x543] = &FloatingPointInstruction::emitDIVS_SUM;   //
+		t16[0x560] = &FloatingPointInstruction::emitAddT_SUM;   // 
+		t16[0x561] = &FloatingPointInstruction::emitSUBT_SUM;   // 
+		t16[0x562] = &FloatingPointInstruction::emitMULT_SUM;   //
+		t16[0x563] = &FloatingPointInstruction::emitDIVT_SUM;   //
+		t16[0x56F] = &FloatingPointInstruction::emitCVTTQ_SVM;   // 
+		t16[0x580] = &FloatingPointInstruction::emitAddS_SU;   // 
+		t16[0x581] = &FloatingPointInstruction::emitSUBS_SU;   // 
+		t16[0x582] = &FloatingPointInstruction::emitMULS_SU;   // 
+		t16[0x583] = &FloatingPointInstruction::emitDIVS_SUC;   //
+		t16[0x583] = &FloatingPointInstruction::emitDIVS_SU;   // 
+		t16[0x5A0] = &FloatingPointInstruction::emitAddT_SU;   // 
+		t16[0x5A1] = &FloatingPointInstruction::emitSUBT_SU;   // 
+		t16[0x5A2] = &FloatingPointInstruction::emitMULS_SU;   // 
+		t16[0x5A3] = &FloatingPointInstruction::emitDIVT_SU;   // 
+		t16[0x5AC] = &FloatingPointInstruction::emitCVTTQ_SU;   // 
+		t16[0x5AF] = &FloatingPointInstruction::emitCVTTQ_SV;   // 
+		t16[0x5C0] = &FloatingPointInstruction::emitAddS_SUD;   // 
+		t16[0x5C1] = &FloatingPointInstruction::emitSUBS_SUD;   // 
+		t16[0x5C2] = &FloatingPointInstruction::emitMULS_SUD;   //
+		t16[0x5C3] = &FloatingPointInstruction::emitDIVS_SUD;   //
+		t16[0x5E0] = &FloatingPointInstruction::emitAddT_SUD;   // 
+		t16[0x5E1] = &FloatingPointInstruction::emitSUBT_SUD;   // 
+		t16[0x5E2] = &FloatingPointInstruction::emitMULT_SUD;   //
+		t16[0x5E3] = &FloatingPointInstruction::emitDIVT_SUD;   //
+		t16[0x5EF] = &FloatingPointInstruction::emitCVTTQ_SVD;   // 
+		t16[0x5EF] = &FloatingPointInstruction::emitCVTTQ_SVD;   // 
+		t16[0x6AC] = &FloatingPointInstruction::emitCVTST_S;   //		
+		t16[0x700] = &FloatingPointInstruction::emitAddS_SUIC;   // 
+		t16[0x701] = &FloatingPointInstruction::emitSUBS_SUIC;   // 
+		t16[0x702] = &FloatingPointInstruction::emitMULS_SUIC;   //
+		t16[0x703] = &FloatingPointInstruction::emitDIVS_SUIC;   //
+		t16[0x720] = &FloatingPointInstruction::emitAddT_SUIC;   // 
+		t16[0x721] = &FloatingPointInstruction::emitSUBT_SUIC;   // 
+		t16[0x722] = &FloatingPointInstruction::emitMULT_SUIC;   //
+		t16[0x723] = &FloatingPointInstruction::emitDIVT_SUIC;   //
+		t16[0x72C] = &FloatingPointInstruction::emitCVTTQ_SUIC;   // 
+		t16[0x72F] = &FloatingPointInstruction::emitCVTTQ_SVIC;   // 
+		t16[0x73C] = &FloatingPointInstruction::emitCVTQS_SUIC;   // 
+		t16[0x73E] = &FloatingPointInstruction::emitCVTQT_SUIC;   // 
+		t16[0x740] = &FloatingPointInstruction::emitAddS_SUIUM;   // 
+		t16[0x741] = &FloatingPointInstruction::emitSUBS_SUIM;   // 
+		t16[0x742] = &FloatingPointInstruction::emitMULS_SUIM;   //
+		t16[0x743] = &FloatingPointInstruction::emitDIVS_SUIM;   //
+		t16[0x760] = &FloatingPointInstruction::emitAddT_SUIUM;   // 
+		t16[0x761] = &FloatingPointInstruction::emitSUBT_SUIM;   // 
+		t16[0x762] = &FloatingPointInstruction::emitMULT_SUIM;   //
+		t16[0x763] = &FloatingPointInstruction::emitDIVT_SUIM;   //
+		t16[0x76C] = &FloatingPointInstruction::emitCVTTQ_SUIM;   //
+		t16[0x76F] = &FloatingPointInstruction::emitCVTTQ_SVIM;   // 
+		t16[0x77C] = &FloatingPointInstruction::emitCVTQS_SUIM;   // 
+		t16[0x77E] = &FloatingPointInstruction::emitCVTQT_SUIM;   // 
+		t16[0x780] = &FloatingPointInstruction::emitAddS_SUI;   // 
+		t16[0x781] = &FloatingPointInstruction::emitSUBS_SUI;   // 
+		t16[0x782] = &FloatingPointInstruction::emitMULS_SUI;   //
+		t16[0x783] = &FloatingPointInstruction::emitDIVS_SUI;   //
+		t16[0x7A0] = &FloatingPointInstruction::emitAddT_SUI;   // 
+		t16[0x7A1] = &FloatingPointInstruction::emitSUBT_SUI;   // 
+		t16[0x7A2] = &FloatingPointInstruction::emitMULT_SUI;   //
+		t16[0x7A3] = &FloatingPointInstruction::emitDIVT_SUI;   //
+		t16[0x7AC] = &FloatingPointInstruction::emitCVTTQ_SUI;   // 
+		t16[0x7AF] = &FloatingPointInstruction::emitCVTQT_SVI; // CVTQT /SVI :contentReference[oaicite:11]{index=11}
+		t16[0x7AF] = &FloatingPointInstruction::emitCVTTQ_SVU;   // 
+		t16[0x7BC] = &FloatingPointInstruction::emitCVTQS_SUI;   // 
+		t16[0x7BE] = &FloatingPointInstruction::emitCVTQT_SUI;   // 
+		t16[0x7C0] = &FloatingPointInstruction::emitAddS_SUID;   // 
+		t16[0x7C1] = &FloatingPointInstruction::emitSUBS_SUID;   //
+		t16[0x7C2] = &FloatingPointInstruction::emitMULS_SUID;   //
+		t16[0x7C3] = &FloatingPointInstruction::emitDIVS_SUID;   //
+		t16[0x7E0] = &FloatingPointInstruction::emitAddT_SUID;   // 
+		t16[0x7E1] = &FloatingPointInstruction::emitSUBT_SUID;   //
+		t16[0x7E2] = &FloatingPointInstruction::emitMULT_SUID;   //
+		t16[0x7E3] = &FloatingPointInstruction::emitDIVT_SUID;   //
+		t16[0x7EC] = &FloatingPointInstruction::emitCVTTQ_SUID;   //
+		t16[0x7EF] = &FloatingPointInstruction::emitCVTTQ_SVID;   // 
+		t16[0x7FC] = &FloatingPointInstruction::emitCVTQS_SUID;   //
+		t16[0x7FE] = &FloatingPointInstruction::emitCVTQT_SUID;   //
+		
+		auto& t17 = all[3]; // opcode 0x15 = ADDG, SUBG, ...
+
+		t17[0x010] = &FloatingPointInstruction::emitCVTLQ;   // 
+		t17[0x020] = &FloatingPointInstruction::emitCPYS;   // 
+		t17[0x021] = &FloatingPointInstruction::emitCPYSN;   // 
+		t17[0x022] = &FloatingPointInstruction::emitCPYSE;   // 
+		t17[0x025] = &FloatingPointInstruction::emitMF_FPCR;   // 
+		t17[0x026] = &FloatingPointInstruction::emitMT_FPCR;   // 
+		t17[0x02A] = &FloatingPointInstruction::emitFCMOVEQ;   // FCMOVEQ – Floating-point conditional move if equal; ASA Manual §4.10.3, Table 4-13 :contentReference[oaicite:0]{index=0}
+		t17[0x02B] = &FloatingPointInstruction::emitFCMOVNE;   // 
+		t17[0x02C] = &FloatingPointInstruction::emitFCMOVLT;   // 
+		t17[0x02D] = &FloatingPointInstruction::emitFCMOVGE;   // 
+		t17[0x02E] = &FloatingPointInstruction::emitFCMOVLE;   //
+		t17[0x02F] = &FloatingPointInstruction::emitFCMOVGT;   // 
+		t17[0x030] = &FloatingPointInstruction::emitCVTQL;   // 
+
+		return all;
+	}
+
+	/**
+	 * Return the singleton dispatch table.
+	 * Initialized on first call in a thread?safe manner.
+	 */
+	 // Returns the singleton 2-D dispatch table
+	static const QVector<QVector<handler>>& dispatchTable() {
+		static const QVector<QVector<handler>> table = createDispatchTable();
+		return table;
+	}
+
+
+
+
+
+
+
+	// … declare other handlers as needed …
+};
+
+
+
+

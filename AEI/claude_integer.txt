@@ -1,0 +1,693 @@
+#pragma once
+
+#include "../Core/AlphaInstruction.h"
+#include "../Core/InstructionHelpers.h"
+#include <QtGlobal>
+
+/**
+ * @brief Base class for all integer operate format instructions
+ * 
+ * Integer instructions use the operate format with a 7-bit function code.
+ * They perform arithmetic, logical, and comparison operations on 64-bit 
+ * integer values in the Alpha register file.
+ */
+class IntegerInstruction : public AlphaInstruction {
+public:
+    // Constructor
+    explicit IntegerInstruction(quint32 rawInstr);
+    
+    // Override pure virtual methods from base class
+    void ParseOperands() override;
+    void HandleExceptions(RegisterFileWrapper* regs, quint64 pc) override;
+    
+    // Hot path compatibility
+    bool IsHotPathCompatible() const override { return true; }
+    bool IsOperateFormat() const override { return true; }
+    
+    // Access to parsed operands
+    quint8 GetRa() const { return m_ra; }
+    quint8 GetRb() const { return m_rb; }
+    quint8 GetRc() const { return m_rc; }
+    quint32 GetFunction() const { return m_function; }
+    
+    // Check for overflow variants
+    virtual bool IsOverflowVariant() const;
+    
+    // Hot path compatibility - overflow variants may need special handling
+    bool RequiresComplexExceptionHandling() const override {
+        return IsOverflowVariant();
+    }
+    
+    bool CanCauseTrap() const override {
+        return IsOverflowVariant();
+    }
+    
+    // Check if instruction uses literal
+    bool UsesLiteral() const { return (m_rawInstr & 0x1000) != 0; }
+    
+    // Get literal value (if used)
+    quint8 GetLiteral() const { return (m_rawInstr >> 13) & 0xFF; }
+    
+protected:
+    // Get the second operand (either register or literal)
+    quint64 GetOperandB(RegisterFileWrapper* regs) const;
+    
+    // Helper for overflow detection
+    virtual bool CheckOverflow(quint64 a, quint64 b, quint64 result) const;
+    
+    // Handle arithmetic trap
+    void HandleArithmeticTrap(RegisterFileWrapper* regs, quint64 pc);
+};
+
+//==============================================================================
+// INTEGER ARITHMETIC INSTRUCTIONS
+//==============================================================================
+
+/**
+ * @brief Base class for arithmetic instructions (ADD, SUB, MUL)
+ * 
+ * Alpha arithmetic instructions follow these rules:
+ * 1. Regular variants (without V bit) never check for overflow
+ * 2. Overflow variants (with V bit set) always check for overflow
+ * 3. When overflow occurs in V variants:
+ *    - Result is always written to destination register (wrap-around)
+ *    - Overflow flag is set in CPU state
+ *    - If arithmetic traps are enabled, exception is raised
+ *    - If traps disabled, execution continues with overflow flag set
+ */
+class ArithmeticInstruction : public IntegerInstruction {
+public:
+    explicit ArithmeticInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+    
+    bool RequiresComplexExceptionHandling() const override {
+        return IsOverflowVariant();
+    }
+    
+    bool CanCauseTrap() const override {
+        return IsOverflowVariant();
+    }
+    
+protected:
+    // Perform the arithmetic operation - implemented by derived classes
+    virtual quint64 PerformOperation(quint64 a, quint64 b) const = 0;
+    
+    // Execute the instruction
+    void Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) override;
+};
+
+/**
+ * @brief Add Longword (ADDL) - 32-bit addition with sign extension
+ */
+class AddlInstruction : public ArithmeticInstruction {
+public:
+    explicit AddlInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "ADDL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Add Quadword (ADDQ) - 64-bit addition
+ */
+class AddqInstruction : public ArithmeticInstruction {
+public:
+    explicit AddqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "ADDQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a + b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Subtract Longword (SUBL) - 32-bit subtraction with sign extension
+ */
+class SublInstruction : public ArithmeticInstruction {
+public:
+    explicit SublInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "SUBL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Subtract Quadword (SUBQ) - 64-bit subtraction
+ */
+class SubqInstruction : public ArithmeticInstruction {
+public:
+    explicit SubqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "SUBQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a - b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Multiply Longword (MULL) - 32-bit multiplication with sign extension
+ */
+class MullInstruction : public ArithmeticInstruction {
+public:
+    explicit MullInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "MULL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Multiply Quadword (MULQ) - 64-bit multiplication
+ */
+class MulqInstruction : public ArithmeticInstruction {
+public:
+    explicit MulqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "MULQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a * b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Unsigned Multiply High Quadword (UMULH) - High 64 bits of 64x64 multiplication
+ */
+class UmulhInstruction : public IntegerInstruction {
+public:
+    explicit UmulhInstruction(quint32 rawInstr);
+    
+    void Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) override;
+    const char* GetMnemonic() const override { return "UMULH"; }
+};
+
+//==============================================================================
+// SCALED ARITHMETIC INSTRUCTIONS
+//==============================================================================
+
+/**
+ * @brief Scaled Add Longword by 4 (S4ADDL)
+ */
+class S4AddlInstruction : public ArithmeticInstruction {
+public:
+    explicit S4AddlInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S4ADDL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Add Quadword by 4 (S4ADDQ)
+ */
+class S4AddqInstruction : public ArithmeticInstruction {
+public:
+    explicit S4AddqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S4ADDQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return (a * 4) + b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Add Longword by 8 (S8ADDL)
+ */
+class S8AddlInstruction : public ArithmeticInstruction {
+public:
+    explicit S8AddlInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S8ADDL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Add Quadword by 8 (S8ADDQ)
+ */
+class S8AddqInstruction : public ArithmeticInstruction {
+public:
+    explicit S8AddqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S8ADDQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return (a * 8) + b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Subtract Longword by 4 (S4SUBL)
+ */
+class S4SublInstruction : public ArithmeticInstruction {
+public:
+    explicit S4SublInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S4SUBL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Subtract Quadword by 4 (S4SUBQ)
+ */
+class S4SubqInstruction : public ArithmeticInstruction {
+public:
+    explicit S4SubqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S4SUBQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return (a * 4) - b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Subtract Longword by 8 (S8SUBL)
+ */
+class S8SublInstruction : public ArithmeticInstruction {
+public:
+    explicit S8SublInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S8SUBL"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override;
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+/**
+ * @brief Scaled Subtract Quadword by 8 (S8SUBQ)
+ */
+class S8SubqInstruction : public ArithmeticInstruction {
+public:
+    explicit S8SubqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "S8SUBQ"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return (a * 8) - b;
+    }
+    
+    bool CheckOverflow(quint64 a, quint64 b, quint64 result) const override;
+};
+
+//==============================================================================
+// LOGICAL INSTRUCTIONS
+//==============================================================================
+
+/**
+ * @brief Base class for logical instructions (AND, BIC, BIS, XOR, etc.)
+ */
+class LogicalInstruction : public IntegerInstruction {
+public:
+    explicit LogicalInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+    
+    bool CanCauseTrap() const override { return false; }
+    bool RequiresComplexExceptionHandling() const override { return false; }
+    
+protected:
+    // Perform the logical operation - implemented by derived classes
+    virtual quint64 PerformOperation(quint64 a, quint64 b) const = 0;
+    
+    // Execute the instruction
+    void Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) override;
+};
+
+/**
+ * @brief Logical AND (AND)
+ */
+class AndInstruction : public LogicalInstruction {
+public:
+    explicit AndInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "AND"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a & b;
+    }
+};
+
+/**
+ * @brief Bit Clear (BIC) - AND with NOT
+ */
+class BicInstruction : public LogicalInstruction {
+public:
+    explicit BicInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "BIC"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a & ~b;
+    }
+};
+
+/**
+ * @brief Bit Set (BIS) - Logical OR
+ */
+class BisInstruction : public LogicalInstruction {
+public:
+    explicit BisInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "BIS"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a | b;
+    }
+};
+
+/**
+ * @brief OR with NOT (ORNOT)
+ */
+class OrnotInstruction : public LogicalInstruction {
+public:
+    explicit OrnotInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "ORNOT"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a | ~b;
+    }
+};
+
+/**
+ * @brief Exclusive OR (XOR)
+ */
+class XorInstruction : public LogicalInstruction {
+public:
+    explicit XorInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "XOR"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return a ^ b;
+    }
+};
+
+/**
+ * @brief Equivalence (EQV) - XOR with NOT
+ */
+class EqvInstruction : public LogicalInstruction {
+public:
+    explicit EqvInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "EQV"; }
+    
+protected:
+    quint64 PerformOperation(quint64 a, quint64 b) const override {
+        return ~(a ^ b);
+    }
+};
+
+//==============================================================================
+// COMPARISON INSTRUCTIONS
+//==============================================================================
+
+/**
+ * @brief Base class for comparison instructions
+ */
+class ComparisonInstruction : public IntegerInstruction {
+public:
+    explicit ComparisonInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+    
+    bool CanCauseTrap() const override { return false; }
+    bool RequiresComplexExceptionHandling() const override { return false; }
+    
+protected:
+    // Perform the comparison - implemented by derived classes
+    virtual bool PerformComparison(quint64 a, quint64 b) const = 0;
+    
+    // Execute the instruction
+    void Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) override;
+};
+
+/**
+ * @brief Compare Equal (CMPEQ)
+ */
+class CmpeqInstruction : public ComparisonInstruction {
+public:
+    explicit CmpeqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMPEQ"; }
+    
+protected:
+    bool PerformComparison(quint64 a, quint64 b) const override {
+        return a == b;
+    }
+};
+
+/**
+ * @brief Compare Less Than (CMPLT)
+ */
+class CmpltInstruction : public ComparisonInstruction {
+public:
+    explicit CmpltInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMPLT"; }
+    
+protected:
+    bool PerformComparison(quint64 a, quint64 b) const override {
+        return static_cast<qint64>(a) < static_cast<qint64>(b);
+    }
+};
+
+/**
+ * @brief Compare Less Than or Equal (CMPLE)
+ */
+class CmpleInstruction : public ComparisonInstruction {
+public:
+    explicit CmpleInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMPLE"; }
+    
+protected:
+    bool PerformComparison(quint64 a, quint64 b) const override {
+        return static_cast<qint64>(a) <= static_cast<qint64>(b);
+    }
+};
+
+/**
+ * @brief Compare Unsigned Less Than (CMPULT)
+ */
+class CmpultInstruction : public ComparisonInstruction {
+public:
+    explicit CmpultInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMPULT"; }
+    
+protected:
+    bool PerformComparison(quint64 a, quint64 b) const override {
+        return a < b;
+    }
+};
+
+/**
+ * @brief Compare Unsigned Less Than or Equal (CMPULE)
+ */
+class CmpuleInstruction : public ComparisonInstruction {
+public:
+    explicit CmpuleInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMPULE"; }
+    
+protected:
+    bool PerformComparison(quint64 a, quint64 b) const override {
+        return a <= b;
+    }
+};
+
+/**
+ * @brief Compare Byte Mask Greater or Equal (CMPBGE)
+ */
+class CmpbgeInstruction : public IntegerInstruction {
+public:
+    explicit CmpbgeInstruction(quint32 rawInstr);
+    
+    void Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) override;
+    const char* GetMnemonic() const override { return "CMPBGE"; }
+    
+    bool CanCauseTrap() const override { return false; }
+    bool RequiresComplexExceptionHandling() const override { return false; }
+};
+
+//==============================================================================
+// CONDITIONAL MOVE INSTRUCTIONS
+//==============================================================================
+
+/**
+ * @brief Base class for conditional move instructions
+ */
+class ConditionalMoveInstruction : public IntegerInstruction {
+public:
+    explicit ConditionalMoveInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+    
+    bool CanCauseTrap() const override { return false; }
+    bool RequiresComplexExceptionHandling() const override { return false; }
+    
+protected:
+    // Check the condition - implemented by derived classes
+    virtual bool CheckCondition(quint64 value) const = 0;
+    
+    // Execute the instruction
+    void Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) override;
+};
+
+/**
+ * @brief Conditional Move if Equal (CMOVEQ)
+ */
+class CmoveqInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmoveqInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVEQ"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return value == 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Not Equal (CMOVNE)
+ */
+class CmovneInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovneInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVNE"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return value != 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Less Than (CMOVLT)
+ */
+class CmovltInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovltInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVLT"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return static_cast<qint64>(value) < 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Greater Than or Equal (CMOVGE)
+ */
+class CmovgeInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovgeInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVGE"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return static_cast<qint64>(value) >= 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Less Than or Equal (CMOVLE)
+ */
+class CmovleInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovleInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVLE"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return static_cast<qint64>(value) <= 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Greater Than (CMOVGT)
+ */
+class CmovgtInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovgtInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVGT"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return static_cast<qint64>(value) > 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Low Bit Clear (CMOVLBC)
+ */
+class CmovlbcInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovlbcInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVLBC"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return (value & 1) == 0;
+    }
+};
+
+/**
+ * @brief Conditional Move if Low Bit Set (CMOVLBS)
+ */
+class CmovlbsInstruction : public ConditionalMoveInstruction {
+public:
+    explicit CmovlbsInstruction(quint32 rawInstr);
+    
+    const char* GetMnemonic() const override { return "CMOVLBS"; }
+    
+protected:
+    bool CheckCondition(quint64 value) const override {
+        return (value & 1) == 1;
+    }
+};

@@ -21,176 +21,771 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Assembler Code">
-      <UniqueIdentifier>{24675bb5-55ee-42f6-9d4b-7c805015ee65}</UniqueIdentifier>
+    <Filter Include="Header Files\Instructions">
+      <UniqueIdentifier>{7d240994-085e-4546-bb0f-5f1796c30313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\constants">
+      <UniqueIdentifier>{250f8aaf-03dd-4a2f-82f8-6adc65c695ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\helpers">
+      <UniqueIdentifier>{e90b4a4b-a6e6-4ebe-95f6-8a06dbbba0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\enumerations">
+      <UniqueIdentifier>{8c029d95-3990-414d-a7eb-97a7acf69318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\structures">
+      <UniqueIdentifier>{9f47b596-9a6a-446e-a79e-8458d51638d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\traps">
+      <UniqueIdentifier>{dab45535-73e0-4c3e-9f96-9dd35415c9fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\constants - Cache Ready">
+      <UniqueIdentifier>{94219394-9daf-4dd9-a25a-268fe18af8bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\constants\Pending Implementation">
+      <UniqueIdentifier>{bd7759b6-d74e-4180-8f09-59be17bf49d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aej_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="aej.h">
+    <QtMoc Include="aej.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClCompile Include="aej.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="decodeOperate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="instructiondefinition.h">
+    <ClInclude Include="AlphaInstrTables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Jit Helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JITFaultInfoStructures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JITBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alphaInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="TLPHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="category_InsertInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JitPALConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaFloatingPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PendingLoad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaPlatformGuards.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformPalOpCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AsaNamespaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteStageLogHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaSystemManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaMMIOAddressChecker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="alphajitprofiler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="alphaexceptionvectors.h">
+    <ClInclude Include="GlobalLockTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IExecutionContext.h">
+    <ClInclude Include="PendingStore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExecutorOpcodeEnumeration.h">
+    <ClInclude Include="helperAstLevels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="decodeOperate.h">
+    <ClInclude Include="enumerations\enumExceptionType.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumSecurityViolationType.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumAstLevel.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumCpuModel.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumCpuState.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumExceptionCause.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumFPCompare.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumFPFormat.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumInstructionFormat.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumInstructionSections.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumIPRNumbers.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumMachineCheckType.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumMemoryFaultType.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumProcessorMode.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumRoundingMode.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumTLBException.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\helperMachineCheck.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\enumOptimizationLevel.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\enumMmuMode.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\enumExceptionBit.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\enumProtectionFlags.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structInstructionDefinition.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structOptions.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structPAL.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structUnalignedAccessContext.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\enumPalCodes.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constAsaPerformance.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_FPCR_AMASK.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_PAL_Constants.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constVector.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constExceptions.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constInternalProcessorRegister.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constHardware.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constMMIOAddress.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_19_HW.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constStatusRegister.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constPALCacheControl.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constPALMemoryBarrier.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constFunctionMoveInstructions.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constFPCRRoundingMode.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constOpCodeMasks.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constFunctionJumpInstructions.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constVaxTypes.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constOpCodeMemoryFormat.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constOpCodeIntegerFormat.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constOpCodeOperateFormat.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="EvSelect.h">
+      <Filter>Header Files\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structTBLCheckResult.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structLockReservation.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structTlbStatistics.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constAlphaMemorySystem.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="tlbSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StackFrame.h">
+    <ClInclude Include="structures\enumMemoryPerm.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="structMMIORegion.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constExceptionConstants.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constFP_Format_Table.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\trapFpType.h">
+      <Filter>Header Files\traps</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\trapFaultTraps.h">
+      <Filter>Header Files\traps</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structSystemEntryPoints.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structProbeResult.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumDenormalMode.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AESH\signExtend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="decodeMemoryOffset.h">
+    <ClInclude Include="structFpRegister.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structFPFormatInfo.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structFpRegs.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structReservationState.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaTranslationCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AlphaCPUFactory.h">
+    <ClInclude Include="enumInstructionPerformance.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constTBLPipeline.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constStackConstants.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constFunctionFloatingPoint.h">
+      <Filter>Header Files\constants - Cache Ready</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\constFunctionIntegerLogicalBitManipulation.h">
+      <Filter>Header Files\constants - Cache Ready</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_0_PAL.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_3A_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_3B_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_3C_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_3D_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_3E_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_3F_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_8_Memory.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_9_Memory.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="const_OpCode_10_Opr_Fp.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_11_OprFP.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_12_OprMem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_13_Opr.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_15_VaxFloatingPoint.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_16_IEEE FloatingPoint.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_17_FloatingPoint.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_18_Mem_mf_Fp.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_20_Mem_Fp.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_21_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_22_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_23_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_24_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_25_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_26_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_27_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_28_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_29_Mem.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_30_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_31_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_32_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_33_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_34_MemBarrier.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_35_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_36_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_37_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_38_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_39_Branch.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_OpCode_14_SQRT.h">
+      <Filter>Header Files\constants\Pending Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_PAL_HANDLER.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_EXCEPTION_CAUSE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TLBEntryFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structPalExecutionResult.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structPALInstruction.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumPALFunctionClass.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="globalHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumRegisterType.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_EXC_SUM.h">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="InstructionWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PALFunctionConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumMemoryBarrierEmulationMode.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="TLBEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\structStatistics.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumLineState.h">
+      <Filter>Header Files\enumerations</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\structCacheRequest.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structFPCR.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="CacheSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structCacheConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\structCacheConfig.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\utilitySafeIncrement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CacheLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decodedInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decodeFloatingFields.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumExceptionArithmetic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alphasystemconfigurator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GlobalMacro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alphacachehierarchy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramCounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants\const_conditionCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\calculateConditionCodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\MemAccessType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\countTrailingZeros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumProcessorStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\trapExceptionMapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="traps\trapInterruptMapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enumerations\enumFlags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="EV57_JIT.txt" />
-    <None Include="Project Task-Implementation notes.txt" />
-    <None Include="Bachman - JIT Execution Stack.txt" />
-    <None Include="Claude Implementation Structure.txt" />
-    <None Include="AlphaKernelExceptionHandlers.s">
-      <Filter>Assembler Code</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="alphasmpmanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphamemorysystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphajitcompiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphaexceptionhandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphasystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphainstructiondecoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphacpu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alphatrace.cpp">
+    <ClCompile Include="alphajitprofiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="alphabasicblock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alphajitexecutionengine.cpp">
+    <ClCompile Include="alphatrace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alphajitsystem.cpp">
+    <ClCompile Include="UnifiedDataCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="instructiondefinition.cpp">
+    <ClCompile Include="IprBank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="instructionset.cpp">
+    <ClCompile Include="tlbSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alphajitprofiler.cpp">
+    <ClCompile Include="test_instructions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alphaexceptionvectors.cpp">
+    <ClCompile Include="TLPHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alphapalinterpreter.cpp">
+    <ClCompile Include="category_InsertInstruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IExecutionContext.cpp">
+    <ClCompile Include="TranslationResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VectorExecutor.cpp">
+    <ClCompile Include="PendingLoad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StackFrame.cpp">
+    <ClCompile Include="AlphaCPU_refactored.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="floatingpointexecutor.cpp">
+    <ClCompile Include="AlphaMemorySystem_refactored.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="alphacoreadapter.cpp">
+    <ClCompile Include="AlphaSMPManager_refactored.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SafeMemory_refactored.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaTranslationCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="executorAlphaFloatingPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode11_executorAlphaIntegerLogical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode14_executorAlphaSQRT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="executorAlphaPAL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaInstructionCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InstructionWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PALFunctionNames.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CacheSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="decodedInstruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="decodeOperate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tlbentrystatemanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tlbaddresstranslator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tlbperformanceoptimizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tlberrorhandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alphasystemconfigurator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode18_executorAlphaMemoryBarrier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode01_executoralpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode02_executoralpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode03_executoralpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode04_executoralpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opcode05_executoralpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pipeline_jitcompiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pipeline_stages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alphaprocessorintegrationmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alphacachehierarchy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="alphacpu.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="alphasmpmanager.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="alphamemorysystem.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="alphaexceptionhandler.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="alphasystem.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="alphainstructiondecoder.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="alphabasicblock.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="alphatrace.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="alphajitexecutionengine.h">
+    <QtMoc Include="UnifiedDataCache.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="alphajitsystem.h">
+    <QtMoc Include="IprBank.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="instructionset.h">
+    <QtMoc Include="ast_registers.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="alphapalinterpreter.h">
+    <QtMoc Include="AlphaMemorySystem_refactored.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="alphajitcompiler.h">
+    <QtMoc Include="AlphaCPU_refactored.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="VectorExecutor.h">
+    <QtMoc Include="AlphaSMPManager_refactored.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="floatingpointexecutor.h">
+    <QtMoc Include="SafeMemory_refactored.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="IntegerExecutor.h">
+    <QtMoc Include="executorAlphaFloatingPoint.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="VectorRegisterBank.h">
+    <QtMoc Include="opcode11_executorAlphaIntegerLogical.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ControlExecutor.h">
+    <QtMoc Include="opcode14_executorAlphaSQRT.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="alphacoreadapter.h">
+    <QtMoc Include="executorAlphaPAL.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="AlphaUnifiedExecutionEngine.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlphaInstructionCache.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tlbentrystatemanager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tlbaddresstranslator.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tlbperformanceoptimizer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="tlberrorhandler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="opcode18_executorAlphaMemoryBarrier.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlphaUnifiedExecutor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="opcode01_executoralpha.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="opcode02_executoralpha.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="opcode03_executoralpha.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="opcode04_executoralpha.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="opcode05_executoralpha.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="pipeline_stages.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="pipeline_jitcompiler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="alphaprocessorintegrationmanager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PALOpcodes.csv">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include=".clang-format" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="scratchspace.txt" />
+    <Text Include="constants\Register Matrix.txt" />
   </ItemGroup>
 </Project>

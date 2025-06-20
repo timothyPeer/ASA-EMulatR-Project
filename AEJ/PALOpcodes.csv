@@ -1,0 +1,22 @@
+﻿Section,Mnemonic,Opcode (hex),Function (hex),Class,Operands,Description,Implementation Status
+PAL,BPT,0x00,0x80,CALL_PAL,,Breakpoint trap,InterpreterOnly
+PAL,BPT_ALT,0x00,0x81,CALL_PAL,,Break alt,InterpreterOnly
+PAL,BUGCHK,0x00,0x82,CALL_PAL,,Kernel bug check,InterpreterOnly
+PAL,CHMK,0x00,0x83,CALL_PAL,,Change‑mode to kernel,InterpreterOnly
+PAL,REI,0x00,0x86,CALL_PAL,,Return from exception,InterpreterOnly
+PAL,IMB,0x00,0x86,CALL_PAL,,Instruction‑MB (sync I‑cache),InterpreterOnly
+PAL,SWPIPL,0x00,0x9E,CALL_PAL,,Swap IPL,InterpreterOnly
+PAL,RDPS,0x00,0x9C,CALL_PAL,,Read Processor Status,InterpreterOnly
+PAL,WRPS,0x00,0x9D,CALL_PAL,,Write Processor Status,InterpreterOnly
+PAL,RDUNIQUE,0x00,0x9F,CALL_PAL,,Read UNIQUE,InterpreterOnly
+PAL,WRUNIQUE,0x00,0xA0,CALL_PAL,,Write UNIQUE,InterpreterOnly
+PAL,RDVAL,0x00,0xA1,CALL_PAL,,Read virtual addr,InterpreterOnly
+PAL,WRVAL,0x00,0xA2,CALL_PAL,,Write virtual addr,InterpreterOnly
+PAL,RDLOCK,0x00,0xA6,CALL_PAL,,Read LOCK_FLAG,InterpreterOnly
+PAL,WRLOCK,0x00,0xA7,CALL_PAL,,Write LOCK_FLAG,InterpreterOnly
+PAL,TBIS,0x00,0xAF,CALL_PAL,,Insert I‑TB entry,InterpreterOnly
+PAL,TBAS,0x00,0xB0,CALL_PAL,,Insert D‑TB entry,InterpreterOnly
+PAL,TBIA,0x00,0xB1,CALL_PAL,,Invalidate all TLB,InterpreterOnly
+PAL,TBISD,0x00,0xB2,CALL_PAL,,Invalidate single D‑TB,InterpreterOnly
+PAL,TBISI,0x00,0xB3,CALL_PAL,,Invalidate single I‑TB,InterpreterOnly
+PAL,HALT,0x00,0x00,CALL_PAL,,Halt processor,InterpreterOnly

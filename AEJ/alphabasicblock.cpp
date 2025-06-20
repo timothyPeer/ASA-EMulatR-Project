@@ -1,5 +1,5 @@
 #include "alphabasicblock.h"
-#include "AlphaInstruction.h"
+/*#include "alphaInstruction.h"*/
 
 AlphaBasicBlock::AlphaBasicBlock(quint64 startAddr, quint64 endAddr) : QObject(nullptr)
 {

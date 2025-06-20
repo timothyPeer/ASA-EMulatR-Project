@@ -1,5 +1,4 @@
 #include "TraceManager.h"
-#include "TraceManager.h"
 #include <QMutexLocker>
 #include <QDateTime>
 #include <QIODevice>

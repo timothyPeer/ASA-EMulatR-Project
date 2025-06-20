@@ -67,7 +67,7 @@ public:
 	}
 
 	// Get all definitions by section
-	QList<InstructionDefinition> getDefinitionsBySection(helpers_JIT::Section section) const {
+	QList<InstructionDefinition> getDefinitionsBySection(Section section) const {
 		QList<InstructionDefinition> result;
 
 		for (const InstructionDefinition& def : definitions) {
@@ -79,11 +79,11 @@ public:
 	}
 
 	// Get all definitions by format
-	QList<InstructionDefinition> getDefinitionsByFormat(helpers_JIT::Format format) const {
+	QList<InstructionDefinition> getDefinitionsByFormat(InstructionFormat format) const {
 		QList<InstructionDefinition> result;
 
 		for (const InstructionDefinition& def : definitions) {
-			if (def.format == format)
+			if (def.m_instructionFormat == format)
 				result.append(def);
 		}
 

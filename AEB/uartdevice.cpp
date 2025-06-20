@@ -1,4 +1,5 @@
 #include "uartdevice.h"
+#include "../AEJ/enumerations/enumUartRegister.h"
 
 
 
@@ -102,13 +103,14 @@ quint64 UartDevice::read(quint64 address, int size)
 	return value;
 }
 
-void UartDevice::write(quint64 address, quint64 data, int size)
+bool UartDevice::write(quint64 address, quint64 data, int size)
 {
 	QMutexLocker locker(&m_mutex);
 
 	if (size != 1) {
 		qWarning() << "UartDevice: Non-byte access attempted:" << size;
 		// Handle as byte access anyway
+		return false;
 	}
 
 	// Get the register being accessed
@@ -124,12 +126,14 @@ void UartDevice::write(quint64 address, quint64 data, int size)
 		case Register::DLL:
 			regs.dll = value;
 			registers[static_cast<quint64>(reg)] = value;
-			return;
+			return true;
+
 
 		case Register::DLM:
 			regs.dlm = value;
+			
 			registers[static_cast<quint64>(reg)] = value;
-			return;
+			return true;
 
 		default:
 			// Other registers are accessed normally even with DLAB set
@@ -217,6 +221,7 @@ void UartDevice::write(quint64 address, quint64 data, int size)
 	updateInterrupts();
 
 	emit deviceAccessed(true, address, data, size);
+	return true;
 }
 
 void UartDevice::reset()
@@ -282,7 +287,7 @@ bool UartDevice::receiveData(quint8& data)
 	return true;
 }
 
-bool UartDevice::hasDataToReceive() const
+bool UartDevice::hasDataToReceive() 
 {
 	QMutexLocker locker(&m_mutex);
 	return !rxFifo.isEmpty();

@@ -1,0 +1,124 @@
+﻿switch (instruction.function)
+{
+/* ---------- 0x00-0x1F : long-word arithmetic & comparisons ---------- */
+case 0x00:                     // ADDL
+case 0x40:                     // ADDL/V
+    /* … unchanged … */
+    break;
+
+case 0x02:                     // S4ADDL
+case 0x42:                     // S4ADDL/V
+    /* … unchanged … */
+    break;
+
+case 0x09:                     // SUBL
+case 0x49:                     // SUBL/V
+    /* … unchanged … */
+    break;
+
+case 0x0B:                     // S4SUBL
+case 0x4B:                     // S4SUBL/V
+    /* … unchanged … */
+    break;
+
+case 0x0F:                     // CMPBGE
+    /* … unchanged … */
+    break;
+
+case 0x12:                     // S8ADDL
+case 0x52:                     // S8ADDL/V
+    /* … unchanged … */
+    break;
+
+case 0x1B:                     // S8SUBL
+case 0x5B:                     // S8SUBL/V
+    /* … unchanged … */
+    break;
+
+case 0x1D:                     // CMPULT (long-word)
+    /* … unchanged … */
+    break;
+
+case 0x1F:                     // CMPULE (long-word)
+    /* … unchanged … */
+    break;
+
+/* ---------- 0x20-0x3F : quad-word arithmetic & more comparisons ----- */
+case 0x20:                     // ADDQ
+case 0x60:                     // ADDQ/V
+    /* … unchanged … */
+    break;
+
+case 0x22:                     // S4ADDQ
+case 0x62:                     // S4ADDQ/V
+    /* … unchanged … */
+    break;
+
+case 0x29:                     // SUBQ
+case 0x69:                     // SUBQ/V
+    /* … unchanged … */
+    break;
+
+case 0x2B:                     // S4SUBQ
+case 0x6B:                     // S4SUBQ/V
+    /* … unchanged … */
+    break;
+
+case 0x2D:                     // CMPEQ
+    /* … unchanged … */
+    break;
+
+case 0x2E:                     // CMPNE
+    /* … unchanged … */
+    break;
+
+case 0x32:                     // S8ADDQ
+case 0x72:                     // S8ADDQ/V
+    /* … unchanged … */
+    break;
+
+case 0x3B:                     // S8SUBQ
+case 0x7B:                     // S8SUBQ/V
+    /* … unchanged … */
+    break;
+
+case 0x3D:                     // CMPULT (quad-word)
+    /* … unchanged … */
+    break;
+
+case 0x3E:                     // CMPGE  (signed quad-word)
+    /* … unchanged … */
+    break;
+
+case 0x3F:                     // CMPULE (quad-word)
+    /* … unchanged … */
+    break;
+
+/* ---------- 0x40-0x7F : remaining comparisons ----------------------- */
+case 0x4D:                     // CMPLT  (signed long-word)
+    /* … unchanged … */
+    break;
+
+case 0x4F:                     // CMPLE  (signed long-word)   ← fixed label²
+    /* … unchanged … */
+    break;
+
+case 0x5D:                     // CMPUGT (unsigned long-word) ← new code²
+    /* … previous CMPUGT body … */
+    break;
+
+case 0x6F:                     // CMPUGE (unsigned long-word)
+    /* … unchanged … */
+    break;
+
+case 0x7D:                     // CMPULE (unsigned quad-word) ← optional³
+    /* … if you implement it … */
+    break;
+
+/* ---------- default -------------------------------------------------- */
+default:
+    DEBUG_LOG(QString("ExecuteStage: Unimplemented INTA function 0x%1")
+              .arg(instruction.function, 2, 16, QChar('0')));
+    m_cpu->triggerException(AlphaCPU::ILLEGAL_INSTRUCTION, m_cpu->getPC());
+    return;
+}

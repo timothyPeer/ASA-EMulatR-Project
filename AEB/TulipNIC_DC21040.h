@@ -35,10 +35,10 @@
 #include <array>
 #include <QDebug>
 #include "DeviceInterface.h"
-#include "mmiomanager.h"
+#include "..\AEE\mmiomanager.h"
 #include "BusInterface.h"
-#include "mmiohandler.h"
-#include "alphamemorysystem.h"
+#include "..\AEE\mmiohandler.h"
+#include "..\AEJ\alphamemorysystem_refactored.h"
 
 
 /*
@@ -71,7 +71,7 @@ Tx ring of Transmit Frame Descriptors (TFDs)
   *
   * Reference: DEC 21140A Hardware Reference Manual
   */
-class TulipNIC_DC21040 : public QObject, public DeviceInterface, public BusInterface, public MmioHandler {
+class TulipNIC_DC21040 : public QObject, public DeviceInterface, public MmioHandler {
     Q_OBJECT
 
 public:
@@ -111,7 +111,7 @@ public:
 			<< "and MAC:" << macAddress.toHex(':');
 	}
 
-
+	QString deviceName() const override { return identifier(); }
     QString identifier() const override { return QString("tulip%1").arg(deviceIndex); }
     QString description() const override { return "DEC 21140A Tulip Ethernet Controller"; }
 
@@ -122,42 +122,23 @@ public:
 		return csr[index];
 	}
 
-	void write(quint64 offset, quint64 value, int size) override {
+	bool write(quint64 offset, quint64 value, int size) override {
 		QMutexLocker lock(&mutex);
-		if (offset + size > (csr.size() * sizeof(quint32))) return;
+		if (offset + size > (csr.size() * sizeof(quint32))) 
+			return false;
 		quint32 index = static_cast<quint32>(offset >> 2);
 		csr[index] = static_cast<quint32>(value);
+		return true; 
 	}
-//     uint32_t mmioRead(uint64_t addr) override {
-//         QMutexLocker lock(&mutex);
-//         quint32 index = static_cast<quint32>((addr - baseAddress) >> 2);
-//         if (index >= csr.size()) return 0xFFFFFFFF;
-//         return csr[index];
-//     }
-// 
-//     void mmioWrite(uint64_t addr, uint32_t value) override {
-//         QMutexLocker lock(&mutex);
-//         quint32 index = static_cast<quint32>((addr - baseAddress) >> 2);
-//         if (index >= csr.size()) return;
-//         csr[index] = value;
-//         handleCSRWrite(index, value);
-//     }
-
 	quint64 read(quint64 offset) override {
 		return read(offset, 4); // Assume 4-byte access default
 	}
 
-	void write(quint64 offset, quint64 value) override {
-		write(offset, value, 4); // Assume 4-byte access default
+	bool write(quint64 offset, quint64 value) override {
+		return write(offset, value, 4); // Assume 4-byte access default
 	}
-//     void write(quint64 offset, quint64 value, int size) override {
-//         QMutexLocker lock(&mutex);
-//         if (offset + size > (csr.size() * sizeof(quint32))) return;
-//         quint32 index = static_cast<quint32>(offset >> 2);
-//         csr[index] = static_cast<quint32>(value);
-//     }
 
-    bool isDeviceAddress(quint64 addr) const override {
+    bool isDeviceAddress(quint64 addr)  override {
         return (addr >= baseAddress && addr < (baseAddress + mappedSize));
     }
 
@@ -167,7 +148,7 @@ public:
     }
 
     quint64 getSize() const override { return mappedSize; }  // ✅ matches BusInterface
-    quint64 getBaseAddress() const override { return baseAddress; }  // ✅ matches BusInterface
+    quint64 getBaseAddress()  override { return baseAddress; }  // ✅ matches BusInterface
 	QByteArray getMacAddress() const { return macAddress; }
 
 	void setMemoryMapping(quint64 base, quint64 size) override {
@@ -212,6 +193,27 @@ public:
     void mmioWriteUInt64(quint64 offset, quint64 value) override;
 
 	void initRings(int entries, AlphaMemorySystem* memorySys);
+
+
+
+
+	bool canInterrupt() const override
+	{
+		throw std::logic_error("The method or operation is not implemented.");
+	}
+
+
+	quint8 interruptVector() override
+	{
+		throw std::logic_error("The method or operation is not implemented.");
+	}
+
+
+	void connectIRQController(IRQController* irq) override
+	{
+		throw std::logic_error("The method or operation is not implemented.");
+	}
+
 private:
     QMutex mutex;
     quint64 baseAddress = 0;

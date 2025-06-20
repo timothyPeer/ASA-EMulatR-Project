@@ -1,0 +1,455 @@
+#pragma once
+
+// AlphaInstructionDecoder.h - Instruction decoder header
+#ifndef ALPHAINSTRUCTIONDECODER_H
+#define ALPHAINSTRUCTIONDECODER_H
+
+#include <QObject>
+#include <QString>
+#include <QVector>
+#include <QIODevice>
+#include <QFile>
+#include <QMap>
+#include <QStringList>
+#include "decodeOperate.h"
+#include "AlphaInstruction.h"
+#include "../AESH/GlobalMacro.h"
+
+
+
+/**
+ * @brief AlphaInstructionDecoder - Decodes Alpha instructions
+ *
+ * This class provides decoding functionality for Alpha instructions,
+ * converting machine code to a structured representation.
+ */
+class AlphaInstructionDecoder : public QObject
+{
+	Q_OBJECT
+
+
+
+
+public:
+	explicit AlphaInstructionDecoder(QObject* parent = nullptr) : QObject(parent)
+	{
+		initializeInstructionMap();
+	}
+	~AlphaInstructionDecoder()
+	{
+
+	}
+
+	// Decode a single instruction
+	AlphaInstruction decode(quint32 instructionWord) {
+		// Extract the opcode (bits 31-26)
+		quint32 opcode = (instructionWord >> 26) & 0x3F;
+
+		// For PAL calls, the function code is in bits 25-0
+		if (opcode == 0x00) {
+			quint32 palFunction = instructionWord & 0x3FFFFFF;
+
+			// Look up the PAL instruction
+			QString key = getInstructionKey(opcode, 0);
+
+			if (!m_instructionMap.contains(key)) {
+				emit decodingError(instructionWord, QString("Unknown PAL function: 0x%1").arg(palFunction, 0, 16));
+				throw std::runtime_error("Unknown PAL function");
+			}
+
+			// Create a copy of the template
+			AlphaInstruction instruction = m_instructionMap[key];
+
+			// Set the function code
+			instruction.decodedOperands["palcode_entry"] = palFunction;
+
+			return instruction;
+		}
+
+		// For operate format instructions, the function code is in bits 11-5
+		quint32 functionCode = (instructionWord >> 5) & 0x7F;
+
+		// Look up the instruction
+		QString key = getInstructionKey(opcode, functionCode);
+
+		if (!m_instructionMap.contains(key)) {
+			emit decodingError(instructionWord, QString("Unknown instruction: opcode=0x%1, function=0x%2")
+				.arg(opcode, 0, 16).arg(functionCode, 0, 16));
+			throw std::runtime_error("Unknown instruction");
+		}
+
+		// Create a copy of the template
+		AlphaInstruction instruction = m_instructionMap[key];
+
+		// Decode the operands
+		decodeOperands(instruction, instructionWord);
+
+		return instruction;
+	}
+
+	// Load instruction definitions from external sources
+	bool loadInstructionDefinitions(const QString& definitionFile)
+	{
+		QFile file(definitionFile);
+		if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+			qDebug() << "Failed to open instruction definition file:" << definitionFile;
+			return false;
+		}
+
+		// Clear existing definitions
+		m_instructionMap.clear();
+
+		// Read the definitions
+		QTextStream in(&file);
+		while (!in.atEnd()) {
+			QString line = in.readLine().trimmed();
+
+			// Skip empty lines and comments
+			if (line.isEmpty() || line.startsWith('#')) {
+				continue;
+			}
+
+			// Parse the definition
+			QStringList parts = line.split(',');
+			if (parts.size() < 4) {
+				qDebug() << "Invalid instruction definition:" << line;
+				continue;
+			}
+
+			// Extract fields
+			QString section = parts[0].trimmed();
+			QString mnemonic = parts[1].trimmed();
+			QString opcodeHex = parts[2].trimmed();
+			QString functionHex = parts[3].trimmed();
+			QString formatName = parts[4].trimmed();
+
+			// Parse opcode and function
+			bool opcodeOk, functionOk;
+			quint32 opcode = opcodeHex.toUInt(&opcodeOk, 16);
+			quint32 functionCode = functionHex.toUInt(&functionOk, 16);
+
+			if (!opcodeOk) {
+				qDebug() << "Invalid opcode:" << opcodeHex;
+				continue;
+			}
+
+			// Parse format
+			InstructionFormat format;
+			if (formatName == "Operate") {
+				format = InstructionFormat::FORMAT_OPERATE;
+			}
+			else if (formatName == "Branch") {
+				format = InstructionFormat::FORMAT_BRANCH;
+			}
+			else if (formatName == "Memory") {
+				format = InstructionFormat::FORMAT_MEMORY;
+			}
+			else if (formatName == "System") {
+				format = InstructionFormat::FORMAT_SYSTEM;
+			}
+			else if (formatName == "Vector") {
+				format = InstructionFormat::FORMAT_VECTOR;
+			}
+			else if (formatName == "MemoryBarrier") {
+				format = InstructionFormat::FORMAT_MEMORY_BARRIER;
+			}
+			else {
+				qDebug() << "Invalid instruction format:" << formatName;
+				continue;
+			}
+
+			// Parse operands
+			QVector<QString> operands;
+			if (parts.size() > 5) {
+				QStringList opList = parts[5].split(' ');
+				for (const QString& op : opList) {
+					operands.append(op.trimmed());
+				}
+			}
+
+			// Parse description
+			QString description;
+			if (parts.size() > 6) {
+				description = parts[6].trimmed();
+			}
+
+			// Add the instruction
+			addCustomInstruction(opcode, functionCode, mnemonic, format, operands, description);
+		}
+
+		file.close();
+
+		qDebug() << "Loaded" << m_instructionMap.size() << "instructions from" << definitionFile;
+
+		return true;
+	}
+
+    void addCustomInstruction(quint32 opcode, quint32 functionCode, const QString &mnemonic, InstructionFormat format, const QVector<QString>& operands, const QString& description)	
+	{
+			// Create a new instruction
+			AlphaInstruction instruction;
+			instruction.opcode = opcode;
+			instruction.functionCode = functionCode;
+			instruction.mnemonic = mnemonic;
+			instruction.format = format;
+			instruction.operands = operands;
+			instruction.description = description;
+
+			// Add to the map
+			QString key = getInstructionKey(opcode, functionCode);
+			m_instructionMap[key] = instruction;
+
+			INFO_LOG(QString("Added custom instruction: %1 opcode=%2").arg(mnemonic).arg(opcode, 0, 16)); //Format the opcode in base 16
+	}
+
+signals:
+	void decodingError(quint32 rawInstruction, const QString& message);
+
+private:
+    // Instruction definitions
+    QMap<QString, AlphaInstruction> m_instructionMap; // Maps opcode+function to instruction template
+    
+    // Helper methods
+    void initializeInstructionMap()
+	{
+		// Integer arithmetic operations
+		addCustomInstruction(0x10, 0x00, "ADDL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Integer Add (longword)");
+		addCustomInstruction(0x10, 0x20, "ADDQ", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Integer Add (quadword)");
+		addCustomInstruction(0x10, 0x09, "SUBL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Integer Subtract (longword)");
+		addCustomInstruction(0x10, 0x29, "SUBQ", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Integer Subtract (quadword)");
+
+		// Multiply and divide
+		addCustomInstruction(0x10, 0x0C, "MULL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Integer Multiply (longword)");
+		addCustomInstruction(0x10, 0x2C, "MULQ", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Integer Multiply (quadword)");
+		addCustomInstruction(0x10, 0x30, "UMULH", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Unsigned Multiply High (quadword)");
+		addCustomInstruction(0x10, 0x1D, "DIVL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Divide (longword)");
+		addCustomInstruction(0x10, 0x3D, "DIVQ", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Divide (quadword)");
+
+		// Compare operations
+		addCustomInstruction(0x10, 0x2D, "CMPEQ", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Compare Equal");
+		addCustomInstruction(0x10, 0x01, "CMPULT", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Compare Unsigned Less Than");
+		addCustomInstruction(0x10, 0x11, "CMPULE", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Compare Unsigned Less Equal");
+		addCustomInstruction(0x10, 0x02, "CMPLT", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Compare Signed Less Than");
+		addCustomInstruction(0x10, 0x12, "CMPLE", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Compare Signed Less Equal");
+
+		// Logical operations
+		addCustomInstruction(0x11, 0x00, "AND", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Logical AND");
+		addCustomInstruction(0x11, 0x08, "BIC", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Bit Clear");
+		addCustomInstruction(0x11, 0x14, "BIS", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Bit Set");
+		addCustomInstruction(0x11, 0x1C, "ORNOT", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "OR NOT");
+		addCustomInstruction(0x11, 0x20, "XOR", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Logical Exclusive OR");
+		addCustomInstruction(0x11, 0x28, "EQV", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Logical Equivalence");
+
+		// Shift operations
+		addCustomInstruction(0x12, 0x39, "SLL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Shift Left Logical");
+		addCustomInstruction(0x12, 0x34, "SRL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Shift Right Logical");
+		addCustomInstruction(0x12, 0x3C, "SRA", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Shift Right Arithmetic");
+
+		// Byte manipulation
+		addCustomInstruction(0x12, 0x30, "ZAP", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Zero Byte Mask");
+		addCustomInstruction(0x12, 0x31, "ZAPNOT", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Zero Byte Not Mask");
+		addCustomInstruction(0x12, 0x02, "MSKBL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Mask Byte Low");
+		addCustomInstruction(0x12, 0x06, "EXTBL", InstructionFormat::FORMAT_OPERATE,
+			{ "ra", "rb", "rc" }, "Extract Byte Low");
+
+		// Branch operations
+		addCustomInstruction(0x30, 0, "BR", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "disp" }, "Branch Relative");
+		addCustomInstruction(0x34, 0, "BSR", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "disp" }, "Branch to Subroutine");
+		addCustomInstruction(0x38, 0, "BLBC", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "disp" }, "Branch Low Bit Clear");
+		addCustomInstruction(0x3C, 0, "BLBS", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "disp" }, "Branch Low Bit Set");
+		addCustomInstruction(0x39, 0, "BEQ", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "disp" }, "Branch if Equal");
+		addCustomInstruction(0x3D, 0, "BNE", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "disp" }, "Branch if Not Equal");
+
+		// Jump operations
+		addCustomInstruction(0x1A, 0, "JMP", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "rb" }, "Jump Indirect");
+		addCustomInstruction(0x1B, 0, "JSR", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "rb" }, "Jump to Subroutine Indirect");
+		addCustomInstruction(0x1C, 0, "RET", InstructionFormat::FORMAT_BRANCH,
+			{ "ra", "rb" }, "Return from Subroutine");
+
+		// Memory operations
+		addCustomInstruction(0x28, 0, "LDL", InstructionFormat::FORMAT_MEMORY,
+			{ "ra", "disp", "rb" }, "Load Longword");
+		addCustomInstruction(0x29, 0, "LDQ", InstructionFormat::FORMAT_MEMORY,
+			{ "ra", "disp", "rb" }, "Load Quadword");
+		addCustomInstruction(0x2A, 0, "LDL_L", InstructionFormat::FORMAT_MEMORY,
+			{ "ra", "disp", "rb" }, "Load Longword Locked");
+		addCustomInstruction(0x2B, 0, "LDQ_L", InstructionFormat::FORMAT_MEMORY,
+			{ "ra", "disp", "rb" }, "Load Quadword Locked");
+		addCustomInstruction(0x2C, 0, "STL", InstructionFormat::FORMAT_MEMORY,
+			{ "ra", "disp", "rb" }, "Store Longword");
+		addCustomInstruction(0x2D, 0, "STQ", InstructionFormat::FORMAT_MEMORY,
+			{ "ra", "disp", "rb" }, "Store Quadword");
+
+		// Floating point operations
+		addCustomInstruction(0x16, 0x00, "ADDF", InstructionFormat::FORMAT_OPERATE,
+			{ "fa", "fb", "fc" }, "Floating Add S (single)");
+		addCustomInstruction(0x16, 0x01, "ADDD", InstructionFormat::FORMAT_OPERATE,
+			{ "fa", "fb", "fc" }, "Floating Add D (double)");
+		addCustomInstruction(0x16, 0x20, "SUBF", InstructionFormat::FORMAT_OPERATE,
+			{ "fa", "fb", "fc" }, "Floating Subtract S");
+		addCustomInstruction(0x16, 0x21, "SUBD", InstructionFormat::FORMAT_OPERATE,
+			{ "fa", "fb", "fc" }, "Floating Subtract D");
+
+		// PAL calls
+		addCustomInstruction(0x00, 0, "CALL_PAL", InstructionFormat::FORMAT_SYSTEM,
+			{ "palcode_entry" }, "Call PAL Routine");
+
+		// Memory barriers
+		addCustomInstruction(0x18, 0, "MB", InstructionFormat::FORMAT_MEMORY_BARRIER,
+			{ "none" }, "Memory Barrier");
+		addCustomInstruction(0x19, 0, "WMB", InstructionFormat::FORMAT_MEMORY_BARRIER,
+			{ "none" }, "Write Memory Barrier");
+	}
+	QString getInstructionKey(quint32 opcode, quint32 functionCode) {
+		return QString("%1-%2").arg(opcode).arg(functionCode);
+	}
+	void decodeOperands(AlphaInstruction& instruction, quint32 instructionWord)
+	{
+		switch (instruction.format) {
+		case InstructionFormat::FORMAT_OPERATE:
+			decodeOperateOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_BRANCH:
+			decodeBranchOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_MEMORY:
+			decodeMemoryOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_SYSTEM:
+			decodePALOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_MEMORY_BARRIER:
+			// Memory barriers have no operands to decode
+			break;
+
+		case InstructionFormat::FORMAT_VECTOR:
+			// Vector operations would be decoded similarly to OPERATE format
+			// but with vector registers instead
+			break;
+
+		default:
+			WARN_LOG(QString("[decodeOperands] Unknown instruction format: %1").arg(instruction.opcode));
+			break;
+		}
+	}
+
+    
+    // Format-specific decoders
+	void decodeOperateOperands(AlphaInstruction& instruction, quint32 instructionWord) {
+		switch (instruction.format) {
+		case InstructionFormat::FORMAT_OPERATE:
+			decodeOperateOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_BRANCH:
+			decodeBranchOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_MEMORY:
+			decodeMemoryOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_SYSTEM:
+			decodePALOperands(instruction, instructionWord);
+			break;
+
+		case InstructionFormat::FORMAT_MEMORY_BARRIER:
+			// Memory barriers have no operands to decode
+			break;
+
+		case InstructionFormat::FORMAT_VECTOR:
+			// Vector operations would be decoded similarly to OPERATE format
+			// but with vector registers instead
+			//TODO
+			break;
+
+		default:
+			WARN_LOG(QString("[decodeOperateOperands] Unknown instruction format: %1").arg(instruction.opcode));
+			break;
+		}
+	}
+
+	void decodeBranchOperands(AlphaInstruction& instruction, quint32 instructionWord) {
+		// Extract fields
+		quint32 ra = (instructionWord >> 21) & 0x1F;
+
+		// For jump instructions (JMP, JSR, RET), extract rb
+		if (instruction.mnemonic == "JMP" || instruction.mnemonic == "JSR" || instruction.mnemonic == "RET") {
+			quint32 rb = (instructionWord >> 16) & 0x1F;
+			instruction.decodedOperands["ra"] = ra;
+			instruction.decodedOperands["rb"] = rb;
+		}
+		else {
+			// For branch instructions, extract displacement
+			// Displacement is a 21-bit signed value in bits 20-0
+			qint32 displacement = instructionWord & 0x1FFFFF;
+
+			// Sign-extend the displacement if the high bit is set
+			if (displacement & 0x100000) {
+				displacement |= ~0x1FFFFF;
+			}
+
+			// Store the operands
+			instruction.decodedOperands["ra"] = ra;
+			instruction.decodedOperands["disp"] = displacement;
+		}
+	}
+	void decodeMemoryOperands(AlphaInstruction& instruction, quint32 instructionWord) {
+		// Extract fields
+		quint32 ra = (instructionWord >> 21) & 0x1F;
+		quint32 rb = (instructionWord >> 16) & 0x1F;
+		qint16 displacement = instructionWord & 0xFFFF; // 16-bit signed displacement
+
+		// Store the decoded operands
+		instruction.decodedOperands["ra"] = ra;
+		instruction.decodedOperands["rb"] = rb;
+		instruction.decodedOperands["disp"] = displacement;
+	}
+	void decodePALOperands(AlphaInstruction& instruction, quint32 instructionWord) {
+		// For PAL calls, the function code is in bits 25-0
+		quint32 palFunction = instructionWord & 0x3FFFFFF;
+
+		// Store the decoded operand
+		instruction.decodedOperands["palcode_entry"] = palFunction;
+	}
+};
+
+#endif // ALPHAINSTRUCTIONDECODER_H

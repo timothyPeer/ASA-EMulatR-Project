@@ -1,0 +1,7 @@
+#pragma once
+enum class SecurityViolationType
+{
+    PRIVILEGE_VIOLATION,
+    MEMORY_ACCESS_VIOLATION,
+    INSTRUCTION_EXECUTION_VIOLATION
+};

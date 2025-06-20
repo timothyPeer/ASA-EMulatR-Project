@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Unedited">
+      <UniqueIdentifier>{37eb027c-a13c-40bf-acd1-4ef73a1bcc41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Code Completed">
+      <UniqueIdentifier>{879acaf8-083d-46cd-b485-da095805e0a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UnitTest Verified">
+      <UniqueIdentifier>{92fba8b8-58a5-40a4-9b9d-e5f706b0277a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aba_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="aba.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClCompile Include="aba.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="Assembler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helperExtenders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\jitLDWU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\jitLoadExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\floatingPointInstruction_alpha.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\memoryFunctionInstruction.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\operateInstruction.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\palInstruction_Alpha.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\memoryInstruction.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\memoryJumpInstruction.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\helper_floatingPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="extensions\assemblerBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assmIntegerLogical.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assmIntegerLoadStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assmBranch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorfmtLogicalAndShift.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorFmtByteManipulation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorMiscellaneousInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\miscellaneousInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executeFmtPAL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorFmtMemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorFmtMbr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorFmtMfc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorfmtIntegerOperate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorFmtBranch.h">
+      <Filter>Header Files\Code Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="integerlogical\executorFmtFP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\executorFmtMFormat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\structMFormatInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="executors\IExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="executors\IntegerInterpreterExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="memoryInterpreterExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="branchInterpreterExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="executors\IntegerJitExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InterpreterExecutorAll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\Instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\PalInstruction_Tru64.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\floatingPointInstruction_Vax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\MemoryFuncCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\MemoryBarrierInstruction.h">
+      <Filter>Header Files\Code Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\branchInstruction.h">
+      <Filter>Header Files\Code Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\VectorInstruction.h">
+      <Filter>Header Files\Unedited</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="IntegerInterpreterExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="memoryInterpreterExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="branchInterpreterExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InterpreterExecutorAll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="structs\memoryInstruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

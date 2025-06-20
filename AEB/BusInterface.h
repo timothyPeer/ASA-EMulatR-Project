@@ -14,10 +14,6 @@
 // Compatible with Qt-based Alpha AXP Emulator architecture
 // ============================================================================
 
-#pragma once
-
-#include <QObject>
-#include <QString>
 #include <QVector>
 #include <QHash>
 #include <QDebug>
@@ -64,29 +60,48 @@ public:
 	*/
 	virtual quint64 read(quint64 offset, int size) = 0;
 	virtual quint64 read(quint64 offset) = 0;
-	
+	// NEW privileged methods with default implementations:
+	virtual quint64 readPrivileged(quint64 offset, int size) {
+		// Default: privileged access same as normal access
+		return read(offset, size);
+	}
 	/**
 	 * @brief Write data to device at specified offset
 	 * @param address The device-relative address (offset) to write to
 	 * @param data The data (value) to write
 	 * @param size The size of the write (1, 2, 4, or 8 bytes)
 	 */
-	virtual void write(quint64 offset, quint64 value) = 0;
-	virtual void write(quint64 offset, quint64 value, int size) = 0;
+	virtual bool write(quint64 offset, quint64 value) = 0;
+	virtual bool write(quint64 offset, quint64 value, int size) = 0;
 	
+
+
+
+	virtual bool writePrivileged(quint64 offset, quint64 value, int size) {
+		// Default: privileged access same as normal access
+		return write(offset, value, size);
+	}
+
+	virtual bool supportsPrivilegedAccess() const {
+		return false; // Most devices don't need special privilege handling
+	}
+
+	virtual bool supportsWriteBuffering() const {
+		return false; // Most devices don't buffer writes
+	}
 	/**
 	* @brief Check if the physical address is handled by this device
 	* @param address The physical memory address to check
 	* @return True if the address belongs to this device
 	*/
-	virtual bool isDeviceAddress(quint64 addr) const = 0;
+	virtual bool isDeviceAddress(quint64 addr)  = 0;
 
 	/**
 	* @brief Reset the device to its initial state
 	*/
 	virtual void reset() = 0;
 
-	virtual quint64 getBaseAddress() const = 0;
+	virtual quint64 getBaseAddress()  = 0;
 	virtual quint64 getSize() const = 0;
 
 	/**
@@ -99,7 +114,7 @@ public:
 	 * @brief Get the interrupt vector for this device
 	 * @return The IRQ vector number (0 if not applicable)
 	 */
-	virtual quint8 interruptVector() const { return 0; }
+	virtual quint8 interruptVector()  { return 0; }
 	virtual void connectIRQController(IRQController* irq) { Q_UNUSED(irq); }
 	virtual quint64 size() const = 0;
 

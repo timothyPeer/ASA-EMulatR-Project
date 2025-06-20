@@ -8,7 +8,8 @@
 #include <QMutex>
 #include <QTimer>
 #include <QDebug>
-#include "..\AEB\BusInterface.h"
+#include <QQueue>
+#include "BusInterface.h"
 
 // ============================================================================
 // ScsiBusController.H
@@ -21,6 +22,7 @@
 // ============================================================================
 
 class ScsiBusController : public QObject, public BusInterface {
+
 	Q_OBJECT
 
 public:
@@ -60,17 +62,28 @@ public:
 
 	// Register accessors
 
-	#pragma region Register Accessors
 	quint64 read(quint64 offset);
-	
-	void write(quint64 offset, quint64 value) override {
-		write(offset, value, 4); // Assume 4-byte access default
+	quint64 read(quint64 offset, int size)
+	{
+		switch (static_cast<Register>(offset))
+		{
+		case Register::Command:  return static_cast<quint64>(Status::Busy);
+		case Register::Data:    
+			if (m_fifo.isEmpty()) return 0;
+			return m_fifo.dequeue();
+
+		default:          qWarning() << "Read @ unknown off" << offset; return 0;
+		}
 	}
-	void write(quint64 offset, quint64 value, int sizeValue) override {
+	
+	bool write(quint64 offset, quint64 value) override {
+		return write(offset, value, 4); // Assume 4-byte access default
+	}
+	bool  write(quint64 offset, quint64 value, int sizeValue) override {
 		QMutexLocker lock(&mutex);
 		if (sizeValue != 8) {
 			qWarning() << "SCSI Controller: Invalid write size:" << sizeValue;
-			return;
+			return false;
 		}
 		switch (static_cast<Register>(offset)) {
 		case Register::Command:
@@ -78,7 +91,8 @@ public:
 			executeCommand(static_cast<Command>(value));
 			break;
 		case Register::Data:
-			dataReg = value;
+			m_fifo.enqueue(value);
+			statusReg = Status::DataReady;
 			break;
 		case Register::Block:
 			blockAddr = value;
@@ -93,16 +107,8 @@ public:
 			qWarning() << "SCSI Controller: Unknown write register:" << offset;
 			break;
 		}
+		return true;
 	}
-
-	quint64 read(quint64 offset, int sizeValue) override {
-		Q_UNUSED(sizeValue);
-		return read(offset);
-	}
-
-
-
-#pragma endregion Register Accessors
 
 	// Disk management
 	bool attachDiskImage(quint8 deviceId, const QString& path, bool readOnly = false);
@@ -110,14 +116,14 @@ public:
 	bool createDiskImage(const QString& path, int sizeInMB);
 
 	void setIRQVector(quint8 vector) { irqVector = vector; }
-	bool canInterrupt() const { return interruptEnabled; }
+	bool canInterrupt() const override { return interruptEnabled; }
 
-	bool isDeviceAddress(quint64 addr) const override {
+	bool isDeviceAddress(quint64 addr)  override {
 		return (addr >= baseAddress && addr < (baseAddress + sizeAddress));
 	}
 
 	void reset() override { internalRegisters.clear(); }
-	quint64 getBaseAddress() const override { return baseAddress; }
+	quint64 getBaseAddress()  override { return baseAddress; }
 	quint64 getSize() const override { return sizeAddress; }
 	void setMemoryMapping(quint64 base, quint64 sz) override { baseAddress = base; sizeAddress = sz; }
 	quint64 size() const override;
@@ -140,6 +146,8 @@ private:
 	Status statusReg = Status::Idle;
 	QTimer* operationTimer = nullptr;
 	QByteArray senseData;
+
+	QQueue<quint64> m_fifo;
 
 	QMap<quint64, quint64> internalRegisters;
 	quint64 baseAddress = 0;

@@ -1,160 +1,243 @@
+ï»¿// RegisterBank.h
 #pragma once
-#ifndef REGISTER_BANKS_H
-#define REGISTER_BANKS_H
-#include "AlphaVax_DataTypes.h" // Updated: Replaces deprecated dt_gfloat
-#include <QObject>
-#include <QVector>
-#include <QBitArray>
-#include <QDebug>
-#include <QMap>
-#include <array>
 
-#include "FpcrRegister.h" // Defines FPCR flag bits and trap modes
-#include "FpRegisterBankcls.h"
+#include <QVector>
+#include <QObject>
+#include <QtGlobal>
+#include <QScopedPointer>
+#include <QVector>
+#include "FpRegisterFile.h"
+#include "RegisterFileWrapper.h"
+#include "../AEJ/traps/trapFpType.h"
+#include "../AEJ/enumerations/enumExceptionType.h"
 
 /**
- * @brief Integer register bank for Alpha AXP architecture, with FPCR support.
- * 
- * ASA References:
-   - §4.3.3 Trap and Interrupt Stack Format (PC, FP, PSR, FPCR, GPRs, FPRs)
-   - §3.3 / §5.1 Integer and Floating-Point Registers
-   - §6.6.2 REI restores full context
+ * @brief Unified register bank for Integer and Floating-Point registers.
+ *        This class manages the integer GPRs (R0â€“R30) and floating-point FPRs (F0â€“F30),
+ *        as well as architectural zero-registers (R31, F31).
  */
 class RegisterBank : public QObject {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    static constexpr int NUM_REGS = 32;
-    static constexpr int NUM_ALT_FPCR = 8;
-
-    std::array<quint64, NUM_REGS> intRegs{};
-    std::array<quint64, NUM_REGS> floatRegs{};
-    std::array<std::array<quint64, 2>, NUM_REGS> vectorRegs{};
-    std::array<quint64, NUM_ALT_FPCR> altFPCRs{};
-    FpcrRegister fpcr;
-
-    bool intDirty = false;
-    bool floatDirty = false;
-    bool vectorDirty = false;
-    bool fpcrDirty = false;
-
-    RegisterBank(QObject* parent = nullptr) : QObject(parent) {
-        buildRegisterNameMap();
-    }
-
-    // === Access Helpers for Integer Registers ===
-
-	QVector<quint64> dump() const {
-		QVector<quint64> regs;
-		for (int i = 0; i < 31; ++i)  // R31 always reads as zero, skip saving
-			regs.append(readIntReg(i));
-		return regs;
-	}
-	void load(const QVector<quint64>& values) {
-		for (int i = 0; i < qMin(values.size(), 31); ++i)
-			writeIntReg(i, values[i]);
+	RegisterBank(QObject* parent = nullptr)
+		: QObject(parent), intRegs(32, 0), fpRegs(new RegisterFileWrapper(this)) {
 	}
 
 
-    inline quint64 readIntReg(quint8 index) const {
-        return (index < NUM_REGS) ? intRegs[index] : 0;
-    }
+	// Underflow trap enable: UNFD bit (FPCR<61>) clear => trap enabled
+	inline bool isUnderflowTrapEnabled() const {
+		return !fpRegs->fpcr().bitTest(61);
+	}
+	// Set Underflow summary flag: UNF bit (FPCR<55>)
+	inline void setUnderflowFlag() {
+		fpRegs->fpcr().setBit(55);
+	}
 
-    inline void writeIntReg(quint8 index, quint64 value) {
-        if (index < NUM_REGS && index != 31) {
-            intRegs[index] = value;
-            intDirty = true;
-        }
-    }
+	// Overflow trap enable: OVFD bit (FPCR<51>) clear => trap enabled
+	inline bool isOverflowTrapEnabled() const {
+		return !fpRegs->fpcr().bitTest(51);
+	}
+	// Set Overflow summary flag: OVF bit (FPCR<54>)
+	inline void setOverflowFlag() {
+		fpRegs->fpcr().setBit(54);
+	}
 
-    void clear() {
-        regNameMap.clear();
-    }
-    // Common aliases as per ASA (register usage convention)
-    inline quint64 readSP() const { return readIntReg(30); } // R30 = Stack Pointer
-    inline void writeSP(quint64 value) { writeIntReg(30, value); }
-    inline quint64 readRA() const { return readIntReg(26); } // R26 = Return Address
-    inline void writeRA(quint64 value) { writeIntReg(26, value); }
+	// Inexact trap enable: INED bit (FPCR<62>) clear => trap enabled
+	inline bool isInexactTrapEnabled() const {
+		return !fpRegs->fpcr().bitTest(62);
+	}
+	// Set Inexact summary flag: CINE bit (FPCR<56>)
+	inline void setInexactFlag() {
+		fpRegs->fpcr().setBit(56);
+	}
+	double readFpReg(quint8 reg) const {
+		return getFpBank()->readFpReg(reg);
+	}
 
-    inline quint64 readA(int index) const { return readIntReg(16 + index); } // a0-a5
-    inline void writeA(int index, quint64 value) { writeIntReg(16 + index, value); }
+	void writeFpReg(quint8 reg, double value) {
+		getFpBank()->writeFpReg(reg, value);
+	}
+	/* Direct access to the underlying FP register array ------------------- */
+	FpRegs& fp() { return fpRegs->fp(); }        // non-const
+	const FpRegs& fp() const { return fpRegs->fp(); }        // const
 
-    inline quint64 readT(int index) const { return readIntReg(1 + index); }  // t0-t7
-    inline void writeT(int index, quint64 value) { writeIntReg(1 + index, value); }
+	/**
+	 * @brief Get direct pointer to integer register array
+	 *
+	 * This method is primarily used for exception handling,
+	 * where the entire register state needs to be saved.
+	 *
+	 * @return quint64* Pointer to the 32-element integer register array
+	 */
+	QVector<quint64> getIntRegisterArray() { return intRegs; }
 
-    QString regName(int index) const {
-        return regNameMap.value(index, QString("$r%1").arg(index));
-    }
+	/**
+ * @brief Handle arithmetic exceptions for integer operations
+ */
+	void handleArithmeticException(ExceptionType type) {
+		// Handle integer arithmetic exceptions
+		emit sigArithmeticExceptionRaised(type);
+	}
 
-    // === Floating-Point Register Access ===
-     quint64 readFloatReg(quint8 index) const {
-        return (index < NUM_REGS) ? floatRegs[index] : 0;
-    }
+	/**
+ * @brief Handle floating-point exceptions based on type
+ */
+	void handleFloatingPointException(FPTrapType type) {
+		// This would typically:
+		// 1. Save current state
+		// 2. Jump to exception handler
+		// 3. Set appropriate processor state
 
-     void writeFloatReg(quint8 index, quint64 value) {
-        if (index < NUM_REGS && index != 31) {
-            floatRegs[index] = value;
-            floatDirty = true;
-        }
-    }
+		switch (type) {
+		case FPTrapType::FP_INVALID_OPERATION:
+			// Handle invalid operation exception
+			break;
+		case FPTrapType::FP_OVERFLOW:
+			// Handle overflow exception  
+			break;
+		case FPTrapType::FP_UNDERFLOW:
+			// Handle underflow exception
+			break;
+		default:
+			break;
+		}
 
-    // === Vector Register Access ===
-    inline quint64 readVectorReg(quint8 index, quint8 lane) const {
-        return (index < NUM_REGS && lane < 2) ? vectorRegs[index][lane] : 0;
-    }
+		emit sigExceptionRaised(type);
+	}
 
-    inline void writeVectorReg(quint8 index, quint8 lane, quint64 value) {
-        if (index < NUM_REGS && lane < 2) {
-            vectorRegs[index][lane] = value;
-            vectorDirty = true;
-        }
-    }
+	/**
+	 * @brief Set the base pointer to system memory for load/store access.
+	 * @param base Pointer to the start of the memory region (byte-addressable).
+	 */
+	inline void setMemoryBasePointer(uint8_t* base) {
+		m_memoryBase = base;
+	}
 
-    // === FPCR Access and Control ===
-    inline quint64 getFPCR() const { return fpcr.getRaw(); }
-    inline void setFPCR(quint64 value) { fpcr.setRaw(value); fpcrDirty = true; }
+	/**
+	 * @brief Get the base pointer to system memory for load/store access.
+	 * @return Pointer to the start of the memory region.
+	 */
+	inline uint8_t* basePointer() const {
+		return m_memoryBase;
+	}
+	quint64 readInt(int reg) const { return intRegs.value(reg); }
+	void writeInt(int reg, quint64 val) {
+		if (reg != 31) intRegs[reg] = val;
+		emit sigIntRegisterUpdated(reg, val);
+	}
 
-    inline void setFPCRFlag(FpcrRegister::FlagBit flag, bool enable) {
-        fpcr.setFlag(flag, enable);
-        fpcrDirty = true;
-    }
+	/**
+ * @brief Raise Invalid Operation exception status
+ * This is triggered by operations like sqrt(-1), 0/0, inf-inf, etc.
+ */
+	void raiseStatus_InvalidOP() {
+		// Set the Invalid Operation flag in the floating-point status register
+		if (fpRegs) {
+			fpRegs->setInvalidOperationFlag(true);
 
-    inline void setFPCRTrap(FpcrRegister::FlagBit trap, bool enable) {
-        fpcr.setTrapEnabled(trap, enable);
-        fpcrDirty = true;
-    }
+			// Optionally emit a signal for debugging/monitoring
+			emit sigFpStatusUpdated("Invalid Operation");
 
-    inline bool hasFPCRFlag(FpcrRegister::FlagBit flag) const {
-        return fpcr.hasFlag(flag);
-    }
+			// In a real processor, this might also trigger an exception
+			// depending on the exception enable bits
+			if (fpRegs->isInvalidOperationTrapEnabled()) {
+				// Trigger floating-point exception handling
+				handleFloatingPointException(FPTrapType::FP_INVALID_OPERATION);
+			}
+		}
+	}
 
-    inline bool isFPCRTrapEnabled(FpcrRegister::FlagBit trap) const {
-        return fpcr.isTrapEnabled(trap);
-    }
 
-    inline FpcrRegister::RoundingMode roundingMode() const {
-        return fpcr.roundingMode();
-    }
+ /**
+  * @brief Raise Invalid Overflow exception status (typically for integer operations)
+  * This handles cases where integer arithmetic results exceed representable range
+  */
+	void raiseStatus_InvalidOverflow() {
+		// This might be for integer overflow in arithmetic operations
+		// Set appropriate status flags
 
-    void clearAllDirtyFlags() {
-        intDirty = floatDirty = vectorDirty = fpcrDirty = false;
-    }
+		// For integer overflow, you might want to set a general arithmetic exception flag
+		if (fpRegs) {
+			fpRegs->setArithmeticExceptionFlag(true);
+		}
+
+		emit sigIntStatusUpdated("Invalid Overflow");
+
+		// Handle the exception based on processor configuration
+		// Fixed: Use correct arithmetic exception type instead of FP trap type
+		handleArithmeticException(ExceptionType::ARITHMETIC_OVERFLOW);
+	}
+
+	/**
+ * @brief Raise Overflow exception status for floating-point operations
+ * This occurs when the result of an operation is too large to represent
+ */
+	void raiseStatus_OverFlow() {
+		if (fpRegs) {
+			// Set the Overflow flag in the floating-point status register
+			fpRegs->setOverflowFlag(true);
+
+			emit sigFpStatusUpdated("Floating-Point Overflow");
+
+			// Check if overflow traps are enabled
+			if (fpRegs->isOverflowTrapEnabled()) {
+				handleFloatingPointException(FPTrapType::FP_OVERFLOW);
+			}
+		}
+	}
+
+
+	/**
+	 * @brief Raise Underflow exception status for floating-point operations
+	 * This occurs when the result of an operation is too small to represent accurately
+	 */
+	void raiseStatus_UnderFlow() {
+		if (fpRegs) {
+			// Set the Underflow flag in the floating-point status register
+			fpRegs->setUnderflowFlag(true);
+
+			emit sigFpStatusUpdated("Floating-Point Underflow");
+
+			// Check if underflow traps are enabled
+			if (fpRegs->isUnderflowTrapEnabled()) {
+				handleFloatingPointException(FPTrapType::FP_UNDERFLOW);
+			}
+		}
+	}
+
+	// Read integer register (R0â€“R30); R31 is always zero
+	quint64 readIntReg(quint8 reg) const {
+		if (reg >= 31) return 0;
+		return intRegs[reg];
+	}
+
+	// Write integer register (R0â€“R30); writing R31 is ignored
+	void writeIntReg(quint8 reg, quint64 value) {
+		if (reg < 31) intRegs[reg] = value;
+	}
+
+	quint64 getKernelGP() const {
+		return intRegs[getKernelGP()];
+	}
+
+	void setKernelGP(quint64 value) {
+		intRegs[getKernelGP()] = value;
+		emit sigRegisterUpdated(getKernelGP(), value);  // if signal connected
+	}
+	RegisterFileWrapper* getFpBank() const { return fpRegs; }
+
+signals:
+	void sigIntRegisterUpdated(int reg, quint64 val);
+	void sigRegisterUpdated(int reg, quint64 val);
+	void sigExceptionRaised(FPTrapType except_);
+	void sigFpStatusUpdated(const QString &status_);
+	void sigIntStatusUpdated(const QString& status);
+	void sigArithmeticExceptionRaised(ExceptionType type_);
 
 private:
-    QMap<int, QString> regNameMap;
-
-    void buildRegisterNameMap() {
-        for (int i = 0; i < NUM_REGS; ++i) {
-            regNameMap[i] = QString("$r%1").arg(i);
-        }
-        regNameMap[26] = "$ra";  // Return address
-        regNameMap[30] = "$sp";  // Stack pointer
-        for (int i = 0; i <= 5; ++i) regNameMap[16 + i] = QString("$a%1").arg(i);
-        for (int i = 0; i <= 7; ++i) regNameMap[1 + i] = QString("$t%1").arg(i);
-    }
+	QVector<quint64> intRegs;
+	RegisterFileWrapper* fpRegs;
+	uint8_t* m_memoryBase;              ///< Pointer to base of system memory
 };
 
-/**
- * @brief Floating-point register bank using G_Float for internal format.
- */
-#endif // REGISTER_BANKS_H

@@ -35,7 +35,9 @@ quint64 ScsiBusController::read(quint64 offset) {
 	QMutexLocker locker(&mutex);
 	switch (static_cast<Register>(offset)) {
 	case Register::Status: return static_cast<quint8>(statusReg);
-	case Register::Data: return dataReg;
+	case Register::Data: 
+		if (m_fifo.isEmpty()) return 0;
+		return m_fifo.dequeue();
 	default: return 0;
 	}
 }

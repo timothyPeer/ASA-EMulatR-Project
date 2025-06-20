@@ -1,0 +1,697 @@
+#include "aei.h"
+
+#include "IntegerInstruction.h"
+#include "../Core/RegisterFileWrapper.h"
+#include "../Core/TLBSystem.h"
+#include "../Core/AlphaMemorySystem.h"
+#include "../Exceptions/ArithmeticException.h"
+#include "../Core/InstructionHelpers.h"
+#include <QtDebug>
+
+//==============================================================================
+// BASE INTEGER INSTRUCTION IMPLEMENTATION
+//==============================================================================
+
+IntegerInstruction::IntegerInstruction(quint32 rawInstr) {
+	m_rawInstr = rawInstr;
+	ParseOperands();
+}
+
+void IntegerInstruction::ParseOperands() {
+	m_ra = (m_rawInstr >> 21) & 0x1F;
+	m_rc = (m_rawInstr >> 0) & 0x1F;
+	m_function = (m_rawInstr >> 5) & 0x7F;
+
+	// Check if this instruction uses a literal
+	if (UsesLiteral()) {
+		// Literal is in bits 20:13
+		m_immediate = (m_rawInstr >> 13) & 0xFF;
+	}
+	else {
+		// Register Rb field
+		m_rb = (m_rawInstr >> 16) & 0x1F;
+	}
+}
+
+void IntegerInstruction::HandleExceptions(RegisterFileWrapper* regs, quint64 pc) {
+	// Most integer operations don't throw exceptions
+	// Derived classes can override this for operations that do
+}
+
+bool IntegerInstruction::IsOverflowVariant() const {
+	// Overflow variants have bit 6 (0x40) set in the function code
+	return (m_function & 0x40) != 0;
+}
+
+quint64 IntegerInstruction::GetOperandB(RegisterFileWrapper* regs) const {
+	if (UsesLiteral()) {
+		return m_immediate;
+	}
+	else {
+		return regs->readIntReg(m_rb);
+	}
+}
+
+bool IntegerInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	// Default implementation - no overflow check
+	return false;
+}
+
+void IntegerInstruction::HandleArithmeticTrap(RegisterFileWrapper* regs, quint64 pc) {
+    // Set arithmetic trap exception
+    AlphaCPU* cpu = regs->getCurrentCPU();
+    if (cpu) {
+        // Set overflow condition in CPU
+        cpu->setOverflowFlag();
+        
+        // Signal arithmetic trap - this may not return
+        cpu->handleArithmeticTrap(pc, m_rawInstr);
+    } else {
+        // If no CPU context, just throw an exception
+        throw ArithmeticException("Integer overflow", pc);
+    }
+}
+
+//==============================================================================
+// ARITHMETIC INSTRUCTION IMPLEMENTATION
+//==============================================================================
+
+void ArithmeticInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 a = regs->readIntReg(m_ra);
+	quint64 b = GetOperandB(regs);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3, %4=0x%5")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(a, 16, 16, QChar('0'))
+		.arg(UsesLiteral() ? "lit" : QString("R%1").arg(m_rb))
+		.arg(b, 16, 16, QChar('0')));
+
+	quint64 result = PerformOperation(a, b);
+
+	// Always write the result first (Alpha behavior)
+	DEBUG_LOG(QString("  Result: 0x%1 written to R%2")
+		.arg(result, 16, 16, QChar('0'))
+		.arg(m_rc));
+	regs->writeIntReg(m_rc, result);
+
+	// Check for overflow if this is an overflow variant
+	if (IsOverflowVariant() && CheckOverflow(a, b, result)) {
+		DEBUG_LOG(QString("Overflow detected in %1").arg(GetMnemonic()));
+
+		// Get current CPU to check trap enable status
+		AlphaCPU* cpu = regs->getCurrentCPU();
+		if (cpu) {
+			// Check if arithmetic traps are enabled
+			if (cpu->isArithmeticTrapEnabled()) {
+				// Set overflow flag in CPU state
+				cpu->setOverflowFlag();
+
+				// If traps are enabled, signal the exception
+				cpu->handleArithmeticTrap(m_programCounter, m_rawInstr);
+				// Note: Exception handling may not return to this point
+			}
+			else {
+				// Traps disabled: just set the overflow flag
+				cpu->setOverflowFlag();
+				DEBUG_LOG("Overflow detected but traps disabled, continuing execution");
+			}
+		}
+		else {
+			// Fallback: always throw exception if no CPU context
+			throw ArithmeticException("Integer overflow", m_programCounter);
+		}
+	}
+}
+
+//==============================================================================
+// ADD INSTRUCTION IMPLEMENTATIONS
+//==============================================================================
+
+AddlInstruction::AddlInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 AddlInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Perform 32-bit addition
+	quint32 result32 = static_cast<quint32>(a) + static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool AddlInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for 32-bit signed overflow
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+	qint32 r32 = static_cast<qint32>(result);
+
+	// Overflow occurs if signs of operands are same but result has different sign
+	return ((a32 >= 0) == (b32 >= 0)) && ((a32 >= 0) != (r32 >= 0));
+}
+
+AddqInstruction::AddqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool AddqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for 64-bit signed overflow
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+	qint64 r64 = static_cast<qint64>(result);
+
+	// Overflow occurs if signs of operands are same but result has different sign
+	return ((a64 >= 0) == (b64 >= 0)) && ((a64 >= 0) != (r64 >= 0));
+}
+
+//==============================================================================
+// SUBTRACT INSTRUCTION IMPLEMENTATIONS
+//==============================================================================
+
+SublInstruction::SublInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 SublInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Perform 32-bit subtraction
+	quint32 result32 = static_cast<quint32>(a) - static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool SublInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for 32-bit signed overflow
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+	qint32 r32 = static_cast<qint32>(result);
+
+	// Overflow occurs if signs of operands are different and result has wrong sign
+	return ((a32 >= 0) != (b32 >= 0)) && ((a32 >= 0) != (r32 >= 0));
+}
+
+SubqInstruction::SubqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool SubqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for 64-bit signed overflow
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+	qint64 r64 = static_cast<qint64>(result);
+
+	// Overflow occurs if signs of operands are different and result has wrong sign
+	return ((a64 >= 0) != (b64 >= 0)) && ((a64 >= 0) != (r64 >= 0));
+}
+
+//==============================================================================
+// MULTIPLY INSTRUCTION IMPLEMENTATIONS
+//==============================================================================
+
+MullInstruction::MullInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 MullInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Perform 32-bit multiplication
+	quint32 result32 = static_cast<quint32>(a) * static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool MullInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for 32-bit signed multiplication overflow
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+
+	// For 32-bit multiplication, check if the full 64-bit result fits in 32 bits
+	qint64 fullResult = static_cast<qint64>(a32) * static_cast<qint64>(b32);
+	return fullResult != static_cast<qint64>(static_cast<qint32>(fullResult));
+}
+
+MulqInstruction::MulqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool MulqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for 64-bit signed multiplication overflow
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+
+	// Check for overflow by division (if b != 0)
+	if (b64 == 0) return false;
+
+	qint64 quotient = static_cast<qint64>(result) / b64;
+	return quotient != a64;
+}
+
+UmulhInstruction::UmulhInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+
+void UmulhInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 a = regs->readIntReg(m_ra);
+	quint64 b = GetOperandB(regs);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3, %4=0x%5")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(a, 16, 16, QChar('0'))
+		.arg(UsesLiteral() ? "lit" : QString("R%1").arg(m_rb))
+		.arg(b, 16, 16, QChar('0')));
+
+	// Perform 64x64 -> 128 bit multiplication and return high 64 bits
+	// Use 128-bit arithmetic to avoid overflow
+	__uint128_t result = static_cast<__uint128_t>(a) * static_cast<__uint128_t>(b);
+	quint64 highResult = static_cast<quint64>(result >> 64);
+
+	DEBUG_LOG(QString("  High result: 0x%1 written to R%2")
+		.arg(highResult, 16, 16, QChar('0'))
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, highResult);
+}
+
+//==============================================================================
+// SCALED ARITHMETIC IMPLEMENTATIONS
+//==============================================================================
+
+S4AddlInstruction::S4AddlInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 S4AddlInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Scale first operand by 4 and add
+	quint32 result32 = (static_cast<quint32>(a) * 4) + static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool S4AddlInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*4) + b
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+
+	// First check if a*4 would overflow
+	if (a32 > INT32_MAX / 4 || a32 < INT32_MIN / 4) return true;
+
+	// Then check if (a*4) + b would overflow
+	qint32 scaled = a32 * 4;
+	qint32 r32 = static_cast<qint32>(result);
+
+	return ((scaled >= 0) == (b32 >= 0)) && ((scaled >= 0) != (r32 >= 0));
+}
+
+S4AddqInstruction::S4AddqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool S4AddqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*4) + b
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+
+	// First check if a*4 would overflow
+	if (a64 > INT64_MAX / 4 || a64 < INT64_MIN / 4) return true;
+
+	// Then check if (a*4) + b would overflow
+	qint64 scaled = a64 * 4;
+	qint64 r64 = static_cast<qint64>(result);
+
+	return ((scaled >= 0) == (b64 >= 0)) && ((scaled >= 0) != (r64 >= 0));
+}
+
+S8AddlInstruction::S8AddlInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 S8AddlInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Scale first operand by 8 and add
+	quint32 result32 = (static_cast<quint32>(a) * 8) + static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool S8AddlInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*8) + b
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+
+	// First check if a*8 would overflow
+	if (a32 > INT32_MAX / 8 || a32 < INT32_MIN / 8) return true;
+
+	// Then check if (a*8) + b would overflow
+	qint32 scaled = a32 * 8;
+	qint32 r32 = static_cast<qint32>(result);
+
+	return ((scaled >= 0) == (b32 >= 0)) && ((scaled >= 0) != (r32 >= 0));
+}
+
+S8AddqInstruction::S8AddqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool S8AddqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*8) + b
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+
+	// First check if a*8 would overflow
+	if (a64 > INT64_MAX / 8 || a64 < INT64_MIN / 8) return true;
+
+	// Then check if (a*8) + b would overflow
+	qint64 scaled = a64 * 8;
+	qint64 r64 = static_cast<qint64>(result);
+
+	return ((scaled >= 0) == (b64 >= 0)) && ((scaled >= 0) != (r64 >= 0));
+}
+
+S4SublInstruction::S4SublInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 S4SublInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Scale first operand by 4 and subtract
+	quint32 result32 = (static_cast<quint32>(a) * 4) - static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool S4SublInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*4) - b
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+
+	// First check if a*4 would overflow
+	if (a32 > INT32_MAX / 4 || a32 < INT32_MIN / 4) return true;
+
+	// Then check if (a*4) - b would overflow
+	qint32 scaled = a32 * 4;
+	qint32 r32 = static_cast<qint32>(result);
+
+	return ((scaled >= 0) != (b32 >= 0)) && ((scaled >= 0) != (r32 >= 0));
+}
+
+S4SubqInstruction::S4SubqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool S4SubqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*4) - b
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+
+	// First check if a*4 would overflow
+	if (a64 > INT64_MAX / 4 || a64 < INT64_MIN / 4) return true;
+
+	// Then check if (a*4) - b would overflow
+	qint64 scaled = a64 * 4;
+	qint64 r64 = static_cast<qint64>(result);
+
+	return ((scaled >= 0) != (b64 >= 0)) && ((scaled >= 0) != (r64 >= 0));
+}
+
+S8SublInstruction::S8SublInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+quint64 S8SublInstruction::PerformOperation(quint64 a, quint64 b) const {
+	// Scale first operand by 8 and subtract
+	quint32 result32 = (static_cast<quint32>(a) * 8) - static_cast<quint32>(b);
+	// Sign-extend to 64 bits
+	return static_cast<quint64>(static_cast<qint64>(static_cast<qint32>(result32)));
+}
+
+bool S8SublInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*8) - b
+	qint32 a32 = static_cast<qint32>(a);
+	qint32 b32 = static_cast<qint32>(b);
+
+	// First check if a*8 would overflow
+	if (a32 > INT32_MAX / 8 || a32 < INT32_MIN / 8) return true;
+
+	// Then check if (a*8) - b would overflow
+	qint32 scaled = a32 * 8;
+	qint32 r32 = static_cast<qint32>(result);
+
+	return ((scaled >= 0) != (b32 >= 0)) && ((scaled >= 0) != (r32 >= 0));
+}
+
+S8SubqInstruction::S8SubqInstruction(quint32 rawInstr) : ArithmeticInstruction(rawInstr) {}
+
+bool S8SubqInstruction::CheckOverflow(quint64 a, quint64 b, quint64 result) const {
+	if (!IsOverflowVariant()) return false;
+
+	// Check for overflow in (a*8) - b
+	qint64 a64 = static_cast<qint64>(a);
+	qint64 b64 = static_cast<qint64>(b);
+
+	// First check if a*8 would overflow
+	if (a64 > INT64_MAX / 8 || a64 < INT64_MIN / 8) return true;
+
+	// Then check if (a*8) - b would overflow
+	qint64 scaled = a64 * 8;
+	qint64 r64 = static_cast<qint64>(result);
+
+	return ((scaled >= 0) != (b64 >= 0)) && ((scaled >= 0) != (r64 >= 0));
+}
+
+//==============================================================================
+// LOGICAL INSTRUCTION IMPLEMENTATION
+//==============================================================================
+
+void LogicalInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 a = regs->readIntReg(m_ra);
+	quint64 b = GetOperandB(regs);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3, %4=0x%5")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(a, 16, 16, QChar('0'))
+		.arg(UsesLiteral() ? "lit" : QString("R%1").arg(m_rb))
+		.arg(b, 16, 16, QChar('0')));
+
+	quint64 result = PerformOperation(a, b);
+
+	DEBUG_LOG(QString("  Result: 0x%1 written to R%2")
+		.arg(result, 16, 16, QChar('0'))
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, result);
+}
+
+// Logical instruction constructors
+AndInstruction::AndInstruction(quint32 rawInstr) : LogicalInstruction(rawInstr) {}
+BicInstruction::BicInstruction(quint32 rawInstr) : LogicalInstruction(rawInstr) {}
+BisInstruction::BisInstruction(quint32 rawInstr) : LogicalInstruction(rawInstr) {}
+OrnotInstruction::OrnotInstruction(quint32 rawInstr) : LogicalInstruction(rawInstr) {}
+XorInstruction::XorInstruction(quint32 rawInstr) : LogicalInstruction(rawInstr) {}
+EqvInstruction::EqvInstruction(quint32 rawInstr) : LogicalInstruction(rawInstr) {}
+
+//==============================================================================
+// COMPARISON INSTRUCTION IMPLEMENTATION
+//==============================================================================
+
+void ComparisonInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 a = regs->readIntReg(m_ra);
+	quint64 b = GetOperandB(regs);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3, %4=0x%5")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(a, 16, 16, QChar('0'))
+		.arg(UsesLiteral() ? "lit" : QString("R%1").arg(m_rb))
+		.arg(b, 16, 16, QChar('0')));
+
+	bool condition = PerformComparison(a, b);
+	quint64 result = condition ? 1 : 0;
+
+	DEBUG_LOG(QString("  Comparison result: %1, writing 0x%2 to R%3")
+		.arg(condition ? "true" : "false")
+		.arg(result, 16, 16, QChar('0'))
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, result);
+}
+
+// Comparison instruction constructors
+CmpeqInstruction::CmpeqInstruction(quint32 rawInstr) : ComparisonInstruction(rawInstr) {}
+CmpltInstruction::CmpltInstruction(quint32 rawInstr) : ComparisonInstruction(rawInstr) {}
+CmpleInstruction::CmpleInstruction(quint32 rawInstr) : ComparisonInstruction(rawInstr) {}
+CmpultInstruction::CmpultInstruction(quint32 rawInstr) : ComparisonInstruction(rawInstr) {}
+CmpuleInstruction::CmpuleInstruction(quint32 rawInstr) : ComparisonInstruction(rawInstr) {}
+
+//==============================================================================
+// CMPBGE IMPLEMENTATION
+//==============================================================================
+
+CmpbgeInstruction::CmpbgeInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+
+void CmpbgeInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 a = regs->readIntReg(m_ra);
+	quint64 b = GetOperandB(regs);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3, %4=0x%5")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(a, 16, 16, QChar('0'))
+		.arg(UsesLiteral() ? "lit" : QString("R%1").arg(m_rb))
+		.arg(b, 16, 16, QChar('0')));
+
+	// Compare each byte position and set corresponding bit if a_byte >= b_byte
+	quint64 result = 0;
+	for (int i = 0; i < 8; i++) {
+		quint8 aByte = (a >> (i * 8)) & 0xFF;
+		quint8 bByte = (b >> (i * 8)) & 0xFF;
+		if (aByte >= bByte) {
+			result |= (1ULL << i);
+		}
+	}
+
+	DEBUG_LOG(QString("  Byte comparison result: 0x%1 written to R%2")
+		.arg(result, 16, 16, QChar('0'))
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, result);
+}
+
+//==============================================================================
+// CONDITIONAL MOVE IMPLEMENTATION
+//==============================================================================
+
+void ConditionalMoveInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 conditionValue = regs->readIntReg(m_ra);
+	quint64 sourceValue = GetOperandB(regs);
+
+	DEBUG_LOG(QString("Executing %1: condition R%2=0x%3, source %4=0x%5")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(conditionValue, 16, 16, QChar('0'))
+		.arg(UsesLiteral() ? "lit" : QString("R%1").arg(m_rb))
+		.arg(sourceValue, 16, 16, QChar('0')));
+
+	if (CheckCondition(conditionValue)) {
+		DEBUG_LOG(QString("  Condition true, writing 0x%1 to R%2")
+			.arg(sourceValue, 16, 16, QChar('0'))
+			.arg(m_rc));
+		regs->writeIntReg(m_rc, sourceValue);
+	}
+	else {
+		DEBUG_LOG(QString("  Condition false, no write"));
+	}
+}
+
+// Conditional move instruction constructors
+CmoveqInstruction::CmoveqInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovneInstruction::CmovneInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovltInstruction::CmovltInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovgeInstruction::CmovgeInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovleInstruction::CmovleInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovgtInstruction::CmovgtInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovlbcInstruction::CmovlbcInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+CmovlbsInstruction::CmovlbsInstruction(quint32 rawInstr) : ConditionalMoveInstruction(rawInstr) {}
+
+
+//==============================================================================
+// BIT COUNTING INSTRUCTION IMPLEMENTATIONS
+//==============================================================================
+
+CtlzInstruction::CtlzInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+
+void CtlzInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 value = regs->readIntReg(m_ra);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(value, 16, 16, QChar('0')));
+
+	// Count leading zeros
+	quint64 result = 0;
+	if (value == 0) {
+		result = 64; // All bits are zero
+	}
+	else {
+		// Use compiler builtin if available, otherwise manual count
+#if defined(__GNUC__) || defined(__clang__)
+		result = __builtin_clzll(value);
+#else
+	// Manual implementation
+		for (int i = 63; i >= 0; i--) {
+			if (value & (1ULL << i)) {
+				break;
+			}
+			result++;
+		}
+#endif
+	}
+
+	DEBUG_LOG(QString("  Leading zeros: %1, written to R%2")
+		.arg(result)
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, result);
+}
+
+CtpopInstruction::CtpopInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+
+void CtpopInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 value = regs->readIntReg(m_ra);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(value, 16, 16, QChar('0')));
+
+	// Count set bits (population count)
+	quint64 result = 0;
+
+#if defined(__GNUC__) || defined(__clang__)
+	result = __builtin_popcountll(value);
+#else
+	// Manual implementation using Brian Kernighan's algorithm
+	quint64 temp = value;
+	while (temp) {
+		result++;
+		temp &= temp - 1; // Clear the lowest set bit
+	}
+#endif
+
+	DEBUG_LOG(QString("  Population count: %1, written to R%2")
+		.arg(result)
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, result);
+}
+
+CttzInstruction::CttzInstruction(quint32 rawInstr) : IntegerInstruction(rawInstr) {}
+
+void CttzInstruction::Execute(RegisterFileWrapper* regs, AlphaMemorySystem* memSys, TLBSystem* tlb) {
+	quint64 value = regs->readIntReg(m_ra);
+
+	DEBUG_LOG(QString("Executing %1: R%2=0x%3")
+		.arg(GetMnemonic())
+		.arg(m_ra)
+		.arg(value, 16, 16, QChar('0')));
+
+	// Count trailing zeros
+	quint64 result = 0;
+	if (value == 0) {
+		result = 64; // All bits are zero
+	}
+	else {
+#if defined(__GNUC__) || defined(__clang__)
+		result = __builtin_ctzll(value);
+#else
+		// Manual implementation
+		for (int i = 0; i < 64; i++) {
+			if (value & (1ULL << i)) {
+				break;
+			}
+			result++;
+		}
+#endif
+	}
+
+	DEBUG_LOG(QString("  Trailing zeros: %1, written to R%2")
+		.arg(result)
+		.arg(m_rc));
+
+	regs->writeIntReg(m_rc, result);
+}

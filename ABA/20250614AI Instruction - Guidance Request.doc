@@ -1,0 +1,13 @@
+Can you provide this matrix one time which covers all OpCode.Functions?  Every opcode will be covered for Alpha, Vax and Tru64.  It is critical that the matrix for OpCode and Function is correct in 100% of the cases.  
+You know, as we build the interpreters, we need to ensure that code execution is decoded, executed correctly to ensure the virtual environment performs in a stable fashion.  
+The approach that I wish to take is as follows: 
+
+1) provide the coverage matrix so I can validate once to Alpha System Architecture references, 
+2) build out the interpreter[s] - given the complexity and volume of instructions which must be coverage, it may be beneficial to generate a single class and with a .H/.CPP (tracking changes, updates and modifications due to ChatGPT errors is not only distracting, is quite inefficient for development time, and delivery timeline).   
+3) once we have a validated matrix, as a convenience, I would request that you create the associated dispatch tables for each opcode.function as necessary.)  A 2-dimensional vector array would seem to provide an excellent option to cache-execute these instructions.   
+4)  we would then create the functions for each opcode.function code as .CPP.  
+5) Refactor these instructions as inline functions for performance.  
+6) generate unit tests that can be executed to ensure correct execution.    
+
+
+So, I ask you - is this something we can accomplish together - accuracy is critical.  It may require a check and recheck on your part, I will certainly check also where it is possible to do so; however, before we continue - can you provide this level of support coverage for this project?

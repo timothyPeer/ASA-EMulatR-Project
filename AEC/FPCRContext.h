@@ -12,6 +12,7 @@ Rounding mode	57–58	Controls rounding behavior (nearest, zero, +inf, −inf)
 #define FPCRCONTEXT_H
 
 #include <QtGlobal>
+#include "..\AEJ\enumerations\enumRoundingMode.h"
 
 /**
  * @brief Alpha AXP FPCR context representation.

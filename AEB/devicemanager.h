@@ -33,20 +33,12 @@ class DeviceManager : public QObject {
 
 public:
     explicit DeviceManager(SystemBus* sbus, IRQController* ictr, QObject* parent = nullptr)
-        : QObject(parent), bus(sbus), irq(ictr), mmioManager(nullptr) {
+        : QObject(parent), m_systemBus(sbus), m_irqController(ictr), m_mmioManager(nullptr) {
     }
 
-    void setMMIOManager(MMIOManager* manager) {
-        mmioManager = manager;
-    }
-
-    IRQController* getIRQController() const {
-        return irq;
-    }
-
-    void setIRQController(IRQController* controller) {
-        irq = controller;
-    }
+    void attachIrqController(IRQController* irqController) { m_irqController = irqController;  }
+    void attachSystemBus(SystemBus* systemBus) { m_systemBus = systemBus;  }
+    void attachMmioManager(MMIOManager* mmioManager) { m_mmioManager = mmioManager;  }
 
     void setLoggingCallback(std::function<void(const QString&)> cb) {
         loggingCallback = std::move(cb);
@@ -64,17 +56,17 @@ public:
             return false;
         }
 
-        if (mmioManager && !mmioManager->mapDevice(device, device->getBaseAddress(), device->getSize())) {
+        if (m_mmioManager && !m_mmioManager->mapDevice(device, device->getBaseAddress(), device->getSize())) {
             qWarning() << "DeviceManager: Failed to map device into MMIOManager:" << id;
             return false;
         }
 
-        if (bus) {
-            bus->mapDevice(device, device->getBaseAddress(), device->getSize());
+        if (m_systemBus) {
+            m_systemBus->mapDevice(device, device->getBaseAddress(), device->getSize());
         }
 
-        if (irq && device->canInterrupt()) {
-            irq->registerHandler(0, [device](int vec) { Q_UNUSED(vec); Q_UNUSED(device); });
+        if (m_irqController && device->canInterrupt()) {
+            m_irqController->registerHandler(0, [device](int vec) { Q_UNUSED(vec); Q_UNUSED(device); });
         }
 
         devices.insert(id, device);
@@ -86,8 +78,8 @@ public:
         QWriteLocker locker(&deviceLock);
         if (!devices.contains(id)) return false;
         BusInterface* dev = devices.take(id);
-        if (mmioManager) mmioManager->unMapDevice(dev);
-        if (bus) bus->dumpMappings();
+        if (m_mmioManager) m_mmioManager->unMapDevice(dev);
+       // if (bus) bus->dumpMappings();
         delete dev;
         emit deviceRemoved(id);
         return true;
@@ -112,14 +104,14 @@ public:
 
             BusInterface* dev = nullptr;
             if (type == "UART") {
-                dev = new UartDevice(irq, irqVec);
+                dev = new UartDevice(m_irqController, irqVec);
             }
             else if (type == "SCSI") {
-                dev = new ScsiBusController(irq, irqVec);
+                dev = new ScsiBusController(m_irqController, irqVec);
             }
             else if (type == "NIC") {
                 QString mac = obj["mac"].toString();
-                dev = new TulipNIC_DC21040(irq, irqVec, mac);
+                dev = new TulipNIC_DC21040(m_irqController, irqVec, mac);
             }
             else {
                 qWarning() << "Unknown device type in config:" << type;
@@ -169,10 +161,10 @@ public:
         for (auto* device : devices) device->reset();
     }
 	QString dumpSystemBus() const {
-		if (!bus)
+		if (!m_systemBus)
 			return "SystemBus not attached.";
 
-		bus->dumpMappings();
+		//bus->dumpMappings();
 		return "System bus dump complete.";
 	}
 
@@ -181,9 +173,9 @@ signals:
     void deviceRemoved(const QString& id);
 
 private:
-    IRQController* irq = nullptr;
-    SystemBus* bus = nullptr;
-    MMIOManager* mmioManager = nullptr;
+    IRQController* m_irqController = nullptr;
+    SystemBus* m_systemBus = nullptr;
+    MMIOManager* m_mmioManager = nullptr;
     QHash<QString, BusInterface*> devices;
     mutable QReadWriteLock deviceLock;
     std::function<void(const QString&)> loggingCallback;

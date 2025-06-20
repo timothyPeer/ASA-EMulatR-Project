@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QDebug>
 #include "FPCRContext.h"
-
+#include "..\AEJ\enumerations\enumRoundingMode.h"
 
 class dt_gfloat {
 public:

@@ -47,7 +47,7 @@ public:
     QString description() const override { return deviceDescription; }
 
     bool canInterrupt() const override { return irqVector >= 0 && irqController; }
-    quint8 interruptVector() const override { return static_cast<quint8>(irqVector); }
+    quint8 interruptVector()  override { return static_cast<quint8>(irqVector); }
 
     void connectIRQController(IRQController* irq) override {
         irqController = irq;
@@ -58,16 +58,17 @@ public:
         return read(offset, 8); // Default: quadword
     }
 
-    void write(quint64 offset, quint64 value) override {
+    bool write(quint64 offset, quint64 value) override {
         QWriteLocker locker(&deviceLock);
-        write(offset, value, 8); // Default: quadword
+        return write(offset, value, 8); // Default: quadword
+   
     }
 
-    bool isDeviceAddress(quint64 address) const override {
+    bool isDeviceAddress(quint64 address) override {
         return (address >= baseAddress && address < (baseAddress + mappedSize));
     }
 
-    quint64 getBaseAddress() const override { return baseAddress; }
+    quint64 getBaseAddress()  override { return baseAddress; }
     quint64 getSize() const override { return mappedSize; }
 
     // --- Device Interface Extensions ---
@@ -114,7 +115,7 @@ public:
         return value;
     }
 
-    virtual void write(quint64 address, quint64 data, int size) {
+    virtual bool write(quint64 address, quint64 data, int size) {
         quint64 aligned = alignAddress(address, size);
 
         switch (size) {
@@ -124,11 +125,12 @@ public:
         case 8: break;
         default:
             qWarning() << "[BaseDevice] Invalid write size:" << size;
-            return;
+            return false;
         }
 
         registers[aligned] = data;
         emit deviceAccessed(true, address, data, size);
+        return true;
     }
 
 signals:

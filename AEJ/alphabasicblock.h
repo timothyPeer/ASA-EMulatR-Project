@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QList>
 
-class AlphaInstruction;
+class alphaInstruction;
 
 /**
  * Alpha Basic Block - represents a basic block of code in the program
@@ -14,7 +14,7 @@ class AlphaBasicBlock : public QObject
     Q_OBJECT
 
 private:
-    QList<AlphaInstruction*> instructions;  // List of instructions in this block
+    QList<alphaInstruction*> instructions;  // List of instructions in this block
     quint64 startAddress;                   // Memory address where this block starts
     quint64 endAddress;                     // Memory address where this block ends
     quint64 executionCount;                     // Number of times this block has been executed
@@ -55,7 +55,7 @@ public:
      * Add an instruction to this block
      * @param instruction - The instruction to add
      */
-    void addInstruction(AlphaInstruction* instruction)
+    void addInstruction(alphaInstruction* instruction)
     {
         instructions.append(instruction);
     }
@@ -64,7 +64,7 @@ public:
      * Get all instructions in this block
      * @return The list of instructions
      */
-    QList<AlphaInstruction*> getInstructions() const
+    QList<alphaInstruction*> getInstructions() const
     {
         return this->instructions;
     }

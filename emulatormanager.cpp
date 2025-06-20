@@ -5,7 +5,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include "Helpers.h"
 #include "AEB/devicemanager.h"
 #include "AEC/AlphaCoreContext.h"
 
@@ -28,7 +27,7 @@ bool EmulatorManager::initialize(quint64 memorySize, int cpuCount)
 		return false;
 	}
 	// AlphaSMPManager -
-	m_smpManager.reset(new AlphaSMPManager(cpuCount));
+	m_smpManager.reset(new AlphaSMPManager(nullptr));
 
 
 

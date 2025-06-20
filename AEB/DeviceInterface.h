@@ -1,13 +1,21 @@
 #pragma once
 #include <QString>
+#include "BusInterface.h"
+#include "IRQController.h"
 
-#pragma once
-
-class DeviceInterface {
+class DeviceInterface : public BusInterface {
 public:
-	virtual ~DeviceInterface() = default;
+	virtual ~DeviceInterface() {}
 
-	virtual QString identifier() const = 0;
-	virtual QString description() const = 0;
-	virtual void reset() = 0;
+	virtual QString deviceName() const = 0;
+
+	virtual void setIRQLine(IRQController* controller, int irqLine) {
+		irqCtrl = controller;
+		irqNumber = irqLine;
+	}
+
+protected:
+	IRQController* irqCtrl = nullptr;
+	int irqNumber = -1;
 };
+

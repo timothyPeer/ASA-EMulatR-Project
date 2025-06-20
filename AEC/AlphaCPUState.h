@@ -34,6 +34,10 @@ struct AlphaCPUState {
 	// Floating-Point Control State
 	// --------------------------------
 	quint64 fpcr_raw = 0;			 // FPCR raw register contents - ASA I, 4-68
+
+	// LDx_L/STx_C reservation state:
+	bool    lockFlag = false;    ///< is there an active reservation?
+	quint64 lockedPhysicalAddress = 0ULL;     ///< base of the 16-byte block reserved
 	// --------------------------------
 	// 
 	// --------------------------------

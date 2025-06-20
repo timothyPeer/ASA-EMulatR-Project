@@ -1,0 +1,6 @@
+
+
+Register	Long Name						Class [c]&& Struct [s]
+PC			Program Counter					ProgramCounter [s]
+			Process Context					AlphaProcessContext [c]
+PS			Processor Status				AlphaProcessorStatus [c]

@@ -5,18 +5,17 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QMutexLocker>
 #include <QQueue>
 #include <QTimer>
 #include "BaseDevice.h"
 #include "mmiomanager.h"
 #include "mmiohandler.h"
-#include "Helpers.h"
+#include "../AEJ/enumerations/enumUartRegister.h"
+#include "../AEJ/structures/structMMIORegion.h"
 
-struct Region {
-	quint64 start;
-	quint64 end;
-	MmioHandler* handler;
-};
+
+
 /**
  * @brief Emulates a simple 16550A-compatible UART
  *
@@ -30,20 +29,7 @@ class UartDevice : public BaseDevice,  public MmioHandler {
     Q_OBJECT
 
 public:
-    enum class Register : quint8 {
-        RBR = 0x00,  // Receive Buffer Register (read-only)
-        THR = 0x00,  // Transmit Holding Register (write-only)
-        IER = 0x01,  // Interrupt Enable Register
-        IIR = 0x02,  // Interrupt Identification Register (read-only)
-        FCR = 0x02,  // FIFO Control Register (write-only)
-        LCR = 0x03,  // Line Control Register
-        MCR = 0x04,  // Modem Control Register
-        LSR = 0x05,  // Line Status Register
-        MSR = 0x06,  // Modem Status Register
-        SCR = 0x07,  // Scratch Register
-        DLL = 0x00,  // Divisor Latch LSB (when DLAB=1)
-        DLM = 0x01   // Divisor Latch MSB (when DLAB=1)
-    };
+    
 
     /**
      * @brief Construct a new UART
@@ -91,9 +77,9 @@ public:
 
 	quint64 read(quint64 address, int size) override;
 
-	void write(quint64 address, quint64 data, int size) override;
+	bool write(quint64 address, quint64 data, int size) override;
 
-	bool isDeviceAddress(quint64 address) const override
+	bool isDeviceAddress(quint64 address) override
 	{
 		// UART registers are within the first 8 bytes
 		return address < 8;
@@ -126,7 +112,7 @@ public:
      * @return True if data is available
      */
 
-	bool hasDataToReceive() const;
+	bool hasDataToReceive() ;
 
     /**
      * @brief Attach a console to this UART for I/O
@@ -196,14 +182,14 @@ private:
     QQueue<quint8> rxFifo;  // Receive FIFO
     QQueue<quint8> txFifo;  // Transmit FIFO
     QTimer* txTimer;        // Transmit timer
-    mutable QMutex m_mutex;           // Protect state
+    QMutex m_mutex;           // Protect state
 	QVector<Region> m_regions;
 
 	
 	// Generic reader: locks, finds region, invokes correct handler or returns default
 
 	template<typename T>
-	T readGeneric(quint64 addr, T defaultVal) const
+	T readGeneric(quint64 addr, T defaultVal) 
 	{
 		QMutexLocker locker(&m_mutex);
 		for (const auto& r : m_regions) {
@@ -268,7 +254,10 @@ private:
     /**
      * @brief Update UART state after register change
      */
-    void updateState();
+	void updateState()
+	{
+
+	}
 
     /**
      * @brief Update interrupt status

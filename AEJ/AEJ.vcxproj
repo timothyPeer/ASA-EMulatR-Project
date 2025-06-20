@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Alpha|x64">
+      <Configuration>Alpha</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Alpha_Release|x64">
+      <Configuration>Alpha_Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -9,16 +17,40 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Tru64_Debug|x64">
+      <Configuration>Tru64_Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Tru64_Release|x64">
+      <Configuration>Tru64_Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A2CE2159-B512-4F45-BDAF-4EED7CEFCF56}</ProjectGuid>
+    <ProjectGuid>{B361320A-3ABB-48E4-B34E-43D0A5C78552}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'">10.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -31,16 +63,50 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.9_msvc20122_64</QtInstall>
-    <QtModules>core;network</QtModules>
+    <QtModules>core;concurrent;core </QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'" Label="QtSettings">
+    <QtInstall>6.9_msvc20122_64</QtInstall>
+    <QtModules>core;concurrent;core </QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'" Label="QtSettings">
+    <QtInstall>6.9_msvc20122_64</QtInstall>
+    <QtModules>core;concurrent</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>6.9_msvc20122_64</QtInstall>
+    <QtModules>core</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'" Label="QtSettings">
+    <QtInstall>6.9_msvc20122_64</QtInstall>
+    <QtModules>core</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'" Label="QtSettings">
     <QtInstall>6.9_msvc20122_64</QtInstall>
     <QtModules>core</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
@@ -54,25 +120,84 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(QtMsBuild)\Qt.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(QtMsBuild)\Qt.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir);$(Qt_INCLUDEPATH_);$(SolutionDir)AEB\;$(SolutionDir)AESH\;$(SolutionDir)AEC\;$(SolutionDir)AES\;$(SolutionDir)AEE\;$(SolutionDir)AEM\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir);$(Qt_INCLUDEPATH_);$(SolutionDir)AEB\;$(SolutionDir)AESH\;$(SolutionDir)AEC\;$(SolutionDir)AES\;$(SolutionDir)AEE\;$(SolutionDir)AEM\;$(SolutionDir)AEU;</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir);$(Qt_INCLUDEPATH_);$(SolutionDir)AEB\;$(SolutionDir)AESH\;$(SolutionDir)AEC\;$(SolutionDir)AES\;$(SolutionDir)AEE\;$(SolutionDir)AEM\;$(SolutionDir)AEU;</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir);$(Qt_INCLUDEPATH_);$(SolutionDir)AEB\;$(SolutionDir)AESH\;$(SolutionDir)AEC\;$(SolutionDir)AES\;$(SolutionDir)AEE\;$(SolutionDir)AEM\;$(SolutionDir)AEU;</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)PlatformSwitch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PreprocessorDefinitions>AEJ_LIB;BUILD_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>AEJ_LIB;BUILD_STATIC;CPU_EV=6 ;ALPHA_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>AEJ_LIB;BUILD_STATIC;CPU_EV=6 ;ALPHA_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>AEJ_LIB;BUILD_STATIC;CPU_EV=6 ;ALPHA_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
@@ -99,70 +224,317 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>AEJ_LIB;BUILD_STATIC;ALPHA_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>AEJ_LIB;BUILD_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="alphabasicblock.cpp" />
-    <ClCompile Include="alphacoreadapter.cpp" />
-    <ClCompile Include="alphacpu.cpp">
+    <ClCompile Include="alphacachehierarchy.cpp" />
+    <ClCompile Include="AlphaCPU_refactored.cpp" />
+    <ClCompile Include="alphaprocessorintegrationmanager.cpp" />
+    <ClCompile Include="executorAlphaFloatingPoint.cpp" />
+    <ClCompile Include="AlphaInstructionCache.cpp" />
+    <ClCompile Include="pipeline_stages.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
-    <ClCompile Include="alphaexceptionhandler.cpp" />
-    <ClCompile Include="alphaexceptionvectors.cpp" />
-    <ClCompile Include="alphainstructiondecoder.cpp" />
-    <ClCompile Include="alphajitcompiler.cpp" />
-    <ClCompile Include="alphajitexecutionengine.cpp" />
+    <ClCompile Include="opcode01_executoralpha.cpp" />
+    <ClCompile Include="opcode02_executoralpha.cpp" />
+    <ClCompile Include="opcode03_executoralpha.cpp" />
+    <ClCompile Include="opcode04_executoralpha.cpp" />
+    <ClCompile Include="opcode05_executoralpha.cpp" />
+    <ClCompile Include="opcode11_executorAlphaIntegerLogical.cpp" />
     <ClCompile Include="alphajitprofiler.cpp" />
-    <ClCompile Include="alphajitsystem.cpp" />
-    <ClCompile Include="alphamemorysystem.cpp" />
-    <ClCompile Include="alphapalinterpreter.cpp" />
-    <ClCompile Include="alphasmpmanager.cpp" />
-    <ClCompile Include="alphasystem.cpp" />
+    <ClCompile Include="AlphaMemorySystem_refactored.cpp" />
+    <ClCompile Include="executorAlphaPAL.cpp" />
+    <ClCompile Include="AlphaSMPManager_refactored.cpp" />
+    <ClCompile Include="opcode14_executorAlphaSQRT.cpp" />
+    <ClCompile Include="alphasystemconfigurator.cpp" />
+    <ClCompile Include="AlphaTranslationCache.cpp" />
+    <ClCompile Include="CacheSet.cpp" />
+    <ClCompile Include="category_InsertInstruction.cpp" />
+    <ClCompile Include="decodedInstruction.cpp" />
+    <ClCompile Include="decodeOperate.cpp" />
+    <ClCompile Include="InstructionWord.cpp" />
+    <ClCompile Include="IprBank.cpp" />
     <ClCompile Include="alphatrace.cpp" />
-    <ClCompile Include="floatingpointexecutor.cpp" />
-    <ClCompile Include="IExecutionContext.cpp" />
-    <ClCompile Include="instructiondefinition.cpp" />
-    <ClCompile Include="instructionset.cpp" />
-    <ClCompile Include="StackFrame.cpp" />
-    <ClCompile Include="VectorExecutor.cpp" />
+    <ClCompile Include="opcode18_executorAlphaMemoryBarrier.cpp" />
+    <ClCompile Include="PALFunctionNames.cpp" />
+    <ClCompile Include="PendingLoad.cpp" />
+    <ClCompile Include="pipeline_jitcompiler.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Alpha_Release|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Tru64_Release|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Alpha|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Tru64_Debug|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
+    <ClCompile Include="SafeMemory_refactored.cpp" />
+    <ClCompile Include="test_instructions.cpp" />
+    <ClCompile Include="tlbaddresstranslator.cpp" />
+    <ClCompile Include="tlbentrystatemanager.cpp" />
+    <ClCompile Include="tlberrorhandler.cpp" />
+    <ClCompile Include="tlbperformanceoptimizer.cpp" />
+    <ClCompile Include="tlbSystem.cpp" />
+    <ClCompile Include="TLPHelpers.cpp" />
+    <ClCompile Include="TranslationResult.cpp" />
+    <ClCompile Include="UnifiedDataCache.cpp" />
+    <ClInclude Include="..\AESH\signExtend.h" />
+    <ClInclude Include="..\GlobalMacro.h" />
     <ClInclude Include="aej_global.h" />
-    <ClInclude Include="aej.h" />
-    <QtMoc Include="alphacoreadapter.h" />
-    <ClInclude Include="AlphaCPUFactory.h" />
-    <ClInclude Include="alphaexceptionvectors.h" />
-    <ClInclude Include="alphajitprofiler.h" />
-    <QtMoc Include="ControlExecutor.h" />
-    <ClInclude Include="decodeMemoryOffset.h" />
-    <ClInclude Include="decodeOperate.h" />
-    <ClInclude Include="ExecutorOpcodeEnumeration.h" />
-    <QtMoc Include="VectorRegisterBank.h" />
-    <QtMoc Include="IntegerExecutor.h" />
-    <QtMoc Include="floatingpointexecutor.h" />
-    <ClInclude Include="StackFrame.h" />
-    <QtMoc Include="VectorExecutor.h" />
-    <QtMoc Include="alphapalinterpreter.h" />
-    <QtMoc Include="instructionset.h" />
-    <ClInclude Include="IExecutionContext.h" />
-    <ClInclude Include="instructiondefinition.h" />
-    <QtMoc Include="alphajitsystem.h" />
-    <QtMoc Include="alphajitexecutionengine.h" />
-    <QtMoc Include="alphabasicblock.h" />
+    <ClInclude Include="enumerations\enumFlags.h" />
+    <ClInclude Include="traps\trapInterruptMapper.h" />
+    <QtMoc Include="AlphaCPU_refactored.h" />
+    <ClInclude Include="alphacachehierarchy.h" />
+    <ClInclude Include="AlphaFloatingPoint.h" />
+    <QtMoc Include="executorAlphaFloatingPoint.h" />
+    <QtMoc Include="AlphaMemorySystem_refactored.h" />
+    <QtMoc Include="opcode11_executorAlphaIntegerLogical.h" />
+    <QtMoc Include="AlphaInstructionCache.h" />
+    <ClInclude Include="AlphaMMIOAddressChecker.h" />
+    <QtMoc Include="executorAlphaPAL.h" />
+    <ClInclude Include="AlphaPlatformGuards.h" />
+    <QtMoc Include="AlphaSMPManager_refactored.h" />
+    <QtMoc Include="opcode14_executorAlphaSQRT.h" />
+    <QtMoc Include="alphaprocessorintegrationmanager.h" />
+    <ClInclude Include="alphasystemconfigurator.h" />
+    <ClInclude Include="AlphaSystemManager.h" />
+    <ClInclude Include="AlphaTranslationCache.h" />
+    <QtMoc Include="AlphaUnifiedExecutionEngine.h" />
+    <QtMoc Include="AlphaUnifiedExecutor.h" />
+    <ClInclude Include="AsaNamespaces.h" />
+    <ClInclude Include="CacheLine.h" />
+    <ClInclude Include="CacheSet.h" />
+    <ClInclude Include="category_InsertInstruction.h" />
+    <ClInclude Include="constants\const_conditionCodes.h" />
+    <ClInclude Include="decodedInstruction.h" />
+    <ClInclude Include="constants\constAlphaMemorySystem.h" />
+    <ClInclude Include="constants\constAsaPerformance.h" />
+    <ClInclude Include="constants\const_EXCEPTION_CAUSE.h" />
+    <ClInclude Include="constants\const_EXC_SUM.h" />
+    <ClInclude Include="constants\const_FPCR_AMASK.h" />
+    <ClInclude Include="constants\constExceptionConstants.h" />
+    <ClInclude Include="constants\constExceptions.h" />
+    <ClInclude Include="constants\const_PAL_HANDLER.h" />
+    <ClInclude Include="constants\const_PAL_Constants.h" />
+    <ClInclude Include="constants\constFPCRRoundingMode.h" />
+    <ClInclude Include="constants\constFP_Format_Table.h" />
+    <ClInclude Include="constants\constFunctionFloatingPoint.h" />
+    <ClInclude Include="constants\constFunctionIntegerLogicalBitManipulation.h" />
+    <ClInclude Include="constants\constFunctionMoveInstructions.h" />
+    <ClInclude Include="constants\const_OpCode_14_SQRT.h" />
+    <ClInclude Include="constants\constHardware.h" />
+    <ClInclude Include="constants\constInternalProcessorRegister.h" />
+    <ClInclude Include="constants\constMMIOAddress.h" />
+    <ClInclude Include="constants\const_OpCode_19_HW.h" />
+    <ClInclude Include="constants\constOpCodeIntegerFormat.h" />
+    <ClInclude Include="constants\constOpCodeMasks.h" />
+    <ClInclude Include="constants\constOpCodeMemoryFormat.h" />
+    <ClInclude Include="constants\constOpCodeOperateFormat.h" />
+    <ClInclude Include="constants\const_OpCode_0_PAL.h" />
+    <ClInclude Include="constants\constPALCacheControl.h" />
+    <ClInclude Include="constants\constFunctionJumpInstructions.h" />
+    <ClInclude Include="constants\constPALMemoryBarrier.h" />
+    <ClInclude Include="constants\constStackConstants.h" />
+    <ClInclude Include="constants\constStatusRegister.h" />
+    <ClInclude Include="constants\constTBLPipeline.h" />
+    <ClInclude Include="constants\constVaxTypes.h" />
+    <ClInclude Include="constants\constVector.h" />
+    <ClInclude Include="constants\const_OpCode_11_OprFP.h" />
+    <ClInclude Include="constants\const_OpCode_12_OprMem.h" />
+    <ClInclude Include="constants\const_OpCode_13_Opr.h" />
+    <ClInclude Include="constants\const_OpCode_15_VaxFloatingPoint.h" />
+    <ClInclude Include="constants\const_OpCode_16_IEEE FloatingPoint.h" />
+    <ClInclude Include="constants\const_OpCode_17_FloatingPoint.h" />
+    <ClInclude Include="constants\const_OpCode_18_Mem_mf_Fp.h" />
+    <ClInclude Include="constants\const_OpCode_20_Mem_Fp.h" />
+    <ClInclude Include="constants\const_OpCode_21_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_22_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_23_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_24_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_25_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_26_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_27_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_28_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_29_Mem.h" />
+    <ClInclude Include="constants\const_OpCode_30_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_31_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_32_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_33_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_34_MemBarrier.h" />
+    <ClInclude Include="constants\const_OpCode_35_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_36_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_37_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_38_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_39_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_3A_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_3B_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_3C_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_3D_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_3E_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_3F_Branch.h" />
+    <ClInclude Include="constants\const_OpCode_8_Memory.h" />
+    <ClInclude Include="constants\const_OpCode_9_Memory.h" />
+    <ClInclude Include="constants\structStatistics.h" />
+    <ClInclude Include="const_OpCode_10_Opr_Fp.h" />
+    <ClInclude Include="decodeFloatingFields.h" />
+    <ClInclude Include="enumerations\countTrailingZeros.h" />
+    <ClInclude Include="enumerations\enumAstLevel.h" />
+    <ClInclude Include="enumerations\enumCpuModel.h" />
+    <ClInclude Include="enumerations\enumCpuState.h" />
+    <ClInclude Include="enumerations\enumDenormalMode.h" />
+    <ClInclude Include="enumerations\enumExceptionArithmetic.h" />
+    <ClInclude Include="enumerations\enumExceptionCause.h" />
+    <ClInclude Include="enumerations\enumExceptionType.h" />
+    <ClInclude Include="enumerations\enumLineState.h" />
+    <ClInclude Include="enumerations\enumMemoryBarrierEmulationMode.h" />
+    <ClInclude Include="enumerations\enumMemoryFaultType.h" />
+    <ClInclude Include="enumerations\enumFPCompare.h" />
+    <ClInclude Include="enumerations\enumFPFormat.h" />
+    <ClInclude Include="enumerations\enumInstructionFormat.h" />
+    <ClInclude Include="enumerations\enumInstructionSections.h" />
+    <ClInclude Include="enumerations\enumIPRNumbers.h" />
+    <ClInclude Include="enumerations\enumMachineCheckType.h" />
+    <ClInclude Include="enumerations\enumPALFunctionClass.h" />
+    <ClInclude Include="enumerations\enumProcessorMode.h" />
+    <ClInclude Include="enumerations\enumProcessorStatus.h" />
+    <ClInclude Include="enumerations\enumRegisterType.h" />
+    <ClInclude Include="enumerations\enumRoundingMode.h" />
+    <ClInclude Include="enumerations\enumSecurityViolationType.h" />
+    <ClInclude Include="enumerations\enumTLBException.h" />
+    <ClInclude Include="enumerations\MemAccessType.h" />
+    <ClInclude Include="enumerations\structCacheRequest.h" />
+    <ClInclude Include="enumInstructionPerformance.h" />
+    <ClInclude Include="ExecuteStageLogHelpers.h" />
+    <ClInclude Include="globalHelpers.h" />
+    <ClInclude Include="GlobalLockTracker.h" />
+    <ClInclude Include="helperAstLevels.h" />
+    <ClInclude Include="helpers\calculateConditionCodes.h" />
+    <ClInclude Include="helpers\helperMachineCheck.h" />
+    <QtMoc Include="pipeline_stages.h" />
+    <ClInclude Include="InstructionWord.h" />
+    <QtMoc Include="opcode18_executorAlphaMemoryBarrier.h" />
+    <QtMoc Include="opcode01_executoralpha.h" />
+    <QtMoc Include="opcode02_executoralpha.h" />
+    <QtMoc Include="opcode03_executoralpha.h" />
+    <QtMoc Include="opcode04_executoralpha.h" />
+    <QtMoc Include="opcode05_executoralpha.h" />
+    <ClInclude Include="PALFunctionConstants.h" />
+    <ClInclude Include="PendingLoad.h" />
+    <ClInclude Include="PendingStore.h" />
+    <QtMoc Include="pipeline_jitcompiler.h" />
+    <ClInclude Include="PlatformPalOpCodes.h" />
+    <QtMoc Include="SafeMemory_refactored.h" />
+    <ClInclude Include="ProgramCounter.h" />
+    <ClInclude Include="structCacheConfig.h" />
+    <ClInclude Include="structFpRegister.h" />
+    <ClInclude Include="structMMIORegion.h" />
+    <ClInclude Include="structures\enumMemoryPerm.h" />
+    <ClInclude Include="structures\enumPalCodes.h" />
+    <ClInclude Include="structures\enumProtectionFlags.h" />
+    <ClInclude Include="structures\structCacheConfig.h" />
+    <ClInclude Include="structures\structFPCR.h" />
+    <ClInclude Include="structures\structFPFormatInfo.h" />
+    <ClInclude Include="structures\structFpRegs.h" />
+    <ClInclude Include="structures\structInstructionDefinition.h" />
+    <ClInclude Include="structures\structLockReservation.h" />
+    <ClInclude Include="structures\structOptions.h" />
+    <ClInclude Include="structures\structPAL.h" />
+    <ClInclude Include="structures\structPalExecutionResult.h" />
+    <ClInclude Include="structures\structPALInstruction.h" />
+    <ClInclude Include="structures\structProbeResult.h" />
+    <ClInclude Include="structures\structReservationState.h" />
+    <ClInclude Include="structures\structSystemEntryPoints.h" />
+    <ClInclude Include="structures\structTBLCheckResult.h" />
+    <ClInclude Include="structures\structTlbStatistics.h" />
+    <ClInclude Include="structures\structUnalignedAccessContext.h" />
+    <ClInclude Include="structures\utilitySafeIncrement.h" />
+    <QtMoc Include="tlbaddresstranslator.h" />
+    <ClInclude Include="TLBEntry.h" />
+    <ClInclude Include="TLBEntryFactory.h" />
+    <QtMoc Include="tlbentrystatemanager.h" />
+    <QtMoc Include="tlbperformanceoptimizer.h" />
+    <QtMoc Include="tlberrorhandler.h" />
+    <ClInclude Include="traps\enumExceptionBit.h" />
+    <ClInclude Include="traps\enumMmuMode.h" />
+    <ClInclude Include="traps\enumOptimizationLevel.h" />
+    <ClInclude Include="traps\trapExceptionMapper.h" />
+    <ClInclude Include="traps\trapFaultTraps.h" />
+    <ClInclude Include="traps\trapFpType.h" />
+    <ClInclude Include="EvSelect.h" />
+    <ClInclude Include="JitPALConstants.h" />
+    <ClInclude Include="tlbSystem.h" />
+    <ClInclude Include="TLPHelpers.h" />
+    <ClInclude Include="TranslationResult.h" />
+    <ClInclude Include="Jit Helpers.h" />
+    <ClInclude Include="JITBlock.h" />
+    <ClInclude Include="JITFaultInfoStructures.h" />
+    <QtMoc Include="UnifiedDataCache.h" />
     <QtMoc Include="alphatrace.h" />
-    <QtMoc Include="alphainstructiondecoder.h" />
-    <QtMoc Include="alphasystem.h" />
-    <QtMoc Include="alphajitcompiler.h" />
-    <QtMoc Include="alphamemorysystem.h" />
-    <QtMoc Include="alphasmpmanager.h" />
-    <QtMoc Include="alphacpu.h" />
-    <QtMoc Include="alphaexceptionhandler.h" />
+    <ClInclude Include="AlphaInstrTables.h" />
+    <QtMoc Include="IprBank.h" />
+    <ClInclude Include="decodeOperate.h" />
+    <QtMoc Include="ast_registers.h" />
+    <QtMoc Include="alphabasicblock.h" />
+    <ClInclude Include="alphajitprofiler.h" />
+    <ClInclude Include="alphaInstruction.h" />
+    <QtMoc Include="aej.h" />
+    <ClCompile Include="aej.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AlphaKernelExceptionHandlers.s" />
-    <None Include="Bachman - JIT Execution Stack.txt" />
-    <None Include="Claude Implementation Structure.txt" />
-    <None Include="EV57_JIT.txt" />
-    <None Include="Project Task-Implementation notes.txt" />
+    <None Include=".clang-format" />
+    <None Include="PALOpcodes.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="constants\Register Matrix.txt" />
+    <Text Include="scratchspace.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

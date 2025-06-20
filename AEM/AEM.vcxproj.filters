@@ -26,11 +26,11 @@
     <ClInclude Include="aem_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <QtMoc Include="aem.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <ClCompile Include="aem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClInclude Include="aem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

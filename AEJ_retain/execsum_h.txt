@@ -1,0 +1,329 @@
+/**
+ * @file AlphaExcSum.h
+ * @brief Exception frame summary for Alpha System Architecture Emulator
+ * 
+ * This header defines the comprehensive exception handling framework
+ * for Alpha architecture emulation, including register state tracking,
+ * memory access violations, and instruction decoding errors.
+ */
+
+#ifndef ALPHA_EXCSUM_H
+#define ALPHA_EXCSUM_H
+
+#include <QObject>
+#include <QString>
+#include <QDateTime>
+#include <QMap>
+#include <QVector>
+#include <QMutex>
+#include <cstdint>
+
+// Forward declarations
+class QWidget;
+class QTableView;
+class QStandardItemModel;
+
+/**
+ * @brief Exception types in Alpha architecture
+ */
+enum class ExceptionType {
+    NONE = 0,
+    ARITHMETIC_TRAP = 1,        // Arithmetic operation exceptions
+    MEMORY_ACCESS_VIOLATION = 2, // Memory access violations
+    ILLEGAL_INSTRUCTION = 3,     // Unimplemented or illegal instruction
+    PRIVILEGED_INSTRUCTION = 4,  // Instruction executed in wrong privilege mode
+    MACHINE_CHECK = 5,           // Machine check exception
+    ALIGNMENT_FAULT = 6,         // Address alignment fault
+    INTERRUPT = 7,               // External interrupt
+    PAGE_FAULT_READ = 8,         // Page fault on read
+    PAGE_FAULT_WRITE = 9,        // Page fault on write
+    SYSTEM_CALL = 10,            // System call exception
+    BREAKPOINT = 11,             // Breakpoint exception
+    USER_DEFINED = 12            // User defined exception
+};
+
+/**
+ * @brief Exception frame summary for Alpha architecture
+ * 
+ * ExcSum maintains the state of the system at the time of an exception,
+ * including register values, memory state, and exception details.
+ */
+class ExcSum : public QObject {
+    Q_OBJECT
+
+public:
+    /**
+     * @brief Constructor for exception frame
+     * @param parent The parent QObject
+     */
+    explicit ExcSum(QObject* parent = nullptr);
+    
+    /**
+     * @brief Destructor for exception frame
+     */
+    ~ExcSum();
+
+    /**
+     * @brief Register the exception with details
+     * @param type The type of exception that occurred
+     * @param pc Program counter at exception time
+     * @param address Memory address related to the exception (if applicable)
+     * @param instruction The instruction that caused the exception
+     * @param message Additional descriptive message
+     * @return Unique ID for this exception instance
+     */
+    uint64_t registerException(
+        ExceptionType type, 
+        uint64_t pc, 
+        uint64_t address, 
+        uint32_t instruction,
+        const QString& message
+    );
+
+    /**
+     * @brief Save the current register state
+     * @param regState Map of register numbers to their values
+     */
+    void saveRegisterState(const QMap<int, uint64_t>& regState);
+
+    /**
+     * @brief Save memory context around the exception
+     * @param baseAddress Base address for memory snapshot
+     * @param memory Memory data (byte array)
+     * @param size Size of memory snapshot
+     */
+    void saveMemoryContext(uint64_t baseAddress, const QByteArray& memory, size_t size);
+
+    /**
+     * @brief Add a callstack entry
+     * @param frameAddress Address of the stack frame
+     * @param returnAddress Return address for this frame
+     * @param function Function name if available
+     */
+    void addCallstackEntry(uint64_t frameAddress, uint64_t returnAddress, const QString& function);
+
+    /**
+     * @brief Clear the callstack
+     */
+    void clearCallstack();
+
+    /**
+     * @brief Get the exception type
+     * @return Current exception type
+     */
+    ExceptionType exceptionType() const;
+
+    /**
+     * @brief Get human-readable exception type name
+     * @return Exception type as string
+     */
+    QString exceptionTypeName() const;
+
+    /**
+     * @brief Get the program counter value at exception
+     * @return PC value
+     */
+    uint64_t programCounter() const;
+
+    /**
+     * @brief Get the exception address
+     * @return Memory address related to exception
+     */
+    uint64_t exceptionAddress() const;
+
+    /**
+     * @brief Get the instruction that caused the exception
+     * @return Instruction word
+     */
+    uint32_t faultingInstruction() const;
+
+    /**
+     * @brief Get the exception message
+     * @return Descriptive message
+     */
+    QString exceptionMessage() const;
+
+    /**
+     * @brief Get register state at exception time
+     * @return Map of register values
+     */
+    QMap<int, uint64_t> registerState() const;
+
+    /**
+     * @brief Get memory context snapshot
+     * @param baseAddress Output parameter for base address
+     * @param size Output parameter for size
+     * @return Memory data
+     */
+    QByteArray memoryContext(uint64_t& baseAddress, size_t& size) const;
+
+    /**
+     * @brief Get callstack information
+     * @return Vector of callstack entries (frame addr, return addr, function)
+     */
+    QVector<std::tuple<uint64_t, uint64_t, QString>> callstack() const;
+
+    /**
+     * @brief Get the timestamp of this exception
+     * @return Time when exception occurred
+     */
+    QDateTime timestamp() const;
+
+    /**
+     * @brief Get exception ID
+     * @return Unique exception ID
+     */
+    uint64_t exceptionId() const;
+
+    /**
+     * @brief Create a widget to display exception details
+     * @return Widget showing the exception information
+     */
+    QWidget* createExceptionWidget();
+
+    /**
+     * @brief Export exception data to a JSON file
+     * @param filename Path to output file
+     * @return True if export succeeded
+     */
+    bool exportToJson(const QString& filename) const;
+
+    /**
+     * @brief Import exception data from a JSON file
+     * @param filename Path to input file
+     * @return True if import succeeded
+     */
+    bool importFromJson(const QString& filename);
+
+signals:
+    /**
+     * @brief Signal emitted when an exception is registered
+     * @param exceptionId Unique ID of the exception
+     */
+    void exceptionRegistered(uint64_t exceptionId);
+
+    /**
+     * @brief Signal emitted when any exception data changes
+     */
+    void exceptionDataChanged();
+
+private:
+    struct ExcSumPrivate {
+        ExceptionType type;          // Type of exception
+        uint64_t pc;                 // Program counter at exception
+        uint64_t address;            // Memory address causing exception
+        uint32_t instruction;        // The instruction causing exception
+        QString message;             // Human-readable message
+        QMap<int, uint64_t> regState; // Register state at exception
+        QByteArray memoryData;       // Memory snapshot
+        uint64_t memoryBaseAddr;     // Base address for memory snapshot
+        size_t memorySize;           // Size of memory snapshot
+        QVector<std::tuple<uint64_t, uint64_t, QString>> callstackEntries; // Callstack
+        QDateTime timestamp;         // When exception occurred
+        uint64_t id;                 // Unique exception ID
+    };
+    
+    ExcSumPrivate* d;                // Private implementation
+    static uint64_t nextExceptionId; // Counter for generating unique IDs
+    static QMutex idMutex;           // Mutex for thread-safe ID generation
+
+    /**
+     * @brief Initialize widget for displaying exception information
+     * @param model Model to populate with exception data
+     */
+    void initializeExceptionModel(QStandardItemModel* model);
+};
+
+/**
+ * @brief Exception manager to track and visualize system exceptions
+ * 
+ * ExcSumManager handles collection and visualization of exceptions,
+ * providing a central registry for all exception frames in the system.
+ */
+class ExcSumManager : public QObject {
+    Q_OBJECT
+
+public:
+    /**
+     * @brief Get the singleton instance of the exception manager
+     * @return Instance of ExcSumManager
+     */
+    static ExcSumManager* instance();
+
+    /**
+     * @brief Register a new exception in the system
+     * @param type Exception type
+     * @param pc Program counter
+     * @param address Related memory address
+     * @param instruction Instruction word
+     * @param message Human-readable description
+     * @return The created exception frame
+     */
+    ExcSum* registerException(
+        ExceptionType type, 
+        uint64_t pc, 
+        uint64_t address, 
+        uint32_t instruction,
+        const QString& message
+    );
+
+    /**
+     * @brief Retrieve an exception by its ID
+     * @param id Exception ID
+     * @return Exception frame or nullptr if not found
+     */
+    ExcSum* getException(uint64_t id) const;
+
+    /**
+     * @brief Get all exceptions in the system
+     * @return List of exception frames
+     */
+    QList<ExcSum*> allExceptions() const;
+
+    /**
+     * @brief Get exceptions filtered by type
+     * @param type Exception type to filter by
+     * @return List of matching exception frames
+     */
+    QList<ExcSum*> exceptionsByType(ExceptionType type) const;
+
+    /**
+     * @brief Clear all exceptions
+     */
+    void clearExceptions();
+
+    /**
+     * @brief Create a widget showing all exceptions in the system
+     * @return Widget to display exceptions
+     */
+    QWidget* createExceptionListWidget();
+
+signals:
+    /**
+     * @brief Signal emitted when an exception is registered
+     * @param exception The registered exception frame
+     */
+    void exceptionRegistered(ExcSum* exception);
+
+    /**
+     * @brief Signal emitted when exceptions are cleared
+     */
+    void exceptionsCleared();
+
+private:
+    // Private constructor for singleton
+    explicit ExcSumManager(QObject* parent = nullptr);
+    ~ExcSumManager();
+
+    // Disable copying
+    ExcSumManager(const ExcSumManager&) = delete;
+    ExcSumManager& operator=(const ExcSumManager&) = delete;
+
+    static ExcSumManager* s_instance;  // Singleton instance
+    QList<ExcSum*> m_exceptions;       // List of all exception frames
+    QMutex m_mutex;                   // Mutex for thread-safe operations
+};
+
+
+
+#endif // ALPHA_EXCSUM_H

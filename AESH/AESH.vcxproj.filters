@@ -32,25 +32,22 @@
     <ClCompile Include="aesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClInclude Include="Helpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GlobalMacro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IExecutionContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="safememory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TraceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QSettingsConfigLoader.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="safememory.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="TraceManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>

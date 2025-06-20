@@ -9,8 +9,23 @@
 #include <QDebug>
 #include <QtGlobal> // For qFormatHex
 #include "BusInterface.h"
+#include "IRQController.h"
 
 
+// Mapping between address range and device
+struct DeviceMapping {
+	quint64 startAddr;
+	quint64 endAddr;
+	BusInterface* device;
+
+	quint64 getRelativeAddress(quint64 addr) const {
+		return addr - startAddr;
+	}
+
+	bool contains(quint64 addr) const {
+		return addr >= startAddr && addr <= endAddr;
+	}
+};
 
 // ============================================================================
 // SystemBus.h
@@ -24,49 +39,37 @@ class SystemBus : public QObject {
 	Q_OBJECT
 
 public:
-	struct DeviceMapping {
-		quint64 start;           // Start of physical memory range
-		quint64 end;             // End of physical memory range (inclusive)
-		BusInterface* device;    // Device to handle accesses in this range
-	};
-
 	explicit SystemBus(QObject* parent = nullptr)
 		: QObject(parent) {
-		qDebug() << "[SystemBus] Initialized.";
 	}
 
-	// Adds a device to the bus at a specific address range.
-	void mapDevice(BusInterface* device, quint64 start, quint64 size) {
+	void attachIrqController(IRQController* irqController) { m_irqController = irqController;  }
+
+	void mapDevice(BusInterface* device, quint64 startAddr, quint64 size) {
 		QMutexLocker locker(&mutex);
-		DeviceMapping mapping{ start, start + size - 1, device };
+		DeviceMapping mapping{ startAddr, startAddr + size - 1, device };
 		mappings.append(mapping);
-		qDebug() << "[SystemBus] Mapped device from" << QString("0x%1").arg(start, 0, 16)
-			<< "to" << QString("0x%1").arg(start + size - 1, 0, 16);
+		qDebug() << "[SystemBus] Mapped device from" << QString("0x%1").arg(startAddr, 0, 16)
+			<< "to" << QString("0x%1").arg(startAddr + size - 1, 0, 16);
 	}
 
-	// Returns the device responsible for a given physical address.
-	BusInterface* resolveDevice(quint64 address) const {
-		for (const auto& mapping : mappings) {
-			if (address >= mapping.start && address <= mapping.end) {
-				return mapping.device;
+	BusInterface* findDevice(quint64 addr, quint64& relative) const {
+		for (const auto& m : mappings) {
+			if (m.contains(addr)) {
+				relative = m.getRelativeAddress(addr);
+				return m.device;
 			}
 		}
-		return nullptr; // No device found
+		return nullptr;
 	}
 
-	// Debug function to dump all mappings
-	void dumpMappings() const {
-		qDebug() << "[SystemBus] Device mappings:";
-		for (const auto& mapping : mappings) {
-			qDebug() << " -" << QString("0x%1").arg(mapping.start, 0, 16)
-				<< "to" << QString("0x%1").arg(mapping.end, 0, 16)
-				<< "=>" << mapping.device;
-		}
-	}
+
+
 
 private:
-	QVector<DeviceMapping> mappings; // List of device address mappings
-	mutable QMutex mutex;           // Protects mapping changes
+	QVector<DeviceMapping> mappings;
+	mutable QMutex mutex;
+	IRQController* m_irqController; 
 };
 
 #endif // SYSTEMBUS_H

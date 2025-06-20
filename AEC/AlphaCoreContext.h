@@ -1,6 +1,6 @@
 #pragma once
-#include "FpRegisterBankcls.h"
 #include "RegisterBank.h"
+#include "RegisterFileWrapper.h"
 
 #ifndef AlphaCoreContext_h__
 #define AlphaCoreContext_h__
@@ -10,7 +10,7 @@
 
 struct AlphaCoreContext {
 	RegisterBank intRegs;
-	FpRegisterBankcls fpRegs;
+	RegisterFileWrapper fpRegs;
 	quint64 pc = 0;
 	quint64 fpcr = 0;
 };
