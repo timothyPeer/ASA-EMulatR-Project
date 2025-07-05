@@ -1,17 +1,42 @@
-Copyright (C) 2025 Timothy Peer — (eNVy Systems, Inc.)
+# eNVy Systems Non-Commercial License (v1.0)
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+**Copyright (C) 2025 Timothy Peer (eNVy Systems, Inc.)**  
+Contact: peert@envysys.com
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Everyone is permitted to use, copy, modify, and distribute this software and its source code for personal, educational, and non-commercial purposes, under the conditions stated in this license. Commercial use of this software or its derivatives requires a separate commercial license from the copyright holder.
 
-You should have received a copy of the GNU General Public License
-along with the sources in this repository.  If not, see https://www.gnu.org/licenses/gpl-3.0.txt .
+---
 
-For commercial licensing (for proprietary or internal business use), please contact:
-Timothy Peer — (eNVy Systems, Inc.)Email: (peert@envysys.com)
+## 📜 Terms and Conditions
+
+### 1️⃣ Definitions
+- **Program**: any copyrightable work licensed under this License.
+- **Non-Commercial Use**: use that is not primarily intended for or directed toward commercial advantage or monetary compensation.
+- **Commercial Use**: any use, copying, distribution, or modification of the Program that is intended for or results in monetary compensation, financial gain, or commercial advantage.
+
+### 2️⃣ Permissions
+You are granted the following rights under this License for **non-commercial purposes**:
+- ✅ Use the Program on any number of machines.
+- ✅ Copy and distribute verbatim copies of the Program.
+- ✅ Modify the Program and distribute modified versions, provided that:
+  - You keep this License attached.
+  - You indicate clearly which parts you modified and the date of modification.
+
+### 3️⃣ Restrictions
+- 🚫 Commercial Use of this Program or derivatives is **prohibited** without a separate commercial license agreement from the copyright holder.
+- 🚫 You may not sublicense, sell, rent, or otherwise exploit the Program or derivatives for profit.
+- 🚫 You may not remove or obscure this License or copyright notices.
+
+### 4️⃣ Disclaimer of Warranty
+> THIS PROGRAM IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.  
+> THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.
+
+### 5️⃣ Termination
+If you violate the terms of this License, your rights under it will terminate automatically. You must then cease all use and distribution of the Program.
+
+---
+
+## 📧 Contact
+For inquiries about commercial licensing, please contact:  
+- 📧 (peert@envysys.com)  
+- 🌐 (http://envysys.com)
