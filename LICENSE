@@ -1,7 +1,7 @@
-# eNVy Systems Non-Commercial License (v1.0)
+# eNVy Systems Non-Commercial License (v1.1)
 
 **Copyright (C) 2025 Timothy Peer (eNVy Systems, Inc.)**  
-Contact: peert@envysys.com
+<your contact email or website>
 
 Everyone is permitted to use, copy, modify, and distribute this software and its source code for personal, educational, and non-commercial purposes, under the conditions stated in this license. Commercial use of this software or its derivatives requires a separate commercial license from the copyright holder.
 
@@ -21,6 +21,8 @@ You are granted the following rights under this License for **non-commercial pur
 - ✅ Modify the Program and distribute modified versions, provided that:
   - You keep this License attached.
   - You indicate clearly which parts you modified and the date of modification.
+  - You **do not remove or alter the original copyright,
+    license, author, or contributing authors.**
 
 ### 3️⃣ Restrictions
 - 🚫 Commercial Use of this Program or derivatives is **prohibited** without a separate commercial license agreement from the copyright holder.
@@ -36,7 +38,12 @@ If you violate the terms of this License, your rights under it will terminate au
 
 ---
 
+## 📋 Attribution
+> The original copyright, license, author, and contributing authors must not be changed or omitted in any distribution or derivative of the Program.
+
+---
+
 ## 📧 Contact
 For inquiries about commercial licensing, please contact:  
-- 📧 (peert@envysys.com)  
-- 🌐 (http://envysys.com)
+- 📧 peert@envysys.com 
+- 🌐 http://envysys.com
