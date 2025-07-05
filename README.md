@@ -51,7 +51,8 @@ Please see the [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) for guidelines.
 
 ## 📄 License
 
-This project will be released under an open-source license (to be decided — likely MIT or GPL).
+This software is licensed under the **eNVy Systems Non-Commercial License (v1.1)**.  
+See [LICENSE.md](LICENSE.md) for details.
 
 ---
 
