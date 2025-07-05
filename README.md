@@ -68,7 +68,12 @@ Thanks also to the OpenVMS, Tru64, and broader engineering communities for their
 If you’d like to collaborate, contribute, or just connect, feel free to:
 - Message me on [LinkedIn](https://www.linkedin.com/)
 - Open an issue in this repository
-- Or email me (email address to be added)
+- Or email me:
+
+📧 Contact: [peert@envysys.com](mailto:peert@envysys.com)  
+🌐 Website: [https://envysys.com](https://envysys.com)  
+🔗 Source Code: [https://github.com/timothyPeer/VirtualASA](https://github.com/timothyPeer/VirtualASA)
+
 
 ---
 
