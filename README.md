@@ -75,6 +75,7 @@ If you’d like to collaborate, contribute, or just connect, feel free to:
 🌐 Website: [https://envysys.com](https://envysys.com)  
 🔗 Source Code: [https://github.com/timothyPeer/VirtualASA](https://github.com/timothyPeer/VirtualASA)
 
+GitHub Wiki: [https://github.com/timothyPeer/VirtualASA/wiki](https://github.com/timothyPeer/VirtualASA/wiki)
 
 ---
 
