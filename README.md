@@ -1,7 +1,7 @@
 # VirtualASA
 # Virtual Alpha Platform
 
-An open-source, cross-platform **Virtual Alpha platform** designed to emulate the Alpha architecture and support legacy operating systems including **OpenVMS**, **Unix/Tru64**, and **Alpha-Linux**.
+An eNVy Systems non-commercial, cross-platform **Virtual Alpha platform** designed to emulate the Alpha architecture and support legacy operating systems including **OpenVMS**, **Unix/Tru64**, and **Alpha-Linux**.
 
 ---
 
@@ -15,11 +15,11 @@ Having spent decades as a DBA, Systems Administrator, and Software Engineer work
 
 ## 🎯 Goals
 
-✅ Open-source and freely available  
+✅ Non-Commercial for Education, Personal Use Only  
 ✅ Cross-platform (thanks to Qt)  
 ✅ Faithful to the Alpha architecture  
 ✅ Support for OpenVMS, Tru64 UNIX, and Alpha-Linux  
-✅ A platform for enthusiasts, historians, and engineers to explore and contribute
+✅ A platform for enthusiasts and engineers to explore and contribute
 
 ---
 
