@@ -1,5 +1,5 @@
-# VirtualASA
-# Virtual Alpha Platform
+# ASA-EmulatR  
+# A Virtual Alpha/VAX & Tru64 Platform
 
 An eNVy Systems non-commercial, cross-platform **Virtual Alpha platform** designed to emulate the Alpha architecture and support legacy operating systems including **OpenVMS**, **Unix/Tru64**, and **Alpha-Linux**.
 
@@ -81,5 +81,5 @@ GitHub Wiki: [https://github.com/timothyPeer/VirtualASA/wiki](https://github.com
 
 ## 🔖 Hashtags
 
-#OpenSource #AlphaAXP #OpenVMS #Tru64 #Linux #QtFramework #Emulation #LegacySystems
+#AlphaAXP #OpenVMS #Tru64 #Linux #QtFramework #Emulation #LegacySystems
 
