@@ -1,0 +1,1324 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Page 7</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="### Exception-Specific Implementation Details &nbsp;#### Memory Management Exceptions &nbsp;**TLB_MISS vs PTE_TLB_MISS** ```cpp void AlphaMemorySystem::HandleTLBMiss(uint64_t va, Acces" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "page-7.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Page 7</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?page-7.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      &raquo;No topics above this level&laquo;
+      </p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Page 7</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <span class="hmbtnprev"></span>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <span class="hmbtnnext"></span>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">### Exception-Specific Implementation Details</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Memory Management Exceptions</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">**TLB_MISS vs PTE_TLB_MISS**</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">void AlphaMemorySystem::HandleTLBMiss(uint64_t va, AccessType access) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// First level: Hardware TLB miss</p>
+<p class="p_Normal"> &nbsp; &nbsp;PageTableEntry pte = page_table.GetPTE(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (pte.valid) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// PTE exists and is valid - simple TLB reload# Alpha System Architecture: Exceptions, Interrupts &amp; Machine Checks Implementation Guide</p>
+<p class="p_Normal">*Complete Implementation Reference for ASA Chapter 14*</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Table of Contents</p>
+<p class="p_Normal">1. [Overview](#overview)</p>
+<p class="p_Normal">2. [PAL Instructions Catalog](#pal-instructions-catalog)</p>
+<p class="p_Normal">3. [Exception Handling](#exception-handling)</p>
+<p class="p_Normal">4. [Interrupt Processing](#interrupt-processing) &nbsp;</p>
+<p class="p_Normal">5. [Machine Check Handling](#machine-check-handling)</p>
+<p class="p_Normal">6. [Implementation Architecture](#implementation-architecture)</p>
+<p class="p_Normal">7. [Code Examples](#code-examples)</p>
+<p class="p_Normal">8. [Testing and Validation](#testing-and-validation)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Overview</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This document provides a complete implementation guide for Alpha System Architecture (ASA) Chapter 14 functionality, covering the three primary system event types:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">- **Exceptions**: Synchronous events caused by instruction execution</p>
+<p class="p_Normal">- **Interrupts**: Asynchronous external events requiring processor attention</p>
+<p class="p_Normal">- **Machine Checks**: Hardware error conditions requiring immediate handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Key Implementation Components</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The emulator requires these core components:</p>
+<p class="p_Normal">- **AlphaCPU**: Central processor state and control</p>
+<p class="p_Normal">- **AlphaMemorySystem**: Memory management and protection</p>
+<p class="p_Normal">- **InstructionGrain**: Individual instruction execution units</p>
+<p class="p_Normal">- **PALcode**: Privileged Architecture Library implementation</p>
+<p class="p_Normal">- **InterruptController**: Priority-based interrupt management</p>
+<p class="p_Normal">- **MachineCheckHandler**: Hardware error detection and recovery</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## PAL Instructions Catalog</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Complete PAL Instruction Set</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The following PAL instructions must be implemented for full ASA Chapter 14 compliance:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Memory Management PAL Instructions</p>
+<p class="p_Normal">- **LDQP** - Load Quadword Physical</p>
+<p class="p_Normal">- **STQP** - Store Quadword Physical &nbsp;</p>
+<p class="p_Normal">- **SWPCTX** - Swap Process Context</p>
+<p class="p_Normal">- **WRFEN** - Write Floating Enable</p>
+<p class="p_Normal">- **WRVPTPTR** - Write Virtual Page Table Pointer</p>
+<p class="p_Normal">- **SWPPAL** - Swap PALcode</p>
+<p class="p_Normal">- **RDPS** - Read Processor Status</p>
+<p class="p_Normal">- **WRKGP** - Write Kernel Global Pointer</p>
+<p class="p_Normal">- **WRFEN** - Write Floating Point Enable</p>
+<p class="p_Normal">- **WRUSP** - Write User Stack Pointer</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Exception/Interrupt PAL Instructions &nbsp;</p>
+<p class="p_Normal">- **REI** - Return from Exception or Interrupt</p>
+<p class="p_Normal">- **GENTRAP** - Generate Trap</p>
+<p class="p_Normal">- **RDUNIQUE** - Read Unique Process Identifier</p>
+<p class="p_Normal">- **WRUNIQUE** - Write Unique Process Identifier</p>
+<p class="p_Normal">- **BPT** - Breakpoint Trap</p>
+<p class="p_Normal">- **CALLSYS** - Call System Service</p>
+<p class="p_Normal">- **IMB** - Instruction Memory Barrier</p>
+<p class="p_Normal">- **RDTEB** - Read Thread Environment Block</p>
+<p class="p_Normal">- **WTINT** - Wait for Interrupt</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Machine Check PAL Instructions</p>
+<p class="p_Normal">- **MCHK** - Machine Check (implicit)</p>
+<p class="p_Normal">- **HALT** - Halt Processor</p>
+<p class="p_Normal">- **CFLUSH** - Cache Flush</p>
+<p class="p_Normal">- **DRAINA** - Drain Aborts</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### I/O and System PAL Instructions</p>
+<p class="p_Normal">- **MTPR** - Move To Processor Register</p>
+<p class="p_Normal">- **MFPR** - Move From Processor Register</p>
+<p class="p_Normal">- **HWLD** - Hardware Load</p>
+<p class="p_Normal">- **HWST** - Hardware Store</p>
+<p class="p_Normal">- **CSERVE** - Console Service</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Exception Handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Exception Types and Classification</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">enum class ExceptionCategory : quint8 {</p>
+<p class="p_Normal"> &nbsp; &nbsp;ACCESS_VIOLATION = 0, &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Accessing memory outside permissions (e.g., store to read-only)</p>
+<p class="p_Normal"> &nbsp; &nbsp;ARITHMETIC = 1, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Integer arithmetic fault (e.g., overflow, div-by-zero)</p>
+<p class="p_Normal"> &nbsp; &nbsp;ARITHMETIC_TRAP = 2,</p>
+<p class="p_Normal"> &nbsp; &nbsp;BREAKPOINT = 3, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Software or hardware breakpoint</p>
+<p class="p_Normal"> &nbsp; &nbsp;BREAKPOINT_TRAP = 4,</p>
+<p class="p_Normal"> &nbsp; &nbsp;CONTEXT_SWITCH = 5, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Internal kernel/emulator context switch</p>
+<p class="p_Normal"> &nbsp; &nbsp;EMULATOR = 6, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Emulator-specific trap (e.g., unsupported opcode)</p>
+<p class="p_Normal"> &nbsp; &nbsp;FAULT_ON_EXECUTE = 7,</p>
+<p class="p_Normal"> &nbsp; &nbsp;FAULT_ON_READ = 8,</p>
+<p class="p_Normal"> &nbsp; &nbsp;FAULT_ON_WRITE = 9,</p>
+<p class="p_Normal"> &nbsp; &nbsp;FCPR_TRAP = 10, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; IEEE 754 FP trap via FPCR flags</p>
+<p class="p_Normal"> &nbsp; &nbsp;FEN_FAULT = 11,</p>
+<p class="p_Normal"> &nbsp; &nbsp;FLOATING_POINT = 12, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;///&lt; Generic FP trap, if subcategory not used</p>
+<p class="p_Normal"> &nbsp; &nbsp;FLOATING_POINT_INEXACT = 13, &nbsp;///&lt; Rounding resulted in inexact value</p>
+<p class="p_Normal"> &nbsp; &nbsp;FLOATING_POINT_INVALID = 14, &nbsp;///&lt; Invalid FP operation (e.g., sqrt(-1))</p>
+<p class="p_Normal"> &nbsp; &nbsp;FLOATING_POINT_OVERFLOW = 15, ///&lt; Result exceeded FP format range</p>
+<p class="p_Normal"> &nbsp; &nbsp;FLOATING_POINT_UNDERFLOW = 16,///&lt; Result fell below normalized FP range</p>
+<p class="p_Normal"> &nbsp; &nbsp;GENTRAP = 17,</p>
+<p class="p_Normal"> &nbsp; &nbsp;INTEGER_OVERFLOW = 18, &nbsp; &nbsp; &nbsp; &nbsp;///&lt; 64-bit signed overflow (e.g., MULQ, ADDQ overflow)</p>
+<p class="p_Normal"> &nbsp; &nbsp;INTERRUPT = 19, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Asynchronous trap (e.g., timer, powerfail, etc.)</p>
+<p class="p_Normal"> &nbsp; &nbsp;MACHINE_CHECK = 20, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Hardware/system fatal error (e.g., cache/memory controller failure)</p>
+<p class="p_Normal"> &nbsp; &nbsp;MEMORY_ACCESS = 21, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; General memory access exception (e.g., read/write fault)</p>
+<p class="p_Normal"> &nbsp; &nbsp;MEMORY_FAULT = 22, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;///&lt; Virtual memory violation (e.g., page fault, protection fault)</p>
+<p class="p_Normal"> &nbsp; &nbsp;MEMORY_MANAGEMENT = 23, &nbsp; &nbsp; &nbsp; ///&lt; TLB invalidation or MMU-side trap</p>
+<p class="p_Normal"> &nbsp; &nbsp;OPCDEC_FAULT = 24,</p>
+<p class="p_Normal"> &nbsp; &nbsp;PRIVILEGE_VIOLATION = 25, &nbsp; &nbsp; ///&lt; Illegal use of privileged instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;PTE_TLB_MISS = 26, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Used handleTblMiss - If a TLB not found after walking PageTable</p>
+<p class="p_Normal"> &nbsp; &nbsp;RESERVED_OPERAND_FAULT = 27, &nbsp;///&lt; Used or decoded reserved field in instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;RESET = 28,</p>
+<p class="p_Normal"> &nbsp; &nbsp;SOFTWARE_INTERRUPT = 29,</p>
+<p class="p_Normal"> &nbsp; &nbsp;TLB_MISS = 30, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Used by TLB Fault Exceptions</p>
+<p class="p_Normal"> &nbsp; &nbsp;TRANSLATION_NOT_VALID = 31,</p>
+<p class="p_Normal"> &nbsp; &nbsp;UNALIGNED_ACCESS = 32,</p>
+<p class="p_Normal"> &nbsp; &nbsp;UNKNOWN = 33 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ///&lt; Used as fallback when no specific cause is detected</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Implementation Stack Layers</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 1. AlphaCPU Layer</p>
+<p class="p_Normal">**Responsibility**: Core exception detection and initial handling</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class AlphaCPU {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;ExceptionVector exception_vector;</p>
+<p class="p_Normal"> &nbsp; &nbsp;ProcessorStatus ps_register;</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t exc_addr;</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t exc_sum;</p>
+<p class="p_Normal"> &nbsp; &nbsp;FloatingPointControlRegister fpcr;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void RaiseException(ExceptionCategory type, uint64_t address, uint32_t summary);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void HandleException();</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool IsExceptionPending() const;</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptLevel GetExceptionIPL(ExceptionCategory type);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void AlphaCPU::RaiseException(ExceptionCategory type, uint64_t address, uint32_t summary) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Save exception context</p>
+<p class="p_Normal"> &nbsp; &nbsp;exc_addr = address;</p>
+<p class="p_Normal"> &nbsp; &nbsp;exc_sum = summary;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Set processor status based on exception type</p>
+<p class="p_Normal"> &nbsp; &nbsp;ps_register.cm = KERNEL_MODE; &nbsp;// Switch to kernel mode</p>
+<p class="p_Normal"> &nbsp; &nbsp;ps_register.ipl = GetExceptionIPL(type);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Special handling for specific exception types</p>
+<p class="p_Normal"> &nbsp; &nbsp;switch (type) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::CONTEXT_SWITCH:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Internal emulator exception - handle specially</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;HandleContextSwitch();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::EMULATOR:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Emulator-specific handling</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;HandleEmulatorTrap(summary);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_INEXACT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_INVALID:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_OVERFLOW:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_UNDERFLOW:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Check if FP traps are enabled in FPCR</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if (!fpcr.IsTrapsEnabled(type)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Trap disabled, set flag and continue</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;fpcr.SetFlag(type);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;default:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Vector to appropriate PAL entry point</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t pal_entry = exception_vector.GetEntryPoint(type);</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetPC(pal_entry);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Notify exception to higher layers</p>
+<p class="p_Normal"> &nbsp; &nbsp;NotifyExceptionHandlers(type, address, summary);</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">InterruptLevel AlphaCPU::GetExceptionIPL(ExceptionCategory type) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Exception IPL assignment based on priority</p>
+<p class="p_Normal"> &nbsp; &nbsp;switch (type) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::MACHINE_CHECK:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_7; &nbsp;// Highest priority</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::RESET:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_7;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::INTERRUPT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::SOFTWARE_INTERRUPT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_6; &nbsp;// High priority async events</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::ACCESS_VIOLATION:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::PRIVILEGE_VIOLATION:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_5; &nbsp;// Security violations</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::MEMORY_FAULT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::MEMORY_ACCESS:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::TRANSLATION_NOT_VALID:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::TLB_MISS:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::PTE_TLB_MISS:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_4; &nbsp;// Memory system faults</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::ARITHMETIC:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::ARITHMETIC_TRAP:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::INTEGER_OVERFLOW:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_INEXACT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_INVALID:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_OVERFLOW:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FLOATING_POINT_UNDERFLOW:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case ExceptionCategory::FCPR_TRAP:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_3; &nbsp;// Arithmetic faults</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;default:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return IPL_2; &nbsp;// Default level for other exceptions</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 2. InstructionGrain Layer</p>
+<p class="p_Normal">**Responsibility**: Instruction-specific exception detection</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class InstructionGrain {</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual ExecutionResult Execute(AlphaCPU* cpu) = 0;</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual bool CanCauseException() const = 0;</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual ExceptionCategory GetPossibleExceptions() const = 0;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">protected:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void CheckForExceptions(AlphaCPU* cpu, const ExecutionContext&amp; ctx);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void ValidateOperands(AlphaCPU* cpu, const Instruction&amp; inst);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void InstructionGrain::CheckForExceptions(AlphaCPU* cpu, const ExecutionContext&amp; ctx) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for privilege violations</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsPrivilegedInstruction() &amp;&amp; cpu-&gt;GetMode() == USER_MODE) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::PRIVILEGE_VIOLATION, ctx.pc, GetInstructionCode());</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for reserved operand usage</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (HasReservedOperand()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::RESERVED_OPERAND_FAULT, ctx.pc, GetOperandMask());</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check alignment for memory operations</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsMemoryOperation() &amp;&amp; (ctx.address &amp; GetAlignmentMask()) != 0) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::UNALIGNED_ACCESS, ctx.address, GetInstructionSummary());</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for invalid instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!IsValidInstruction()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::OPCDEC_FAULT, ctx.pc, 0);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for FP enable faults</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsFloatingPointInstruction() &amp;&amp; !cpu-&gt;GetFPEnable()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::FEN_FAULT, ctx.pc, 0);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Arithmetic operation checks</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsIntegerArithmetic()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;CheckIntegerArithmetic(cpu, ctx);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsFloatingPointOperation()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;CheckFloatingPointOperation(cpu, ctx);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void InstructionGrain::CheckIntegerArithmetic(AlphaCPU* cpu, const ExecutionContext&amp; ctx) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Example for ADDQ with overflow checking</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (GetOpcode() == ADDQ_OPCODE) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;int64_t op1 = GetOperand1();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;int64_t op2 = GetOperand2();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// Check for signed overflow</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if ((op1 &gt; 0 &amp;&amp; op2 &gt; 0 &amp;&amp; op1 &gt; INT64_MAX - op2) ||</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(op1 &lt; 0 &amp;&amp; op2 &lt; 0 &amp;&amp; op1 &lt; INT64_MIN - op2)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::INTEGER_OVERFLOW, ctx.pc, </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(static_cast&lt;uint32_t&gt;(op1 &gt;&gt; 32) &lt;&lt; 16) | (op2 &gt;&gt; 32));</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Division by zero check</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsDivisionInstruction() &amp;&amp; GetDivisor() == 0) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::ARITHMETIC, ctx.pc, DIVISION_BY_ZERO);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void InstructionGrain::CheckFloatingPointOperation(AlphaCPU* cpu, const ExecutionContext&amp; ctx) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;FloatingPointControlRegister fpcr = cpu-&gt;GetFPCR();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Get FP operands and check for special cases</p>
+<p class="p_Normal"> &nbsp; &nbsp;double op1 = GetFPOperand1();</p>
+<p class="p_Normal"> &nbsp; &nbsp;double op2 = GetFPOperand2();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for invalid operations</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (std::isnan(op1) || std::isnan(op2)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (GetOpcode() != CPYS_OPCODE) { &nbsp;// CPYS allows NaN propagation</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if (fpcr.IsTrapsEnabled(INVALID_OPERATION)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::FLOATING_POINT_INVALID, ctx.pc, INVALID_NAN);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for sqrt of negative number</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (GetOpcode() == SQRTS_OPCODE &amp;&amp; op1 &lt; 0) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (fpcr.IsTrapsEnabled(INVALID_OPERATION)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::FLOATING_POINT_INVALID, ctx.pc, INVALID_SQRT);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Division by zero check for FP</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (IsFPDivision() &amp;&amp; op2 == 0.0) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (fpcr.IsTrapsEnabled(DIVISION_BY_ZERO)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;cpu-&gt;RaiseException(ExceptionCategory::FLOATING_POINT_INVALID, ctx.pc, FP_DIV_BY_ZERO);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 3. AlphaMemorySystem Layer</p>
+<p class="p_Normal">**Responsibility**: Memory-related exception detection</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class AlphaMemorySystem {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;TranslationBuffer tlb;</p>
+<p class="p_Normal"> &nbsp; &nbsp;PageTable page_table;</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryProtection protection;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryResult ReadQuadword(uint64_t va, uint64_t&amp; data);</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryResult WriteQuadword(uint64_t va, uint64_t data);</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryResult FetchInstruction(uint64_t va, uint32_t&amp; instruction);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool TranslateAddress(uint64_t va, uint64_t&amp; pa, AccessType access);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void HandleTLBMiss(uint64_t va, AccessType access);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void HandlePageTableWalk(uint64_t va, AccessType access);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">MemoryResult AlphaMemorySystem::ReadQuadword(uint64_t va, uint64_t&amp; data) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t pa;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check TLB first</p>
+<p class="p_Normal"> &nbsp; &nbsp;TLBEntry* tlb_entry = tlb.Lookup(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (tlb_entry == nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// TLB miss - attempt page table walk</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;HandleTLBMiss(va, ACCESS_READ);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;tlb_entry = tlb.Lookup(va); &nbsp;// Try again after PT walk</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (tlb_entry == nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::TLB_MISS, va, READ_ACCESS);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check page permissions</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!tlb_entry-&gt;CanRead(GetCurrentMode())) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::ACCESS_VIOLATION, va, READ_VIOLATION);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check page validity</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!tlb_entry-&gt;valid) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::TRANSLATION_NOT_VALID, va, READ_ACCESS);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Calculate physical address</p>
+<p class="p_Normal"> &nbsp; &nbsp;pa = tlb_entry-&gt;GetPhysicalAddress(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Perform physical memory access</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryResult result = ReadPhysical(pa, data);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (result == MEMORY_ERROR) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::FAULT_ON_READ, va, MEMORY_ERROR_CODE);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return result;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">MemoryResult AlphaMemorySystem::WriteQuadword(uint64_t va, uint64_t data) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t pa;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Similar TLB lookup</p>
+<p class="p_Normal"> &nbsp; &nbsp;TLBEntry* tlb_entry = tlb.Lookup(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (tlb_entry == nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;HandleTLBMiss(va, ACCESS_WRITE);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;tlb_entry = tlb.Lookup(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (tlb_entry == nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::TLB_MISS, va, WRITE_ACCESS);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check write permissions</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!tlb_entry-&gt;CanWrite(GetCurrentMode())) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::ACCESS_VIOLATION, va, WRITE_VIOLATION);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for copy-on-write</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (tlb_entry-&gt;copy_on_write) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;HandleCopyOnWrite(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// Reload TLB entry after COW handling</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;tlb_entry = tlb.Lookup(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;pa = tlb_entry-&gt;GetPhysicalAddress(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Perform physical write</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryResult result = WritePhysical(pa, data);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (result == MEMORY_ERROR) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::FAULT_ON_WRITE, va, MEMORY_ERROR_CODE);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return result;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">MemoryResult AlphaMemorySystem::FetchInstruction(uint64_t va, uint32_t&amp; instruction) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t pa;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check instruction fetch permissions</p>
+<p class="p_Normal"> &nbsp; &nbsp;TLBEntry* tlb_entry = tlb.Lookup(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (tlb_entry == nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;HandleTLBMiss(va, ACCESS_EXECUTE);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;tlb_entry = tlb.Lookup(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (tlb_entry == nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::TLB_MISS, va, EXECUTE_ACCESS);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check execute permissions</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!tlb_entry-&gt;CanExecute(GetCurrentMode())) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::FAULT_ON_EXECUTE, va, EXECUTE_VIOLATION);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;pa = tlb_entry-&gt;GetPhysicalAddress(va);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Fetch instruction from physical memory</p>
+<p class="p_Normal"> &nbsp; &nbsp;MemoryResult result = ReadPhysical32(pa, instruction);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (result == MEMORY_ERROR) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::FAULT_ON_EXECUTE, va, FETCH_ERROR);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return MEMORY_FAULT;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return result;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void AlphaMemorySystem::HandleTLBMiss(uint64_t va, AccessType access) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Perform page table walk</p>
+<p class="p_Normal"> &nbsp; &nbsp;PageTableWalkResult walk_result = page_table.Walk(va, access);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;switch (walk_result.status) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case PT_WALK_SUCCESS:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Add entry to TLB</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;tlb.Insert(va, walk_result.pte);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case PT_WALK_INVALID_PTE:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Page table entry not valid</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::PTE_TLB_MISS, va, access);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case PT_WALK_ACCESS_DENIED:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Access denied by page permissions</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::ACCESS_VIOLATION, va, access);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;case PT_WALK_MEMORY_FAULT:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Error reading page table itself</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RaiseException(ExceptionCategory::MEMORY_MANAGEMENT, va, PT_READ_ERROR);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Exception Handler Structure</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### PAL Exception Entry Points</p>
+<p class="p_Normal">```assembly</p>
+<p class="p_Normal"># Exception entry point template - customized for each exception type</p>
+<p class="p_Normal">.align 4</p>
+<p class="p_Normal">exception_entry:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Save minimal processor state</p>
+<p class="p_Normal"> &nbsp; &nbsp;mtpr &nbsp; &nbsp;r0, pt0 &nbsp; &nbsp; &nbsp; &nbsp; # Save R0 </p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r0, exc_addr &nbsp; &nbsp;# Get exception address</p>
+<p class="p_Normal"> &nbsp; &nbsp;mtpr &nbsp; &nbsp;r1, pt1 &nbsp; &nbsp; &nbsp; &nbsp; # Save R1</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r1, exc_sum &nbsp; &nbsp; # Get exception summary</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Extract exception type from summary</p>
+<p class="p_Normal"> &nbsp; &nbsp;srl &nbsp; &nbsp; r1, #24, r2 &nbsp; &nbsp; # Extract exception type</p>
+<p class="p_Normal"> &nbsp; &nbsp;cmpult &nbsp;r2, #34, r0 &nbsp; &nbsp; # Check against max exception count</p>
+<p class="p_Normal"> &nbsp; &nbsp;beq &nbsp; &nbsp; r0, unknown_exception</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Jump to specific handler based on exception type</p>
+<p class="p_Normal"> &nbsp; &nbsp;s8addl &nbsp;r2, zero, r0 &nbsp; &nbsp;# Calculate table offset (*8)</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; r0, exception_dispatch_table(r0)</p>
+<p class="p_Normal"> &nbsp; &nbsp;ldq &nbsp; &nbsp; r0, 0(r0) &nbsp; &nbsp; &nbsp; # Load handler address</p>
+<p class="p_Normal"> &nbsp; &nbsp;jmp &nbsp; &nbsp; zero, (r0) &nbsp; &nbsp; &nbsp;# Jump to specific handler</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"># Exception dispatch table</p>
+<p class="p_Normal">exception_dispatch_table:</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_access_violation &nbsp; &nbsp; &nbsp;# 0</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_arithmetic &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # 1</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_arithmetic_trap &nbsp; &nbsp; &nbsp;# 2</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_breakpoint &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # 3</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_breakpoint_trap &nbsp; &nbsp; &nbsp;# 4</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_context_switch &nbsp; &nbsp; &nbsp; # 5</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_emulator_trap &nbsp; &nbsp; &nbsp; &nbsp;# 6</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fault_on_execute &nbsp; &nbsp; # 7</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fault_on_read &nbsp; &nbsp; &nbsp; &nbsp;# 8</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fault_on_write &nbsp; &nbsp; &nbsp; # 9</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fpcr_trap &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# 10</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fen_fault &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# 11</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_floating_point &nbsp; &nbsp; &nbsp; # 12</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fp_inexact &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # 13</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fp_invalid &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # 14</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fp_overflow &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# 15</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_fp_underflow &nbsp; &nbsp; &nbsp; &nbsp; # 16</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_gentrap &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# 17</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_integer_overflow &nbsp; &nbsp; # 18</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_interrupt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# 19</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_machine_check &nbsp; &nbsp; &nbsp; &nbsp;# 20</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_memory_access &nbsp; &nbsp; &nbsp; &nbsp;# 21</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_memory_fault &nbsp; &nbsp; &nbsp; &nbsp; # 22</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_memory_management &nbsp; &nbsp;# 23</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_opcdec_fault &nbsp; &nbsp; &nbsp; &nbsp; # 24</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_privilege_violation &nbsp;# 25</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_pte_tlb_miss &nbsp; &nbsp; &nbsp; &nbsp;# 26</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_reserved_operand &nbsp; &nbsp; # 27</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_reset &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # 28</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_software_interrupt &nbsp;# 29</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_tlb_miss &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# 30</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_translation_invalid # 31</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_unaligned_access &nbsp; &nbsp;# 32</p>
+<p class="p_Normal"> &nbsp; &nbsp;.quad &nbsp; handle_unknown &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # 33</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"># Specific exception handlers</p>
+<p class="p_Normal">handle_access_violation:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Save full processor context</p>
+<p class="p_Normal"> &nbsp; &nbsp;bsr &nbsp; &nbsp; ra, save_full_context</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Get fault details</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r16, exc_addr &nbsp; # Faulting address</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r17, exc_sum &nbsp; &nbsp;# Access type and details</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Call OS memory manager</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; r27, mm_access_violation</p>
+<p class="p_Normal"> &nbsp; &nbsp;jsr &nbsp; &nbsp; ra, (r27)</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Check return code - if handled, return to user</p>
+<p class="p_Normal"> &nbsp; &nbsp;beq &nbsp; &nbsp; r0, restore_and_rei</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Unhandled - signal process</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; r16, SIGSEGV</p>
+<p class="p_Normal"> &nbsp; &nbsp;bsr &nbsp; &nbsp; ra, deliver_signal</p>
+<p class="p_Normal"> &nbsp; &nbsp;br &nbsp; &nbsp; &nbsp;zero, restore_and_rei</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">handle_tlb_miss:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Fast path TLB miss handler</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r0, exc_addr &nbsp; &nbsp;# Get faulting VA</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r1, ptbr &nbsp; &nbsp; &nbsp; &nbsp;# Get page table base</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Calculate PTE address</p>
+<p class="p_Normal"> &nbsp; &nbsp;srl &nbsp; &nbsp; r0, #13, r2 &nbsp; &nbsp; # VA &gt;&gt; 13 = VPN</p>
+<p class="p_Normal"> &nbsp; &nbsp;s8addq &nbsp;r2, r1, r1 &nbsp; &nbsp; # PTE addr = PTBR + VPN*8</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Load PTE</p>
+<p class="p_Normal"> &nbsp; &nbsp;ldq_p &nbsp; r2, 0(r1) &nbsp; &nbsp; &nbsp;# Load PTE (physical)</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Check if PTE is valid</p>
+<p class="p_Normal"> &nbsp; &nbsp;and &nbsp; &nbsp; r2, #1, r3 &nbsp; &nbsp; # Check valid bit</p>
+<p class="p_Normal"> &nbsp; &nbsp;beq &nbsp; &nbsp; r3, slow_path_tlb_miss</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Insert into TLB</p>
+<p class="p_Normal"> &nbsp; &nbsp;mtpr &nbsp; &nbsp;r0, tlb_tag &nbsp; &nbsp;# Set TLB tag</p>
+<p class="p_Normal"> &nbsp; &nbsp;mtpr &nbsp; &nbsp;r2, tlb_data &nbsp; # Set TLB data</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Return from exception</p>
+<p class="p_Normal"> &nbsp; &nbsp;rei</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">slow_path_tlb_miss:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Complex page fault handling</p>
+<p class="p_Normal"> &nbsp; &nbsp;bsr &nbsp; &nbsp; ra, save_full_context</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; r27, handle_page_fault</p>
+<p class="p_Normal"> &nbsp; &nbsp;jsr &nbsp; &nbsp; ra, (r27)</p>
+<p class="p_Normal"> &nbsp; &nbsp;br &nbsp; &nbsp; &nbsp;zero, restore_and_rei</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">handle_unaligned_access:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Save context</p>
+<p class="p_Normal"> &nbsp; &nbsp;bsr &nbsp; &nbsp; ra, save_minimal_context</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Get instruction that caused fault</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r16, exc_addr</p>
+<p class="p_Normal"> &nbsp; &nbsp;subq &nbsp; &nbsp;r16, #4, r16 &nbsp; # PC of faulting instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;ldl &nbsp; &nbsp; r17, 0(r16) &nbsp; &nbsp;# Load faulting instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Call unaligned access emulation</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; r27, emulate_unaligned</p>
+<p class="p_Normal"> &nbsp; &nbsp;jsr &nbsp; &nbsp; ra, (r27)</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# If emulation successful, continue</p>
+<p class="p_Normal"> &nbsp; &nbsp;bne &nbsp; &nbsp; r0, restore_and_rei</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Emulation failed - signal process</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; r16, SIGBUS</p>
+<p class="p_Normal"> &nbsp; &nbsp;bsr &nbsp; &nbsp; ra, deliver_signal</p>
+<p class="p_Normal"> &nbsp; &nbsp;br &nbsp; &nbsp; &nbsp;zero, restore_and_rei</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Interrupt Processing</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Interrupt Priority Levels (IPL)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The Alpha architecture defines 8 interrupt priority levels:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">enum class InterruptLevel {</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_0 = 0, &nbsp;// User mode, all interrupts enabled</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_1 = 1, &nbsp;// Software level 1</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_2 = 2, &nbsp;// Software level 2 &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_3 = 3, &nbsp;// Clock/timer interrupts</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_4 = 4, &nbsp;// I/O device interrupts</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_5 = 5, &nbsp;// I/O device interrupts</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_6 = 6, &nbsp;// Real-time clock</p>
+<p class="p_Normal"> &nbsp; &nbsp;IPL_7 = 7 &nbsp; // High priority/power fail</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Interrupt Controller Implementation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class InterruptController {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;QMultiHash&lt;int, InterruptRequest&gt; interrupt_queue;</p>
+<p class="p_Normal"> &nbsp; &nbsp;std::array&lt;bool, 8&gt; ipl_masks;</p>
+<p class="p_Normal"> &nbsp; &nbsp;int current_ipl;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void PostInterrupt(InterruptLevel level, uint32_t vector, void* data);</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptRequest* GetHighestPriorityInterrupt();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void SetIPL(InterruptLevel new_ipl);</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool HasPendingInterrupts() const;</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void InterruptController::PostInterrupt(InterruptLevel level, uint32_t vector, void* data) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptRequest req;</p>
+<p class="p_Normal"> &nbsp; &nbsp;req.level = level;</p>
+<p class="p_Normal"> &nbsp; &nbsp;req.vector = vector;</p>
+<p class="p_Normal"> &nbsp; &nbsp;req.data = data;</p>
+<p class="p_Normal"> &nbsp; &nbsp;req.timestamp = GetSystemTicks();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Queue interrupt by priority (higher IPL = higher priority)</p>
+<p class="p_Normal"> &nbsp; &nbsp;interrupt_queue.insert(static_cast&lt;int&gt;(level), req);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Signal processor if interrupt can be delivered</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (static_cast&lt;int&gt;(level) &gt; current_ipl) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;SignalInterruptPending();</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">InterruptRequest* InterruptController::GetHighestPriorityInterrupt() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Find highest priority pending interrupt</p>
+<p class="p_Normal"> &nbsp; &nbsp;for (int ipl = 7; ipl &gt; current_ipl; ipl--) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (interrupt_queue.contains(ipl)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;auto it = interrupt_queue.find(ipl);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;InterruptRequest* req = &amp;it.value();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;interrupt_queue.erase(it);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return req;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;return nullptr;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Interrupt Raising Example</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Device Interrupt Sequence</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">// Example: Serial port raises interrupt when data ready</p>
+<p class="p_Normal">class SerialPortDevice {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptController* int_controller;</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint32_t device_vector;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void OnDataReady() {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// Post interrupt at IPL 4 (device level)</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;int_controller-&gt;PostInterrupt(IPL_4, device_vector, this);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// CPU periodically checks for interrupts</p>
+<p class="p_Normal">void AlphaCPU::CheckInterrupts() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!interrupt_controller-&gt;HasPendingInterrupts()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptRequest* req = interrupt_controller-&gt;GetHighestPriorityInterrupt();</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (req != nullptr) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;DeliverInterrupt(req);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void AlphaCPU::DeliverInterrupt(InterruptRequest* req) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Save current processor state</p>
+<p class="p_Normal"> &nbsp; &nbsp;SaveProcessorState();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Raise IPL to interrupt level</p>
+<p class="p_Normal"> &nbsp; &nbsp;int old_ipl = GetIPL();</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetIPL(req-&gt;level);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Vector to interrupt handler</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t handler_address = GetInterruptVector(req-&gt;vector);</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetPC(handler_address);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Switch to kernel mode</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetMode(KERNEL_MODE);</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Timer Interrupt Handler Example</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">// Timer interrupt handler (IPL 3)</p>
+<p class="p_Normal">void HandleTimerInterrupt() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Acknowledge timer interrupt</p>
+<p class="p_Normal"> &nbsp; &nbsp;AckTimerInterrupt();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Update system time</p>
+<p class="p_Normal"> &nbsp; &nbsp;UpdateSystemClock();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for process quantum expiration &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (--current_process-&gt;quantum &lt;= 0) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;ScheduleProcessSwitch();</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Re-enable interrupts and return</p>
+<p class="p_Normal"> &nbsp; &nbsp;REI(); &nbsp;// Return from Exception/Interrupt</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### IPL Management and Events</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Events That Change IPL</p>
+<p class="p_Normal">1. **Interrupt Delivery**: IPL raised to interrupt level</p>
+<p class="p_Normal">2. **Exception Entry**: IPL raised to exception level &nbsp;</p>
+<p class="p_Normal">3. **PAL Code Entry**: IPL raised to appropriate level</p>
+<p class="p_Normal">4. **Explicit MTPR**: Software sets IPL directly</p>
+<p class="p_Normal">5. **REI Instruction**: IPL restored from saved state</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### IPL Change Implementation</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">void AlphaCPU::SetIPL(InterruptLevel new_ipl) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;int old_ipl = current_ipl;</p>
+<p class="p_Normal"> &nbsp; &nbsp;current_ipl = static_cast&lt;int&gt;(new_ipl);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Update processor status register</p>
+<p class="p_Normal"> &nbsp; &nbsp;ps_register.ipl = current_ipl;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Notify interrupt controller</p>
+<p class="p_Normal"> &nbsp; &nbsp;interrupt_controller-&gt;SetIPL(new_ipl);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check if lowering IPL allows pending interrupts</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (current_ipl &lt; old_ipl) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;CheckInterrupts();</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Machine Check Handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Machine Check Types</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">enum class MachineCheckType {</p>
+<p class="p_Normal"> &nbsp; &nbsp;SYSTEM_CORRECTABLE = 0x0001,</p>
+<p class="p_Normal"> &nbsp; &nbsp;SYSTEM_UNCORRECTABLE = 0x0002,</p>
+<p class="p_Normal"> &nbsp; &nbsp;CPU_CORRECTABLE = 0x0004,</p>
+<p class="p_Normal"> &nbsp; &nbsp;CPU_UNCORRECTABLE = 0x0008,</p>
+<p class="p_Normal"> &nbsp; &nbsp;CACHE_TAG_ERROR = 0x0010,</p>
+<p class="p_Normal"> &nbsp; &nbsp;CACHE_DATA_ERROR = 0x0020,</p>
+<p class="p_Normal"> &nbsp; &nbsp;MEMORY_ECC_ERROR = 0x0040,</p>
+<p class="p_Normal"> &nbsp; &nbsp;BUS_ERROR = 0x0080,</p>
+<p class="p_Normal"> &nbsp; &nbsp;TIMEOUT_ERROR = 0x0100</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Machine Check Handler Architecture</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Machine checks are handled at multiple levels:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 1. Hardware Detection Layer</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class MachineCheckDetector {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;std::vector&lt;ErrorSource&gt; error_sources;</p>
+<p class="p_Normal"> &nbsp; &nbsp;MachineCheckHandler* handler;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void RegisterErrorSource(ErrorSource* source);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void CheckForErrors();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void ReportMachineCheck(MachineCheckType type, uint64_t address, uint32_t syndrome);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">class ErrorSource {</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual bool HasError() = 0;</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual MachineCheckInfo GetErrorInfo() = 0;</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual bool IsCorrectable() = 0;</p>
+<p class="p_Normal"> &nbsp; &nbsp;virtual void ClearError() = 0;</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Example: Memory ECC error source</p>
+<p class="p_Normal">class MemoryECCErrorSource : public ErrorSource {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t error_address;</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint32_t ecc_syndrome;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool error_detected;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool HasError() override {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return error_detected;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;MachineCheckInfo GetErrorInfo() override {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;MachineCheckInfo info;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;info.type = MEMORY_ECC_ERROR;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;info.address = error_address;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;info.syndrome = ecc_syndrome;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;info.correctable = IsCorrectableECC(ecc_syndrome);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return info;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 2. CPU Layer Machine Check Handling</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">void AlphaCPU::HandleMachineCheck(const MachineCheckInfo&amp; info) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Save machine check context</p>
+<p class="p_Normal"> &nbsp; &nbsp;mchk_code = info.type;</p>
+<p class="p_Normal"> &nbsp; &nbsp;mchk_addr = info.address;</p>
+<p class="p_Normal"> &nbsp; &nbsp;mchk_syndrome = info.syndrome;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Set highest IPL (7) to prevent interrupts</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetIPL(IPL_7);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Vector to machine check PAL entry point</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t mchk_entry = pal_base + MCHK_ENTRY_OFFSET;</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetPC(mchk_entry);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Switch to kernel mode</p>
+<p class="p_Normal"> &nbsp; &nbsp;SetMode(KERNEL_MODE);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Log error for diagnosis</p>
+<p class="p_Normal"> &nbsp; &nbsp;LogMachineCheck(info);</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 3. PAL Machine Check Handler</p>
+<p class="p_Normal">```assembly</p>
+<p class="p_Normal"># Machine check PAL entry point</p>
+<p class="p_Normal">mchk_entry:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Save all registers</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; sp, -MCHK_FRAME_SIZE(sp)</p>
+<p class="p_Normal"> &nbsp; &nbsp;stq &nbsp; &nbsp; r0, 0(sp)</p>
+<p class="p_Normal"> &nbsp; &nbsp;stq &nbsp; &nbsp; r1, 8(sp)</p>
+<p class="p_Normal"> &nbsp; &nbsp;# ... save all registers ...</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Get machine check information</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r0, mchk_code</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r1, mchk_addr</p>
+<p class="p_Normal"> &nbsp; &nbsp;mfpr &nbsp; &nbsp;r2, mchk_syndrome</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Determine if error is correctable</p>
+<p class="p_Normal"> &nbsp; &nbsp;and &nbsp; &nbsp; r0, #CORRECTABLE_MASK, r3</p>
+<p class="p_Normal"> &nbsp; &nbsp;bne &nbsp; &nbsp; r3, correctable_error</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Uncorrectable error - prepare for system halt</p>
+<p class="p_Normal"> &nbsp; &nbsp;jsr &nbsp; &nbsp; ra, uncorrectable_mchk_handler</p>
+<p class="p_Normal"> &nbsp; &nbsp;br &nbsp; &nbsp; &nbsp;zero, system_halt</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">correctable_error:</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Log error and continue</p>
+<p class="p_Normal"> &nbsp; &nbsp;jsr &nbsp; &nbsp; ra, correctable_mchk_handler</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Restore registers and return</p>
+<p class="p_Normal"> &nbsp; &nbsp;ldq &nbsp; &nbsp; r0, 0(sp)</p>
+<p class="p_Normal"> &nbsp; &nbsp;ldq &nbsp; &nbsp; r1, 8(sp)</p>
+<p class="p_Normal"> &nbsp; &nbsp;# ... restore all registers ...</p>
+<p class="p_Normal"> &nbsp; &nbsp;lda &nbsp; &nbsp; sp, MCHK_FRAME_SIZE(sp)</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;# Return from machine check</p>
+<p class="p_Normal"> &nbsp; &nbsp;rei</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### 4. System-Level Error Handling</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class SystemMachineCheckHandler {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;ErrorLog error_log;</p>
+<p class="p_Normal"> &nbsp; &nbsp;ErrorRecovery recovery_manager;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void HandleCorrectableError(const MachineCheckInfo&amp; info);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void HandleUncorrectableError(const MachineCheckInfo&amp; info);</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool AttemptErrorRecovery(const MachineCheckInfo&amp; info);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void SystemMachineCheckHandler::HandleCorrectableError(const MachineCheckInfo&amp; info) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Log the error for trending</p>
+<p class="p_Normal"> &nbsp; &nbsp;error_log.LogError(info);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Attempt to fix the error</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (info.type == MEMORY_ECC_ERROR) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// Scrub memory location to fix single-bit error</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;memory_system-&gt;ScrubMemory(info.address);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Update error counters</p>
+<p class="p_Normal"> &nbsp; &nbsp;error_counters[info.type]++;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check if error rate is increasing</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (error_counters[info.type] &gt; ERROR_THRESHOLD) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;TakePreventiveAction(info.type);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void SystemMachineCheckHandler::HandleUncorrectableError(const MachineCheckInfo&amp; info) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Critical error - attempt recovery</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!AttemptErrorRecovery(info)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;// Recovery failed - system must halt</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;PrepareSystemHalt(info);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;SystemHalt();</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Implementation Architecture</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Component Integration</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">```mermaid</p>
+<p class="p_Normal">graph TD</p>
+<p class="p_Normal"> &nbsp; &nbsp;A[InstructionGrain] --&gt; B[AlphaCPU]</p>
+<p class="p_Normal"> &nbsp; &nbsp;C[AlphaMemorySystem] --&gt; B</p>
+<p class="p_Normal"> &nbsp; &nbsp;B --&gt; D[InterruptController]</p>
+<p class="p_Normal"> &nbsp; &nbsp;B --&gt; E[MachineCheckHandler]</p>
+<p class="p_Normal"> &nbsp; &nbsp;D --&gt; F[PALcode]</p>
+<p class="p_Normal"> &nbsp; &nbsp;E --&gt; F</p>
+<p class="p_Normal"> &nbsp; &nbsp;F --&gt; G[ExceptionHandlers]</p>
+<p class="p_Normal"> &nbsp; &nbsp;F --&gt; H[InterruptHandlers] &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;F --&gt; I[MachineCheckHandlers]</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Key Interfaces</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">// Main system interface</p>
+<p class="p_Normal">class AlphaSystemEmulator {</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;AlphaCPU cpu;</p>
+<p class="p_Normal"> &nbsp; &nbsp;AlphaMemorySystem memory;</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptController int_controller;</p>
+<p class="p_Normal"> &nbsp; &nbsp;MachineCheckHandler mchk_handler;</p>
+<p class="p_Normal"> &nbsp; &nbsp;PALcodeImplementation palcode;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void Initialize();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void ExecuteCycle();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void HandleSystemEvent(SystemEvent event);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void AlphaSystemEmulator::ExecuteCycle() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for pending machine checks (highest priority)</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (mchk_handler.HasPendingMachineCheck()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;MachineCheckInfo info = mchk_handler.GetPendingMachineCheck();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu.HandleMachineCheck(info);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Check for pending interrupts</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (int_controller.HasPendingInterrupts()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;InterruptRequest* req = int_controller.GetHighestPriorityInterrupt();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (req != nullptr &amp;&amp; req-&gt;level &gt; cpu.GetIPL()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;cpu.DeliverInterrupt(req);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Execute next instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;try {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu.ExecuteNextInstruction();</p>
+<p class="p_Normal"> &nbsp; &nbsp;} catch (const AlphaException&amp; ex) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;cpu.RaiseException(ex.GetType(), ex.GetAddress(), ex.GetSummary());</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Testing and Validation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Test Cases</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Exception Testing</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">class ExceptionTester {</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void TestUnalignedAccess();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void TestAccessViolation();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void TestInvalidInstruction();</p>
+<p class="p_Normal"> &nbsp; &nbsp;void TestArithmeticTrap();</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">void ExceptionTester::TestUnalignedAccess() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Setup: Create unaligned memory access</p>
+<p class="p_Normal"> &nbsp; &nbsp;AlphaCPU cpu;</p>
+<p class="p_Normal"> &nbsp; &nbsp;AlphaMemorySystem memory;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Try to load quadword from unaligned address</p>
+<p class="p_Normal"> &nbsp; &nbsp;uint64_t unaligned_addr = 0x1000 + 1; &nbsp;// Not 8-byte aligned</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Execute load instruction</p>
+<p class="p_Normal"> &nbsp; &nbsp;LoadQuadwordInstruction ldq(R1, unaligned_addr);</p>
+<p class="p_Normal"> &nbsp; &nbsp;ExecutionResult result = ldq.Execute(&amp;cpu);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Verify exception was raised</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(result.exception_raised);</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(result.exception_type == UNALIGNED_ACCESS);</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(result.exception_address == unaligned_addr);</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Interrupt Testing</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">void TestInterruptPriority() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptController controller;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Post interrupts at different levels</p>
+<p class="p_Normal"> &nbsp; &nbsp;controller.PostInterrupt(IPL_3, TIMER_VECTOR, nullptr);</p>
+<p class="p_Normal"> &nbsp; &nbsp;controller.PostInterrupt(IPL_6, CLOCK_VECTOR, nullptr);</p>
+<p class="p_Normal"> &nbsp; &nbsp;controller.PostInterrupt(IPL_4, DEVICE_VECTOR, nullptr);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Set CPU at IPL 2</p>
+<p class="p_Normal"> &nbsp; &nbsp;controller.SetIPL(IPL_2);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Highest priority interrupt should be IPL 6</p>
+<p class="p_Normal"> &nbsp; &nbsp;InterruptRequest* req = controller.GetHighestPriorityInterrupt();</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(req-&gt;level == IPL_6);</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(req-&gt;vector == CLOCK_VECTOR);</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#### Machine Check Testing</p>
+<p class="p_Normal">```cpp</p>
+<p class="p_Normal">void TestCorrectableMemoryError() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;MachineCheckHandler handler;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Simulate single-bit ECC error</p>
+<p class="p_Normal"> &nbsp; &nbsp;MachineCheckInfo info;</p>
+<p class="p_Normal"> &nbsp; &nbsp;info.type = MEMORY_ECC_ERROR;</p>
+<p class="p_Normal"> &nbsp; &nbsp;info.address = 0x2000;</p>
+<p class="p_Normal"> &nbsp; &nbsp;info.syndrome = 0x01; &nbsp;// Single-bit error pattern</p>
+<p class="p_Normal"> &nbsp; &nbsp;info.correctable = true;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Handle the error</p>
+<p class="p_Normal"> &nbsp; &nbsp;handler.HandleMachineCheck(info);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Verify error was corrected</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(!handler.HasPendingMachineCheck());</p>
+<p class="p_Normal"> &nbsp; &nbsp;assert(memory_system.IsLocationCorrected(0x2000));</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">## Implementation Checklist</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Core Components</p>
+<p class="p_Normal">- [ ] Exception vector table implementation</p>
+<p class="p_Normal">- [ ] PAL instruction decoder and handlers</p>
+<p class="p_Normal">- [ ] Interrupt priority queue (QMultiHash recommended)</p>
+<p class="p_Normal">- [ ] Machine check detection and logging</p>
+<p class="p_Normal">- [ ] Processor status register management</p>
+<p class="p_Normal">- [ ] Memory protection and translation</p>
+<p class="p_Normal">- [ ] Context save/restore mechanisms</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Exception Handling</p>
+<p class="p_Normal">- [ ] All exception types properly detected</p>
+<p class="p_Normal">- [ ] Exception summary register population</p>
+<p class="p_Normal">- [ ] Proper mode switching (user to kernel)</p>
+<p class="p_Normal">- [ ] PAL entry point vectoring</p>
+<p class="p_Normal">- [ ] Register state preservation</p>
+<p class="p_Normal">- [ ] Nested exception handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Interrupt Processing &nbsp;</p>
+<p class="p_Normal">- [ ] 8-level IPL implementation</p>
+<p class="p_Normal">- [ ] Interrupt masking and delivery</p>
+<p class="p_Normal">- [ ] Timer and device interrupt support</p>
+<p class="p_Normal">- [ ] Interrupt acknowledgment</p>
+<p class="p_Normal">- [ ] Return from interrupt (REI) implementation</p>
+<p class="p_Normal">- [ ] Interrupt latency optimization</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">### Machine Check Support</p>
+<p class="p_Normal">- [ ] Error detection integration</p>
+<p class="p_Normal">- [ ] Correctable vs uncorrectable classification</p>
+<p class="p_Normal">- [ ] Error logging and reporting</p>
+<p class="p_Normal">- [ ] Recovery attempt mechanisms</p>
+<p class="p_Normal">- [ ] System halt procedures</p>
+<p class="p_Normal">- [ ] Error rate monitoring</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This implementation guide provides the foundation for a complete ASA Chapter 14 compliant emulator. Each section should be implemented incrementally with thorough testing at each stage.</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

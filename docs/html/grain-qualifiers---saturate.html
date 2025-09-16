@@ -1,0 +1,515 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha Architecture &gt; Instruction Grains &gt; Alpha AXP Instruction Qualifier Suffixes &gt; Grain Qualifiers - Saturate</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="This page documents the trap models and exception checking logic for all floating-point arithmetic instructions in the ASA-EMulatR. The Alpha architecture uses a combination of..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "grain-qualifiers---saturate.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Grain Qualifiers - Saturate</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?grain-qualifiers---saturate.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; <a href="platform-architectures.html">Platform Architectures</a> &gt; <a href="architecture.html">Alpha Architecture</a> &gt; <a href="instruction-grain.html">Instruction Grains</a> &gt; <a href="qualifiers-instruction.html">Alpha AXP Instruction Qualifier Suffixes</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Grain Qualifiers - Saturate</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="grain-exception-fixups.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="qualifiers-instruction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="instruction-memory-barriers.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">This page documents the trap models and exception checking logic for all floating-point arithmetic instructions in the ASA-EMulatR. The Alpha architecture uses a combination of <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> and FPCR trap enable bits to determine whether a detected exception results in a trap, or is only recorded as a status (“sticky”) bit for later inspection. </p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Example Grains: &nbsp; ADDS_SUIC_InstructionGrain</p>
+<p class="p_Normal"><span style="width:48px;display:inline-block">&nbsp;</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DIVT_M_InstructionGrain</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Basic Pattern: </span>Each letter in the qualifier combination represents one of the base qualifiers:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">S = Software completion (deferred trapping)</p>
+<p class="p_Normal">U = Underflow enable (enhanced detection)</p>
+<p class="p_Normal">I = Inexact disable (suppress inexact exceptions)</p>
+<p class="p_Normal">C = Chopped (truncate rounding)</p>
+<p class="p_Normal">D = Dynamic (use FPCR rounding mode)</p>
+<p class="p_Normal">M = Minus infinity (floor rounding)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Rounding Hierarchy:</span> Only one rounding mode can be active:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">If C is present → truncate</p>
+<p class="p_Normal">Else if M is present → floor</p>
+<p class="p_Normal">Else if D is present → use FPCR mode</p>
+<p class="p_Normal">Else → default behavior</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Exception Modifiers:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">S changes normal trapping to deferred/software completion</p>
+<p class="p_Normal">U forces underflow detection even when FPCR underflow enable is off</p>
+<p class="p_Normal">I completely suppresses inexact exception reporting</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">So /SUID means: &quot;Use dynamic rounding, enable underflow detection, suppress inexact reporting, and defer all trapping for software completion.&quot;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Qualifier</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Behavior - Use - Trap Model</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Example</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/V (Overflow Trap Unconditionally)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior:</p>
+<p class="p_Normal">Always traps on integer overflow during conversion instructions, regardless of FPCR enables.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use:</p>
+<p class="p_Normal">Used with instructions like CVTTQ/V (Convert T-floating to Quadword, Overflow).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model:</p>
+<p class="p_Normal">Unmasked trap: If the overflow occurs, a trap is raised unconditionally, not subject to FPCR trap enables.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">auto&nbsp;conv&nbsp;=&nbsp;OptimizedExceptionStatusRegister::checkCvttqConversion(srcA);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">if&nbsp;(conv.invalid)&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::InvalidOpOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">if&nbsp;(conv.overflow)&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::OverflowOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">//&nbsp;Trap&nbsp;on&nbsp;invalid&nbsp;(if&nbsp;enabled)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">if&nbsp;(status-&gt;hasInvalidOpOccurred()&nbsp;&amp;&amp;&nbsp;fpcr-&gt;hasFlag(ExceptionCategory::TRAP_INVALID_OP_ENABLE))&nbsp;{</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">ExceptionInfo&nbsp;info;</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">quint32&nbsp;bitmask&nbsp;=&nbsp;ALPHA_EXCEPTION_SRC_BITMASK(31);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">info.setSoftwareRepairBitmask(bitmask);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">info.setPcAtFault(pc);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">info.category&nbsp;=&nbsp;ExceptionCategory::INVALID_OPERATION;</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">argCpu-&gt;raiseException(info);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">return;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">//&nbsp;Trap&nbsp;on&nbsp;overflow&nbsp;(if&nbsp;enabled)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">if&nbsp;(status-&gt;hasOverflowOccurred()&nbsp;&amp;&amp;&nbsp;fpcr-&gt;hasFlag(ExceptionCategory::TRAP_FLOATING_POINT_OVERFLOW_ENABLE))&nbsp;{</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">ExceptionInfo&nbsp;info;</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">quint32&nbsp;bitmask&nbsp;=&nbsp;ALPHA_EXCEPTION_SRC_BITMASK(31);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">info.setSoftwareRepairBitmask(bitmask);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">info.setPcAtFault(pc);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">info.category&nbsp;=&nbsp;ExceptionCategory::FLOATING_POINT_OVERFLOW;</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">argCpu-&gt;raiseException(info);</span></p>
+<p class="p_CodeExample"><span style="width:48px;display:inline-block">&nbsp;</span><span class="f_CodeExample" style="font-size: 11px;">return;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SV (Saturate on Overflow)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior:</p>
+<p class="p_Normal">Saturates the result to the max or min representable integer value if overflow occurs, and sets the overflow and inexact bits in the exception status register.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Does NOT trap!</p>
+<p class="p_Normal">The instruction does not raise a trap on overflow; it produces a saturated result.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use:</p>
+<p class="p_Normal">Used with integer conversion instructions, e.g., CVTTQ/SV.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Saturation Details:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">If the input is too large: result is set to 0x7FFF...FFF</p>
+<p class="p_Normal">If the input is too small: result is set to 0x8000...000</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Overflow and Inexact are set (sticky), but no trap occurs (even if FPCR overflow enable is set).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(conv.overflow)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;conv.value&nbsp;=&nbsp;(srcA&nbsp;&gt;&nbsp;0)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&nbsp;std::numeric_limits&lt;qint64&gt;::max()</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;std::numeric_limits&lt;qint64&gt;::min();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::OverflowOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::InexactOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Do&nbsp;not&nbsp;trap,&nbsp;just&nbsp;continue</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/C (Chopped/Truncate)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Forces rounding mode to &quot;round toward zero&quot; (truncate) for this instruction only, overriding the FPCR dynamic rounding mode.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use: Used with floating-point arithmetic and conversion instructions when you need truncation regardless of current rounding mode.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model: Normal trap behavior applies based on FPCR enables for other exceptions.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Override&nbsp;rounding&nbsp;mode&nbsp;for&nbsp;this&nbsp;operation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;originalMode&nbsp;=&nbsp;fpcr-&gt;getRoundingMode();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;RoundingMode::TOWARD_ZERO;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Check&nbsp;for&nbsp;exceptions&nbsp;with&nbsp;original&nbsp;FPCR&nbsp;enables</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isInexact(result)&nbsp;&amp;&amp;&nbsp;fpcr-&gt;isTrapEnabled_Inexact())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseInexactException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/D (Dynamic)</p>
+<p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Uses the current rounding mode specified in the FPCR register. This is typically the default behavior when no rounding qualifier is specified.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use: Explicitly indicates that the instruction should use whatever rounding mode is currently set in FPCR bits [59:58].</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model: Normal trap behavior applies based on FPCR enables.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Use&nbsp;current&nbsp;FPCR&nbsp;rounding&nbsp;mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;currentMode&nbsp;=&nbsp;fpcr-&gt;getRoundingMode();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;currentMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Normal&nbsp;exception&nbsp;handling</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isOverflow(result)&nbsp;&amp;&amp;&nbsp;fpcr-&gt;isTrapEnabled_Overflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseOverflowException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/M (Minus Infinity/Round Down)</p>
+<p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Forces rounding mode to &quot;round toward minus infinity&quot; (floor) for this instruction only.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use: Used when you need floor behavior regardless of current FPCR rounding mode.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model: Normal trap behavior applies based on FPCR enables.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Force&nbsp;round&nbsp;toward&nbsp;minus&nbsp;infinity</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;RoundingMode::TOWARD_MINUS_INFINITY;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Normal&nbsp;exception&nbsp;processing</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isUnderflow(result)&nbsp;&amp;&amp;&nbsp;fpcr-&gt;isTrapEnabled_Underflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseUnderflowException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/S (Software Completion/Exception Completion)</p>
+<p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: When an exception occurs that would normally trap, the instruction completes with a default result and sets appropriate status bits, but does not immediately trap. The trap is deferred until software explicitly checks or a subsequent floating-point instruction executes.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use: Allows software to handle multiple floating-point exceptions in a batch rather than trapping on each one individually.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model: Deferred trapping - exceptions are recorded but trap delivery is postponed.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">bool&nbsp;hadException&nbsp;=&nbsp;false;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Perform&nbsp;operation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isInvalidOp(srcA,&nbsp;srcB))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;=&nbsp;getQuietNaN();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::InvalidOpOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;hadException&nbsp;=&nbsp;true;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isOverflow(result))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;=&nbsp;getInfinity(getSign(result));</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::OverflowOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::InexactOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;hadException&nbsp;=&nbsp;true;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Store&nbsp;result&nbsp;but&nbsp;don't&nbsp;trap&nbsp;yet</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">writeResult(result);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Mark&nbsp;for&nbsp;deferred&nbsp;exception&nbsp;processing</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(hadException)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setPendingSoftwareException(true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/I (Inexact Disable)</p>
+<p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Suppresses inexact exception reporting for this instruction. The inexact condition may occur, but the inexact status bit will not be set and no inexact trap will be generated.</p>
+<p class="p_Normal">Use: Used when you don't care about precision loss for a particular operation.</p>
+<p class="p_Normal">Trap Model: Inexact exceptions are completely suppressed - no status bit setting, no trapping.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Perform&nbsp;operation&nbsp;normally</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Check&nbsp;all&nbsp;exceptions&nbsp;EXCEPT&nbsp;inexact</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isOverflow(result)&nbsp;&amp;&amp;&nbsp;fpcr-&gt;isTrapEnabled_Overflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseOverflowException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isUnderflow(result)&nbsp;&amp;&amp;&nbsp;fpcr-&gt;isTrapEnabled_Underflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseUnderflowException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Inexact&nbsp;is&nbsp;ignored&nbsp;-&nbsp;do&nbsp;not&nbsp;set&nbsp;status&nbsp;bit&nbsp;or&nbsp;trap</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;if&nbsp;(isInexact(result))&nbsp;{&nbsp;/*&nbsp;SUPPRESSED&nbsp;*/&nbsp;}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/U (Underflow Enable)</p>
+<p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Forces underflow exception checking and reporting for this instruction, even if the FPCR underflow enable bit is not set. Creates a more strict underflow detection than normal.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Use: Used when you want to ensure underflow conditions are always detected and reported for critical calculations.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Trap Model: Enhanced underflow detection - will trap on underflow regardless of FPCR underflow enable setting.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Perform&nbsp;operation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Standard&nbsp;exception&nbsp;checks</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isOverflow(result)&nbsp;&amp;&amp;&nbsp;fpcr-&gt;isTrapEnabled_Overflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseOverflowException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;Enhanced&nbsp;underflow&nbsp;check&nbsp;-&nbsp;forced&nbsp;by&nbsp;/U&nbsp;qualifier</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isUnderflow(result))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::UnderflowOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(OptimizedExceptionStatusRegister::StatusBit::InexactOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Always&nbsp;trap&nbsp;on&nbsp;underflow&nbsp;with&nbsp;/U,&nbsp;regardless&nbsp;of&nbsp;FPCR&nbsp;setting</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;raiseUnderflowException();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SU (Software Completion + Underflow Enable)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Enhanced underflow detection with deferred exception handling.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isUnderflow(result))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;=&nbsp;getSignedZero(result);&nbsp;&nbsp;//&nbsp;Software&nbsp;completion&nbsp;default</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setUnderflowOccurred(true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setPendingSoftwareException(true);&nbsp;&nbsp;//&nbsp;Defer&nbsp;trap</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SUC (Software Completion + Underflow Enable + Chopped)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Underflow enable + deferred exceptions + truncate rounding.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;RoundingMode::TOWARD_ZERO;&nbsp;&nbsp;//&nbsp;/C</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;/SU&nbsp;underflow&nbsp;handling&nbsp;as&nbsp;above</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SUD (Software Completion + Underflow Enable + Dynamic)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Underflow enable + deferred exceptions + FPCR rounding mode.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;fpcr-&gt;getRoundingMode();&nbsp;&nbsp;//&nbsp;/D</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;/SU&nbsp;underflow&nbsp;handling</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SUID (Software Completion + Underflow Enable + Inexact Disable + Dynamic)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: All of the above but suppresses inexact exceptions.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;fpcr-&gt;getRoundingMode();&nbsp;&nbsp;//&nbsp;/D</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">if&nbsp;(isUnderflow(result))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;/SU&nbsp;behavior</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;=&nbsp;getSignedZero(result);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setUnderflowOccurred(true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setPendingSoftwareException(true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;/I&nbsp;behavior&nbsp;-&nbsp;do&nbsp;NOT&nbsp;check&nbsp;for&nbsp;inexact</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SUIM (Software Completion + Underflow Enable + Inexact Disable + Minus Infinity)</p>
+<p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Floor rounding + underflow enable + no inexact + deferred exceptions.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;RoundingMode::TOWARD_MINUS_INFINITY;&nbsp;&nbsp;//&nbsp;/M</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;/SU&nbsp;underflow&nbsp;handling,&nbsp;/I&nbsp;inexact&nbsp;suppression</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

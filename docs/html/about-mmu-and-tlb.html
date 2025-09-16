@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha Architecture &gt; Virtual Address Space — Overview &gt; Memory Management &gt; About MMU and TLB — Definitions &amp; Roles</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="MMU — Memory Management Unit ----------------------------------------------------------------------------- The **Memory Management Unit (MMU)** is a hardware component (or soft" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "about-mmu-and-tlb.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">About MMU and TLB — Definitions &amp; Roles</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?about-mmu-and-tlb.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; <a href="platform-architectures.html">Platform Architectures</a> &gt; <a href="architecture.html">Alpha Architecture</a> &gt; <a href="virtualization-address-space.html">Virtual Address Space — Overview</a> &gt; <a href="memory-management.html">Memory Management</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">About MMU and TLB — Definitions &amp; Roles</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="memory-management.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="memory-management.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="caching---instruction.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">MMU&nbsp;—&nbsp;Memory&nbsp;Management&nbsp;Unit</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-----------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">The&nbsp;**Memory&nbsp;Management&nbsp;Unit&nbsp;(MMU)**&nbsp;is&nbsp;a&nbsp;hardware&nbsp;component&nbsp;(or&nbsp;software-emulated&nbsp;subsystem)&nbsp;responsible&nbsp;for&nbsp;translating&nbsp;*virtual&nbsp;addresses*&nbsp;generated&nbsp;by&nbsp;the&nbsp;CPU&nbsp;into&nbsp;*physical&nbsp;addresses*&nbsp;in&nbsp;system&nbsp;memory.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">On&nbsp;Alpha&nbsp;AXP&nbsp;systems,&nbsp;the&nbsp;MMU&nbsp;also:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Enforces&nbsp;memory&nbsp;protection&nbsp;(read/write/execute&nbsp;permissions).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Supports&nbsp;multiple&nbsp;address&nbsp;spaces&nbsp;via&nbsp;Address&nbsp;Space&nbsp;Numbers&nbsp;(ASN).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Generates&nbsp;faults&nbsp;(page&nbsp;fault,&nbsp;protection&nbsp;fault)&nbsp;when&nbsp;translation&nbsp;fails&nbsp;or&nbsp;violates&nbsp;permissions.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Works&nbsp;closely&nbsp;with&nbsp;the&nbsp;TLB&nbsp;(Translation&nbsp;Lookaside&nbsp;Buffer)&nbsp;to&nbsp;cache&nbsp;translations.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">In&nbsp;the&nbsp;ASA-EMulatR:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;The&nbsp;MMU&nbsp;is&nbsp;modeled&nbsp;as&nbsp;part&nbsp;of&nbsp;the&nbsp;`AlphaMemorySystem`&nbsp;and&nbsp;`TLBSystem`.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;It&nbsp;consults&nbsp;page&nbsp;tables&nbsp;or&nbsp;predefined&nbsp;mappings&nbsp;to&nbsp;resolve&nbsp;virtual&nbsp;→&nbsp;physical&nbsp;addresses.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Typical&nbsp;responsibilities:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;Virtual&nbsp;Address&nbsp;→&nbsp;MMU&nbsp;→&nbsp;(checks&nbsp;TLB&nbsp;→&nbsp;page&nbsp;table)&nbsp;→&nbsp;Physical&nbsp;Address</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">TLB&nbsp;—&nbsp;Translation&nbsp;Lookaside&nbsp;Buffer</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">The&nbsp;**Translation&nbsp;Lookaside&nbsp;Buffer&nbsp;(TLB)**&nbsp;is&nbsp;a&nbsp;high-speed,&nbsp;small&nbsp;hardware&nbsp;cache&nbsp;inside&nbsp;the&nbsp;MMU&nbsp;that&nbsp;stores&nbsp;the&nbsp;most&nbsp;recently&nbsp;used&nbsp;virtual&nbsp;→&nbsp;physical&nbsp;address&nbsp;translations.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Why&nbsp;a&nbsp;TLB?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Accessing&nbsp;full&nbsp;page&nbsp;tables&nbsp;in&nbsp;memory&nbsp;for&nbsp;every&nbsp;memory&nbsp;operation&nbsp;would&nbsp;be&nbsp;slow.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;TLBs&nbsp;dramatically&nbsp;reduce&nbsp;translation&nbsp;latency&nbsp;by&nbsp;caching&nbsp;recent&nbsp;translations.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Key&nbsp;characteristics:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Usually&nbsp;implemented&nbsp;as&nbsp;fully-associative&nbsp;or&nbsp;set-associative&nbsp;cache.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Has&nbsp;limited&nbsp;number&nbsp;of&nbsp;entries&nbsp;(e.g.,&nbsp;64–256&nbsp;in&nbsp;typical&nbsp;hardware).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Entries&nbsp;may&nbsp;include:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Virtual&nbsp;Page&nbsp;Number&nbsp;(VPN)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Physical&nbsp;Frame&nbsp;Number&nbsp;(PFN)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;ASN&nbsp;(address&nbsp;space)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Permissions&nbsp;(R/W/X)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Valid/Dirty&nbsp;bits</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">In&nbsp;the&nbsp;ASA-EMulatR:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Modeled&nbsp;by&nbsp;`TLBSystem`.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Each&nbsp;`AlphaCPU`&nbsp;instance&nbsp;typically&nbsp;has&nbsp;its&nbsp;own&nbsp;TLB&nbsp;(per-core).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;On&nbsp;TLB&nbsp;miss:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Emulator&nbsp;walks&nbsp;the&nbsp;page&nbsp;table&nbsp;in&nbsp;`AlphaMemorySystem`.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Updates&nbsp;TLB&nbsp;with&nbsp;the&nbsp;new&nbsp;translation.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;On&nbsp;TLB&nbsp;hit:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Emulator&nbsp;returns&nbsp;the&nbsp;cached&nbsp;physical&nbsp;address&nbsp;immediately.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">MMU&nbsp;&amp;&nbsp;TLB&nbsp;Interaction&nbsp;Summary</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;CPU&nbsp;issues&nbsp;a&nbsp;memory&nbsp;access&nbsp;to&nbsp;Virtual&nbsp;Address&nbsp;(VA).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;MMU&nbsp;checks&nbsp;the&nbsp;TLB&nbsp;for&nbsp;VA&nbsp;translation:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;If&nbsp;hit:&nbsp;retrieves&nbsp;Physical&nbsp;Address&nbsp;(PA)&nbsp;from&nbsp;TLB.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;If&nbsp;miss:&nbsp;walks&nbsp;the&nbsp;page&nbsp;table,&nbsp;inserts&nbsp;new&nbsp;entry&nbsp;into&nbsp;TLB.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;MMU&nbsp;validates&nbsp;permissions.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;If&nbsp;translation&nbsp;or&nbsp;permissions&nbsp;invalid,&nbsp;raises&nbsp;a&nbsp;fault&nbsp;(page&nbsp;fault,&nbsp;protection&nbsp;fault).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">ASA&nbsp;-&nbsp;Alpha&nbsp;Specific&nbsp;Notes</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Alpha&nbsp;MMU&nbsp;supports:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;43-bit&nbsp;virtual&nbsp;address&nbsp;space.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Per-process&nbsp;ASN&nbsp;for&nbsp;address&nbsp;space&nbsp;isolation.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Large&nbsp;page&nbsp;support&nbsp;(8KB,&nbsp;64KB,&nbsp;512KB,&nbsp;4MB&nbsp;pages).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;TLB&nbsp;entries&nbsp;are&nbsp;tagged&nbsp;with&nbsp;ASN&nbsp;+&nbsp;VPN&nbsp;→&nbsp;PFN&nbsp;mappings.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;TLB&nbsp;is&nbsp;explicitly&nbsp;managed&nbsp;by&nbsp;PALcode&nbsp;and&nbsp;OS&nbsp;during&nbsp;context&nbsp;switches.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">References</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;Alpha&nbsp;AXP&nbsp;Architecture&nbsp;Handbook,&nbsp;Chapter&nbsp;5&nbsp;(Virtual&nbsp;Memory&nbsp;&amp;&nbsp;MMU).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">-&nbsp;ASA-EMulatR&nbsp;Source:&nbsp;TLBSystem.cpp/.h,&nbsp;AlphaMemorySystem_refactored.cpp/.h.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

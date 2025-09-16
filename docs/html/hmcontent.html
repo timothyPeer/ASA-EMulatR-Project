@@ -1,0 +1,638 @@
+﻿<!DOCTYPE html>
+<html><head>
+   <title>ASA-Architectural Guide&nbsp;</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="robots" content="noindex,follow" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+ 
+   <!-- This line includes the general project style sheet (not required) -->
+   <link type="text/css" href="default.css" rel="stylesheet" />
+
+   <!-- This block defines the styles of the TOC headings, change them as needed -->
+   <style type="text/css">
+       body { font-size: 1em }
+       .heading1 { color: #000; text-decoration: none; }
+       .heading2 { color: #000; text-decoration: none; }
+       .heading3 { color: #000; text-decoration: none; }
+       .heading4 { color: #000; text-decoration: none; }
+       .heading5 { color: #000; text-decoration: none; }
+       .heading6 { color: #000; text-decoration: none; }
+
+       .hilight1 { color: #FFFFFF; background: #2C5D88; text-decoration: none; }
+       .hilight2 { color: #FFFFFF; background: #2C5D88; text-decoration: none; }
+       .hilight3 { color: #FFFFFF; background: #2C5D88; text-decoration: none; }
+       .hilight4 { color: #FFFFFF; background: #2C5D88; text-decoration: none; }
+       .hilight5 { color: #FFFFFF; background: #2C5D88; text-decoration: none; }
+       .hilight6 { color: #FFFFFF; background: #2C5D88; text-decoration: none; }
+
+       /* TOC LIST CSS */
+       #toc    { padding:0; margin:0 }
+       #toc li { 
+			margin-top:2px; 
+			margin-left:0; 
+			padding: 1px;
+			background-position: 0px 3px !important;
+			background-size: 18px 18px !important;
+            padding-left: 23px !important;
+			}
+       #toc ul { padding-left:0; margin-left:0px }       
+       /* TOC LIST CSS */
+       
+       @media (pointer: coarse) {
+         body    { transform-origin: 0 0;
+		   transform:scale(1.25); 
+		   max-width: 80%;
+       }       
+   </style>
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript">
+   $(document).ready(function(){
+   	   var hiTest = /^hilight/im,
+			parentScope = (parent.hmNavigationFrame);
+		if (parentScope) parent.currentNav("toc");
+		$("a[class^='heading']").on("click",function(event){
+			var doSwipe = (hiTest.test($(this).children("span").first().attr("class")) || false || (parentScope && !parent.hmBrowser.nonDeskTouch));
+			if (doSwipe && parentScope) {
+			window.parent.showNav("toggle");
+			}
+			});
+     });
+   </script>
+      <script type="text/javascript">
+     var parentScope = (parent.hmNavigationFrame);
+     if (!parentScope) {
+		      var s = document.createElement("script");
+		      s.setAttribute("type","text/javascript");
+		      s.setAttribute("src", "helpman_navigation.js");
+		      document.getElementsByTagName("head")[0].appendChild(s);
+	    }
+     else {
+       if (initialtocstate != "expandall") parent.hmAddCss(document, "#toc li ul { display: none }");
+     }
+     function loadicons() { var icons = new Array(); for (i=0; i<arguments.length; i++) { icons[i] = new Image(); icons[i].src = arguments[i]; } }
+     function loadtoc() { if (parentScope) parent.loadstate(document.getElementById("toc")); else loadstate(document.getElementById("toc")); }
+     function savetoc() { if (parentScope) parent.savestate(document.getElementById("toc")); else savestate(document.getElementById("toc")); }
+     function clicked(node, event) { deselect(); if (parentScope) parent.hmNodeClicked(node, event); else hmNodeClicked(node, event); }
+     function dblclicked(node) { if (parentScope) parent.hmNodeDblclicked(node); else hmNodeDblclicked(node); }
+     function deselect() { if (window.getSelection) window.getSelection().removeAllRanges(); else if (document.selection) document.selection.empty(); }
+     $(document).ready(function(){
+       loadtoc();
+       $(window).onunload = savetoc;
+     });
+   </script>
+</head>
+<body>
+<ul id="toc" style="list-style-type:none;display:block;padding-left:0">
+<li class="heading1" id="i1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading1" id="a1" href="introduction.html" target="hmcontent"><span class="heading1" id="s1" ondblclick="return dblclicked(this)">Introduction</span></a>
+<ul id="ul1" style="list-style-type:none">
+<li class="heading2" id="i1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a1.1" href="developmentprioritiesandroadmap.html" target="hmcontent"><span class="heading2" id="s1.1">Development Priorities and Roadmap</span></a>
+</li>
+<li class="heading2" id="i1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a1.2" href="licensing.html" target="hmcontent"><span class="heading2" id="s1.2">Licensing</span></a>
+</li>
+<li class="heading2" id="i1.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a1.3" href="milestones-instruduction.html" target="hmcontent"><span class="heading2" id="s1.3">Major Milestones</span></a>
+</li>
+<li class="heading2" id="i1.4" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a1.4" href="platform-architectures.html" target="hmcontent"><span class="heading2" id="s1.4" ondblclick="return dblclicked(this)">Platform Architectures</span></a>
+<ul id="ul1.4" style="list-style-type:none">
+<li class="heading3" id="i1.4.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.4.1" href="architecture.html" target="hmcontent"><span class="heading3" id="s1.4.1" ondblclick="return dblclicked(this)">Alpha Architecture</span></a>
+<ul id="ul1.4.1" style="list-style-type:none">
+<li class="heading4" id="i1.4.1.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.1" href="alpha-registers.html" target="hmcontent"><span class="heading4" id="s1.4.1.1" ondblclick="return dblclicked(this)">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</span></a>
+<ul id="ul1.4.1.1" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.1.1" href="canonical-register-definitions-alphaaxpregister.html" target="hmcontent"><span class="heading5" id="s1.4.1.1.1">Registers Defined — Canonical Register and Bitfield Enumeration</span></a>
+</li>
+<li class="heading5" id="i1.4.1.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.1.2" href="processor-status-register-(ps).html" target="hmcontent"><span class="heading5" id="s1.4.1.1.2">Processor Status Register (PS) — Overview</span></a>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.2" href="asa-emulator-initialization.html" target="hmcontent"><span class="heading4" id="s1.4.1.2">ASA Emulator Initialization</span></a>
+</li>
+<li class="heading4" id="i1.4.1.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.3" href="datatype-considerations.html" target="hmcontent"><span class="heading4" id="s1.4.1.3">DataType Considerations</span></a>
+</li>
+<li class="heading4" id="i1.4.1.4" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.4" href="exceptionsinterruptsandmachinechecks.html" target="hmcontent"><span class="heading4" id="s1.4.1.4" ondblclick="return dblclicked(this)">Exceptions, Faults, Interrupts, and MachineChecks</span></a>
+<ul id="ul1.4.1.4" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.4.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.1" href="interrupt-levels-.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.1">Alpha AXP Interrupt Priority Level (IPL) — Introduction</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.2" href="architecture-guide-exceptions-interrupts-machinechecks.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.2">Architecture-Guide</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.3" href="exception-frame_exceptionsinterruptsmachinechecks.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.3">Exception Frame</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.4" href="trapping-exceptions.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.4">Exception Source Bitmask</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.5" href="exception-source-bitmask-maski.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.5">Exception Source Bitmask Masking</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.6" href="interrupts-exceptions-faults-machinechecks.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.6">Interrupts</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.7" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.7" href="machine-check---hardware-error.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.7" ondblclick="return dblclicked(this)">Machine Check Handling and Machine Check Frame</span></a>
+<ul id="ul1.4.1.4.7" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.4.7.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.4.7.1" href="asa-emulator-implementation.html" target="hmcontent"><span class="heading6" id="s1.4.1.4.7.1">ASA Emulator Implementation</span></a>
+</li>
+</ul>
+</li>
+<li class="heading5" id="i1.4.1.4.8" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.8" href="machine_hardware-fault-level.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.8">Machine/Hardware Fault Level - Partial Support</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.9" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.9" href="overview-exceptionsinterruptsmachinechecks.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.9">Overview</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.10" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.10" href="savedcontext.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.10">SavedContext- Processor State Snapshot</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.11" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.11" href="tlbexception-class-dictionary.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.11">TLB Exception Handling in the ASA Emulator</span></a>
+</li>
+<li class="heading5" id="i1.4.1.4.12" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.4.12" href="canonical-trap-handling.html" target="hmcontent"><span class="heading5" id="s1.4.1.4.12">Trap Handling</span></a>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.1.5" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.5" href="firmware-(srm-ev59)---es40.html" target="hmcontent"><span class="heading4" id="s1.4.1.5" ondblclick="return dblclicked(this)">Firmware (SRM EV59) - ES40</span></a>
+<ul id="ul1.4.1.5" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.5.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.5.1" href="firmware-.html" target="hmcontent"><span class="heading5" id="s1.4.1.5.1">Firmware:&nbsp;</span></a>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.1.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.6" href="floating-point-control-registe.html" target="hmcontent"><span class="heading4" id="s1.4.1.6">Floating-Point Control Register (FPCR)</span></a>
+</li>
+<li class="heading4" id="i1.4.1.7" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.7" href="emulated-hardware.html" target="hmcontent"><span class="heading4" id="s1.4.1.7" ondblclick="return dblclicked(this)">Hardware - Virtualized</span></a>
+<ul id="ul1.4.1.7" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.7.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.7.1" href="devices-claude.html" target="hmcontent"><span class="heading5" id="s1.4.1.7.1">Devices</span></a>
+</li>
+<li class="heading5" id="i1.4.1.7.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.7.2" href="devices--interfaces.html" target="hmcontent"><span class="heading5" id="s1.4.1.7.2" ondblclick="return dblclicked(this)">Devices &amp; Interfaces</span></a>
+<ul id="ul1.4.1.7.2" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.7.2.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.1" href="logical-hardware-model.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.1" ondblclick="return dblclicked(this)">Logical Hardware Model</span></a>
+<ul id="ul1.4.1.7.2.1" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.7.2.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.1.1" href="devicemanager-classdictionary.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.1.1">DeviceManager</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.1.2" href="businterface-classdictionary.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.1.2">BusInterface</span></a>
+</li>
+</ul>
+</li>
+<li class="heading6" id="i1.4.1.7.2.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2" href="virtual-hardware.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2" ondblclick="return dblclicked(this)">Physical Hardware Model</span></a>
+<ul id="ul1.4.1.7.2.2" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.7.2.2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2.1" href="cabinet-virtualhardware.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2.1">Cabinet</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2.2" href="drawer-virtualdevices.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2.2">Drawer</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.2.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2.3" href="iodrawer-virtualdevices.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2.3">IODrawer</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.2.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2.4" href="iohose-virtualhardware.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2.4">IOHose</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.2.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2.5" href="bus-virtualhardware.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2.5">Bus</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.2.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.2.6" href="pcidevice-virtualhardware.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.2.6">PCIDevice</span></a>
+</li>
+</ul>
+</li>
+<li class="heading6" id="i1.4.1.7.2.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.3" href="device-assignments.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.3">Device Assignments</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.4" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.4" href="scsi-device-integration.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.4" ondblclick="return dblclicked(this)">SCSI Device Integration</span></a>
+<ul id="ul1.4.1.7.2.4" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.7.2.4.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.4.1" href="configuration_loadfile.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.4.1">Configuration_loadFile TODO</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.2.4.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.2.4.2" href="threadsafety-locksafety.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.2.4.2">ThreadSafety-LockSafety</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading5" id="i1.4.1.7.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.7.3" href="second-topic.html" target="hmcontent"><span class="heading5" id="s1.4.1.7.3">Interfaces</span></a>
+</li>
+<li class="heading5" id="i1.4.1.7.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.7.4" href="q-logic-emulatedhardware.html" target="hmcontent"><span class="heading5" id="s1.4.1.7.4">Q-Logic</span></a>
+</li>
+<li class="heading5" id="i1.4.1.7.5" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.7.5" href="tulip-dc21040.html" target="hmcontent"><span class="heading5" id="s1.4.1.7.5" ondblclick="return dblclicked(this)">Tulip DC21040</span></a>
+<ul id="ul1.4.1.7.5" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.7.5.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.5.1" href="stack-cpu-interface.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.5.1">Stack CPU Interface</span></a>
+</li>
+<li class="heading6" id="i1.4.1.7.5.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.7.5.2" href="stack---level-2-(3_4)-support-.html" target="hmcontent"><span class="heading6" id="s1.4.1.7.5.2">Stack - Level 2 (3/4) Support&nbsp;</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.1.8" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.8" href="instruction-grain.html" target="hmcontent"><span class="heading4" id="s1.4.1.8" ondblclick="return dblclicked(this)">Instruction Grains</span></a>
+<ul id="ul1.4.1.8" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.8.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.8.1" href="instructions-introduction.html" target="hmcontent"><span class="heading5" id="s1.4.1.8.1" ondblclick="return dblclicked(this)">Instruction Grain Data Flow — Overview</span></a>
+<ul id="ul1.4.1.8.1" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.8.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.8.1.1" href="instruction-stack-exection.html" target="hmcontent"><span class="heading6" id="s1.4.1.8.1.1">Grain Execution - Load Instruction</span></a>
+</li>
+<li class="heading6" id="i1.4.1.8.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.8.1.2" href="execution-stack-breakdown-for-.html" target="hmcontent"><span class="heading6" id="s1.4.1.8.1.2">Grain Execution - Store Instruction</span></a>
+</li>
+</ul>
+</li>
+<li class="heading5" id="i1.4.1.8.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.8.2" href="qualifiers-instruction.html" target="hmcontent"><span class="heading5" id="s1.4.1.8.2" ondblclick="return dblclicked(this)">Alpha AXP Instruction Qualifier Suffixes</span></a>
+<ul id="ul1.4.1.8.2" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.8.2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.8.2.1" href="grain-default-behavior.html" target="hmcontent"><span class="heading6" id="s1.4.1.8.2.1">Grain Default Behavior</span></a>
+</li>
+<li class="heading6" id="i1.4.1.8.2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.8.2.2" href="grain-exception-fixups.html" target="hmcontent"><span class="heading6" id="s1.4.1.8.2.2">Grain Exception Fixups</span></a>
+</li>
+<li class="heading6" id="i1.4.1.8.2.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.8.2.3" href="grain-qualifiers---saturate.html" target="hmcontent"><span class="heading6" id="s1.4.1.8.2.3">Grain Qualifiers - Saturate</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.1.9" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.9" href="instruction-memory-barriers.html" target="hmcontent"><span class="heading4" id="s1.4.1.9">Memory Barrier Instructions — Overview and Integration</span></a>
+</li>
+<li class="heading4" id="i1.4.1.10" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.10" href="platform-architecture-endianes.html" target="hmcontent"><span class="heading4" id="s1.4.1.10">Platform Architecture-Endianess</span></a>
+</li>
+<li class="heading4" id="i1.4.1.11" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.11" href="symmetric-multi-processing.html" target="hmcontent"><span class="heading4" id="s1.4.1.11" ondblclick="return dblclicked(this)">Symmetric Multi-Processing</span></a>
+<ul id="ul1.4.1.11" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.11.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.11.1" href="ipi-stack-documentation.html" target="hmcontent"><span class="heading5" id="s1.4.1.11.1">Interprocessor Interrupt (IPI) Stack Design</span></a>
+</li>
+<li class="heading5" id="i1.4.1.11.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.11.2" href="iprbank-registers.html" target="hmcontent"><span class="heading5" id="s1.4.1.11.2">Internal Processor Register (IPR) Bank</span></a>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.1.12" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.1.12" href="virtualization-address-space.html" target="hmcontent"><span class="heading4" id="s1.4.1.12" ondblclick="return dblclicked(this)">Virtual Address Space — Overview</span></a>
+<ul id="ul1.4.1.12" style="list-style-type:none">
+<li class="heading5" id="i1.4.1.12.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.12.1" href="memory-management.html" target="hmcontent"><span class="heading5" id="s1.4.1.12.1" ondblclick="return dblclicked(this)">Memory Management</span></a>
+<ul id="ul1.4.1.12.1" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.12.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.1" href="about-mmu-and-tlb.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.1">About MMU and TLB — Definitions &amp; Roles</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2" href="caching---instruction.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2" ondblclick="return dblclicked(this)">Caching</span></a>
+<ul id="ul1.4.1.12.1.2" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.12.1.2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.1" href="alphainstructioncache.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.1">AlphaInstructionCache</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.2" href="caching-code.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.2">Caching-Code</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.3" href="code-3.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.3">Code-3</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.4" href="l1cache.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.4">L1 I-Cache</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.5" href="l2cache.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.5">L2 D-Cache</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.6" href="l3-shared-(smp)-unifiedcache.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.6">L3 Shared (SMP) UnifiedCache</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.2.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.2.7" href="translation-lookaside-buffer-(.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.2.7">Translation Lookaside Buffer (TLB)</span></a>
+</li>
+</ul>
+</li>
+<li class="heading6" id="i1.4.1.12.1.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.3" href="safememory-claude.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.3">SafeMemory - TODO</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.4" href="virtual-to-physical-address-tr.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.4">Virtual to Physical Address Translation</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.5" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.5" href="page-table-support.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.5" ondblclick="return dblclicked(this)">Page Table Support</span></a>
+<ul id="ul1.4.1.12.1.5" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.12.1.5.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.5.1" href="invalidation-pagetable.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.5.1" ondblclick="return dblclicked(this)">Invalidation&nbsp;</span></a>
+<ul id="ul1.4.1.12.1.5.1" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.12.1.5.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.5.1.1" href="page-table-entries.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.5.1.1">Page Table Entries</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.5.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.5.1.2" href="instruction-tlb-pagetable.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.5.1.2">Instruction TLB</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading6" id="i1.4.1.12.1.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.6" href="virtual-barrier-support.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.6">Virtual Barrier Support</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.1.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.1.7" href="coverage-tlbsystem.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.1.7">Coverage</span></a>
+</li>
+</ul>
+</li>
+<li class="heading5" id="i1.4.1.12.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.12.2" href="architecture-registers-claude.html" target="hmcontent"><span class="heading5" id="s1.4.1.12.2" ondblclick="return dblclicked(this)">Architecture Registers</span></a>
+<ul id="ul1.4.1.12.2" style="list-style-type:none">
+<li class="heading6" id="i1.4.1.12.2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.2.1" href="frame-pointer-claude.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.2.1">Frame Pointer</span></a>
+</li>
+<li class="heading6" id="i1.4.1.12.2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a1.4.1.12.2.2" href="m_psr-claude.html" target="hmcontent"><span class="heading6" id="s1.4.1.12.2.2">Process Status Register-PSR</span></a>
+</li>
+</ul>
+</li>
+<li class="heading5" id="i1.4.1.12.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.1.12.3" href="addresstranslation.html" target="hmcontent"><span class="heading5" id="s1.4.1.12.3">Address Translation (va &lt;-&gt; pa)</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i1.4.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.4.2" href="linux-on-alpha-specific.html" target="hmcontent"><span class="heading3" id="s1.4.2">LINUX on Alpha</span></a>
+</li>
+<li class="heading3" id="i1.4.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.4.3" href="tru64-unix-on-alpha-specific.html" target="hmcontent"><span class="heading3" id="s1.4.3">Tru64 Unix on Alpha</span></a>
+</li>
+<li class="heading3" id="i1.4.4" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.4.4" href="vax---specific.html" target="hmcontent"><span class="heading3" id="s1.4.4" ondblclick="return dblclicked(this)">VAX - Specific</span></a>
+<ul id="ul1.4.4" style="list-style-type:none">
+<li class="heading4" id="i1.4.4.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.4.1" href="vax-architecture.html" target="hmcontent"><span class="heading4" id="s1.4.4.1" ondblclick="return dblclicked(this)">VAX Architecture — Exceptions, Interrupts, and Machine Checks</span></a>
+<ul id="ul1.4.4.1" style="list-style-type:none">
+<li class="heading5" id="i1.4.4.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.1.1" href="interrupt-levels---vax.html" target="hmcontent"><span class="heading5" id="s1.4.4.1.1"><br/>
+VAX Interrupt Priority Level (IPL) — Introduction</span></a>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i1.4.4.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a1.4.4.2" href="vaxmacroandheader.html" target="hmcontent"><span class="heading4" id="s1.4.4.2" ondblclick="return dblclicked(this)">Conversion Macros</span></a>
+<ul id="ul1.4.4.2" style="list-style-type:none">
+<li class="heading5" id="i1.4.4.2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.2.1" href="vax_g_to_f_float_2.html" target="hmcontent"><span class="heading5" id="s1.4.4.2.1">VAX_D_TO_G_FLOAT - Convert VAX D_Float to 64-bit VAX G_Float</span></a>
+</li>
+<li class="heading5" id="i1.4.4.2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.2.2" href="vax_g_to_f_float.html" target="hmcontent"><span class="heading5" id="s1.4.4.2.2">VAX_G_TO_F_FLOAT - Converts a 64-bit VAX G_floating value to a 64-bit VAX D_floating</span></a>
+</li>
+<li class="heading5" id="i1.4.4.2.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.2.3" href="vax_g_to_qword---convert-vax-g.html" target="hmcontent"><span class="heading5" id="s1.4.4.2.3">VAX_G_TO_QWORD - Convert VAX G_Float to 64-bit signed integer</span></a>
+</li>
+<li class="heading5" id="i1.4.4.2.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.2.4" href="vax_g_to_f_float_4.html" target="hmcontent"><span class="heading5" id="s1.4.4.2.4">VAX_LONG_TO_QWORD</span></a>
+</li>
+<li class="heading5" id="i1.4.4.2.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.2.5" href="vax_g_to_f_float_3.html" target="hmcontent"><span class="heading5" id="s1.4.4.2.5">VAX_LWORD_TO_QWORD</span></a>
+</li>
+<li class="heading5" id="i1.4.4.2.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a1.4.4.2.6" href="vax_qword_to_g_float.html" target="hmcontent"><span class="heading5" id="s1.4.4.2.6">VAX_QWORD_TO_G_FLOAT</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading2" id="i1.5" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a1.5" href="subsystem_component-api.html" target="hmcontent"><span class="heading2" id="s1.5" ondblclick="return dblclicked(this)">Subsystems/Components API</span></a>
+<ul id="ul1.5" style="list-style-type:none">
+<li class="heading3" id="i1.5.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.5.1" href="alphacpu-subsystem.html" target="hmcontent"><span class="heading3" id="s1.5.1">AlphaCPU</span></a>
+</li>
+<li class="heading3" id="i1.5.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.5.2" href="alphamemorysystem-subsystem.html" target="hmcontent"><span class="heading3" id="s1.5.2">AlphaMemorySystem</span></a>
+</li>
+<li class="heading3" id="i1.5.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.5.3" href="alphaprocessorcontext-subsystem.html" target="hmcontent"><span class="heading3" id="s1.5.3">AlphaProcessorContext</span></a>
+</li>
+<li class="heading3" id="i1.5.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.5.4" href="configuration-subsystem.html" target="hmcontent"><span class="heading3" id="s1.5.4">Configuration&nbsp;</span></a>
+</li>
+<li class="heading3" id="i1.5.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.5.5" href="safememory-subsystem.html" target="hmcontent"><span class="heading3" id="s1.5.5">SafeMemory</span></a>
+</li>
+<li class="heading3" id="i1.5.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.5.6" href="storage-subsystem.html" target="hmcontent"><span class="heading3" id="s1.5.6">Storage Subsystem</span></a>
+</li>
+</ul>
+</li>
+<li class="heading2" id="i1.6" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a1.6" href="system-configuration.html" target="hmcontent"><span class="heading2" id="s1.6" ondblclick="return dblclicked(this)">System Configuration</span></a>
+<ul id="ul1.6" style="list-style-type:none">
+<li class="heading3" id="i1.6.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.6.1" href="configuration-user-guide.html" target="hmcontent"><span class="heading3" id="s1.6.1">Configuration Guide</span></a>
+</li>
+<li class="heading3" id="i1.6.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a1.6.2" href="ready-to-use-configuration.html" target="hmcontent"><span class="heading3" id="s1.6.2">Ready-To-Use Configuration</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading1" id="i2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading1" id="a2" href=javascript:void(0);><span class="heading1" id="s2" ondblclick="return dblclicked(this)">Appendix</span></a>
+<ul id="ul2" style="list-style-type:none">
+<li class="heading2" id="i2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.1" href="exception-handling-reference.html" target="hmcontent"><span class="heading2" id="s2.1">Alpha/VAX Floating-Point Exception Handling: Status and Trap Model Reference</span></a>
+</li>
+<li class="heading2" id="i2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.2" href="asa-performance-montor.html" target="hmcontent"><span class="heading2" id="s2.2">ASA Performance Montor</span></a>
+</li>
+<li class="heading2" id="i2.3" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.3" href=javascript:void(0);><span class="heading2" id="s2.3" ondblclick="return dblclicked(this)">Class Dictionary</span></a>
+<ul id="ul2.3" style="list-style-type:none">
+<li class="heading3" id="i2.3.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.1" href="alphaconsoleshell-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.1">AlphaConsoleShell</span></a>
+</li>
+<li class="heading3" id="i2.3.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.2" href="alphacpu-claude.html" target="hmcontent"><span class="heading3" id="s2.3.2" ondblclick="return dblclicked(this)">AlphaCPU</span></a>
+<ul id="ul2.3.2" style="list-style-type:none">
+<li class="heading4" id="i2.3.2.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.1" href="alphacpustate-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.1">AlphaCPUState</span></a>
+</li>
+<li class="heading4" id="i2.3.2.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.2" href="alphaprocessorcontext-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.2">AlphaProcessorContext</span></a>
+</li>
+<li class="heading4" id="i2.3.2.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.3" href="cache-policies.html" target="hmcontent"><span class="heading4" id="s2.3.2.3">Cache Policies in ASA Alpha Emulator</span></a>
+</li>
+<li class="heading4" id="i2.3.2.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.4" href="exception-processing-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.4">Exception Processing</span></a>
+</li>
+<li class="heading4" id="i2.3.2.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.5" href="exceptions-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.5">Exceptions</span></a>
+</li>
+<li class="heading4" id="i2.3.2.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.6" href="integration-(fdew)-.html" target="hmcontent"><span class="heading4" id="s2.3.2.6">Integration (FDEWI)&nbsp;</span></a>
+</li>
+<li class="heading4" id="i2.3.2.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.7" href="interfaces-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.7">Interfaces</span></a>
+</li>
+<li class="heading4" id="i2.3.2.8" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.8" href="pipelines-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.8">PipeLines</span></a>
+</li>
+<li class="heading4" id="i2.3.2.9" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.9" href="processor-exceptions-claude.html" target="hmcontent"><span class="heading4" id="s2.3.2.9">Processor Exceptions</span></a>
+</li>
+<li class="heading4" id="i2.3.2.10" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.10" href="startup-claude-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.10">Startup</span></a>
+</li>
+<li class="heading4" id="i2.3.2.11" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.2.11" href="trap-handling-alphacpu.html" target="hmcontent"><span class="heading4" id="s2.3.2.11">Trap Handling</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.3" href="alphacpuloghandler-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.3">AlphaCPULogHandler</span></a>
+</li>
+<li class="heading3" id="i2.3.4" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.4" href="alphainstructiongrain-class-dictionary.html" target="hmcontent"><span class="heading3" id="s2.3.4" ondblclick="return dblclicked(this)">AlphaInstructionGrain</span></a>
+<ul id="ul2.3.4" style="list-style-type:none">
+<li class="heading4" id="i2.3.4.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.4.1" href="memoriy-barrier-model.html" target="hmcontent"><span class="heading4" id="s2.3.4.1" ondblclick="return dblclicked(this)">Memory Barrier Model</span></a>
+<ul id="ul2.3.4.1" style="list-style-type:none">
+<li class="heading5" id="i2.3.4.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a2.3.4.1.1" href="wmb-performance.html" target="hmcontent"><span class="heading5" id="s2.3.4.1.1">Performance</span></a>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i2.3.4.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.4.2" href="priority-candidates.html" target="hmcontent"><span class="heading4" id="s2.3.4.2">Priority Candidates</span></a>
+</li>
+<li class="heading4" id="i2.3.4.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.4.3" href="table-of-alpha-instructions.html" target="hmcontent"><span class="heading4" id="s2.3.4.3">Table of Alpha Instructions</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.5" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.5" href="alphamemorysystem-claude.html" target="hmcontent"><span class="heading3" id="s2.3.5" ondblclick="return dblclicked(this)">AlphaMemorySystem</span></a>
+<ul id="ul2.3.5" style="list-style-type:none">
+<li class="heading4" id="i2.3.5.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.5.1" href="mmiomanager-claude.html" target="hmcontent"><span class="heading4" id="s2.3.5.1" ondblclick="return dblclicked(this)">MMIOManager (MMIO)</span></a>
+<ul id="ul2.3.5.1" style="list-style-type:none">
+<li class="heading5" id="i2.3.5.1.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a2.3.5.1.1" href="memory-boundaries-mmiomanager.html" target="hmcontent"><span class="heading5" id="s2.3.5.1.1" ondblclick="return dblclicked(this)">Memory Boundaries</span></a>
+<ul id="ul2.3.5.1.1" style="list-style-type:none">
+<li class="heading6" id="i2.3.5.1.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a2.3.5.1.1.1" href="ev6-tsunami-mmiomanager.html" target="hmcontent"><span class="heading6" id="s2.3.5.1.1.1">EV6-Tsunami</span></a>
+</li>
+<li class="heading6" id="i2.3.5.1.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a2.3.5.1.1.2" href="ev7-marvin-memoryboundaries.html" target="hmcontent"><span class="heading6" id="s2.3.5.1.1.2">EV7-Marvin</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading4" id="i2.3.5.2" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.5.2" href="implementation-alphamemorysystem.html" target="hmcontent"><span class="heading4" id="s2.3.5.2" ondblclick="return dblclicked(this)">Implementation</span></a>
+<ul id="ul2.3.5.2" style="list-style-type:none">
+<li class="heading5" id="i2.3.5.2.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading5" id="a2.3.5.2.1" href="page-table-alphamemorysystem.html" target="hmcontent"><span class="heading5" id="s2.3.5.2.1" ondblclick="return dblclicked(this)">Page Table&nbsp;</span></a>
+<ul id="ul2.3.5.2.1" style="list-style-type:none">
+<li class="heading6" id="i2.3.5.2.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading6" id="a2.3.5.2.1.1" href="alpha-tlb-conflict-todo.html" target="hmcontent"><span class="heading6" id="s2.3.5.2.1.1">Alpha TLB Conflict Todo</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.6" href="alphaprocessorcontext-library.html" target="hmcontent"><span class="heading3" id="s2.3.6">AlphaProcessorContext</span></a>
+</li>
+<li class="heading3" id="i2.3.7" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.7" href="alphasmpmanager-claude.html" target="hmcontent"><span class="heading3" id="s2.3.7" ondblclick="return dblclicked(this)">AlphaSMPManager</span></a>
+<ul id="ul2.3.7" style="list-style-type:none">
+<li class="heading4" id="i2.3.7.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.7.1" href="globallocktracker-alphasmpmanager.html" target="hmcontent"><span class="heading4" id="s2.3.7.1">GlobalLockTracker</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.8" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.8" href="alphatelnetconsoleserver-class-dictionary.html" target="hmcontent"><span class="heading3" id="s2.3.8">AlphaTelnetConsoleServer</span></a>
+</li>
+<li class="heading3" id="i2.3.9" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.9" href="asa-emulator-data-types.html" target="hmcontent"><span class="heading3" id="s2.3.9" ondblclick="return dblclicked(this)">ASA Emulator Data Types</span></a>
+<ul id="ul2.3.9" style="list-style-type:none">
+<li class="heading4" id="i2.3.9.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.1" href="128-bit-float.html" target="hmcontent"><span class="heading4" id="s2.3.9.1">128-bit Floating Point: dt_tfloat (T_Float, Quad Precision)</span></a>
+</li>
+<li class="heading4" id="i2.3.9.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.2" href="128-bit-integer-datatypes.html" target="hmcontent"><span class="heading4" id="s2.3.9.2">128-bit Integer: dt_int128</span></a>
+</li>
+<li class="heading4" id="i2.3.9.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.3" href="64-bit-floating-point.html" target="hmcontent"><span class="heading4" id="s2.3.9.3">64-bit Floating Point: dt_gfloat (VAX G_Float) and dt_float (Unified)</span></a>
+</li>
+<li class="heading4" id="i2.3.9.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.4" href="dt_dfloat--vax-d_floating-form.html" target="hmcontent"><span class="heading4" id="s2.3.9.4">dt_dfloat -VAX D_floating format (64-bit, bias 128, 55-bit fraction)</span></a>
+</li>
+<li class="heading4" id="i2.3.9.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.5" href="dt_ffloat_classdictionary.html" target="hmcontent"><span class="heading4" id="s2.3.9.5">dt_ffloat -Alpha/VAX F_floating &lt;-&gt; Alpha G_floating Canonical Conversion</span></a>
+</li>
+<li class="heading4" id="i2.3.9.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.6" href="dt_gfloat.html" target="hmcontent"><span class="heading4" id="s2.3.9.6">dt_gfloat — VAX G_Float (64-bit floating-point)</span></a>
+</li>
+<li class="heading4" id="i2.3.9.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.7" href="dt_sfloat.html" target="hmcontent"><span class="heading4" id="s2.3.9.7">dt_sfloat - Alpha 754 single-precision / Alpha S_floating (32-bit) format</span></a>
+</li>
+<li class="heading4" id="i2.3.9.8" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.9.8" href="dt_tfloat2-asaemulatordatatypes.html" target="hmcontent"><span class="heading4" id="s2.3.9.8">dt_tfloat — Alpha T_Float (128-bit Quad-Precision)</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.10" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.10" href="emulatormanager-claude.html" target="hmcontent"><span class="heading3" id="s2.3.10">ASAEmulator</span></a>
+</li>
+<li class="heading3" id="i2.3.11" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.11" href="exceptionstatusregister-classlibrary.html" target="hmcontent"><span class="heading3" id="s2.3.11">ExceptionStatusRegister</span></a>
+</li>
+<li class="heading3" id="i2.3.12" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.12" href="fpcrregister-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.12">FpcrRegister</span></a>
+</li>
+<li class="heading3" id="i2.3.13" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.13" href="grainresolver-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.13">GrainResolver</span></a>
+</li>
+<li class="heading3" id="i2.3.14" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.14" href="hwstackframe-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.14">HWStackFrame</span></a>
+</li>
+<li class="heading3" id="i2.3.15" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.15" href="iprbank-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.15">IprBank</span></a>
+</li>
+<li class="heading3" id="i2.3.16" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.16" href="safememory-class-dictionary.html" target="hmcontent"><span class="heading3" id="s2.3.16">SafeMemory</span></a>
+</li>
+<li class="heading3" id="i2.3.17" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.17" href="savedcontext-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.17">SavedContext</span></a>
+</li>
+<li class="heading3" id="i2.3.18" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.18" href="stackmanager-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.18">StackManager</span></a>
+</li>
+<li class="heading3" id="i2.3.19" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.19" href="systembus.html" target="hmcontent"><span class="heading3" id="s2.3.19" ondblclick="return dblclicked(this)">SystemBus</span></a>
+<ul id="ul2.3.19" style="list-style-type:none">
+<li class="heading4" id="i2.3.19.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.1" href="cipca-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.1">CIPCA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.2" href="cixcd-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.2">CIXCD</span></a>
+</li>
+<li class="heading4" id="i2.3.19.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.3" href="defaa-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.3">DEFAA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.4" href="defea-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.4">DEFEA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.5" href="defpa-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.5">DEFPA-SystemBus</span></a>
+</li>
+<li class="heading4" id="i2.3.19.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.6" href="demfa-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.6">DEMFA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.7" href="demna-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.7">DEMNA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.8" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.8" href="fca-2354-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.8">FCA-2354</span></a>
+</li>
+<li class="heading4" id="i2.3.19.9" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.9" href="isp10x0-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.9">ISP10X0</span></a>
+</li>
+<li class="heading4" id="i2.3.19.10" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.10" href="kcm44-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.10">KCM44</span></a>
+</li>
+<li class="heading4" id="i2.3.19.11" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.11" href="kdm70-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.11">KDM70</span></a>
+</li>
+<li class="heading4" id="i2.3.19.12" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.12" href="kfmsb-b01-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.12">KFMSB-B01</span></a>
+</li>
+<li class="heading4" id="i2.3.19.13" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.13" href="kfmsb-b01-gt-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.13">KFMSB-B01-GT</span></a>
+</li>
+<li class="heading4" id="i2.3.19.14" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.14" href="kgpsa-bc-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.14">KGPSA-BC</span></a>
+</li>
+<li class="heading4" id="i2.3.19.15" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.15" href="kgpsa-ca-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.15">KGPSA-CA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.16" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.16" href="kzmsa-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.16">KZMSA</span></a>
+</li>
+<li class="heading4" id="i2.3.19.17" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.19.17" href="kzpsa-systembus.html" target="hmcontent"><span class="heading4" id="s2.3.19.17">KZPSA-SystemBus</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.20" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.20" href="tlbentry-superpages.html" target="hmcontent"><span class="heading3" id="s2.3.20" ondblclick="return dblclicked(this)">TLB and PTE Bit-Shift Consistency</span></a>
+<ul id="ul2.3.20" style="list-style-type:none">
+<li class="heading4" id="i2.3.20.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.20.1" href="tlb-and-pte-invalidation.html" target="hmcontent"><span class="heading4" id="s2.3.20.1">TLB and PTE Invalidation</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.21" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.21" href="tlbentry-class-dictionary.html" target="hmcontent"><span class="heading3" id="s2.3.21">TLBEntry</span></a>
+</li>
+<li class="heading3" id="i2.3.22" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.22" href="tlbsystem-class-dictionary.html" target="hmcontent"><span class="heading3" id="s2.3.22" ondblclick="return dblclicked(this)">TLBSystem - Translation Buffer Table (TLB)</span></a>
+<ul id="ul2.3.22" style="list-style-type:none">
+<li class="heading4" id="i2.3.22.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.22.1" href="translation-buffer-(tlb)-alphasystemmemory.html" target="hmcontent"><span class="heading4" id="s2.3.22.1">Translation Buffer (TLB)</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.23" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.23" href="tracemanager-classdictionary.html" target="hmcontent"><span class="heading3" id="s2.3.23" ondblclick="return dblclicked(this)">TraceManager</span></a>
+<ul id="ul2.3.23" style="list-style-type:none">
+<li class="heading4" id="i2.3.23.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.3.23.1" href="tracing-claude).html" target="hmcontent"><span class="heading4" id="s2.3.23.1">Tracing</span></a>
+</li>
+</ul>
+</li>
+<li class="heading3" id="i2.3.24" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.3.24" href="unifieddatacache-objectlibrary.html" target="hmcontent"><span class="heading3" id="s2.3.24">UnifiedDataCache</span></a>
+</li>
+</ul>
+</li>
+<li class="heading2" id="i2.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.4" href="code-standards-and-conventions.html" target="hmcontent"><span class="heading2" id="s2.4">Code Standards and Conventions</span></a>
+</li>
+<li class="heading2" id="i2.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.5" href="glossary.html" target="hmcontent"><span class="heading2" id="s2.5">Glossary</span></a>
+</li>
+<li class="heading2" id="i2.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.6" href="irq-assignments.html" target="hmcontent"><span class="heading2" id="s2.6">IRQ Assignments</span></a>
+</li>
+<li class="heading2" id="i2.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.7" href="linkedin-notice.html" target="hmcontent"><span class="heading2" id="s2.7">LinkedIn Notice</span></a>
+</li>
+<li class="heading2" id="i2.8" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.8" href="macro-and-header-documentation.html" target="hmcontent"><span class="heading2" id="s2.8" ondblclick="return dblclicked(this)">Macro and Header</span></a>
+<ul id="ul2.8" style="list-style-type:none">
+<li class="heading3" id="i2.8.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.8.1" href="utility-macros.html" target="hmcontent"><span class="heading3" id="s2.8.1">Alignment Check Macros in Emulator Development</span></a>
+</li>
+<li class="heading3" id="i2.8.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.8.2" href="macros-.html" target="hmcontent"><span class="heading3" id="s2.8.2">Bitfield Conversion Macros in Alpha/VAX Emulation</span></a>
+</li>
+<li class="heading3" id="i2.8.3" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.8.3" href="exception-source-bitmask-macro.html" target="hmcontent"><span class="heading3" id="s2.8.3" ondblclick="return dblclicked(this)">Exception Source BitMask Macros</span></a>
+<ul id="ul2.8.3" style="list-style-type:none">
+<li class="heading4" id="i2.8.3.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.8.3.1" href="alpha_fp_divzero_check---divid.html" target="hmcontent"><span class="heading4" id="s2.8.3.1">ALPHA_FP_DIVZERO_CHECK - Divide By Zero Check</span></a>
+</li>
+<li class="heading4" id="i2.8.3.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.8.3.2" href="alpha_fp_masked_invalidop_chec.html" target="hmcontent"><span class="heading4" id="s2.8.3.2">ALPHA_FP_MASKED_INVALIDOP_CHECK - Invalid Operation Check</span></a>
+</li>
+<li class="heading4" id="i2.8.3.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.8.3.3" href="reserved-operand-check.html" target="hmcontent"><span class="heading4" id="s2.8.3.3">ALPHA_FP_RESERVED_OPERAND_CHECK - Reserved Operand Check</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading2" id="i2.9" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.9" href="signals---glossary.html" target="hmcontent"><span class="heading2" id="s2.9">Signals - Glossary</span></a>
+</li>
+<li class="heading2" id="i2.10" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.10" href="srm-console-commands.html" target="hmcontent"><span class="heading2" id="s2.10" ondblclick="return dblclicked(this)">SRM Console Commands</span></a>
+<ul id="ul2.10" style="list-style-type:none">
+<li class="heading3" id="i2.10.1" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.10.1" href="commands.html" target="hmcontent"><span class="heading3" id="s2.10.1" ondblclick="return dblclicked(this)">Commands</span></a>
+<ul id="ul2.10.1" style="list-style-type:none">
+<li class="heading4" id="i2.10.1.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.1" href="boot-commands-srm.html" target="hmcontent"><span class="heading4" id="s2.10.1.1">BOOT</span></a>
+</li>
+<li class="heading4" id="i2.10.1.2" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.2" href="clear-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.2">Clear</span></a>
+</li>
+<li class="heading4" id="i2.10.1.3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.3" href="continue-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.3">Continue</span></a>
+</li>
+<li class="heading4" id="i2.10.1.4" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.4" href="crash-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.4">Crash</span></a>
+</li>
+<li class="heading4" id="i2.10.1.5" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.5" href="csr-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.5">CSR</span></a>
+</li>
+<li class="heading4" id="i2.10.1.6" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.6" href="halt-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.6">Halt</span></a>
+</li>
+<li class="heading4" id="i2.10.1.7" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.7" href="help-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.7">Help</span></a>
+</li>
+<li class="heading4" id="i2.10.1.8" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.8" href="init-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.8">Init</span></a>
+</li>
+<li class="heading4" id="i2.10.1.9" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.9" href="power-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.9">Power</span></a>
+</li>
+<li class="heading4" id="i2.10.1.10" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.10" href="set-envar-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.10">Set envar</span></a>
+</li>
+<li class="heading4" id="i2.10.1.11" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.11" href="show-config-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.11">Show Config</span></a>
+</li>
+<li class="heading4" id="i2.10.1.12" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.12" href="show-cpu-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.12">Show CPU</span></a>
+</li>
+<li class="heading4" id="i2.10.1.13" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.13" href="show-device-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.13">Show Device</span></a>
+</li>
+<li class="heading4" id="i2.10.1.14" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.14" href="show-envar-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.14">Show envar</span></a>
+</li>
+<li class="heading4" id="i2.10.1.15" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.15" href="show-pal-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.15">Show Pal</span></a>
+</li>
+<li class="heading4" id="i2.10.1.16" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading4" id="a2.10.1.16" href="wwidmgr-commands-srmconsole.html" target="hmcontent"><span class="heading4" id="s2.10.1.16">wwidmgr</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading2" id="i2.11" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.11" href="table_of_definitions.html" target="hmcontent"><span class="heading2" id="s2.11" ondblclick="return dblclicked(this)">Table of Definitons</span></a>
+<ul id="ul2.11" style="list-style-type:none">
+<li class="heading3" id="i2.11.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.11.1" href="length-of-access.html" target="hmcontent"><span class="heading3" id="s2.11.1">Length-of-Access</span></a>
+</li>
+</ul>
+</li>
+<li class="heading2" id="i2.12" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.12" href="tools--references.html" target="hmcontent"><span class="heading2" id="s2.12">Tools &amp; References</span></a>
+</li>
+<li class="heading2" id="i2.13" data-bg="cicon1.png;cicon2.png" style="background:url(cicon2.png) no-repeat;cursor:pointer;padding-left:20px" onclick="return clicked(this,event)"><a class="heading2" id="a2.13" href="visual-studio-2022---community.html" target="hmcontent"><span class="heading2" id="s2.13" ondblclick="return dblclicked(this)">Visual Studio 2022 - Community</span></a>
+<ul id="ul2.13" style="list-style-type:none">
+<li class="heading3" id="i2.13.1" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading3" id="a2.13.1" href="compiler-options.html" target="hmcontent"><span class="heading3" id="s2.13.1">Compiler Options</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="heading1" id="i3" style="background:url(cicon9.png) no-repeat;padding-left:20px" onclick="return clicked(this,event)"><a class="heading1" id="a3" href="alpha-system-architecture-form.html" target="hmcontent"><span class="heading1" id="s3">Alpha System Architecture Format Reference</span></a>
+</li>
+</ul>
+<script type="text/javascript">loadicons('cicon2.png','cicon1.png','cicon9.png');</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Appendix &gt; SRM Console Commands &gt; Commands &gt; Show Config</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Displays the configuration seen at the last system initialization." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "show-config-commands-srmconsole.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Show Config</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?show-config-commands-srmconsole.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      Appendix &gt; <a href="srm-console-commands.html">SRM Console Commands</a> &gt; <a href="commands.html">Commands</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Show Config</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="set-envar-commands-srmconsole.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="commands.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="show-cpu-commands-srmconsole.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">Displays the configuration seen at the last system initialization.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Syntax</span></h3>
+<p class="p_Normal"><span style="font-weight: bold;">sh</span>[ow] <span style="font-weight: bold;">c</span>[onfiguration]</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Options</span></p>
+<p class="p_Normal">None</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Arguments</span></p>
+<p class="p_Normal">None</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Example</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">P00&gt;&gt;&gt;show&nbsp;config</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Compaq&nbsp;Computer&nbsp;Corporation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;hp&nbsp;AlphaServer&nbsp;GS1280&nbsp;7/800</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">SRM&nbsp;Console&nbsp;X6.3-9195,&nbsp;built&nbsp;on&nbsp;Aug&nbsp;16&nbsp;2002&nbsp;at&nbsp;13:59:21</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;PALcode&nbsp;OpenVMS&nbsp;PALcode&nbsp;X2.11-0,&nbsp;Tru64&nbsp;UNIX&nbsp;PALcode&nbsp;X2.08-0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PID&nbsp;0&nbsp;CPU&nbsp;0&nbsp;Cabinet&nbsp;0&nbsp;Drawer&nbsp;0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;NS,EW&nbsp;(0,0)&nbsp;Hard&nbsp;ID&nbsp;0&nbsp;1.50&nbsp;MB&nbsp;Cache&nbsp;EV7&nbsp;rev&nbsp;2.0,&nbsp;800&nbsp;MHz</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Memory&nbsp;0&nbsp;1&nbsp;GB</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;IO7&nbsp;0&nbsp;3.3V&nbsp;PCI-X&nbsp;I/O&nbsp;IO7&nbsp;pass&nbsp;1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;I/O&nbsp;Drawer&nbsp;1&nbsp;Cabinet&nbsp;0&nbsp;Riser&nbsp;0&nbsp;Backplane&nbsp;rev&nbsp;0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;PCI&nbsp;Bus&nbsp;0&nbsp;Hose&nbsp;0&nbsp;64&nbsp;Bit,&nbsp;33&nbsp;MHz&nbsp;PCI&nbsp;2.2&nbsp;mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;PCI&nbsp;Bus&nbsp;1&nbsp;Hose&nbsp;1&nbsp;64&nbsp;Bit,&nbsp;33&nbsp;MHz&nbsp;PCI&nbsp;2.2&nbsp;mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;PCI&nbsp;Bus&nbsp;2&nbsp;Hose&nbsp;2&nbsp;64&nbsp;Bit,&nbsp;66&nbsp;MHz&nbsp;PCI&nbsp;2.2&nbsp;mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;AGP&nbsp;Bus&nbsp;3&nbsp;Hose&nbsp;3&nbsp;AGP&nbsp;rev&nbsp;2.0&nbsp;AGP&nbsp;2x&nbsp;mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PID&nbsp;1&nbsp;CPU&nbsp;1&nbsp;Cabinet&nbsp;0&nbsp;Drawer&nbsp;0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;NS,EW&nbsp;(1,0)&nbsp;Hard&nbsp;ID&nbsp;1&nbsp;1.50&nbsp;MB&nbsp;Cache&nbsp;EV7&nbsp;rev&nbsp;2.0,&nbsp;800&nbsp;MHz</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Memory&nbsp;1&nbsp;1&nbsp;GB</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;No&nbsp;Local&nbsp;I/O</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PID&nbsp;2&nbsp;CPU&nbsp;2&nbsp;Cabinet&nbsp;0&nbsp;Drawer&nbsp;0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;NS,EW&nbsp;(0,1)&nbsp;Hard&nbsp;ID&nbsp;2&nbsp;1.50&nbsp;MB&nbsp;Cache&nbsp;EV7&nbsp;rev&nbsp;2.0,&nbsp;800&nbsp;MHz</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Memory&nbsp;2&nbsp;1&nbsp;GB</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;No&nbsp;Local&nbsp;I/O</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PID&nbsp;3&nbsp;CPU&nbsp;3&nbsp;Cabinet&nbsp;0&nbsp;Drawer&nbsp;0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;NS,EW&nbsp;(1,1)&nbsp;Hard&nbsp;ID&nbsp;3&nbsp;1.50&nbsp;MB&nbsp;Cache&nbsp;EV7&nbsp;rev&nbsp;2.0,&nbsp;800&nbsp;MHz</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Memory&nbsp;3&nbsp;1&nbsp;GB</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;No&nbsp;Local&nbsp;I/O</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">System&nbsp;Memory&nbsp;4&nbsp;GB</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;RIMMs</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;PID&nbsp;Cab&nbsp;Drw&nbsp;CPU&nbsp;0123456789&nbsp;Size&nbsp;Address</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;PPPP.PPPP.&nbsp;1&nbsp;GB&nbsp;0&nbsp;Non-Striped</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1&nbsp;0&nbsp;0&nbsp;1&nbsp;PPPP.PPPP.&nbsp;1&nbsp;GB&nbsp;400000000&nbsp;Non-Striped</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;2&nbsp;0&nbsp;0&nbsp;2&nbsp;PPPP.PPPP.&nbsp;1&nbsp;GB&nbsp;800000000&nbsp;Non-Striped</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;3&nbsp;0&nbsp;0&nbsp;3&nbsp;PPPP.PPPP.&nbsp;1&nbsp;GB&nbsp;c00000000&nbsp;Non-Striped</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;0,&nbsp;Bus&nbsp;0,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1&nbsp;DECchip&nbsp;21154-AA&nbsp;Bridge&nbsp;to&nbsp;Bus&nbsp;2,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;2&nbsp;DECchip&nbsp;21154-AA&nbsp;Bridge&nbsp;to&nbsp;Bus&nbsp;3,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;0,&nbsp;Bus&nbsp;2,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;0/0&nbsp;USB&nbsp;usba0.0.0.2000.0&nbsp;hub</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;0/1&nbsp;USB&nbsp;usbb0.0.0.2100.0&nbsp;hub/mouse</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;0/2&nbsp;USB&nbsp;usbc0.0.0.2200.0&nbsp;hub</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;0/3&nbsp;USB&nbsp;usbd0.0.0.2300.0&nbsp;hub</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1&nbsp;CMD&nbsp;649&nbsp;PCI-IDE&nbsp;dqa.0.0.2001.0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;2&nbsp;Adaptec&nbsp;AIC-7892&nbsp;pka0.7.0.2002.0&nbsp;SCSI&nbsp;Bus&nbsp;ID&nbsp;7</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;dka0.0.0.2002.0&nbsp;COMPAQ&nbsp;BD0366349C</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;dka100.1.0.2002.0&nbsp;COMPAQ&nbsp;BD036635C</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;0,&nbsp;Bus&nbsp;3,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1&nbsp;DEC&nbsp;PCI&nbsp;FDDI&nbsp;fwa0.0.0.3001.0&nbsp;08-00-2B-B9-1B-7D</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;1,&nbsp;Bus&nbsp;0,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1&nbsp;KGPSA-C&nbsp;pga0.0.0.1.1&nbsp;WWN&nbsp;1000-0000-c929-4dbc</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;2&nbsp;DECchip&nbsp;21154-AA&nbsp;Bridge&nbsp;to&nbsp;Bus&nbsp;2,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;1,&nbsp;Bus&nbsp;2,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;4&nbsp;DE602-AA&nbsp;eia0.0.0.2004.1&nbsp;00-02-A5-89-9D-36</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;5&nbsp;DE602-AA&nbsp;eib0.0.0.2005.1&nbsp;00-02-A5-89-9D-37</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;2,&nbsp;Bus&nbsp;0,&nbsp;PCI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1/0&nbsp;Adaptec&nbsp;AIC-7899&nbsp;pkb0.7.0.1.2&nbsp;SCSI&nbsp;Bus&nbsp;ID&nbsp;7</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;1/1&nbsp;Adaptec&nbsp;AIC-7899&nbsp;pkc0.7.0.101.2&nbsp;SCSI&nbsp;Bus&nbsp;ID&nbsp;7</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;2&nbsp;FCA-2354&nbsp;pgb0.0.0.2.2&nbsp;WWN&nbsp;1000-0000-c927-2ebd</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;Slot&nbsp;Option&nbsp;Hose&nbsp;3,&nbsp;Bus&nbsp;0,&nbsp;AGP</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;5&nbsp;3D&nbsp;Labs&nbsp;OXYGEN&nbsp;VX1&nbsp;A&nbsp;vga0.0.0.5.3</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">P00&gt;&gt;&gt;&nbsp;</span></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

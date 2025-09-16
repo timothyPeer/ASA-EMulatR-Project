@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha Architecture &gt; Exceptions, Faults, Interrupts, and MachineChecks &gt; Trap Handling</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="Exception, Status Only,Exception, Trap Always,Exception, Trap Only if Both,Exceptions,ExceptionStatusRegister,FPCR,ra, Operand,rb, Operand,rc, Operand,Register, FPCR,Trap, Conditional,Trap, Unconditional" />
+   <meta name="description" content="This page documents the three canonical patterns for delivering floating-point exceptions and traps in the ASA-EMulatR, as required by the Alpha AXP architecture. Every..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "canonical-trap-handling.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Trap Handling</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?canonical-trap-handling.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; <a href="platform-architectures.html">Platform Architectures</a> &gt; <a href="architecture.html">Alpha Architecture</a> &gt; <a href="exceptionsinterruptsandmachinechecks.html">Exceptions, Faults, Interrupts, and MachineChecks</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Trap Handling</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="tlbexception-class-dictionary.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="firmware-(srm-ev59)---es40.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">This page documents the three canonical patterns for delivering floating-point exceptions and traps in the ASA-EMulatR, as required by the Alpha AXP architecture. Every floating-point arithmetic instruction grain (ADD, SUB, MUL, DIV, SQRT, etc.) selects one of these models based on its variant suffix (e.g., /C, /D, /M, /U, etc.).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-style: italic;">Each pattern defines when an exception results in a trap (architectural interrupt), and when it is only recorded as a “sticky” status bit for later inspection.</span></p>
+<p class="p_Normal">The trap delivery logic is determined by the combination of the <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> (which records whether an exception occurred) and the FPCR trap enable bits (which control whether that exception is eligible to interrupt the processor).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Trap Only if Both:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The most common model for Alpha floating-point instructions (variants: /C, /D, /SU, /SUI, /SUIC, /SUD, /SUID, /SUIM, and default/none).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain raises a trap only if the relevant exception status bit is set and the corresponding FPCR trap enable bit is set.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Trap Always:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Used for “unmasked” or unconditional variants (e.g., /U, /UM, /UC, /UD).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain always delivers a trap if the exception occurs, regardless of FPCR trap enables.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Status Only:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Used for summary-only or masked variants (e.g., /M, /SUM, /SUID).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain updates the <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> for any exceptions, but never delivers a trap—these exceptions are only sticky for software inspection.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The included code snippets illustrate each model and should be used directly in all arithmetic grains.</p>
+<p class="p_Normal"><span class="f_CodeExample">AlphaCpu::raiseException()</span> is the canonical entry point for trap delivery: all architectural traps must be funneled through this method for correct context, state, and handler vectoring.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For implementation:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always update <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> status bits after the arithmetic operation.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Slect and apply the correct trap pattern for the grain type based on the variant table.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only call <span class="f_CodeExample">AlphaCpu::raiseException()</span> if required by the model; otherwise, update status only.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always write results, notify, and advance PC after exception/trap handling.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This approach guarantees full architectural compliance for OS, PALcode, and guest application compatibility.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Examples and Usage: </span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;"> Trap Only if Both</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">(OptimizedExceptionStatusRegister + FPCR Trap Enable Checked)</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">Used for: /C, /D, /SU, /SUI, /SUIC, /SUD, /SUID, /SUIM, (none)</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Trap&nbsp;only&nbsp;if&nbsp;both&nbsp;exception&nbsp;occurred&nbsp;AND&nbsp;trap&nbsp;enable&nbsp;is&nbsp;set&nbsp;in&nbsp;FPCR</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">if&nbsp;(status-&gt;hasInvalidOpOccurred()&nbsp;&amp;&amp;&nbsp;fpcr-&gt;hasFlag(ExceptionCategory::TRAP_INVALID_OP_ENABLE))&nbsp;{</span></p>
+<p class="p_Normal" style="margin: 0 0 0 26px;"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #0000ff; background-color: #ffffff;">ExceptionInfo</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">info</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">;</span></p>
+<p class="p_Normal" style="margin: 0 0 0 26px;"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #2b91af; background-color: #ffffff;">quint32</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">bitmask</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;=&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a000a0; background-color: #ffffff;">ALPHA_EXCEPTION_SRC_BITMASK</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">(</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">m_ra</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">,&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">m_rb</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">);</span></p>
+<p class="p_Normal" style="margin: 0 0 0 26px;"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">info</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">.</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setSoftwareIPLBitmask</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">(</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">bitmask</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">);</span></p>
+<p class="p_Normal" style="margin: 0 0 0 26px;"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">info</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">.</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setPcAtFault</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">(</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">pc</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">);</span></p>
+<p class="p_Normal" style="margin: 0 0 0 26px;"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">info</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">.</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">category</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;=&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #0000ff; background-color: #ffffff;">ExceptionCategory</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">::</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #2f4f4f; background-color: #ffffff;">INVALID_OPERATION</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">;&nbsp;</span></p>
+<p class="p_Normal" style="margin: 0 0 0 26px;"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">argCpu</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">-&gt;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">raiseException</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">(</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">info</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;return;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_SeeAlso">See&nbsp;Also.</span><span class="f_CodeExample">&nbsp;&nbsp;</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><a href="trapping-exceptions.html" class="topiclink">Exception Source Bitmask</a> <a href="exception-source-bitmask-maski.html" class="topiclink">Exception Source Bitmask Masking</a></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">Summary: </span>Traps are delivered only if both the status bit is set and the corresponding FPCR enable bit is set.</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Trap Always</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">(OptimizedExceptionStatusRegister Only; Unconditional Trap)</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">Used for: /U, /UM, /UC, /UD</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Trap&nbsp;always&nbsp;if&nbsp;exception&nbsp;occurred,&nbsp;regardless&nbsp;of&nbsp;FPCR&nbsp;trap&nbsp;enables</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">if&nbsp;(status-&gt;hasInvalidOpOccurred())&nbsp;{</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;cpu-&gt;raiseException(ExceptionCategory::INVALID_OPERATION,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">if&nbsp;(status-&gt;hasOverflowOccurred())&nbsp;{</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;cpu-&gt;raiseException(ExceptionCategory::FLOATING_POINT_OVERFLOW,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">if&nbsp;(status-&gt;hasUnderflowOccurred())&nbsp;{</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;cpu-&gt;raiseException(ExceptionCategory::FLOATING_POINT_UNDERFLOW,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">if&nbsp;(status-&gt;hasInexactOccurred())&nbsp;{</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;cpu-&gt;raiseException(ExceptionCategory::INEXACT,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">Summary</span>: Traps are delivered for any occurred exception—FPCR is not checked.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Status Only (Masked/Summary-Only)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">(OptimizedExceptionStatusRegister Only; Never Traps)</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">Used for: /M, /SUM, /SUID, etc.</p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Status&nbsp;only:&nbsp;update&nbsp;OptimizedExceptionStatusRegister,&nbsp;never&nbsp;trap</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">status-&gt;testInvalidOccurred(dtResult);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">status-&gt;testOverflowOccurred(dtResult);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">status-&gt;testUnderflowOccurred(dtResult);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">status-&gt;testInexactOccurred(dtA,&nbsp;dtResult);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;No&nbsp;RaiseException&nbsp;called</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">Summary</span>: Never triggers a trap/exception; only sets status bits. Do not Call AlphaCPU::raiseException()</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">About RaiseException:</span> </h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-weight: bold;">RaiseException</span> is the single, canonical entry point for actually delivering an architectural trap/exception.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The above logic ensures the grain decides whether to deliver a trap.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>It does so by checking:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>For &quot;Trap Only if Both&quot;: Exception status and FPCR trap enable</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>For &quot;Trap Always&quot;: Exception status only (no FPCR check)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>For &quot;Status Only&quot;: Never calls RaiseException (status update only)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Once the trap is to be delivered, RaiseException takes over: saves context, updates architectural state, possibly signals PALcode, etc.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Quick Visual Table</span></p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Case Name</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Condition</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Code Pattern</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Trap Only if Both</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">status &amp;&amp; fpcr-&gt;enable</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">See #1 above</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Trap Always</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">status</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">See #2 above</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Status Only</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">(none)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">See #3 above</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Grain Implementation and Usage:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always update <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> status bits after the operation.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Select the right trap pattern for the grain type (per your table).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only then write result, notify, and advance PC.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Summary</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All architectural &quot;trap&quot; logic for FP arithmetic is handled by the combination of <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> (status bits) and FPCR (trap enables) per instruction model.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>RaiseException is only called if the grain's model and current status/enable bits require a trap.</p>
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>
