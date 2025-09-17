@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Virtual Address Space — Overview &gt; Address Translation (va &lt;-&gt; pa)</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Virtual-to-Physical Address Translation in Alpha Architecture" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "addresstranslation.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Address Translation (va &lt;-&gt; pa)</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?addresstranslation.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="virtualization-address-space.html">Virtual Address Space — Overview</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Address Translation (va &lt;-&gt; pa)</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="m_psr-claude.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="virtualization-address-space.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="linux-on-alpha-specific.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Virtual-to-Physical Address Translation in Alpha Architecture</span></p>
+<p class="p_Normal">You've touched on a fundamental aspect of the Alpha architecture's memory system. Let me clarify how virtual-to-physical address translation works in the Alpha architecture and how it should be implemented in your emulator.</p>
+<p class="p_Normal">The Complete Translation Path</p>
+<p class="p_Normal">In Alpha systems, the complete virtual-to-physical translation process involves:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">1.</span>Memory Management Unit ( <a href="mmiomanager-claude.html" class="topiclink">MMIOManager (MMIO)</a>) - The primary hardware component responsible for translation</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">2.</span>Translation Lookaside Buffer ( <a href="tlbsystem-class-dictionary.html" class="topiclink">Translation Buffer Table (TLB)</a>) - A cache of recent translations</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">3.</span>Page Tables (<a href="tlbsystem-class-dictionary.html" class="topiclink">Translation Buffer Table (TLB))</a> - Memory structures that define the complete mapping</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">--------------</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">Virtual&nbsp;Address</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MMU&nbsp;checks&nbsp;TLB&nbsp;first&nbsp;(fast&nbsp;path)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">If&nbsp;TLB&nbsp;miss&nbsp;→&nbsp;MMU&nbsp;walks&nbsp;Page&nbsp;Tables&nbsp;(slow&nbsp;path)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp;Updates&nbsp;TLB&nbsp;with&nbsp;new&nbsp;translation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Physical&nbsp;Address</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Detailed Interface Analysis</span></h3>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><span style="font-weight: bold;">FetchUnit ↔ AlphaCPU Interface</span></p>
+<p class="p_Normal">Key Methods:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;translate(alignedPC,&nbsp;physicalAddress,&nbsp;2)&nbsp;-&nbsp;Translates&nbsp;instruction&nbsp;virtual&nbsp;addresses</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;handleTLBMiss(alignedPC,&nbsp;asn,&nbsp;true)&nbsp;-&nbsp;Handles&nbsp;instruction&nbsp;TLB&nbsp;misses</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;readMemory32(physicalAddress,&nbsp;instruction)&nbsp;-&nbsp;Reads&nbsp;instruction&nbsp;from&nbsp;physical&nbsp;memory</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;getInstructionCache()&nbsp;-&nbsp;Accesses&nbsp;instruction&nbsp;cache</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Translation Flow:</span></p>
+<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">From fetchInstruction() in FetchUnit</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(m_cpu-&gt;translate(alignedPC,&nbsp;physicalAddress,&nbsp;2))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Translation&nbsp;successful&nbsp;-&nbsp;read&nbsp;from&nbsp;physical&nbsp;memory</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;readSuccess&nbsp;=&nbsp;m_cpu-&gt;readMemory32(physicalAddress,&nbsp;instruction);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}&nbsp;else&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Translation&nbsp;failed&nbsp;-&nbsp;handle&nbsp;TLB&nbsp;miss</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!m_cpu-&gt;handleTLBMiss(alignedPC,&nbsp;m_cpu-&gt;readASN(),&nbsp;true))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tlbMiss&nbsp;=&nbsp;true;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit&nbsp;tlbMissSignal(alignedPC);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">2.</span>AlphaCPU&nbsp;↔&nbsp;TLBSystem&nbsp;Interface</p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-style: italic; font-weight: bold;">Key&nbsp;Methods:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">translateAddress(va,&nbsp;isWrite,&nbsp;isExec,&nbsp;asn,&nbsp;isKernel)&nbsp;-&nbsp;Main&nbsp;translation&nbsp;entry&nbsp;point</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">handleTLBMiss(va,&nbsp;asn,&nbsp;isWrite,&nbsp;isExec,&nbsp;isKernel)&nbsp;-&nbsp;Handles&nbsp;translation&nbsp;misses</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">insertEntry(va,&nbsp;pa,&nbsp;asn,&nbsp;protection,&nbsp;isInstruction)&nbsp;-&nbsp;Adds&nbsp;new&nbsp;TLB&nbsp;entries</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">invalidateEntry(va,&nbsp;asn,&nbsp;isKernel)&nbsp;-&nbsp;Invalidates&nbsp;specific&nbsp;TLB&nbsp;entries</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><span style="font-weight: bold;">Translation Process:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Address Translation:</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Virtual → Physical address mapping</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Permission Checking: </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Read/Write/Execute permission validation</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">ASN Matching: </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Address Space Number verification</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Alignment Checking:</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Ensures proper memory alignment</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB Management:</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Entry insertion, replacement, and invalidation</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><span style="font-weight: bold;">3. TLBSystem ↔ AlphaTranslationCache Coordination</span></p>
+<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Coordinated Operations:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">invalidateTranslationCache(va,&nbsp;asn,&nbsp;isInstruction)&nbsp;-&nbsp;Synchronized&nbsp;invalidation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">invalidateTranslationCacheAll()&nbsp;-&nbsp;Full&nbsp;cache&nbsp;flush&nbsp;coordination</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">invalidateTranslationCacheASN(asn)&nbsp;-&nbsp;ASN-specific&nbsp;invalidation</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This ensures cache coherency between the TLB and any higher-level translation caches.</p>
+<p class="p_Normal"><span style="font-weight: bold;">4. Memory Protection and Fault Handling</span></p>
+<p class="p_Normal">The TLB system implements comprehensive fault detection:</p>
+<p class="p_Normal">Fault Types:</p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">INVALID_ENTRY:</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Page not mapped or invalid</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">PROTECTION_FAULT: </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Permission violation (read/write/execute)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">ALIGNMENT_FAULT: </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Misaligned memory access</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_MISS: </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Entry not found in TLB (triggers page table walk)</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Protection Bits:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_VALID (0x01):</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Entry is valid</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_WRITE (0x02):</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Write permission</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_EXEC (0x04):</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Execute permission</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_KERNEL (0x08):</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Kernel-mode access</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_USER (0x10):</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">User-mode access</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TLB_GLOBAL (0x80):</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Global across all ASNs</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">5. Performance Features</span></p>
+<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Statistics Tracking:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>ITLB/DTLB hit/miss rates</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Page fault and protection fault counts</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Memory access patterns analysis</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Optimization Features:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Separate instruction and data TLBs (Harvard architecture)</p>
+<p class="p_Normal">LRU replacement policy with reference bit tracking</p>
+<p class="p_Normal">Reverse lookup cache for physical→virtual mapping</p>
+<p class="p_Normal">Prefetch support in FetchUnit for sequential instruction access</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">6. Thread Safety and Synchronization</span></p>
+<p class="p_Normal">The system uses multiple synchronization mechanisms:</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">QReadWriteLock&nbsp;m_tlbLock&nbsp;for&nbsp;TLB&nbsp;array&nbsp;access</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">QMutex&nbsp;tlbMutex&nbsp;for&nbsp;statistics&nbsp;and&nbsp;critical&nbsp;sections</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">QAtomicInt&nbsp;m_pendingAborts&nbsp;for&nbsp;memory&nbsp;operation&nbsp;tracking</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Lock&nbsp;reservation&nbsp;tracking&nbsp;for&nbsp;LL/SC&nbsp;(Load-Locked/Store-Conditional)&nbsp;operations</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also. <a href="alphamemorysystem-claude.html" class="topiclink">AlphaMemorySystem</a>  &nbsp; &nbsp; &nbsp; &nbsp;<a href="safememory-claude.html" class="topiclink">SafeMemory</a> <a href="mmiomanager-claude.html" class="topiclink">MMIOManager (MMIO)</a> <a href="virtual-to-physical-address-tr.html" class="topiclink">Virtual to Physical Address Translation</a></span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

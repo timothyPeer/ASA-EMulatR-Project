@@ -1,0 +1,563 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design) &gt; Processor Status Register (PS) — Overview</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="64-bits,Asynchronous System Trap enable,Current Mode (User, Supervisor, Executive, Kernel),Data Translation (MMU enable for data accesses),Divide by Zero Trap Enable,EV6,EV7,Floating-Point Enable (required for FP ops),Instruction Translation (MMU enable for instruction fetches),Integer Overflow Trap Enable,Interrupt Enable (1=enabled, 0=disabled),Interrupt Priority Level (0=lowest, 31=highest; default after reset is 31),IRQL (Interrupt Request Level) (Used internally),Kernel Mode,PALcode,PC,Privilege Enforcement,Processor Status Register,Program Counter,PS,Register, AST,Register, CM,Register, DT,Register, DZE,Register, FEN,Register, IE,Register, IPL,Register, IRQL,Register, IT,Register, IV,Register, SDE,Register, SIE,SMP,Software Debug Enable,Software Interrupt Enable (ASTs)" />
+   <meta name="description" content="The Processor Status Register (PS) is a central architectural register on Alpha AXP systems, controlling processor mode, interrupt priority, floating-point enable, exception..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "processor-status-register-(ps).html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Processor Status Register (PS) — Overview)</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?processor-status-register-(ps).html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="alpha-registers.html">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Processor Status Register (PS) — Overview)</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="canonical-register-definitions-alphaaxpregister.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="alpha-registers.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="asa-emulator-initialization.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">The Processor Status Register (PS) is a central architectural register on Alpha AXP systems, controlling processor mode, interrupt priority, floating-point enable, exception trapping, and system privilege state.</p>
+<p class="p_Normal">PS is 64 bits wide (though not all bits are used on every implementation) and is required for correct context switching, exception/interrupt handling, and operating system privilege enforcement.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Width: 64 bits (architecture-defined fields through EV6/EV67; reserved bits for SMP extensions and implementation use)</p>
+<p class="p_Normal">Privilege: PS is readable and writable in kernel mode and by PALcode. Some fields (such as current mode) may be read in all modes for introspection.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Purpose: Controls privilege level (User/Supervisor/Executive/Kernel), interrupt enable, interrupt priority level (IPL), floating-point enable, exception summary/trapping, and other processor state features.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">All emulator and PALcode logic must use the canonical field definitions, masks, and helper functions provided here to ensure full architectural compatibility and system correctness. The tables and code samples in this section are the sole reference for PS register usage and field extraction.</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">&nbsp;</span></h3>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">General Description</span></h3>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Width: 64 bits (but not all bits are defined or implemented in all CPUs)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privilege: Readable/writable in Kernel mode or by PALcode; some bits available in all modes (e.g., reading mode).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Purpose: Controls processor mode, interrupt enable, IPL (priority), floating-point enable, exception status, and more.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Canonical Bit Fields</span></h3>
+<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">(Reference: Alpha Architecture Reference Manual, Vol I, Section 3.2.5.2 and Table 3-10; OpenVMS Internals, SRM)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Bits</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Name</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Mask</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Description</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">2:0</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">CM</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x7</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Current Mode (User, Supervisor, Executive, Kernel)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">7:3</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IPL</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0xF8</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt Priority Level (0=lowest, 31=highest; default after reset is 31)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">8</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IE</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x100</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt Enable (1=enabled, 0=disabled)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">9</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IRQL</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x200</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IRQL (Interrupt Request Level) (Used internally)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">10</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">DT</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x400</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Data Translation (MMU enable for data accesses)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">11</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IT</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x800</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Instruction Translation (MMU enable for instruction fetches)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">12</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">SDE</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x1000</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Software Debug Enable</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">13</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">SIE</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x2000</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Software Interrupt Enable (ASTs)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">14</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">AST</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x4000</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Asynchronous System Trap enable</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">15</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">FEN</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x8000</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Floating-Point Enable (required for FP ops)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">16</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">DZE</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x10000</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Divide by Zero Trap Enable</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">17</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IV</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x20000</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Integer Overflow Trap Enable</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">...</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">...</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">...</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">(Reserved/Implementation-specific)</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">36</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Reserved</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">...</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Reserved for EV6+; higher bits mostly unused in ES40/EV6 except for SMP extension bits</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-style: italic;">Not all bits are defined on every implementation. The above covers all canonical fields through EV6/EV67. Lower bits (CM, IPL, IE, FEN, IV) are present on all implementations.</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;PS&nbsp;Register&nbsp;Field&nbsp;Masks&nbsp;and&nbsp;Shifts&nbsp;(canonical)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_CM_SHIFT&nbsp;&nbsp;&nbsp;=&nbsp;0;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_CM_MASK&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0x7ULL&nbsp;&lt;&lt;&nbsp;PS_CM_SHIFT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bits&nbsp;2:0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IPL_SHIFT&nbsp;&nbsp;=&nbsp;3;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IPL_MASK&nbsp;&nbsp;&nbsp;=&nbsp;0x1FULL&nbsp;&lt;&lt;&nbsp;PS_IPL_SHIFT;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bits&nbsp;7:3</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IE_SHIFT&nbsp;&nbsp;&nbsp;=&nbsp;8;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IE_MASK&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0x1ULL&nbsp;&lt;&lt;&nbsp;PS_IE_SHIFT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;8</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_FEN_SHIFT&nbsp;&nbsp;=&nbsp;15;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_FEN_MASK&nbsp;&nbsp;&nbsp;=&nbsp;0x1ULL&nbsp;&lt;&lt;&nbsp;PS_FEN_SHIFT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;15</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IV_SHIFT&nbsp;&nbsp;&nbsp;=&nbsp;17;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IV_MASK&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0x1ULL&nbsp;&lt;&lt;&nbsp;PS_IV_SHIFT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;17</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><span style="font-style: italic;">// (todo Add SIE, AST, DZE, IRQL, DT, IT, SDE as above if modeling full SRM field set)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">PS Register: Mode Values (CM field)</span></h3>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Mode</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Value (bits 2:0)</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Description</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">User</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0 (0b000)</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">User mode</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Supervisor</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">1 (0b001)</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Supervisor mode</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Executive</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">2 (0b010)</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Executive mode</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Kernel</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">3 (0b011)</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Kernel mode</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal"><span style="font-size: 9px; vertical-align: sub;">Palcode runs in kernel mode (cm=3); os may use supervisor or executive for compatibility.</span></p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">PS Register: Default/Reset Value</span></h3>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic;">Register</span></p>
+</th>
+<th style="vertical-align:top; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic;">Reset Value</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">PS</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x0400_0000_0000_0000</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">IPL = 31 (all interrupts masked)</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">CM = 3 (Kernel mode)</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">IE = 0 (interrupts disabled)</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">All other bits = 0</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-style: italic;">The class implementation performs bitwise setter/getter functions via helper functions.</span></p>
+<p class="p_Normal"><span style="font-style: italic;">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Example:&nbsp;Setting/Extracting&nbsp;PS&nbsp;Fields&nbsp;in&nbsp;C++</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Extract&nbsp;mode&nbsp;and&nbsp;IPL&nbsp;from&nbsp;PS</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint64&nbsp;ps&nbsp;=&nbsp;...;&nbsp;//&nbsp;Value&nbsp;from&nbsp;register</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint8&nbsp;mode&nbsp;=&nbsp;static_cast&lt;quint8&gt;((ps&nbsp;&amp;&nbsp;PS_CM_MASK)&nbsp;&gt;&gt;&nbsp;PS_CM_SHIFT);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint8&nbsp;ipl&nbsp;&nbsp;=&nbsp;static_cast&lt;quint8&gt;((ps&nbsp;&amp;&nbsp;PS_IPL_MASK)&nbsp;&gt;&gt;&nbsp;PS_IPL_SHIFT);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;interruptsEnabled&nbsp;=&nbsp;(ps&nbsp;&amp;&nbsp;PS_IE_MASK)&nbsp;!=&nbsp;0;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;fpEnabled&nbsp;=&nbsp;(ps&nbsp;&amp;&nbsp;PS_FEN_MASK)&nbsp;!=&nbsp;0;</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-style: italic;">// Set PS (example: set kernel mode, IPL=31)</span></p>
+<p class="p_Normal"><span style="font-style: italic;">ps = (3ULL &lt;&lt; PS_CM_SHIFT) | (31ULL &lt;&lt; PS_IPL_SHIFT);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Summary Table</span></h3>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Field</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Bits</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Mask</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Description</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">CM</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">2:0</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x7</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Current Mode</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">IPL</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">7:3</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0xF8</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Interrupt Priority Level</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">IE</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">8</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x100</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Interrupt Enable</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">FEN</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">15</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x8000</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Floating-Point Enable</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">IV</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">17</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x20000</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Integer Overflow Trap Enable</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">(others)</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">...</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">...</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">...</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Source of Truth (Header-Ready)</span></h3>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_CM_MASK&nbsp;&nbsp;=&nbsp;0x7ULL;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;[2:0]&nbsp;&nbsp;&nbsp;Current&nbsp;Mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IPL_MASK&nbsp;=&nbsp;0xF8ULL;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;[7:3]&nbsp;&nbsp;&nbsp;Interrupt&nbsp;Priority&nbsp;Level</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IE_MASK&nbsp;&nbsp;=&nbsp;0x100ULL;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;[8]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interrupt&nbsp;Enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_FEN_MASK&nbsp;=&nbsp;0x8000ULL;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;[15]&nbsp;&nbsp;&nbsp;&nbsp;Floating-Point&nbsp;Enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IV_MASK&nbsp;&nbsp;=&nbsp;0x20000ULL;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;[17]&nbsp;&nbsp;&nbsp;&nbsp;Integer&nbsp;Overflow&nbsp;Trap&nbsp;Enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Default/Reset&nbsp;Value:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_RESET_DEFAULT&nbsp;=&nbsp;0x0400000000000000ULL;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">References</span></p>
+<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">Alpha Architecture Reference Manual, Vol I, Table 3-10: Processor Status Register (PS)</span></p>
+<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">OpenVMS Alpha Internals and Data Structures</span></p>
+<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">Alpha SRM (System Reference Manual)</span></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

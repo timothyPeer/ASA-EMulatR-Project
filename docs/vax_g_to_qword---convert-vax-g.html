@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; VAX on ASA-EmulatR &gt; Conversion Macros &gt; VAX_G_TO_QWORD - Convert VAX G_Float to 64-bit signed integer</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Convert VAX G_Float to 64-bit signed integer (QUADWORD)." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "vax_g_to_qword---convert-vax-g.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">VAX_G_TO_QWORD - Convert VAX G_Float to 64-bit signed integer</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?vax_g_to_qword---convert-vax-g.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="vax---specific.html">VAX on ASA-EmulatR</a> &gt; <a href="vaxmacroandheader.html">Conversion Macros</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">VAX_G_TO_QWORD - Convert VAX G_Float to 64-bit signed integer</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="vax_g_to_f_float.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="vaxmacroandheader.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="vax_g_to_f_float_4.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">Convert VAX G_Float to 64-bit signed integer (QUADWORD).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The macro does a simple, direct conversion—no reserved/overflow/inexact detection.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Add additional exception/trap logic outside the macro as needed for full architectural fidelity.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Converts VAX G_floating (raw bits) to int64_t (quadword integer).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Uses dt_gfloat for full fidelity if available.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Considerations. </span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>This does not check reserved operands/NaN.</p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #008000; background-color: #ffffff;">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">/*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Macro:&nbsp;VAX_G_TO_QWORD</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Converts&nbsp;VAX&nbsp;G_floating&nbsp;(raw&nbsp;64-bit&nbsp;value)&nbsp;to&nbsp;a&nbsp;64-bit&nbsp;signed&nbsp;integer&nbsp;(quadword).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Usage:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;quint64&nbsp;gBits&nbsp;=&nbsp;context-&gt;readFpRegRawGFloat(m_ra);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;qint64&nbsp;result&nbsp;=&nbsp;0;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;VAX_G_TO_QWORD(gBits,&nbsp;result);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Arguments:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;g_bits&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;The&nbsp;raw&nbsp;64-bit&nbsp;G-float&nbsp;value&nbsp;(as&nbsp;quint64).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;qword_out&nbsp;-&nbsp;A&nbsp;reference/variable&nbsp;to&nbsp;receive&nbsp;the&nbsp;converted&nbsp;64-bit&nbsp;signed&nbsp;integer&nbsp;(qint64).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;How&nbsp;it&nbsp;works:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;Wraps&nbsp;the&nbsp;raw&nbsp;bits&nbsp;in&nbsp;a&nbsp;dt_gfloat&nbsp;object.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;Calls&nbsp;dt_gfloat::toDouble()&nbsp;for&nbsp;conversion&nbsp;to&nbsp;IEEE&nbsp;double.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;Casts&nbsp;the&nbsp;double&nbsp;value&nbsp;to&nbsp;qint64&nbsp;(truncating&nbsp;any&nbsp;fractional&nbsp;part).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;No&nbsp;check&nbsp;is&nbsp;performed&nbsp;for&nbsp;reserved&nbsp;operands&nbsp;or&nbsp;NaNs.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;No&nbsp;overflow&nbsp;checking—out-of-range&nbsp;G-float&nbsp;values&nbsp;will&nbsp;saturate&nbsp;or&nbsp;wrap&nbsp;per&nbsp;C++&nbsp;cast&nbsp;rules.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Limitations:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;Does&nbsp;NOT&nbsp;raise&nbsp;Alpha/VAX&nbsp;reserved&nbsp;operand,&nbsp;overflow,&nbsp;or&nbsp;inexact&nbsp;exceptions.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;If&nbsp;G-float&nbsp;is&nbsp;reserved/NaN,&nbsp;result&nbsp;is&nbsp;implementation-defined.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;For&nbsp;full&nbsp;Alpha/VAX&nbsp;architectural&nbsp;compliance,&nbsp;add&nbsp;additional&nbsp;checks&nbsp;before/after&nbsp;macro&nbsp;use.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Architectural&nbsp;Reference:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;Alpha&nbsp;System&nbsp;Architecture&nbsp;Reference&nbsp;Manual,&nbsp;Ch.&nbsp;4,&nbsp;Floating-Point&nbsp;Conversion&nbsp;Instructions.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;-&nbsp;VAX&nbsp;G_float&nbsp;→&nbsp;Integer&nbsp;conversion&nbsp;rules.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;Example:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;//&nbsp;In&nbsp;an&nbsp;Alpha&nbsp;grain:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;quint64&nbsp;gBits&nbsp;=&nbsp;context-&gt;readFpRegRawGFloat(m_ra);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;qint64&nbsp;qResult&nbsp;=&nbsp;0;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;VAX_G_TO_QWORD(gBits,&nbsp;qResult);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*&nbsp;&nbsp;&nbsp;context-&gt;writeIntReg(m_rc,&nbsp;qResult);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;*/</span></p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

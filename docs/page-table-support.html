@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Virtual Address Space — Overview &gt; Memory Management &gt; Page Table Support</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Page Table Interface Documentation for Alpha Emulator" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "page-table-support.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Page Table Support</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?page-table-support.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="virtualization-address-space.html">Virtual Address Space — Overview</a> &gt; <a href="memory-management.html">Memory Management</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Page Table Support</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="virtual-to-physical-address-tr.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="memory-management.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="invalidation-pagetable.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Page Table Interface Documentation for Alpha Emulator</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">API Boundary Contract</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All APIs on TLBEntry, TLBHashSystem, TLBSystem must only accept raw, unshifted VA/PA.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>VPN/PPN is internal only. The shifting logic is never repeated outside TLBEntry.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>The MMU’s primary storage method is based on VA → PA translation.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>All memory access by the CPU starts with a Virtual Address (VA).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>The MMU uses the VA (and ASN/context) to look up a translation (in the TLB or via a page table walk).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>The MMU then outputs the corresponding Physical Address (PA).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>The actual DRAM, I/O, and device memory is addressed physically (by PA).</p>
+<p class="p_Normal"><span style="font-style: italic;">The PA is never translated to VA by the MMU in hardware.</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">If the page size/shift is not known at the API boundary, then you must:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Canonical Memory Access Flow (Alpha):</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">1.</span>CPU issues load/store/fetch with a Virtual Address (VA).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">2.</span>MMU (ITB/DTB) translates VA to PA using TLB or page tables (software or hardware refill, as appropriate).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">3.</span>PA is used to access memory or device.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">4.</span>Exception/Trap occurs if translation is not possible (page not present, access violation, etc.).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Supply it as a parameter, or</p>
+<p class="p_Normal">Query it from a matching TLBEntry object if possible.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample">&nbsp;&nbsp;<span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;+---------------------------&nbsp;Virtual&nbsp;Address&nbsp;Space&nbsp;-----------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;VA&nbsp;=&nbsp;0xFFFF_FFFF_FFFF_1234&nbsp;&nbsp;&nbsp;(example&nbsp;64-bit&nbsp;Alpha/VMS&nbsp;address)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;+--------------------------+-----------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Virtual&nbsp;Page&nbsp;Number&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Page&nbsp;Offset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(VPN)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;(Offset)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[VA[63:pageShift]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;[VA[pageShift-1:0]]&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;+--------------------------+-----------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-------------------------------------------------------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TLB/PTE&nbsp;Translation&nbsp;(lookup&nbsp;by&nbsp;VPN)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------------------------&nbsp;Physical&nbsp;Address&nbsp;Space&nbsp;----------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;PA&nbsp;=&nbsp;0x0000_1234_5678_1234&nbsp;&nbsp;&nbsp;(output&nbsp;of&nbsp;MMU/TLB&nbsp;translation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;+--------------------------+-----------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Physical&nbsp;Page&nbsp;Number&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Page&nbsp;Offset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(PPN)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;(Offset)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PA[63:pageShift]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;[PA[pageShift-1:0]]&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;+--------------------------+-----------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-------------------------------------------------------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span style="font-weight: bold;">Example&nbsp;for&nbsp;8KB&nbsp;Page&nbsp;Size&nbsp;(pageShift&nbsp;=&nbsp;13):</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample">&nbsp;&nbsp;&nbsp;<span class="f_CodeExample">VA:&nbsp;0xFFFF_FFFF_FFFF_1234</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[63..................13&nbsp;|&nbsp;12.............0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VPN&nbsp;(0xFFFF_FFFF_FFFF)&nbsp;|&nbsp;Offset&nbsp;(0x1234)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;PA:&nbsp;0x0000_1234_5678_1234</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[63..................13&nbsp;|&nbsp;12.............0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PPN&nbsp;(0x0000_1234_5678)&nbsp;|&nbsp;Offset&nbsp;(0x1234)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;-&nbsp;The&nbsp;**Page&nbsp;Offset**&nbsp;(lowest&nbsp;13&nbsp;bits)&nbsp;is&nbsp;**identical**&nbsp;in&nbsp;both&nbsp;VA&nbsp;and&nbsp;PA.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;-&nbsp;The&nbsp;**VPN**&nbsp;indexes&nbsp;the&nbsp;TLB/Page&nbsp;Table,&nbsp;yielding&nbsp;a&nbsp;**PPN**.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;-&nbsp;The&nbsp;final&nbsp;**PA**&nbsp;is&nbsp;constructed&nbsp;as:&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PA&nbsp;=&nbsp;(PPN&nbsp;&lt;&lt;&nbsp;13)&nbsp;|&nbsp;(VA&nbsp;&amp;&nbsp;0x1FFF)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">+----------------------------------------------------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Virtual&nbsp;Address&nbsp;Space&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Physical&nbsp;Address&nbsp;Space&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;+-------------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-------------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;VPN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Offset&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;---&gt;&nbsp;|&nbsp;&nbsp;PPN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Offset&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;+-------------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-------------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(TLB/PTE&nbsp;Lookup)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Same&nbsp;Offset&nbsp;Bits)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">+----------------------------------------------------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal">Legend:</p>
+<p class="p_Normal"> &nbsp;- VPN = Virtual Page Number = VA &gt;&gt; pageShift</p>
+<p class="p_Normal"> &nbsp;- PPN = Physical Page Number = PA &gt;&gt; pageShift</p>
+<p class="p_Normal"> &nbsp;- Offset = VA &amp; (2^pageShift-1) = PA &amp; (2^pageShift-1)</p>
+<p class="p_Normal"> &nbsp;- Page size: 8KB (pageShift=13) is shown, but applies to 64KB, 4MB, etc.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">References:</p>
+<p class="p_Normal"> &nbsp;- Alpha AXP System Reference Manual, Sections 5.2–5.3</p>
+<p class="p_Normal"> &nbsp;- VMS Internals, TLB Translation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">Method&nbsp;Name &nbsp; &nbsp; &nbsp; &nbsp;Returns &nbsp; &nbsp; &nbsp; &nbsp;Notes</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">virtualPageNumber() &nbsp; &nbsp; &nbsp; &nbsp;VPN&nbsp;(shifted,&nbsp;integer) &nbsp; &nbsp; &nbsp; &nbsp;Not&nbsp;a&nbsp;VA,&nbsp;just&nbsp;the&nbsp;page&nbsp;number</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">virtualPageBaseAddress() &nbsp; &nbsp; &nbsp; &nbsp;VA&nbsp;base&nbsp;for&nbsp;entry's&nbsp;page &nbsp; &nbsp; &nbsp; &nbsp;VPN&nbsp;&lt;&lt;&nbsp;shift</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">getVirtualAddressBase() &nbsp; &nbsp; &nbsp; &nbsp;(alias)&nbsp;VA&nbsp;base&nbsp;for&nbsp;entry &nbsp; &nbsp; &nbsp; &nbsp;synonym&nbsp;for&nbsp;above</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">physicalPageNumber() &nbsp; &nbsp; &nbsp; &nbsp;PPN&nbsp;(shifted,&nbsp;integer) &nbsp; &nbsp; &nbsp; &nbsp;Not&nbsp;a&nbsp;PA,&nbsp;just&nbsp;the&nbsp;page&nbsp;number</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">physicalPageBaseAddress() &nbsp; &nbsp; &nbsp; &nbsp;PA&nbsp;base&nbsp;for&nbsp;entry's&nbsp;page &nbsp; &nbsp; &nbsp; &nbsp;PPN&nbsp;&lt;&lt;&nbsp;shift</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">getPhysicalAddressBase() &nbsp; &nbsp; &nbsp; &nbsp;(alias)&nbsp;PA&nbsp;base&nbsp;for&nbsp;entry &nbsp; &nbsp; &nbsp; &nbsp;synonym&nbsp;for&nbsp;above</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Overview</span></p>
+<p class="p_Normal">This document describes the structure, purpose, and integration points of the PageTableHelpers.h interface within the Alpha Emulator system. It outlines how the page table subsystem interacts with other core subsystems, including AlphaMemorySystem, TLBSystem, and optionally SafeMemory. This document serves as a reference for integrating and extending the page table subsystem to support guest operating systems such as OpenVMS, Tru64, and UNIX.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Chain of Execution: </span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">[InstructionGrain::execute()]&nbsp;&nbsp;&lt;-&nbsp;e.g.,&nbsp;LDT,&nbsp;STQ</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">AlphaMemorySystem::readVirtualMemory(...)</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">TLBSystem::translateAddress(...)&nbsp;&nbsp;//&nbsp;Miss&nbsp;occurs</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">SimplePageTable::translate(...)&nbsp;&nbsp;&nbsp;//&nbsp;Uses&nbsp;IPR::VPTB&nbsp;(</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #0000ff; background-color: #ffffff;">MTPR_VPTB_InstructionGrain)</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">Create&nbsp;and&nbsp;insert&nbsp;new&nbsp;TLB&nbsp;entry</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">1.</span><span class="f_Heading3">Page Table Interface Components</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">a.</span>alpha_pte_asa_v7_t</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The baseline 64-bit Page Table Entry format according to the Alpha System Architecture (ASA V7):</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">struct&nbsp;alpha_pte_asa_v7_t&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;v&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Valid&nbsp;bit</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;for_:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Fault-on-read</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;foe&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Fault-on-execute</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;fow&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Fault-on-write</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;sw1&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;OS&nbsp;software&nbsp;bit</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;kh&nbsp;:&nbsp;2;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;hint</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;gh&nbsp;:&nbsp;2;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Granularity&nbsp;hint</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;asm&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Address&nbsp;space&nbsp;match</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;kre&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;read&nbsp;enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;krex&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;execute&nbsp;enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;uwe&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;User&nbsp;write&nbsp;enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;ure&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;User&nbsp;read&nbsp;enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;urx&nbsp;:&nbsp;1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;User&nbsp;execute&nbsp;enable</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;pfn&nbsp;:&nbsp;32;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Page&nbsp;frame&nbsp;number</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;quint64&nbsp;sw&nbsp;:&nbsp;16;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Software-defined&nbsp;bits</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">};</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal">This is extended with union overlays for OpenVMS and Tru64.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">struct&nbsp;alpha_pte_handler_t&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;ArchitectureType&nbsp;arch;&nbsp;&nbsp;//&nbsp;e.g.,&nbsp;OPENVMS,&nbsp;TRU64,&nbsp;UNIX</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;union&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;alpha_pte_openvms_asa_v7_t&nbsp;vms;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;alpha_pte_tru64_asa_v7_t&nbsp;tru64;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;}&nbsp;u;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;//&nbsp;Function&nbsp;pointers&nbsp;for&nbsp;architecture-specific&nbsp;behavior</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;int&nbsp;(*translate_address)(...);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;int&nbsp;(*handle_fault)(...);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;void&nbsp;(*flush_tlb)(...);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">};</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">2.</span><span class="f_Heading3">Integration Points</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">a.</span>AlphaMemorySystem</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">This class is responsible for triggering page table walks during TLB misses and address translation.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">Primary responsibilities:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a)</span>Calls pageTableManager-&gt;walkPageTable(...)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b)</span>Uses alpha_pte_handler_t to call translate_address()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">c)</span>Optionally populates victim cache or software TLB on success</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">d)</span>Integration locations:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">e)</span>translateViaPageTable()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">f)</span>tlbTranslateViaAlternativePath()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">g)</span>createTLBEntryFromPTE()</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">3.</span><span class="f_Heading3"> TLBSystem</span></p>
+<p class="p_Normal">Holds instruction/data TLB entries and is responsible for hit/miss detection and miss notification.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Responsibilities:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Detects TLB misses</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>On miss, delegates to AlphaMemorySystem for walk</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Optionally caches PTE info (per ASN, per VA)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Integration Points:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>findInstructionTLBEntry() / findDataTLBEntry()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>registerTLBMiss()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>populateTLBFromPTE() — to be added</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">4.</span><span class="f_Heading3">SafeMemory</span></p>
+<p class="p_Normal">Primarily used for read/write of physical memory. Can optionally:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Read physical PTEs via readPhysicalMemory(pteAddr, &amp;pte, sizeof(pte))</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Be wrapped by PageTableManager as backing store</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">5.</span><span class="f_Heading3">Recommended Integration APIs</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">a.</span>In AlphaMemorySystem</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">bool&nbsp;translateViaPageTable(quint64&nbsp;virtualAddr,&nbsp;quint64&amp;&nbsp;physicalAddr,&nbsp;bool&nbsp;allowFault);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">bool&nbsp;createTLBEntryFromPTE(</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;TLBEntry&amp;&nbsp;out,&nbsp;quint64&nbsp;va,&nbsp;quint64&nbsp;pa,&nbsp;quint64&nbsp;asn,</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;const&nbsp;PageTableEntry&amp;&nbsp;pte,&nbsp;bool&nbsp;isInstruction);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">6.</span><span class="f_Heading3">TLBSystem</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">bool&nbsp;populateTLBFromPTE(quint64&nbsp;va,&nbsp;const&nbsp;alpha_pte_handler_t&amp;&nbsp;pteHandler);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">7.</span><span class="f_Heading3">Benefits of the Page Table Interface</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Guest OS Independence: Clean separation between OS-specific page table bits and emulator logic.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Granularity-Aware: Built-in support for GH (granularity hint) and page coloring.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception Safety: Hooks for triggering traps or faults (e.g., FOW/FOE/FOR).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Performance: Use of pfn &lt;&lt; 13 instead of byte-based computation ensures native alignment.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Extension Ready: Tru64 NUMA, OpenVMS WSQUOTA enforcement.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Heading3" style="display:inline-block;width:20px;margin-left:-20px">8.</span><span class="f_Heading3">Next Steps</span></p>
+<p class="p_Normal">Insert this document into emulator documentation system (PDF, Markdown, or Help&amp;Manual).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Inject usage of alpha_pte_handler_t in AlphaMemorySystem::translateViaPageTable().</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Update TLBSystem to support dynamic PTE population.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Create config flags to enable VMS/Tru64-specific handlers at boot time.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

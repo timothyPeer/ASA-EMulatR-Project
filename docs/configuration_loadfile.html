@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Hardware - Virtualized &gt; Devices &amp; Interfaces &gt; SCSI Device Integration &gt; Configuration_loadFile TODO</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="// SCSI Configuration System #pragma once &nbsp;#include &lt;QSettings&gt; #include &lt;QJsonDocument&gt; #include &lt;QJsonObject&gt; #include &lt;QJsonArray&gt; #include &quot;SCSIDevice.h&quot; &nbsp;// Configura" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "configuration_loadfile.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Configuration_loadFile TODO</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?configuration_loadfile.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="emulated-hardware.html">Hardware - Virtualized</a> &gt; <a href="devices--interfaces.html">Devices &amp; Interfaces</a> &gt; <a href="scsi-device-integration.html">SCSI Device Integration</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Configuration_loadFile TODO</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="scsi-device-integration.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="scsi-device-integration.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="threadsafety-locksafety.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">// SCSI Configuration System</p>
+<p class="p_Normal">#pragma once</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#include &lt;QSettings&gt;</p>
+<p class="p_Normal">#include &lt;QJsonDocument&gt;</p>
+<p class="p_Normal">#include &lt;QJsonObject&gt;</p>
+<p class="p_Normal">#include &lt;QJsonArray&gt;</p>
+<p class="p_Normal">#include &quot;SCSIDevice.h&quot;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Configuration structure for SCSI devices</p>
+<p class="p_Normal">struct SCSIDeviceConfig {</p>
+<p class="p_Normal"> &nbsp; &nbsp;quint8 targetId;</p>
+<p class="p_Normal"> &nbsp; &nbsp;quint8 deviceType;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QString vendor;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QString product;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QString revision;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QString imagePath;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QVariantMap deviceSpecific;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool enabled;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Device-specific configurations</p>
+<p class="p_Normal"> &nbsp; &nbsp;struct DiskConfig {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint32 blockSize = 512;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint64 sizeInMB = 100;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;bool writeProtected = false;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;QString geometry; &nbsp;// &quot;C/H/S&quot; format</p>
+<p class="p_Normal"> &nbsp; &nbsp;};</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;struct TapeConfig {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;QString tapeType = &quot;DAT&quot;; &nbsp; &nbsp; &nbsp; // DAT, DLT, LTO, etc.</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint32 blockSize = 512;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;bool compression = true;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint32 capacity = 4000; &nbsp; &nbsp; &nbsp; &nbsp;// MB</p>
+<p class="p_Normal"> &nbsp; &nbsp;};</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;struct CDROMConfig {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;bool doorLocked = false;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;QString discType = &quot;DATA&quot;; &nbsp; &nbsp; &nbsp;// DATA, AUDIO, MIXED</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint32 speed = 24; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// 24x speed</p>
+<p class="p_Normal"> &nbsp; &nbsp;};</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">class SCSIConfigManager : public QObject {</p>
+<p class="p_Normal"> &nbsp; &nbsp;Q_OBJECT</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIConfigManager(QObject* parent = nullptr);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Configuration file management</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool loadConfiguration(const QString&amp; configFile);</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool saveConfiguration(const QString&amp; configFile);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Device configuration</p>
+<p class="p_Normal"> &nbsp; &nbsp;void addDeviceConfig(const SCSIDeviceConfig&amp; config);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void removeDeviceConfig(quint8 targetId);</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIDeviceConfig getDeviceConfig(quint8 targetId) const;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QList&lt;SCSIDeviceConfig&gt; getAllConfigs() const;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Factory method using configuration</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIDevice* createDevice(const SCSIDeviceConfig&amp; config);</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIBus* createConfiguredBus();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;QMap&lt;quint8, SCSIDeviceConfig&gt; m_deviceConfigs;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Helper methods</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIDeviceConfig parseDeviceConfig(const QJsonObject&amp; deviceObj);</p>
+<p class="p_Normal"> &nbsp; &nbsp;QJsonObject deviceConfigToJson(const SCSIDeviceConfig&amp; config);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Example configuration file format (JSON)</p>
+<p class="p_Normal">/*</p>
+<p class="p_Normal">{</p>
+<p class="p_Normal"> &nbsp; &nbsp;&quot;scsi_bus&quot;: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;&quot;bus_id&quot;: 0,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;&quot;devices&quot;: [</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;target_id&quot;: 0,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;device_type&quot;: &quot;DISK&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;vendor&quot;: &quot;EMULATOR&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;product&quot;: &quot;VIRTUAL DISK&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;revision&quot;: &quot;1.0&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;image_path&quot;: &quot;/emulator/disks/boot.img&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;enabled&quot;: true,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;disk_config&quot;: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;block_size&quot;: 512,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;size_mb&quot;: 500,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;write_protected&quot;: false,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;geometry&quot;: &quot;1024/16/63&quot;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;},</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;target_id&quot;: 1,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;device_type&quot;: &quot;TAPE&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;vendor&quot;: &quot;EMULATOR&quot;, </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;product&quot;: &quot;VIRTUAL TAPE&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;revision&quot;: &quot;1.0&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;image_path&quot;: &quot;/emulator/tapes/backup.dat&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;enabled&quot;: true,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;tape_config&quot;: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;tape_type&quot;: &quot;DLT&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;block_size&quot;: 1024,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;compression&quot;: true,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;capacity_mb&quot;: 40000</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;},</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;target_id&quot;: 2,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;device_type&quot;: &quot;CDROM&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;vendor&quot;: &quot;EMULATOR&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;product&quot;: &quot;VIRTUAL CDROM&quot;, </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;revision&quot;: &quot;1.0&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;image_path&quot;: &quot;/emulator/cds/install.iso&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;enabled&quot;: true,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;cdrom_config&quot;: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;door_locked&quot;: false,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;disc_type&quot;: &quot;DATA&quot;,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;speed&quot;: 24</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;]</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">*/</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Alternative INI-style configuration</p>
+<p class="p_Normal">/*</p>
+<p class="p_Normal">[SCSI_Device_0]</p>
+<p class="p_Normal">Type=DISK</p>
+<p class="p_Normal">Vendor=EMULATOR</p>
+<p class="p_Normal">Product=VIRTUAL DISK</p>
+<p class="p_Normal">Revision=1.0</p>
+<p class="p_Normal">ImagePath=/emulator/disks/boot.img</p>
+<p class="p_Normal">BlockSize=512</p>
+<p class="p_Normal">SizeMB=500</p>
+<p class="p_Normal">WriteProtected=false</p>
+<p class="p_Normal">Enabled=true</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">[SCSI_Device_1] </p>
+<p class="p_Normal">Type=TAPE</p>
+<p class="p_Normal">Vendor=EMULATOR</p>
+<p class="p_Normal">Product=VIRTUAL TAPE</p>
+<p class="p_Normal">Revision=1.0</p>
+<p class="p_Normal">ImagePath=/emulator/tapes/backup.dat</p>
+<p class="p_Normal">TapeType=DLT</p>
+<p class="p_Normal">BlockSize=1024</p>
+<p class="p_Normal">Compression=true</p>
+<p class="p_Normal">CapacityMB=40000</p>
+<p class="p_Normal">Enabled=true</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">[SCSI_Device_2]</p>
+<p class="p_Normal">Type=CDROM</p>
+<p class="p_Normal">Vendor=EMULATOR</p>
+<p class="p_Normal">Product=VIRTUAL CDROM</p>
+<p class="p_Normal">Revision=1.0</p>
+<p class="p_Normal">ImagePath=/emulator/cds/install.iso</p>
+<p class="p_Normal">DoorLocked=false</p>
+<p class="p_Normal">DiscType=DATA</p>
+<p class="p_Normal">Speed=24</p>
+<p class="p_Normal">Enabled=true</p>
+<p class="p_Normal">*/</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Implementation of SCSIConfigManager</p>
+<p class="p_Normal">SCSIConfigManager::SCSIConfigManager(QObject* parent) : QObject(parent) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Initialize with default configurations if needed</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">bool SCSIConfigManager::loadConfiguration(const QString&amp; configFile) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;QFile file(configFile);</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!file.open(QIODevice::ReadOnly)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;qWarning() &lt;&lt; &quot;Cannot open SCSI config file:&quot; &lt;&lt; configFile;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return false;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QByteArray data = file.readAll();</p>
+<p class="p_Normal"> &nbsp; &nbsp;QJsonDocument doc = QJsonDocument::fromJson(data);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!doc.isObject()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;qWarning() &lt;&lt; &quot;Invalid SCSI configuration format&quot;;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return false;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QJsonObject root = doc.object();</p>
+<p class="p_Normal"> &nbsp; &nbsp;QJsonObject scsiBus = root[&quot;scsi_bus&quot;].toObject();</p>
+<p class="p_Normal"> &nbsp; &nbsp;QJsonArray devices = scsiBus[&quot;devices&quot;].toArray();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;m_deviceConfigs.clear();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;for (const auto&amp; deviceValue : devices) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;QJsonObject deviceObj = deviceValue.toObject();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;SCSIDeviceConfig config = parseDeviceConfig(deviceObj);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (config.enabled) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;m_deviceConfigs[config.targetId] = config;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;qDebug() &lt;&lt; &quot;Loaded&quot; &lt;&lt; m_deviceConfigs.size() &lt;&lt; &quot;SCSI device configurations&quot;;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return true;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">SCSIDevice* SCSIConfigManager::createDevice(const SCSIDeviceConfig&amp; config) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIDevice* device = nullptr;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;switch (config.deviceType) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;case TYPE_DISK: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;auto diskConfig = config.deviceSpecific;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint32 blockSize = diskConfig.value(&quot;block_size&quot;, 512).toUInt();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint64 sizeMB = diskConfig.value(&quot;size_mb&quot;, 100).toULongLong();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;device = SCSIDeviceFactory::createDiskDrive(config.imagePath, sizeMB, blockSize);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;case TYPE_TAPE: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;auto tapeConfig = config.deviceSpecific;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;QString tapeType = tapeConfig.value(&quot;tape_type&quot;, &quot;DAT&quot;).toString();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;device = SCSIDeviceFactory::createTapeDrive(config.imagePath, tapeType);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;case TYPE_CDROM: {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;device = SCSIDeviceFactory::createCDROMDrive(config.imagePath);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;break;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;default:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;qWarning() &lt;&lt; &quot;Unknown SCSI device type:&quot; &lt;&lt; config.deviceType;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;return nullptr;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (device) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;qDebug() &lt;&lt; &quot;Created SCSI device:&quot; &lt;&lt; config.vendor &lt;&lt; config.product </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;&lt; &quot;at target&quot; &lt;&lt; config.targetId;</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return device;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">SCSIBus* SCSIConfigManager::createConfiguredBus() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIBus* bus = new SCSIBus(this);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;for (auto it = m_deviceConfigs.begin(); it != m_deviceConfigs.end(); ++it) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint8 targetId = it.key();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;const SCSIDeviceConfig&amp; config = it.value();</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;if (config.enabled) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;SCSIDevice* device = createDevice(config);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if (device) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;bus-&gt;attachDevice(targetId, device);</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;device-&gt;setParent(bus); // Transfer ownership</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return bus;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Advanced SCSI Bus Features</p>
+<p class="p_Normal">class AdvancedSCSIBus : public SCSIBus {</p>
+<p class="p_Normal"> &nbsp; &nbsp;Q_OBJECT</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">public:</p>
+<p class="p_Normal"> &nbsp; &nbsp;AdvancedSCSIBus(QObject* parent = nullptr);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// SCSI bus phases</p>
+<p class="p_Normal"> &nbsp; &nbsp;enum BusPhase {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;BUS_FREE,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;ARBITRATION,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;SELECTION,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;COMMAND,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;DATA_IN,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;DATA_OUT,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;STATUS,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;MESSAGE_IN,</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;MESSAGE_OUT</p>
+<p class="p_Normal"> &nbsp; &nbsp;};</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Advanced bus operations</p>
+<p class="p_Normal"> &nbsp; &nbsp;void setBusPhase(BusPhase phase);</p>
+<p class="p_Normal"> &nbsp; &nbsp;BusPhase getCurrentPhase() const { return m_currentPhase; }</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// SCSI protocol features</p>
+<p class="p_Normal"> &nbsp; &nbsp;void enableDisconnection(bool enable) { m_disconnectionEnabled = enable; }</p>
+<p class="p_Normal"> &nbsp; &nbsp;void enableSynchronousTransfer(bool enable) { m_synchronousEnabled = enable; }</p>
+<p class="p_Normal"> &nbsp; &nbsp;void setTransferRate(quint32 rateKBps) { m_transferRate = rateKBps; }</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Bus arbitration</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool arbitrateForBus(quint8 initiatorId);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void releaseBus();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Performance monitoring</p>
+<p class="p_Normal"> &nbsp; &nbsp;struct BusStatistics {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint64 totalCommands;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint64 totalBytes;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint64 busyTimeMs;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;quint64 errorCount;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;double averageTransferRate;</p>
+<p class="p_Normal"> &nbsp; &nbsp;};</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;BusStatistics getStatistics() const { return m_stats; }</p>
+<p class="p_Normal"> &nbsp; &nbsp;void resetStatistics() { m_stats = {}; }</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">signals:</p>
+<p class="p_Normal"> &nbsp; &nbsp;void busPhaseChanged(BusPhase newPhase);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void transferCompleted(quint64 bytes, quint32 timeMs);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void busError(const QString&amp; error);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal">private:</p>
+<p class="p_Normal"> &nbsp; &nbsp;BusPhase m_currentPhase;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool m_disconnectionEnabled;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool m_synchronousEnabled;</p>
+<p class="p_Normal"> &nbsp; &nbsp;quint32 m_transferRate;</p>
+<p class="p_Normal"> &nbsp; &nbsp;BusStatistics m_stats;</p>
+<p class="p_Normal"> &nbsp; &nbsp;QTimer* m_phaseTimer;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;void simulateTransferDelay(qsizetype bytes);</p>
+<p class="p_Normal"> &nbsp; &nbsp;void updateStatistics(qsizetype bytes, quint32 timeMs);</p>
+<p class="p_Normal">};</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">// Usage example for emulator integration</p>
+<p class="p_Normal">/*</p>
+<p class="p_Normal">int main() {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Create configuration manager</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIConfigManager configManager;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Load configuration from file</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (!configManager.loadConfiguration(&quot;emulator_scsi.json&quot;)) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;qFatal(&quot;Failed to load SCSI configuration&quot;);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Create configured SCSI bus</p>
+<p class="p_Normal"> &nbsp; &nbsp;SCSIBus* scsiBus = configManager.createConfiguredBus();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Connect to emulated computer system</p>
+<p class="p_Normal"> &nbsp; &nbsp;EmulatedSystem* system = new EmulatedSystem();</p>
+<p class="p_Normal"> &nbsp; &nbsp;system-&gt;installSCSIController(scsiBus);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Start emulation</p>
+<p class="p_Normal"> &nbsp; &nbsp;system-&gt;powerOn();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;return 0;</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">*/</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

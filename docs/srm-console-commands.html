@@ -1,0 +1,706 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Appendix &gt; SRM Console Commands</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="The Alpha SRM console maintains various environment variables which configure the ASA-EMulatR virtual hardware. &nbsp; The environment variables are generally updated once for an..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "srm-console-commands.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">SRM Console Commands</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?srm-console-commands.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      Appendix&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">SRM Console Commands</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="signals---glossary.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="commands.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal"><span class="f_Heading3" style="font-weight: normal;">The Alpha SRM console maintains various environment variables which configure the ASA-EMulatR virtual hardware. &nbsp; The environment variables are generally updated once for an installation and saved to a file in the default directory which hosts the ASA-EMulatR application and files. &nbsp; The file name is: &nbsp;ASA-SRM_EEPROM.BIN file. </span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Conformance</span>: &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>An environment variable is a name and value association maintained by the console program. The value associated with an environment variable is an ASCII string (up to 127 characters in length) or an integer. Some environment variables can be set to tailor the recovery behavior of the system on power-up and after system failures.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Volatile environment variables are initialized to their default by a system reset. Nonvolatile environment variables stay set across system power cycles. </p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Environment variables can be created, modified, displayed, and deleted using the SRM commands create, set, show, and clear. A default value is associated with any variable that is stored in the EEPROM (area. </p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Environment Variables</span><span style="font-weight: bold;"> </span>[<span style="font-weight: bold;">BOLD </span>indicates supported command options.]</p>
+<p class="p_Normal"><span style="width:48px;display:inline-block">&nbsp;</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Variable &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Attribute</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Function</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">auto_action</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies the action the console will take following an error halt or power-up. Values are: &nbsp;restart - Automatically restart the system. If restart fails, boot the operating system. boot - Automatically boot the operating system. Systems will use as the default device that defined by manufacturing (for factory-installed software), or a default boot device selected by setting the bootdef_dev environment variable. halt (default) - Enter SRM console mode.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">bootdef_dev</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Defines the default device or device list from which booting is attempted when no device name is specified by the boot command.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">boot_file</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Defines the default file name used for the primary bootstrap when no file name is specified by the boot command, if appropriate.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">boot_osflags</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Defines additional parameters to be passed to the system software during booting if none are specified by the boot command with the -flags specifier.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">boot_reset</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">A boot reset will occur before booting. </p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">console</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Defines the type of console device. serial A serial console terminal graphics A graphics console device.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_complete</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies whether or not to display test completion messages. &nbsp;off (default) Disables completion messages; &nbsp;on Enables completion messages</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_eop</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies whether or not to display test end of pass messages. &nbsp;off (default) Disables end of pass messages; &nbsp;on Enables end of pass messages</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_harderr</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Determines action taken following a hard error. Values are halt (default) and continue. Applies only when using test. </p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_passes </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies the default number of passes for a test to execute. Can be overridden on the test command line. Default value is 1.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_report </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Determines level of information provided by the diagnostic reports. Values are summary and full (default). Applies only when using test.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_softerr</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Determines action taken following a soft error. Values are continue (default) and halt. Applies only when using test.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_startup</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Volatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies whether or not to display test startup messages. &nbsp;off (default) Disables startup messages; &nbsp;on Enables startup messages</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">d_trace</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies whether or not to display test trace messages. off (default) Disables trace messages; &nbsp;on Enables trace messages</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">dump_dev</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Device to which dump file is written if the system crashes, if supported by the operating system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">enable_audit</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">If set to on (default), enables the generation of audit trail messages. If set to off, audit trail messages are suppressed. Console initialization sets this to on.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">e*0_loop_count</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies number of times message is looped for a test command exercising a PCI network adapter.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">e*0_loop_inc</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies the amount the message size is increased from message to message.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">e*0_loop_patt</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Specifies data pattern used for loopback. &nbsp;0xfffff; fff; All the patterns: 1 All 0’s, 2 All 1’s, , 3 All A’s, 4 Incrementing, 5 Decrementing</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">e*0_loop_size</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Size of loop data used.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">e*0_lp_msg_node</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Number of messages originally sent to each node.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">e*0__mode</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Value for the Ethernet port node when it is started.; Allowed values are: Auto-sensing BNC, AUI FastFD (full duplex), Twisted-pair Auto-negotiate, Full duplex, twisted pair</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">os_type</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Nonvolatile</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Used to store operating system type. Values are vms, openvms, osf, and unix. </p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Command</span></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Function</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">bash</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Exerciser for the CPU interprocessor ports.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">boot</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Boots the operating systems.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">cat</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the named file.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">clear</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Clears the SRM password or an environment variable.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">continue</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Resumes processing after a Ctrl/P is issued (OpenVMS systems).</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">crash</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Forces a crash dump of the operating system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">csr</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays contents of control and status registers.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">deposit</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Writes data to the specified address.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">edit</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Invokes the console line editor, which can be used to edit a RAM file or the user power-up script, “nvram,” which is always invoked during the power-up sequence.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">examine</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the contents of a memory location or device register.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">exer</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Exercises one or more devices by performing specified read, write, and compare operations.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">grep</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Globally searches for regular expressions and prints matches.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">halt</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Halts the specified processor or device.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">help (or man)</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays information about all or a specific SRM command.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">info </p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays registers and data structures.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">init </span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Stores any changes made to environment variables and reinitializes the hardware.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">kill</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Stops a process that is running on the system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">kill_diags</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Stops all console-based diagnostic processes running on the system. ls Displays names of files on the system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">memexer</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Runs a requested number of memory tests in the background.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">memexer_mp</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Exercises ability of CPUs to share data and remain coherent by running memory tests on all CPUs.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">migrate</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Moves one or all CPUs to a given soft partition.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">more</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays a file one screen at a time.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">nettest</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Runs loopback tests for PCI-based Ethernet ports. Also used to test a port on a “live” network.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">nvram</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Runs the nvram script.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">power</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Turns power on or removes power from the specified CPU, I/O riser, or PCI box.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">ps</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays process status and statistics.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">rm</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Removes files from the file system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">set envar</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Sets the value of an environment variable. </p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">show bios</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the devices in the system that have BIOS extension ROMs.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show config</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the configuration at the last system initialization.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show cpu</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays processor information.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show device</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the controllers and bootable devices in the system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show envar</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the state of all or a specified environment variable.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">show fru</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the configuration of field-replaceable units (FRUs).</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show memory</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays memory module information.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show pal</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays version of Tru64 UNIX and OpenVMS PALcode.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show_status</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the progress of diagnostic tests. Reports one line of information for each executing diagnostic.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">show version</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Displays the version of the SRM console program.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">sys_exer</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Exercises the entire system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">test</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Tests the entire system.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">wwidmgr</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Manages the WWID registration (Fibre Channel)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">SRM attributes include: </p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;auto_action&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;restart&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">}, &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #008000; background-color: #ffffff;">// restart / halt&nbsp;</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;boot_dev&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;dka0.0.0.2.1&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;bootdef_dev&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;dka0.0.0.2.1&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;booted_dev&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;dka0.0.0.2.1&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;boot_file&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;booted_file&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;boot_osflags&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;booted_osflags&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">,&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;boot_reset&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;ON&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;dump_dev&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;enable_audit&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;ON&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;license&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;MU&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;char_set&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;language&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;tty_dev&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;0&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;console&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;serial&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;controlp&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;on&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;scsiid&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;scsifast&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com1_baud&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;9600&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com1_modem&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;off&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com1_flow&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;software&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com1_misc&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com2_baud&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;9600&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com2_modem&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;off&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com2_flow&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;software&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;com2_misc&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;password&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;secure&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;off&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;logfail&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;0&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;srm2dev_id&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;eia0_mode&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;Auto&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;eib0_mode&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;Auto&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;eic0_mode&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;Auto&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;eid0_mode&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;Auto&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;eie0_mode&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;Auto&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;eif0_mode&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;Auto&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;sys_serial_num&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">,&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;SN01234567&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;date&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;082120162025.44&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;pal&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;OpenVMS PALcode 1.98-104, Tru64 UNIX PALcode 1.92-105&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;wwid0&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;wwid1&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;wwid2&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;wwid3&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;n1&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;n2&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">{</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;n3&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #a31515; background-color: #ffffff;">&quot;&quot;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">},</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

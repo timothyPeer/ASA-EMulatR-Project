@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Memory Barrier Instructions — Overview and Integration</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="AlphaCPU,AlphaProcessorContext,Barrier, Memory,Barrier, Store,Barrier, System,Memory Barrier,PAL, ECB,PAL, EXCB,PAL, FETCH,PAL, FETCH_M,PAL, MB,PAL, MB2,PAL, RC,PAL, RS,PAL, TRAPB,PAL, WH64,PAL, WH64EN,PAL, WMB,PALcode,SMP,System Barrier" />
+   <meta name="description" content="This section documents the Alpha AXP memory barrier instructions and their correct integration in the emulator’s execution core. Memory barrier instructions are critical for..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "instruction-memory-barriers.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Memory Barrier Instructions — Overview and Integration</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?instruction-memory-barriers.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Memory Barrier Instructions — Overview and Integration</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="grain-qualifiers---saturate.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="architecture.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="platform-architecture-endianes.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">This section documents the Alpha AXP memory barrier instructions and their correct integration in the emulator’s execution core. Memory barrier instructions are critical for enforcing memory operation ordering and system-wide coherency, especially in SMP (multi-processor) environments. They provide architectural guarantees that memory operations before the barrier complete before any operations after the barrier begin, according to the type of barrier invoked (full, load, store, or system-specific).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Instruction <a href="alphainstructiongrain-class-dictionary.html" class="topiclink">AlphaInstructionGrains</a> implementing these barriers must call the appropriate memoryBarrier function on the <a href="alphacpu-claude.html" class="topiclink">AlphaCPU</a>, specifying both the barrier type and whether the instruction is SMP-aware. This ensures that all guest OS, PALcode, and multiprocessor software running under the emulator observes the expected Alpha memory consistency model.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Each instruction variant (MB, WMB, MB2, FETCH, etc.) enforces specific ordering rules:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Full barriers (MB, RC, RS, TRAPB): enforce both load and store ordering for all CPUs</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Store barriers (WMB): enforce ordering of stores only</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Load barriers (FETCH, FETCH_M): enforce ordering of loads only</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>System barriers (WH64, ECB, EXCB, WH64EN): interact with cache, ECC, and prefetch hardware (may require emulator PAL/hardware hooks)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Integration into grains is straightforward:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Fetch the PC</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Call AlphaCPU::memoryBarrier(&lt;BarrierType&gt;, smpAware);</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Advance the PC by 4 bytes</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">TRAPB and certain system barriers may require additional emulation, such as pipeline serialization or PALcode hooks.</p>
+<p class="p_Normal"><span style="font-style: italic;">TODO: For architectural compliance, always refer to the Alpha AXP System Reference Manual and enforce the documented SMP/consistency semantics for each instruction.</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The following table and examples summarize the memory barrier instructions, function calls, and integration patterns in the emulator.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">====================================================================</p>
+<p class="p_Normal"> Alpha AXP Memory Barrier Instruction Dispatch Table (Execution Core)</p>
+<p class="p_Normal">====================================================================</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">Instruction&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;FP&nbsp;Code&nbsp;|&nbsp;Barrier&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;SMP-Aware&nbsp;|&nbsp;Barrier&nbsp;Enforcement&nbsp;Function&nbsp;Call</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">---------------|---------|----------------------------------|-----------|-----------------------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.4000&nbsp;|&nbsp;FullBarrier&nbsp;(MB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(FullBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">WMB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.4400&nbsp;|&nbsp;StoreBarrier&nbsp;(WMB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(StoreBarrier,&nbsp;false);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MB2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.4800&nbsp;|&nbsp;LoadStoreBarrier&nbsp;(MB2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(LoadStoreBarrier,&nbsp;false);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FETCH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.0800&nbsp;|&nbsp;LoadBarrier&nbsp;(RMB&nbsp;-&nbsp;FETCH)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(LoadBarrier,&nbsp;false);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FETCH_M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.0A00&nbsp;|&nbsp;LoadBarrier&nbsp;(RMB&nbsp;-&nbsp;FETCH_M)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(LoadBarrier,&nbsp;false);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">RC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.E000&nbsp;|&nbsp;FullBarrier&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(FullBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">RS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.F000&nbsp;|&nbsp;FullBarrier&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(FullBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">WH64&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.F800&nbsp;|&nbsp;SystemBarrier&nbsp;(WH64&nbsp;Prefetch)&nbsp;&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(SystemBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">WH64EN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.FC00&nbsp;|&nbsp;SystemBarrier&nbsp;(Enable&nbsp;WH64)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(SystemBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">TRAPB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.0000&nbsp;|&nbsp;FullBarrier&nbsp;+&nbsp;Instruction&nbsp;Trap&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(FullBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ECB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.E800&nbsp;|&nbsp;SystemBarrier&nbsp;(ECC&nbsp;clean)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(SystemBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">EXCB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.0400&nbsp;|&nbsp;SystemBarrier&nbsp;(Exception&nbsp;barrier)|&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;argCpu-&gt;memoryBarrier(SystemBarrier,&nbsp;true);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Integration Guidance for Instruction Grains</span></h3>
+<p class="p_Normal">AlphaProcessorContext :- context</p>
+<p class="p_Normal">AlphaCpu :- argCpu</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Each instruction grain for these operations should call:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">context-&gt;setPC(pc&nbsp;+&nbsp;4);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">argCpu-&gt;memoryBarrier(AlphaMemoryBarrierType::&lt;TYPE&gt;,&nbsp;smpAware);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><span style="font-weight: bold;">Example for MB:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">inline&nbsp;void&nbsp;MB_InstructionGrain::execute(AlphaCPU*&nbsp;argCpu,&nbsp;AlphaProcessorContext*&nbsp;context,&nbsp;quint64&nbsp;rawInstr)&nbsp;const</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;quint64&nbsp;pc&nbsp;=&nbsp;context-&gt;getPC();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;argCpu-&gt;memoryBarrier(AlphaMemoryBarrierType::FullBarrier,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;context-&gt;setPC(pc&nbsp;+&nbsp;4);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">Example for FETCH_M:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">inline&nbsp;void&nbsp;FETCH_M_InstructionGrain::execute(AlphaCPU*&nbsp;argCpu,&nbsp;AlphaProcessorContext*&nbsp;context,&nbsp;quint64&nbsp;rawInstr)&nbsp;const</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;quint64&nbsp;pc&nbsp;=&nbsp;context-&gt;getPC();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;argCpu-&gt;memoryBarrier(AlphaMemoryBarrierType::LoadBarrier,&nbsp;false);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;context-&gt;setPC(pc&nbsp;+&nbsp;4);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Notes"><span class="f_Notes" style="font-weight: bold;">Notes</span></p>
+<p class="p_Notes"><span class="f_Notes">TRAPB additionally enforces instruction serialization. If trap emulation is desired, it should inject a pipeline trappoint.</span></p>
+<p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
+<p class="p_Notes"><span class="f_Notes">WH64, WH64EN, ECB, EXCB, and RS/RC may also require PAL or hardware hooks — these should call memoryBarrier(SystemBarrier, true) and log prefetch/invalidation as needed.</span></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

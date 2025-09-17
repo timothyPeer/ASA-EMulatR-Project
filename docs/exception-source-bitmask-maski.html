@@ -1,0 +1,326 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Exceptions, Faults, Interrupts, and MachineChecks &gt; Exception Source Bitmask Masking</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="ALPHA_EXCEPTION_SRC_BITMASK,Bitmask, BINARY,Bitmask, TERTIARY,Bitmask, UNARY,Bitmasking, Instructions,double,Exceptions,F_FLOAT,float,G_FLOAT,int,Longword,Macro, ALPHA_EXCEPTION_SRC_BITMASK,Quadword,ra, Operand,rb, Operand,rc, Operand,S_FLOAT,signed/unsigned,T_FLOAT,VAX,Vector" />
+   <meta name="description" content="This covers all typical unary, binary, and ternary (FMA, etc.) grains used in Alpha AXP floating-point, following architectural conventions." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "exception-source-bitmask-maski.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Exception Source Bitmask Masking</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?exception-source-bitmask-maski.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="exceptionsinterruptsandmachinechecks.html">Exceptions, Faults, Interrupts, and MachineChecks</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Exception Source Bitmask Masking</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="trapping-exceptions.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="interrupts-exceptions-faults-machinechecks.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">This covers all typical unary, binary, and ternary (FMA, etc.) grains used in Alpha AXP floating-point, following architectural conventions.</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Alpha&nbsp;Floating-Point&nbsp;Grain&nbsp;Exception&nbsp;Source&nbsp;Bitmask&nbsp;Map</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;(For&nbsp;use&nbsp;in&nbsp;raiseException()&nbsp;and&nbsp;ExceptionInfo)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;FORMAT:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;&nbsp;&nbsp;GRAIN_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALPHA_EXCEPTION_SRC_BITMASK&nbsp;ARGUMENTS</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;---&nbsp;UNARY&nbsp;(single&nbsp;source)&nbsp;---</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;COMPLETE&nbsp;LIST&nbsp;OF&nbsp;ALPHA&nbsp;AXP&nbsp;UNARY&nbsp;FLOATING-POINT&nbsp;INSTRUCTIONS&nbsp;(S,&nbsp;T,&nbsp;Conversion,&nbsp;etc.)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTQS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;S-float&nbsp;to&nbsp;Quadword&nbsp;Integer</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTQT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;Quadword&nbsp;Integer&nbsp;to&nbsp;T-float&nbsp;(double)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTTQ_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;T-float&nbsp;(double)&nbsp;to&nbsp;Quadword&nbsp;Integer&nbsp;(source&nbsp;always&nbsp;F31)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTST_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;Quadword&nbsp;Integer&nbsp;to&nbsp;S-float&nbsp;(single)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTTS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;S-float&nbsp;(single)&nbsp;to&nbsp;T-float&nbsp;(double)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTTSU_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;S-float&nbsp;to&nbsp;T-float,&nbsp;unsigned&nbsp;variant&nbsp;(less&nbsp;common)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTQS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;S-float&nbsp;(single)&nbsp;to&nbsp;Quadword&nbsp;Integer&nbsp;(unsigned&nbsp;variant)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">SQRTS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Square&nbsp;Root&nbsp;S-float&nbsp;(single)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">SQRTT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Square&nbsp;Root&nbsp;T-float&nbsp;(double)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ABS_S*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Absolute&nbsp;Value&nbsp;S-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ABS_T*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Absolute&nbsp;Value&nbsp;T-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">NEG_S*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Negate&nbsp;S-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">NEG_T*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Negate&nbsp;T-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CPYS_S*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Copy&nbsp;Sign&nbsp;S-float&nbsp;(see&nbsp;note&nbsp;below)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CPYSN_S*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Copy&nbsp;Sign&nbsp;Negate&nbsp;S-float&nbsp;(see&nbsp;note&nbsp;below)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CPYSN_T*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Copy&nbsp;Sign&nbsp;Negate&nbsp;T-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MOV_S*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Move&nbsp;S-float&nbsp;(register&nbsp;move/copy)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MOV_T*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Move&nbsp;T-float&nbsp;(register&nbsp;move/copy)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;SPECIAL&nbsp;UNARY&nbsp;CONVERSIONS&nbsp;(RARE,&nbsp;but&nbsp;architectural)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTQF_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;Quadword&nbsp;Integer&nbsp;to&nbsp;F-float&nbsp;(VAX,&nbsp;rare)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTGF_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;G-float&nbsp;to&nbsp;F-float&nbsp;(VAX,&nbsp;rare)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTGFU_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;G-float&nbsp;to&nbsp;F-float&nbsp;unsigned&nbsp;(VAX,&nbsp;rare)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;PALcode&nbsp;and&nbsp;System/Status&nbsp;ops&nbsp;(PAL,&nbsp;not&nbsp;user&nbsp;FP)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;These&nbsp;are&nbsp;not&nbsp;included&nbsp;in&nbsp;normal&nbsp;FP&nbsp;grain&nbsp;mapping</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;NOTE:&nbsp;CPYS,&nbsp;CPYSN,&nbsp;CPYSN&nbsp;are&nbsp;&quot;unary&quot;&nbsp;in&nbsp;that&nbsp;only&nbsp;m_ra&nbsp;is&nbsp;significant&nbsp;for&nbsp;exceptions,</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;even&nbsp;though&nbsp;they&nbsp;technically&nbsp;also&nbsp;use&nbsp;m_rb&nbsp;for&nbsp;sign&nbsp;bits.&nbsp;In&nbsp;practice,&nbsp;exceptions&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;can&nbsp;only&nbsp;be&nbsp;sourced&nbsp;from&nbsp;m_ra&nbsp;(the&nbsp;magnitude&nbsp;operand),&nbsp;so&nbsp;only&nbsp;m_ra&nbsp;should&nbsp;be&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;included&nbsp;in&nbsp;ALPHA_EXCEPTION_SRC_BITMASK.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;If&nbsp;your&nbsp;emulator&nbsp;supports&nbsp;VAX&nbsp;F/G&nbsp;float,&nbsp;or&nbsp;T-&gt;S,&nbsp;S-&gt;T,&nbsp;etc.&nbsp;conversions,</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;add&nbsp;the&nbsp;corresponding&nbsp;conversion&nbsp;grains&nbsp;here.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Summary:&nbsp;For&nbsp;all&nbsp;above,&nbsp;use&nbsp;ALPHA_EXCEPTION_SRC_BITMASK(m_ra)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;---&nbsp;BINARY&nbsp;(two&nbsp;source&nbsp;operands)&nbsp;---</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;COMPLETE&nbsp;LIST&nbsp;OF&nbsp;ALPHA&nbsp;AXP&nbsp;BINARY&nbsp;FLOATING-POINT&nbsp;INSTRUCTIONS&nbsp;(S,&nbsp;T,&nbsp;Comparison,&nbsp;etc.)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ADDS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Add&nbsp;S-float&nbsp;(single)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ADDT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Add&nbsp;T-float&nbsp;(double)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">SUBS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Subtract&nbsp;S-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">SUBT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Subtract&nbsp;T-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MULS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Multiply&nbsp;S-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MULT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Multiply&nbsp;T-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">DIVS_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Divide&nbsp;S-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">DIVT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Divide&nbsp;T-float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPTLE_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;T-float:&nbsp;less-or-equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPTLT_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;T-float:&nbsp;less-than</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPTEQ_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;T-float:&nbsp;equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPUN_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;unordered</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPSEQ_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;S-float:&nbsp;equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPSELT_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;S-float:&nbsp;less-than</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPSELE_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;S-float:&nbsp;less-or-equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CMPSUN_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Compare&nbsp;S-float:&nbsp;unordered</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCMOVEQ_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;FP&nbsp;Conditional&nbsp;Move&nbsp;Equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCMOVNE_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;FP&nbsp;Conditional&nbsp;Move&nbsp;Not&nbsp;Equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCMOVLT_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;FP&nbsp;Conditional&nbsp;Move&nbsp;Less&nbsp;Than</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCMOVLE_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;FP&nbsp;Conditional&nbsp;Move&nbsp;Less-or-Equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCMOVGT_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;FP&nbsp;Conditional&nbsp;Move&nbsp;Greater&nbsp;Than</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCMOVGE_*&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;FP&nbsp;Conditional&nbsp;Move&nbsp;Greater-or-Equal</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Note:&nbsp;FCMOVxx&nbsp;instructions&nbsp;use&nbsp;m_ra&nbsp;(source1),&nbsp;m_rb&nbsp;(source2),&nbsp;result&nbsp;goes&nbsp;to&nbsp;m_rc</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;VAX/DEC&nbsp;compatibility&nbsp;grains&nbsp;(if&nbsp;implemented)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTDG_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;D-float&nbsp;to&nbsp;G-float&nbsp;(if&nbsp;supported)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTGD_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb)&nbsp;&nbsp;&nbsp;#&nbsp;Convert&nbsp;G-float&nbsp;to&nbsp;D-float&nbsp;(if&nbsp;supported)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;(Rare—include&nbsp;only&nbsp;if&nbsp;your&nbsp;emulator&nbsp;supports&nbsp;VAX&nbsp;FP)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Most&nbsp;other&nbsp;non-computational&nbsp;grains&nbsp;are&nbsp;unary&nbsp;or&nbsp;memory&nbsp;access,&nbsp;not&nbsp;binary.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;For&nbsp;all&nbsp;of&nbsp;the&nbsp;above,&nbsp;use:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;&nbsp;&nbsp;ALPHA_EXCEPTION_SRC_BITMASK(m_ra,&nbsp;m_rb)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;---&nbsp;TERNARY&nbsp;(FMA-like,&nbsp;rare)&nbsp;---</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FMA_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m_ra,&nbsp;m_rb,&nbsp;m_rc)&nbsp;&nbsp;#&nbsp;If/when&nbsp;implemented</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;---&nbsp;SPECIAL/RESTRICTED&nbsp;---</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;CVTTQ&nbsp;grains:&nbsp;always&nbsp;source&nbsp;F31,&nbsp;so&nbsp;bitmask&nbsp;=&nbsp;(1U&nbsp;&lt;&lt;&nbsp;31)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CVTTQ_*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(31)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;FCVTxy&nbsp;grains&nbsp;(VAX,&nbsp;G-float&nbsp;etc.):</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FCVTSG,&nbsp;FCVTTG,&nbsp;...&nbsp;&nbsp;&nbsp;(m_ra)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;etc.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Memory&nbsp;grains&nbsp;(LDS,&nbsp;LDT,&nbsp;etc.):</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Exception&nbsp;is&nbsp;typically&nbsp;memory&nbsp;access,&nbsp;not&nbsp;operand;&nbsp;only&nbsp;include&nbsp;register&nbsp;if&nbsp;loading&nbsp;causes&nbsp;exception.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;---&nbsp;VECTOR&nbsp;or&nbsp;PACKED&nbsp;(future&nbsp;SIMD&nbsp;support)&nbsp;---</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;For&nbsp;vector&nbsp;ops,&nbsp;use&nbsp;all&nbsp;lanes'&nbsp;indices&nbsp;if&nbsp;any&nbsp;element&nbsp;is&nbsp;exceptional.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;---&nbsp;CONTROL/BRANCH/INTEGER&nbsp;(not&nbsp;FP)&nbsp;---</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#&nbsp;Omit;&nbsp;not&nbsp;handled&nbsp;by&nbsp;ALPHA_EXCEPTION_SRC_BITMASK&nbsp;in&nbsp;FP&nbsp;grains.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Guidance/Reminders:</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For unary FP grains:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Use m_ra (FP or integer source, depending on instruction).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For binary FP grains:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Use m_ra, m_rb.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For CVTTQ:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always 31 (F31, per Alpha).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For memory exceptions:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If the exception comes from the source register, include it; otherwise, handle as a memory exception (not in FP bitmask).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For control/integer grains:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Not used (handled differently).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">For vector/SIMD:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Extend the macro, or use a loop to build the bitmask for all exceptional lanes.</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Instruction Grains &gt; Instruction Grain Data Flow — Overview &gt; Grain Execution - Store Instruction</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="This section documents the control and data flow for store instruction grains (such as STT_InstructionGrain::execute()) in the Alpha AXP emulator." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "execution-stack-breakdown-for-.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Grain Execution - Store Instruction</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?execution-stack-breakdown-for-.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="instruction-grain.html">Instruction Grains</a> &gt; <a href="instructions-introduction.html">Instruction Grain Data Flow — Overview</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Grain Execution - Store Instruction</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="instruction-stack-exection.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="instructions-introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="qualifiers-instruction.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">This section documents the control and data flow for store instruction grains (such as STT_InstructionGrain::execute()) in the Alpha AXP emulator.</p>
+<p class="p_Normal">Store grains are responsible for decoding operands, calculating effective virtual addresses, reading source values from registers, and writing data to guest memory through the full memory management and translation hierarchy.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">When a store instruction executes:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain computes the effective virtual address (base register + signed displacement).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Reads the value to be stored from the appropriate register (FP or integer).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Calls into the virtual memory system to perform the store operation.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-weight: bold;">The memory system:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Translates the virtual address to a physical address using the TLB ( <a href="tlbentry-class-dictionary.html" class="topiclink">TLBEntry</a>) and, if needed, the page table.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Handles TLB misses, page faults, and permission checks in compliance with Alpha hardware behavior.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Performs the store to physical memory, supporting split operations for multi-word (e.g., TFloat/128-bit [<span class="f_CodeExample"><a href="dt_tfloat.html" class="topiclink">dt_tFloat</a></span><a href="dt_tfloat.html" class="topiclink">]</a> ) values.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This process ensures architectural accuracy for address translation, TLB management, fault handling, and logging. It also provides a faithful emulation of how stores, faults, and multi-word operations work on real Alpha hardware and operating systems. The subsequent sections detail each step, from operand decode through TLB resolution, to final store in memory and post-execution logging.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Instruction Grain (e.g., STT_InstructionGrain::execute())</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The instruction implementation begins by:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Reading the base register (Ra)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Computing the effective virtual address (VA) using base + signed displacement.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Reading the value to store (from FP or integer register, depending on instruction)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Calling AlphaMemorySystem::writeVirtualMemory()</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">quint64&nbsp;baseAddr&nbsp;=&nbsp;context-&gt;readIntReg(m_ra);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">quint64&nbsp;virtualAddr&nbsp;=&nbsp;baseAddr&nbsp;+&nbsp;static_cast&lt;qint64&gt;(m_signedDisplacement);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">dt_tfloat&nbsp;tval&nbsp;=&nbsp;context-&gt;readFpRegRawTFloat(m_rc);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">memorySystem-&gt;writeVirtualMemory(cpuId,&nbsp;virtualAddr,&nbsp;tval.low64(),&nbsp;8);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">memorySystem-&gt;writeVirtualMemory(cpuId,&nbsp;virtualAddr&nbsp;+&nbsp;8,&nbsp;tval.high64(),&nbsp;8);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">AlphaMemorySystem::writeVirtualMemory()</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>This function is the mirror of readVirtualMemory(), and:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Performs TLB lookup for VA → PA translation.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>If not found, triggers TLB miss handler.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>On success, invokes writePhysicalMemory() with physical address.</p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">TranslationResult&nbsp;tr&nbsp;=&nbsp;tlbSystem-&gt;translateAddress(va);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">if&nbsp;(!tr.isValid())&nbsp;{</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;handleTLBMiss();&nbsp;&nbsp;//&nbsp;May&nbsp;call&nbsp;page&nbsp;table&nbsp;walker</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">writePhysicalMemory(tr.physicalAddress(),&nbsp;data,&nbsp;size);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">TLBSystem::translateAddress()</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Returns cached translation (VA → PA) if TLB hit.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Otherwise, calls back into memory system to handle the miss.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">TLBEntry*&nbsp;entry&nbsp;=&nbsp;findDataTLBEntry(cpuId,&nbsp;va,&nbsp;asn);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">if&nbsp;(!entry)&nbsp;return&nbsp;TranslationResult(/*&nbsp;invalid&nbsp;*/);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">return&nbsp;TranslationResult(entry-&gt;getPhysicalAddress(va),&nbsp;...,&nbsp;true);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">AlphaMemorySystem::handleTLBMiss()</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Walks the page table to resolve the VPN to PPN.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Typically done via SimplePageTable::lookup().</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If found, installs the result into the TLB.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">quint64&nbsp;vpn&nbsp;=&nbsp;va&nbsp;&gt;&gt;&nbsp;13;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">PTE&nbsp;entry&nbsp;=&nbsp;simplePageTable-&gt;lookup(vpn);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">quint64&nbsp;pa&nbsp;=&nbsp;(entry.ppn&nbsp;&lt;&lt;&nbsp;13)&nbsp;|&nbsp;(va&nbsp;&amp;&nbsp;0x1FFF);</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">installTLBEntry(cpuId,&nbsp;va,&nbsp;pa);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">// TODO DEPRECATED SimplePageTable::lookup()</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Key function for VA→PA resolution:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Extracts the VPN: <span class="f_CodeExample" style="font-size: 11px;">vpn = va &gt;&gt; 13</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Looks up vpn in<span class="f_CodeExample" style="font-size: 11px;"> QHash&lt;vpn, PTE&gt;</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>PTE gives physical page number (PPN)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Returns translated PA offset:<span class="f_CodeExample" style="font-size: 11px;"> ppn &lt;&lt; 13 | (va &amp; 0x1FFF)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Final Execution Flow Summary (for STT, STQ, etc.)</span></h3>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">InstructionGrain::execute()</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">AlphaMemorySystem::writeVirtualMemory()</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">TLBSystem::translateAddress()</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓&nbsp;(miss?)</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">AlphaMemorySystem::handleTLBMiss()</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">SimplePageTable::lookup()</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">(returns&nbsp;PA,&nbsp;updates&nbsp;TLB)</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">AlphaMemorySystem::writePhysicalMemory()</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px;">Store&nbsp;completes&nbsp;to&nbsp;memory</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Additional Architectural Notes</span></h3>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px; font-weight: bold;">Fault&nbsp;Detection:</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size:11px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_CodeExample" style="font-size: 11px;">Page&nbsp;faults&nbsp;or&nbsp;protection&nbsp;violations&nbsp;can&nbsp;be&nbsp;triggered&nbsp;in&nbsp;writeVirtualMemory&nbsp;or&nbsp;during&nbsp;PTE&nbsp;lookup&nbsp;if&nbsp;access&nbsp;is&nbsp;not&nbsp;allowed.</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also.</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample" style="font-size: 11px; font-weight: bold;"><a href="alphamemorysystem-claude.html" class="topiclink">AlphaMemorySystem</a>&nbsp;<a href="tlbsystem-class-dictionary.html" class="topiclink">TLBSystem&nbsp;-&nbsp;Translation&nbsp;Buffer&nbsp;Table&nbsp;(TLB)</a>&nbsp;<a href="tlbentry-class-dictionary.html" class="topiclink">TLBEntry</a>&nbsp;<a href="tlbentry-superpages.html" class="topiclink">TLB&nbsp;and&nbsp;PTE&nbsp;Bit-Shift&nbsp;Consistency</a>&nbsp;<a href="alphainstructiongrain-class-dictionary.html" class="topiclink">AlphaInstructionGrain</a></span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>
