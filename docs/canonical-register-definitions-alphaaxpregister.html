@@ -129,18 +129,18 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">This section documents the full set of architectural and internal registers implemented in the ASA-EMulatR, including all standard Alpha AXP integer, floating-point, and internal processor registers (IPRs). For each register, its enumeration name, offset/number, field structure, default value, privilege level, and key usage notes are provided.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Purpose and Approach:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Purpose and Approach:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Provides a canonical, architecture-faithful enumeration for all registers in the emulator.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Serves as the sole source of truth for register access, privilege checks, and bitfield definitions.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Ensures all emulator and PALcode/OS logic references these enums and bitmasks only (never magic numbers).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Register Types Covered:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Register Types Covered:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Integer Registers (R0–R31): General-purpose registers used for all integer and address computation.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Floating-Point Registers (F0–F31): Full IEEE and VAX G/T/F floating-point support, used by all FP instructions.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Internal Processor Registers (IPR): Architecturally defined processor and system registers, including:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Internal Processor Registers (IPR): Architecturally defined processor and system registers, including:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PC: Program Counter (current instruction address)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PS: Processor Status (mode, IPL, interrupt enable, FEN, IV, etc.)</p>
@@ -149,7 +149,7 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Additional system registers (see IprBank.h and Table 3-4 in the Alpha SRM)</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Fields, Bits, and Defaults:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Fields, Bits, and Defaults:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Each register is defined with:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Enum name (IPR::PC, IPR::PS, etc.)</p>
@@ -159,23 +159,23 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Access privilege (AllModes, KernelOnly, PALOnly)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Usage notes (e.g., “Program Counter”, “Exception Summary”, etc.)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">See table below for examples.</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">See table below for examples.</strong></p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Register</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Register</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Enum Name</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Enum Name</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Number/Offset</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Number/Offset</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Bits/Fields</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Bits/Fields</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Default Value</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Default Value</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Privilege</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Privilege</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Notes</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Notes</strong></p>
 </th>
 </tr>
 </thead>
@@ -248,24 +248,24 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Field and Bit Position Documentation:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Field and Bit Position Documentation:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All key fields (mode, IPL, FEN, IV, trap enables, etc.) are enumerated with bit positions and masks, following Alpha SRM and emulator source.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Bitfield macros and constants (e.g., CM_MASK, IPL_MASK, FEN_MASK, etc.) ensure all code is architecture-faithful and self-documenting.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Default Values and Power-on State:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Default Values and Power-on State:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each register is initialized to its documented hardware reset value (e.g., PC = 0x20000000, PS = 0x0400...0000).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>See enum, mask, and constant documentation for details.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Access Privilege Levels:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Access Privilege Levels:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each register is tagged as accessible from all modes, kernel-only, or PALcode-only, enforcing proper architectural privilege checks.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Usage and Coding Guidance:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Usage and Coding Guidance:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All emulator, PALcode, and OS code should use only these enums and bitmasks for register access, not raw numbers or offsets.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Macros and enum-based field access allow for future extension, bitfield safety, and maximum maintainability.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Reference:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Reference:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Alpha AXP System Reference Manual, Table 3-4, Table 4-7, Ch. 9 (FPCR), Ch. 14 (Exception Summary)</p>
 <p class="p_Normal">&nbsp;</p>
@@ -276,19 +276,19 @@
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; width:192px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Register</span></p>
+<th style="vertical-align:top; width:192px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Register</strong></p>
 </th>
-<th style="vertical-align:top; width:134px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Enum Name</span></p>
+<th style="vertical-align:top; width:134px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Enum Name</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Number/Offset</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Number/Offset</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Bits/Fields</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Bits/Fields</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Default Value</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Default Value</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Privilege</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Privilege</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Notes</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Notes</strong></p>
 </th>
 </tr>
 </thead>
@@ -374,15 +374,15 @@
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:192px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">Field</span></p>
+<td style="vertical-align:top; width:192px; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">Field</strong></p>
 </td>
-<td style="vertical-align:top; width:134px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">Bit/Mask</span></p>
+<td style="vertical-align:top; width:134px; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">Bit/Mask</strong></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">Register</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">Register</strong></p>
 </td>
-<td colspan="3"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">Privilege</span></p>
+<td colspan="3"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">Privilege</strong></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-weight: bold;">Default Description</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">Default Description</strong></p>
 </td>
 </tr>
 <tr>

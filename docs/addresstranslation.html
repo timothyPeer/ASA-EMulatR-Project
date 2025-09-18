@@ -128,7 +128,7 @@
 
 <!--ZOOMRESTART-->
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Virtual-to-Physical Address Translation in Alpha Architecture</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Virtual-to-Physical Address Translation in Alpha Architecture</strong></p>
 <p class="p_Normal">You've touched on a fundamental aspect of the Alpha architecture's memory system. Let me clarify how virtual-to-physical address translation works in the Alpha architecture and how it should be implemented in your emulator.</p>
 <p class="p_Normal">The Complete Translation Path</p>
 <p class="p_Normal">In Alpha systems, the complete virtual-to-physical translation process involves:</p>
@@ -151,7 +151,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Detailed Interface Analysis</span></h3>
-<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><span style="font-weight: bold;">FetchUnit ↔ AlphaCPU Interface</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><strong style="font-weight: bold;">FetchUnit ↔ AlphaCPU Interface</strong></p>
 <p class="p_Normal">Key Methods:</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;translate(alignedPC,&nbsp;physicalAddress,&nbsp;2)&nbsp;-&nbsp;Translates&nbsp;instruction&nbsp;virtual&nbsp;addresses</span></p>
@@ -159,8 +159,8 @@
 <p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;readMemory32(physicalAddress,&nbsp;instruction)&nbsp;-&nbsp;Reads&nbsp;instruction&nbsp;from&nbsp;physical&nbsp;memory</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">m_cpu-&gt;getInstructionCache()&nbsp;-&nbsp;Accesses&nbsp;instruction&nbsp;cache</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Translation Flow:</span></p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">From fetchInstruction() in FetchUnit</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Translation Flow:</strong></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">From fetchInstruction() in FetchUnit</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(m_cpu-&gt;translate(alignedPC,&nbsp;physicalAddress,&nbsp;2))&nbsp;{</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Translation&nbsp;successful&nbsp;-&nbsp;read&nbsp;from&nbsp;physical&nbsp;memory</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;bool&nbsp;readSuccess&nbsp;=&nbsp;m_cpu-&gt;readMemory32(physicalAddress,&nbsp;instruction);</span></p>
@@ -172,14 +172,14 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">2.</span>AlphaCPU&nbsp;↔&nbsp;TLBSystem&nbsp;Interface</p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-style: italic; font-weight: bold;">Key&nbsp;Methods:</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-style: italic; font-weight: bold;">Key&nbsp;Methods:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">translateAddress(va,&nbsp;isWrite,&nbsp;isExec,&nbsp;asn,&nbsp;isKernel)&nbsp;-&nbsp;Main&nbsp;translation&nbsp;entry&nbsp;point</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">handleTLBMiss(va,&nbsp;asn,&nbsp;isWrite,&nbsp;isExec,&nbsp;isKernel)&nbsp;-&nbsp;Handles&nbsp;translation&nbsp;misses</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">insertEntry(va,&nbsp;pa,&nbsp;asn,&nbsp;protection,&nbsp;isInstruction)&nbsp;-&nbsp;Adds&nbsp;new&nbsp;TLB&nbsp;entries</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">invalidateEntry(va,&nbsp;asn,&nbsp;isKernel)&nbsp;-&nbsp;Invalidates&nbsp;specific&nbsp;TLB&nbsp;entries</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">Translation Process:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Translation Process:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <tr>
@@ -215,15 +215,15 @@
 </table>
 </div>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">3. TLBSystem ↔ AlphaTranslationCache Coordination</span></p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Coordinated Operations:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">3. TLBSystem ↔ AlphaTranslationCache Coordination</strong></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Coordinated Operations:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">invalidateTranslationCache(va,&nbsp;asn,&nbsp;isInstruction)&nbsp;-&nbsp;Synchronized&nbsp;invalidation</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">invalidateTranslationCacheAll()&nbsp;-&nbsp;Full&nbsp;cache&nbsp;flush&nbsp;coordination</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">invalidateTranslationCacheASN(asn)&nbsp;-&nbsp;ASN-specific&nbsp;invalidation</span></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">This ensures cache coherency between the TLB and any higher-level translation caches.</p>
-<p class="p_Normal"><span style="font-weight: bold;">4. Memory Protection and Fault Handling</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">4. Memory Protection and Fault Handling</strong></p>
 <p class="p_Normal">The TLB system implements comprehensive fault detection:</p>
 <p class="p_Normal">Fault Types:</p>
 <p class="p_Normal">&nbsp;</p>
@@ -255,7 +255,7 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Protection Bits:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Protection Bits:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <tr>
@@ -297,21 +297,21 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">5. Performance Features</span></p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Statistics Tracking:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">5. Performance Features</strong></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Statistics Tracking:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>ITLB/DTLB hit/miss rates</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Page fault and protection fault counts</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Memory access patterns analysis</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Optimization Features:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Optimization Features:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Separate instruction and data TLBs (Harvard architecture)</p>
 <p class="p_Normal">LRU replacement policy with reference bit tracking</p>
 <p class="p_Normal">Reverse lookup cache for physical→virtual mapping</p>
 <p class="p_Normal">Prefetch support in FetchUnit for sequential instruction access</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">6. Thread Safety and Synchronization</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">6. Thread Safety and Synchronization</strong></p>
 <p class="p_Normal">The system uses multiple synchronization mechanisms:</p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">QReadWriteLock&nbsp;m_tlbLock&nbsp;for&nbsp;TLB&nbsp;array&nbsp;access</span></p>

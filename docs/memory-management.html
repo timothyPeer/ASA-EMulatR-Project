@@ -132,7 +132,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">ASA&nbsp;AXP&nbsp;Emulator&nbsp;—&nbsp;Memory&nbsp;Management&nbsp;System&nbsp;Reference</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">Overview</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Overview</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">--------</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">This&nbsp;document&nbsp;describes&nbsp;the&nbsp;memory&nbsp;management&nbsp;system&nbsp;in&nbsp;the&nbsp;ASA-EMulatR,&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">with&nbsp;emphasis&nbsp;on&nbsp;the&nbsp;AlphaMemorySystem&nbsp;class,&nbsp;its&nbsp;relationship&nbsp;to&nbsp;AlphaCPU,&nbsp;</span></p>
@@ -173,13 +173,13 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp;Manage&nbsp;device&nbsp;discovery,&nbsp;IRQ&nbsp;routing,&nbsp;and&nbsp;DMA.</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">AlphaMemorySystem</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">AlphaMemorySystem</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">-----------------</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">The&nbsp;`AlphaMemorySystem`&nbsp;sits&nbsp;at&nbsp;the&nbsp;heart&nbsp;of&nbsp;the&nbsp;emulator’s&nbsp;memory&nbsp;subsystem.&nbsp;&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">It&nbsp;implements&nbsp;the&nbsp;physical&nbsp;memory&nbsp;abstraction,&nbsp;manages&nbsp;page&nbsp;mappings,&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">and&nbsp;serves&nbsp;as&nbsp;the&nbsp;interface&nbsp;between&nbsp;the&nbsp;CPU&nbsp;and&nbsp;all&nbsp;memory-resident&nbsp;or&nbsp;MMIO&nbsp;resources.</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-style: italic;">###&nbsp;Responsibilities:</span></p>
+<p class="p_CodeExample"><em class="f_CodeExample" style="font-style: italic;">###&nbsp;Responsibilities:</em></p>
 <p class="p_CodeExample"><span class="f_CodeExample">✔&nbsp;Own&nbsp;and&nbsp;manage&nbsp;host-allocated&nbsp;RAM&nbsp;(system&nbsp;memory).&nbsp;&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">✔&nbsp;Provide&nbsp;methods&nbsp;to&nbsp;read/write&nbsp;memory&nbsp;at&nbsp;virtual&nbsp;and&nbsp;physical&nbsp;addresses.&nbsp;&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">✔&nbsp;Integrate&nbsp;with&nbsp;the&nbsp;MMU&nbsp;for&nbsp;page&nbsp;table&nbsp;management.&nbsp;&nbsp;</span></p>
@@ -188,7 +188,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">✔&nbsp;Support&nbsp;SMP&nbsp;coherency&nbsp;hooks&nbsp;where&nbsp;needed.</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">Interaction:&nbsp;AlphaCPU&nbsp;→&nbsp;Memory</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Interaction:&nbsp;AlphaCPU&nbsp;→&nbsp;Memory</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">-------------------------------</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">At&nbsp;runtime,&nbsp;the&nbsp;AlphaCPU&nbsp;executes&nbsp;instructions&nbsp;and&nbsp;performs&nbsp;memory&nbsp;operations:</span></p>
@@ -206,7 +206,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Routed&nbsp;to&nbsp;the&nbsp;appropriate&nbsp;device&nbsp;handler.</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">AlphaMemorySystem&nbsp;Interface</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">AlphaMemorySystem&nbsp;Interface</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">---------------------------</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">Key&nbsp;methods&nbsp;(example&nbsp;signatures):</span></p>
@@ -223,7 +223,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;registerMMIODevice(MMIODevice*&nbsp;device,&nbsp;baseAddr,&nbsp;size);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">MMU&nbsp;&amp;&nbsp;TLB&nbsp;Integration</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">MMU&nbsp;&amp;&nbsp;TLB&nbsp;Integration</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">---------------------</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">The&nbsp;AlphaMemorySystem&nbsp;works&nbsp;in&nbsp;conjunction&nbsp;with&nbsp;the&nbsp;MMU&nbsp;and&nbsp;TLB&nbsp;system&nbsp;to&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">translate&nbsp;virtual&nbsp;addresses&nbsp;to&nbsp;physical&nbsp;addresses:</span></p>
@@ -286,7 +286,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">===============================================================================</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">Elements:&nbsp;</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Elements:&nbsp;</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample"><a href="translation-buffer-(tlb)-alphasystemmemory.html" class="topiclink">Translation&nbsp;Buffer&nbsp;(TLB)</a>&nbsp;<a href="virtual-to-physical-address-tr.html" class="topiclink">Virtual&nbsp;to&nbsp;Physical&nbsp;Address&nbsp;Translation</a>&nbsp;<a href="caching---instruction.html" class="topiclink">Caching</a>&nbsp;<a href="about-mmu-and-tlb.html" class="topiclink">About&nbsp;MMU&nbsp;and&nbsp;TLB&nbsp;—&nbsp;Definitions&nbsp;&amp;&nbsp;Roles</a></span></p>
 

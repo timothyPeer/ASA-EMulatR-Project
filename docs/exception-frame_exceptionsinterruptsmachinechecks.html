@@ -131,7 +131,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">When a hardware trap or software exception occurs, the processor (and the emulator) must capture a complete snapshot of execution context—including all general-purpose registers (GPRs), the floating-point control register (FPCR, if enabled), and the current processor mode. These properties ensure that the interrupted process or routine can be restored with full accuracy, maintaining all privilege, access, and memory translation settings.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">The processor mode and associated stack pointer (R30) are critical:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">The processor mode and associated stack pointer (R30) are critical:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The Alpha hardware saves the active processor mode and the SP as seen by the interrupted mode at the instant of exception.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>On exception return, PALcode or the OS uses these saved values to restore stack pointers (USP, KSP, ESP, SSP) and processor status, guaranteeing the resumed context runs at the correct privilege level with the expected access rights.</p>
 <p class="p_Normal">&nbsp;</p>
@@ -148,35 +148,35 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">===========================</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Frame Properties: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Frame Properties: </strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_gpr[32]: Covers all general purpose integer registers; matches the hardware frame for full architectural compliance. If you need only the ABI-preserved subset for &quot;fast&quot; software exceptions, you may keep the smaller set, but full hardware compatibility means all GPRs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_fpcr: Only meaningful if PS.FEN is set (hardware enables floating-point).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>ProcessorMode: Required to restore stack pointer correctly (K/E/S/U).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>No FPRs: PALcode/hardware does not save FPRs on a hardware trap; software does if needed.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Processor Mode: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Processor Mode: </strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>When a trap or exception occurs, hardware saves the current mode (via PS) along with the stack pointer (SP, usually R30).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>To restore the interrupted process or routine, the OS/PALcode must:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Restore the correct stack pointer for the processor mode that was active at the time of the exception (USP, KSP, ESP, SSP, depending on U/K/E/S).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Restore processor status and privilege level from the frame, so the resumed context has the same permissions.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Stack Pointer Semantics</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Stack Pointer Semantics</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>R30 in the frame is the SP as seen by the current mode at time of exception.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Upon return, the OS must map this value back to the correct architectural stack pointer for the restored mode:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If resuming user mode, set the USP from R30 (frame).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If resuming kernel mode, set the KSP from R30 (frame).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Privilege Level and Access Rights</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Privilege Level and Access Rights</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Restoring the ProcessorMode (from frame or PS) ensures:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Correct privilege checks are re-established.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Code resumes with the expected MMU settings, address translation, and instruction permissions.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Selecting Stack for Nested Exceptions</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Selecting Stack for Nested Exceptions</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If an exception occurs while already in K/E/S/U mode, hardware may switch stacks (e.g., from USP to KSP) based on the processor mode saved in the frame.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PALcode uses the mode to decide where to push/pull frames for nested exception delivery.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Practical Implementation in Emulator</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Practical Implementation in Emulator</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">When restoring from ExceptionFrame:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Set the processor’s mode register (from frame.m_processorMode or the PS field).</p>
@@ -184,12 +184,12 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">If your OS/emulator uses software shadow registers for SPs, update those as well.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">When handling exceptions:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">When handling exceptions:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Use m_processorMode to determine which stack pointer is valid for R30 in the frame.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Update the context manager’s stack pointers as needed for the next return.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Reference</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Reference</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">ASA 3.2.5.2 (Processor Status Register)</p>
 <p class="p_Normal">Table 3-3 (Processor Modes)</p>

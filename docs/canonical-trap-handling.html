@@ -6,7 +6,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
-   <meta name="keywords" content="Exception, Status Only,Exception, Trap Always,Exception, Trap Only if Both,Exceptions,ExceptionStatusRegister,FPCR,ra, Operand,rb, Operand,rc, Operand,Register, FPCR,Trap, Conditional,Trap, Unconditional" />
+   <meta name="keywords" content="Exception, Status Only,Exception, Trap Always,Exception, Trap Only if Both,Exceptions,ExceptionStatusRegister,FPCR,Register, DADFX,Register, FPCR,Trap, Conditional,Trap, Unconditional" />
    <meta name="description" content="This page documents the three canonical patterns for delivering floating-point exceptions and traps in the ASA-EMulatR, as required by the Alpha AXP architecture. Every..." />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
@@ -114,7 +114,7 @@
       
       <a href="tlbexception-class-dictionary.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="firmware-(srm-ev59)---es40.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="faults---processor-reset.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -129,25 +129,25 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">This page documents the three canonical patterns for delivering floating-point exceptions and traps in the ASA-EMulatR, as required by the Alpha AXP architecture. Every floating-point arithmetic instruction grain (ADD, SUB, MUL, DIV, SQRT, etc.) selects one of these models based on its variant suffix (e.g., /C, /D, /M, /U, etc.).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Each pattern defines when an exception results in a trap (architectural interrupt), and when it is only recorded as a “sticky” status bit for later inspection.</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Each pattern defines when an exception results in a trap (architectural interrupt), and when it is only recorded as a “sticky” status bit for later inspection.</em></p>
 <p class="p_Normal">The trap delivery logic is determined by the combination of the <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> (which records whether an exception occurred) and the FPCR trap enable bits (which control whether that exception is eligible to interrupt the processor).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Trap Only if Both:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Trap Only if Both:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The most common model for Alpha floating-point instructions (variants: /C, /D, /SU, /SUI, /SUIC, /SUD, /SUID, /SUIM, and default/none).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain raises a trap only if the relevant exception status bit is set and the corresponding FPCR trap enable bit is set.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Trap Always:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Trap Always:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Used for “unmasked” or unconditional variants (e.g., /U, /UM, /UC, /UD).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain always delivers a trap if the exception occurs, regardless of FPCR trap enables.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Status Only:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Status Only:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Used for summary-only or masked variants (e.g., /M, /SUM, /SUID).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain updates the <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> for any exceptions, but never delivers a trap—these exceptions are only sticky for software inspection.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The included code snippets illustrate each model and should be used directly in all arithmetic grains.</p>
 <p class="p_Normal"><span class="f_CodeExample">AlphaCpu::raiseException()</span> is the canonical entry point for trap delivery: all architectural traps must be funneled through this method for correct context, state, and handler vectoring.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">For implementation:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">For implementation:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always update <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> status bits after the arithmetic operation.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Slect and apply the correct trap pattern for the grain type based on the variant table.</p>
@@ -158,9 +158,9 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Examples and Usage: </span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;"> Trap Only if Both</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;"> Trap Only if Both</strong></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">(OptimizedExceptionStatusRegister + FPCR Trap Enable Checked)</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;">(OptimizedExceptionStatusRegister + FPCR Trap Enable Checked)</strong></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">Used for: /C, /D, /SU, /SUI, /SUIC, /SUD, /SUID, /SUIM, (none)</p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Trap&nbsp;only&nbsp;if&nbsp;both&nbsp;exception&nbsp;occurred&nbsp;AND&nbsp;trap&nbsp;enable&nbsp;is&nbsp;set&nbsp;in&nbsp;FPCR</span></p>
@@ -177,11 +177,11 @@
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_SeeAlso">See&nbsp;Also.</span><span class="f_CodeExample">&nbsp;&nbsp;</span></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;"><a href="trapping-exceptions.html" class="topiclink">Exception Source Bitmask</a> <a href="exception-source-bitmask-maski.html" class="topiclink">Exception Source Bitmask Masking</a></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">Summary: </span>Traps are delivered only if both the status bit is set and the corresponding FPCR enable bit is set.</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;">Summary: </strong>Traps are delivered only if both the status bit is set and the corresponding FPCR enable bit is set.</p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Trap Always</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Trap Always</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">(OptimizedExceptionStatusRegister Only; Unconditional Trap)</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;">(OptimizedExceptionStatusRegister Only; Unconditional Trap)</strong></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">Used for: /U, /UM, /UC, /UD</p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Trap&nbsp;always&nbsp;if&nbsp;exception&nbsp;occurred,&nbsp;regardless&nbsp;of&nbsp;FPCR&nbsp;trap&nbsp;enables</span></p>
@@ -198,11 +198,11 @@
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;cpu-&gt;raiseException(ExceptionCategory::INEXACT,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">Summary</span>: Traps are delivered for any occurred exception—FPCR is not checked.</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;">Summary</strong>: Traps are delivered for any occurred exception—FPCR is not checked.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Status Only (Masked/Summary-Only)</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Status Only (Masked/Summary-Only)</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">(OptimizedExceptionStatusRegister Only; Never Traps)</span></p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;">(OptimizedExceptionStatusRegister Only; Never Traps)</strong></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">Used for: /M, /SUM, /SUID, etc.</p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Status&nbsp;only:&nbsp;update&nbsp;OptimizedExceptionStatusRegister,&nbsp;never&nbsp;trap</span></p>
@@ -212,11 +212,11 @@
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">status-&gt;testInexactOccurred(dtA,&nbsp;dtResult);</span></p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;No&nbsp;RaiseException&nbsp;called</span></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
-<p class="p_Normal" style="margin: 0 0 0 13px;"><span style="font-weight: bold;">Summary</span>: Never triggers a trap/exception; only sets status bits. Do not Call AlphaCPU::raiseException()</p>
+<p class="p_Normal" style="margin: 0 0 0 13px;"><strong style="font-weight: bold;">Summary</strong>: Never triggers a trap/exception; only sets status bits. Do not Call AlphaCPU::raiseException()</p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">About RaiseException:</span> </h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-weight: bold;">RaiseException</span> is the single, canonical entry point for actually delivering an architectural trap/exception.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><strong style="font-weight: bold;">RaiseException</strong> is the single, canonical entry point for actually delivering an architectural trap/exception.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The above logic ensures the grain decides whether to deliver a trap.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>It does so by checking:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>For &quot;Trap Only if Both&quot;: Exception status and FPCR trap enable</p>
@@ -224,15 +224,15 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>For &quot;Status Only&quot;: Never calls RaiseException (status update only)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Once the trap is to be delivered, RaiseException takes over: saves context, updates architectural state, possibly signals PALcode, etc.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Quick Visual Table</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Quick Visual Table</strong></p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Case Name</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Case Name</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Condition</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Condition</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Code Pattern</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Code Pattern</strong></p>
 </th>
 </tr>
 </thead>
@@ -265,7 +265,7 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Grain Implementation and Usage:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Grain Implementation and Usage:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always update <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> status bits after the operation.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Select the right trap pattern for the grain type (per your table).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only then write result, notify, and advance PC.</p>
@@ -274,6 +274,10 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All architectural &quot;trap&quot; logic for FP arithmetic is handled by the combination of <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> (status bits) and FPCR (trap enables) per instruction model.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>RaiseException is only called if the grain's model and current status/enable bits require a trap.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also.</span></p>
+<p class="p_Normal"><a href="dadfx---register.html" class="topiclink">DADFX- Data Access Fault Extension Register</a></p>
+
 <!--ZOOMSTOP-->
 </div></div>
 <script type="text/javascript">

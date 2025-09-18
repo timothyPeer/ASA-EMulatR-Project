@@ -1,4 +1,4 @@
-﻿/* ------------ Script copyright 2024 EC Software -------------
+﻿/* ------------ Script copyright 2025 EC Software -------------
    This script was created by Help+Manual and is part of the      
    Webhelp export format. This script is designed for use in 
    combination with the output of Help+Manual and must not 

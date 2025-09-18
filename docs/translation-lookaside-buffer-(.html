@@ -129,12 +129,12 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">A Translation Lookaside Buffer (TLB) is a small, fast hardware cache that holds a subset of the processor’s page‐table entries—i.e. recently used virtual→physical mappings—along with permission bits (read/write/execute), “referenced”/“dirty” flags, and an Address Space Number (ASN). In an Alpha‐based system (and thus in an ASA-EMulatR), the TLB’s job is twofold:</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><span style="font-weight: bold;">Accelerate address translation</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><strong style="font-weight: bold;">Accelerate address translation</strong></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">Without a TLB, every memory access would require walking the full page table in main memory (or invoking a microcoded PAL routine). That is very slow. By caching a handful of page mappings in the TLB, the CPU can translate virtual addresses to physical addresses on most accesses in a single cycle (or just a few cycles in an emulator), rather than doing a full page‐table lookup each time.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>Caches recently used page‐table entries so that a majority of memory accesses avoid a full page-table walk.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>Each TLBEntry holds (VPN, ASN) → PFN plus permission bits, so a simple lookup yields (physBaseAddress | pageOffset).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">2.</span><span style="font-weight: bold;">Enforce memory‐protection semantics</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">2.</span><strong style="font-weight: bold;">Enforce memory‐protection semantics</strong></p>
 <p class="p_Normal" style="margin: 0 0 0 13px;">Each TLB entry carries protection bits (valid, writable, executable) plus “referenced” and “dirty” flags. On every load/store/fetch, the CPU checks those bits to decide if the access is allowed or whether it should trap (e.g. for a page fault, protection violation, or coherence action). The TLB also tracks which pages have been “referenced” or “dirtied,” so later page‐table updates (or OS routines) can see which pages need write‐back or cleaning.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a)</span>On every access—load, store, or instruction fetch—the emulator probes the TLB first.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin: 0 0 0 13px;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b)</span>If lookup() returns a non-null TLBEntry*, the emulator checks:</p>
@@ -145,7 +145,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a)</span>If&nbsp;none&nbsp;of&nbsp;these&nbsp;conditions&nbsp;are&nbsp;violated,&nbsp;the&nbsp;emulator&nbsp;proceeds&nbsp;with&nbsp;the&nbsp;access.&nbsp;It&nbsp;also&nbsp;sets&nbsp;e-&gt;setReferenced(true)&nbsp;(and&nbsp;e-&gt;setDirty(true)&nbsp;if&nbsp;it&nbsp;was&nbsp;a&nbsp;store).</p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">3.</span><span style="font-weight: bold;">Referenced/Dirty&nbsp;Bit&nbsp;Emulation</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">3.</span><strong style="font-weight: bold;">Referenced/Dirty&nbsp;Bit&nbsp;Emulation</strong></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_CodeExample">Hardware&nbsp;sets&nbsp;the&nbsp;“referenced”&nbsp;bit&nbsp;on&nbsp;reads/fetches&nbsp;and&nbsp;the&nbsp;“dirty”&nbsp;bit&nbsp;on&nbsp;writes.&nbsp;We&nbsp;mirror&nbsp;that&nbsp;by&nbsp;doing:</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">entry-&gt;setReferenced(true);</span></p>
@@ -156,21 +156,21 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>Extract “referenced” and “dirty” from the PTE (if any).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">c.</span>Create a new TLBEntry newEntry; … newEntry.setReferenced(…), etc.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">d.</span>Call TLBSystem::insert(newEntry).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">5.</span><span style="font-weight: bold;">LRU Replacement</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">5.</span><strong style="font-weight: bold;">LRU Replacement</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>Each time we hit or insert an entry, we update that entry’s m_lastUsed = ++m_ageCounter.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>On insertion when all slots are valid, we scan m_lastUsed and evict the entry whose m_lastUsed is smallest (oldest). This is a standard software‐simulated LRU.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">6.</span><span style="font-weight: bold;">Invalidation Hooks (PAL Instructions &amp; OS Updates)</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">6.</span><strong style="font-weight: bold;">Invalidation Hooks (PAL Instructions &amp; OS Updates)</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>invalidateEntry(virtualPage, asn): corresponds to PAL instructions like PAL_TBIS (invalidate single mapping). Also used if the OS updates a page table for that (VPN, ASN).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>invalidateByASN(asn): corresponds to “Invalidate all TLB entries for this ASN” (e.g. certain PAL calls or when the OS does a process-wide flush).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">c.</span>invalidateAll(): corresponds to “Invalidate everything” (e.g. PAL_TBIA global flush).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">7.</span><span style="font-weight: bold;">Separate I-TLB (<a href="l1cache.html" class="topiclink">L1 I-Cache)</a> vs. D-TLB (<a href="l2cache.html" class="topiclink">L2 D-Cache)</a></span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">7.</span><strong style="font-weight: bold;">Separate I-TLB (<a href="l1cache.html" class="topiclink">L1 I-Cache)</a> vs. D-TLB (<a href="l2cache.html" class="topiclink">L2 D-Cache)</a></strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>Although our implementation uses a single m_entries vector, each TLBEntry has isInstructionEntry = true/false.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>On an instruction-fetch, the emulator calls lookup(virtPage, asn) but then checks that e-&gt;getIsInstructionEntry() == true; if not, it’s considered a miss (so it won’t reuse a data entry for instruction fetch).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">c.</span>Conversely, on data load/store, we look for isInstructionEntry() == false.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Why is it needed: </span></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Why is it needed: </strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Performance</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Performance</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Without a TLB, every load/store/fetch would do a full page‐table walk (which involves at least one or two memory references per level of the page table). Even if the emulator stores page tables in a fast C++ data structure, the overhead is enormous compared to a simple in‐memory lookup in a small QVector&lt;TLBEntry&gt;.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>By caching “hot” mappings, we reduce the cost of most memory accesses to a few lines of C++ code and a linear scan of, say, 64 entries—trivially faster than a multi‐level table walk.</p>
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
@@ -178,23 +178,23 @@
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
 <p class="p_Notes"><span class="f_Notes">This layered design—CPU → TLBSystem → PageTableWalk → PhysicalMemory—ensures both correctness (matching Alpha’s VM semantics exactly) and performance (most accesses served by a tiny cache of TLB entries rather than a full multi-level table walk).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Correct Alpha Semantics</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Correct Alpha Semantics</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Alpha hardware sets “referenced” on reads/fetches and “dirty” on writes in the TLB entry, then pushes those bits back into the page table only on eviction or explicit flush. Many OS page‐replacement algorithms rely on exactly that behavior.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If we bypassed a TLB entirely and always manipulated PTEs directly, we would have to replicate that entire “on-access set‐bit” logic for every read/write. The TLB model isolates it into one place.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Similarly, ASNs let Alpha avoid flushing the entire TLB on every context switch. If your emulator simply flushed the entire TLB on every switch, it would still function, but performance and OS‐behavior fidelity would suffer drastically.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">PAL-code Compatibility</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">PAL-code Compatibility</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The Alpha PAL instructions PAL_TBIS, PAL_TBIA require precise TLB invalidation semantics. By centralizing that logic in TLBSystem, our emulator can implement PAL traps by calling the appropriate invalidate*() methods, matching the hardware’s effect exactly.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Separate I- and D- TLBs</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Separate I- and D- TLBs</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Real Alpha hardware has separate instruction and data TLBs, so an instruction fetch never accidentally reuses a data entry. By tagging each TLBEntry with isInstructionEntry, we mirror that behavior.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Without a TLB, instruction fetch could be treated just like a data load in software, but that would diverge from real hardware (and break certain self-modifying code or protected-mode quirks on Alpha).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">As Implemented Here: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">As Implemented Here: </strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The TLB is implemented as an internal component of the <a href="alphamemorysystem-claude.html" class="topiclink">AlphaMemorySystem</a> and is vectored to each <a href="alphacpu-claude.html" class="topiclink">AlphaCPU</a> . &nbsp;The TLB instance is private to each CPU. &nbsp; The practical vector-size is coded to a maximum 16 CPUs - though in practice, for non-Galaxy implementations, one to four CPUs will be implemented. </p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">The TLB consists of two elements: </span></p>
+<p class="p_Normal"><em style="font-style: italic;">The TLB consists of two elements: </em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">1.</span>A fixed high-performant Vector (array) </p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">2.</span>A TLB entry which is owned directly (by-value) and maintained in the Vector array.</p>
 <p class="p_Normal">&nbsp;</p>
@@ -202,7 +202,7 @@
 <tr>
 <td style="vertical-align:top; width:509px; padding:0; border:none"><p class="p_Normal"><span class="f_CodeExample" style="font-size: 11px;"> TLBEntry </span></p>
 </td>
-<td style="vertical-align:top; width:1729px; padding:0; border:none"><p class="p_Normal"><span style="font-weight: bold;">Property Implementation</span></p>
+<td style="vertical-align:top; width:1729px; padding:0; border:none"><p class="p_Normal"><strong style="font-weight: bold;">Property Implementation</strong></p>
 </td>
 </tr>
 <tr>
@@ -253,19 +253,19 @@
 </td>
 <td style="vertical-align:top; width:1729px; padding:0; border:none"><p class="p_Normal"><span style="font-size: 11px;">A single TLB “slot,” which holds all metadata for a cached virtual→physical mapping. Each TLBEntry packs:</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint64 virtualPage</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint64 virtualPage</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• The virtual page number (VPN) of this mapping.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Computed by (virtualAddress ≫ pageSizeBits) before lookup.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint64 physicalPage</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint64 physicalPage</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• The corresponding physical page‐frame number (PFN).</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• When a TLB hit occurs, the physical address is assembled as (physicalPage « pageSizeBits) | (pageOffset).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint64 asn</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint64 asn</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Address Space Number (ASN) tagging: in Alpha, each process (or “address space”) has its own ASN.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Two different processes may map the same virtual page to different physical pages, so we store the ASN to ensure that lookup() only hits if (VPN, ASN) match.</span></p>
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
-<p class="p_Notes"><span class="f_Notes" style="font-weight: bold;">Important Distinction:</span><span class="f_Notes"> An ASN (Address Space Number) is the tag that distinguishes one process’s page mappings from another’s. It records which address space (i.e. which “process”) this particular virtual→physical mapping belongs to. Later, when the CPU performs a lookup, it only considers an entry a hit if both entry.getVirtualAddress()==vpn and entry.getAsn()==currentASN. If the ASNs don’t match, that entry is treated as invalid for the current process. If no entry’s ASN matches, it’s a miss—even if the same VPN exists in the array under a different ASN.</span></p>
+<p class="p_Notes"><strong class="f_Notes" style="font-weight: bold;">Important Distinction:</strong><span class="f_Notes"> An ASN (Address Space Number) is the tag that distinguishes one process’s page mappings from another’s. It records which address space (i.e. which “process”) this particular virtual→physical mapping belongs to. Later, when the CPU performs a lookup, it only considers an entry a hit if both entry.getVirtualAddress()==vpn and entry.getAsn()==currentASN. If the ASNs don’t match, that entry is treated as invalid for the current process. If no entry’s ASN matches, it’s a miss—even if the same VPN exists in the array under a different ASN.</span></p>
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
 <p class="p_Notes"><span class="f_Notes">When the OS does a context switch, it simply changes currentASN (the emulator’s active AS number) and does not flush the entire TLB. Entries belonging to other ASNs remain in place, but they won’t match until their entry.getAsn() equals the new currentASN.</span></p>
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
@@ -277,36 +277,36 @@
 <p class="p_Notes" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Notes" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_Notes">On a context switch, changing the emulator’s active ASN automatically causes all entries with a different entry.getAsn() to be treated as misses, preserving “process isolation” without needing to flush every slot.</span></p>
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint32 protection</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint32 protection</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Bitmask encoding the valid/read/write/execute bits as provided by page‐table entries (or PAL routines).</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Used in isValid(), isWritable(), isExecutable() to enforce access rights.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">bool valid</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">bool valid</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Whether this entry has been initialized and may be used for translation. Set to true by TLBSystem::insert() when the slot is filled.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• isValid() returns valid &amp;&amp; (protection &amp; TLB_VALID).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">bool dirty</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">bool dirty</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Set to true whenever a write occurs through this mapping. Reflects the “dirty” bit in hardware, so that OS page‐replacement code can know whether a page must be written back.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">bool referenced</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">bool referenced</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Set to true whenever a read or execute occurs through this mapping. Mirrors the hardware “referenced” bit used by many page‐replacement algorithms.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">bool executable</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">bool executable</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• True if this mapping may be used for instruction fetches.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• A D-TLB entry almost always has executable = false, while an I-TLB entry has executable = true.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint8 granularity</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint8 granularity</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Indicates page‐size for this mapping (e.g. 4 KB, 8 KB, 64 KB). On Alpha, different page‐table levels can produce different page sizes, so we track it to reconstruct physical addresses and validate offsets.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint64 m_slotIndex</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint64 m_slotIndex</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• The index of this entry in the TLBSystem’s m_entries vector.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Primarily for debugging or bookkeeping; not strictly required for functional lookups.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">quint64 m_lastUsed</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">quint64 m_lastUsed</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• An age timestamp used in LRU replacement. Each time the emulator accesses or inserts this entry, m_lastUsed is set to ++m_ageCounter from the TLBSystem.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• When the TLB is full, TLBSystem::insert() scans m_lastUsed across all entries and evicts whichever slot has the smallest timestamp (i.e. least recently used).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">bool isInstructionEntry</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">bool isInstructionEntry</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Distinguishes I-TLB vs. D-TLB.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• When the emulator performs an instruction‐fetch, it only probes entries with isInstructionEntry = true. Conversely, D-TLB lookups set isInstructionEntry = false.</span></p>
 </td>
@@ -317,11 +317,11 @@
 <p class="p_Normal">&nbsp;</p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0;">
 <tr>
-<td style="vertical-align:top; width:413px; padding:0; border:none"><p class="p_Normal"><span style="font-weight: bold;">TLBSystem o-----------------------* TLBEntry</span></p>
+<td style="vertical-align:top; width:413px; padding:0; border:none"><p class="p_Normal"><strong style="font-weight: bold;">TLBSystem o-----------------------* TLBEntry</strong></p>
 </td>
-<td style="vertical-align:top; width:468px; padding:0; border:none"><p class="p_Normal"><span style="font-weight: bold;">Property Implementation</span></p>
+<td style="vertical-align:top; width:468px; padding:0; border:none"><p class="p_Normal"><strong style="font-weight: bold;">Property Implementation</strong></p>
 </td>
-<td style="vertical-align:top; width:2948px; padding:0; border:none"><p class="p_Normal"><span style="font-weight: bold;">About This Class-Implementation</span></p>
+<td style="vertical-align:top; width:2948px; padding:0; border:none"><p class="p_Normal"><strong style="font-weight: bold;">About This Class-Implementation</strong></p>
 </td>
 </tr>
 <tr>
@@ -343,16 +343,16 @@
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">+------------------------------------------------------+</span></p>
 <p class="p_Normal">&nbsp;</p>
 </td>
-<td style="vertical-align:top; width:468px; padding:0; border:none"><p class="p_Normal"><span style="font-size: 11px; font-style: italic;">m_entries</span></p>
+<td style="vertical-align:top; width:468px; padding:0; border:none"><p class="p_Normal"><em style="font-size: 11px; font-style: italic;">m_entries</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Allocated in the constructor as m_entries(capacity). Each element is a default‐constructed TLBEntry (initially invalid).</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Size is fixed at TLB “capacity” (e.g. 64 entries).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">m_lastUsed</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">m_lastUsed</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Also allocated in the constructor as m_lastUsed(capacity, 0), so every slot starts with timestamp 0.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Whenever lookup() or insert() touches slot i, we update m_lastUsed[i] = ++m_ageCounter.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Used by insert() to find the slot with the lowest m_lastUsed for eviction (LRU).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 11px; font-style: italic;">m_ageCounter</span></p>
+<p class="p_Normal"><em style="font-size: 11px; font-style: italic;">m_ageCounter</em></p>
 <p class="p_Normal"><span style="font-size: 11px;">• 32- or 64-bit integer that increments on each TLB hit or insertion.</span></p>
 <p class="p_Normal"><span style="font-size: 11px;">• Ensures that “most recently used” entries have the highest timestamp.</span></p>
 </td>
@@ -370,7 +370,7 @@
 </div>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">Interfaces:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Interfaces:</strong></p>
 <p class="p_Normal">Interface Ownership: <a href="alphamemorysystem-claude.html" class="topiclink">AlphaMemorySystem</a> <a href="translation-buffer-(tlb)-alphasystemmemory.html" class="topiclink">Translation Buffer (TLB)</a></p>
 <p class="p_Normal">&nbsp;</p>
 

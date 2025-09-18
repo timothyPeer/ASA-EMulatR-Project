@@ -112,7 +112,7 @@
     </td>
     <td class="topichead" id="idnav">
       
-      <a href="introduction.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="update-notice-introduction.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
       <a href="licensing.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
@@ -129,12 +129,12 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">The ASA-EMulatR is a work-in-progress with a rigorous focus on both architectural accuracy and host performance. The following prioritized task list outlines the remaining work, ongoing efforts, and areas planned for future development.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Core Emulation Priorities</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Core Emulation Priorities</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Complete the Core Alpha Instruction Set</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All documented Alpha instructions (integer, floating-point, control, and system) must be implemented and verified.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Atomic Operations</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Atomic Operations</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Implement full Load-Linked/Store-Conditional (LL/SC) semantics for atomic memory operations—critical for OS and SMP correctness.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Support granular lock tracking and all architecture-specified SC failure conditions.</p>
@@ -142,68 +142,68 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Implement all memory barrier instructions (MB, WMB, RMB) as specified by Alpha’s relaxed memory model.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Guarantee correct inter-CPU store/load ordering and SMP safety.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Complete Exception Model</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Complete Exception Model</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Ensure full architectural trap and exception coverage (ARITH, FEN, machine check, unaligned access, etc.).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Integrate with PALcode and proper exception frame management.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">TLB and MMU Features</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">TLB and MMU Features</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Implement TLB shootdown and address space management for full SMP and OS compatibility.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Add support for superpages and advanced MMU features.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Performance Optimizations</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Performance Optimizations</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Focus first on correctness, then on optimizing hot paths and critical code blocks.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Incrementally roll out JIT compilation (ASA Assembler integration) for heavily-used grains.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">ISA and Platform Extensions</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">SIMD/Multimedia Extensions</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">SIMD/Multimedia Extensions</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Finish implementation of MVI (Multimedia), BWX (Byte/Word), MAX (Multimedia Extensions), and CIX (Count) instructions.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">System and PALcode Instructions</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">System and PALcode Instructions</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Expand system-level instructions: FETCH, FETCH_M, RC, RS, HALT, etc.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Complete PALcode call interface and integration for all system and I/O instructions.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Memory Model and Advanced Features</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Memory Model and Advanced Features</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Add detailed handling for MB, WMB, and full store ordering semantics.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Implement prefetch hints and LD_L/ST_C cache-line corner cases.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Advanced and Platform-Specific Features</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">SMP/Multiprocessor Features</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">SMP/Multiprocessor Features</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Add interprocessor interrupt and PAL event support for SMP coordination.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Support full cache/TLB coherency, superpages, and address-space match registers.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Instruction Pipeline and Cache Emulation</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Instruction Pipeline and Cache Emulation</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Simulate realistic instruction pipelines, cache (L1/L2/L3), and hot path acceleration.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Performance Optimization</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Performance Optimization</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Advance JIT compiler: optimize block formation, register allocation, and inline common operations.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Develop an Alpha-to-x86 instruction precompiler for further performance.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Architecture-Specific and System Features</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Support for all Alpha Generations</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Support for all Alpha Generations</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>EV4, EV5, EV6, and EV7 architectural variations, including chipset- and platform-specific MMIO and registers.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Add system and platform management extensions as needed for compatibility with ES40, GS1280, and others.</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">&nbsp;</span></h3>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Documentation and Usability</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Documentation Hive</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Documentation Hive</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Continue expanding architecture, configuration, and virtualization docs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Appendices for system configuration, address-space, and virtualized hardware.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Why Prioritization Matters</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Why Prioritization Matters</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Emulating the Alpha architecture is not merely about “booting an OS.” Full correctness, real-world SMP scalability, and performance require completeness—across instructions, memory, device, and system models. This list tracks not just remaining work, but also the unique “gotchas” that DEC/Compaq systems and their OSes demand.</p>
 <p class="p_Normal">&nbsp;</p>

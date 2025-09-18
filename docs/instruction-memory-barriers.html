@@ -137,14 +137,14 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Load barriers (FETCH, FETCH_M): enforce ordering of loads only</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>System barriers (WH64, ECB, EXCB, WH64EN): interact with cache, ECC, and prefetch hardware (may require emulator PAL/hardware hooks)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Integration into grains is straightforward:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Integration into grains is straightforward:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Fetch the PC</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Call AlphaCPU::memoryBarrier(&lt;BarrierType&gt;, smpAware);</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Advance the PC by 4 bytes</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">TRAPB and certain system barriers may require additional emulation, such as pipeline serialization or PALcode hooks.</p>
-<p class="p_Normal"><span style="font-style: italic;">TODO: For architectural compliance, always refer to the Alpha AXP System Reference Manual and enforce the documented SMP/consistency semantics for each instruction.</span></p>
+<p class="p_Normal"><em style="font-style: italic;">TODO: For architectural compliance, always refer to the Alpha AXP System Reference Manual and enforce the documented SMP/consistency semantics for each instruction.</em></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The following table and examples summarize the memory barrier instructions, function calls, and integration patterns in the emulator.</p>
 <p class="p_Normal">&nbsp;</p>
@@ -176,7 +176,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">context-&gt;setPC(pc&nbsp;+&nbsp;4);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">argCpu-&gt;memoryBarrier(AlphaMemoryBarrierType::&lt;TYPE&gt;,&nbsp;smpAware);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">Example for MB:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Example for MB:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">inline&nbsp;void&nbsp;MB_InstructionGrain::execute(AlphaCPU*&nbsp;argCpu,&nbsp;AlphaProcessorContext*&nbsp;context,&nbsp;quint64&nbsp;rawInstr)&nbsp;const</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">{</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;quint64&nbsp;pc&nbsp;=&nbsp;context-&gt;getPC();</span></p>
@@ -184,7 +184,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;context-&gt;setPC(pc&nbsp;+&nbsp;4);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Example for FETCH_M:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Example for FETCH_M:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">inline&nbsp;void&nbsp;FETCH_M_InstructionGrain::execute(AlphaCPU*&nbsp;argCpu,&nbsp;AlphaProcessorContext*&nbsp;context,&nbsp;quint64&nbsp;rawInstr)&nbsp;const</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">{</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;quint64&nbsp;pc&nbsp;=&nbsp;context-&gt;getPC();</span></p>
@@ -192,7 +192,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;context-&gt;setPC(pc&nbsp;+&nbsp;4);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Notes"><span class="f_Notes" style="font-weight: bold;">Notes</span></p>
+<p class="p_Notes"><strong class="f_Notes" style="font-weight: bold;">Notes</strong></p>
 <p class="p_Notes"><span class="f_Notes">TRAPB additionally enforces instruction serialization. If trap emulation is desired, it should inject a pipeline trappoint.</span></p>
 <p class="p_Notes"><span class="f_Notes">&nbsp;</span></p>
 <p class="p_Notes"><span class="f_Notes">WH64, WH64EN, ECB, EXCB, and RS/RC may also require PAL or hardware hooks — these should call memoryBarrier(SystemBarrier, true) and log prefetch/invalidation as needed.</span></p>

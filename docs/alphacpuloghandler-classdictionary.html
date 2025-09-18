@@ -129,10 +129,10 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">Logging is handled as &quot;slow&quot;, &quot;fast&quot; &amp; fastest. For legacy code: (QString::arg(), QString / std::sprintf, and std::sprintf. &nbsp;)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Considerations: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Considerations: </strong></p>
 <p class="p_Normal">To change log destinations (file, ring buffer), just update dispatch().</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Replace all legacy .arg() logging and similar calls:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Replace all legacy .arg() logging and similar calls:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">AlphaCPULogHandler::logf(LogLevel::DEBUG,</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&quot;opr_ADDF&nbsp;executed&nbsp;at&nbsp;PC=0x%llx&nbsp;:&nbsp;R%d(%.8e)&nbsp;+&nbsp;R%d(%.8e)&nbsp;=&nbsp;%.8e&nbsp;?&nbsp;R%d&quot;,</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;static_cast&lt;unsigned&nbsp;long&nbsp;long&gt;(pc),</span></p>
@@ -140,15 +140,15 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;int(m_rb),&nbsp;srcB,</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;result,&nbsp;int(m_rc));</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">For QString messages built with QTextStream:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">For QString messages built with QTextStream:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">AlphaCPULogHandler::logq(LogLevel::DEBUG,&nbsp;myQStringMessage);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">For va_list C-style:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">For va_list C-style:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">va_list&nbsp;args;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">AlphaCPULogHandler::vlogf(LogLevel::INFO,&nbsp;fmt,&nbsp;args);</span></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Instruction Grain Logging: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Instruction Grain Logging: </strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;argCpu-&gt;log(QString(&quot;opr_ADDF&nbsp;executed&nbsp;at&nbsp;PC=0x%1&nbsp;:&nbsp;R%2(%.8e)&nbsp;+&nbsp;R%3(%.8e)&nbsp;=&nbsp;%.8e&nbsp;?&nbsp;R%4&quot;)</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;.arg(pc,&nbsp;0,&nbsp;16)</span></p>
@@ -166,11 +166,11 @@
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Case</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Case</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Format String / Arguments</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Format String / Arguments</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Correction Needed?</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Correction Needed?</strong></p>
 </th>
 </tr>
 </thead>

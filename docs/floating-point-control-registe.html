@@ -139,18 +139,18 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Responsibilities:</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Arithmetic instruction grains:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Arithmetic instruction grains:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Read only: Query trap enable bits and rounding mode during execution.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Update OptimizedExceptionStatusRegister (not FPCR) for status on each FP operation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">PALcode/OS/MT_FPCR:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">PALcode/OS/MT_FPCR:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Update FPCR: Set/clear trap enables, status bits, and rounding mode.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Trap handler:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Trap handler:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>May update FPCR status/sticky bits (rare).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>May read/clear sticky bits on exception handling.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Bitfields and Controls (Summary):</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Bitfields and Controls (Summary):</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception/Status Flags (bits 0–4): Invalid, Divide-by-Zero, Overflow, Underflow, Inexact</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Trap Enable Flags (bits 5–9): Enable trapping for each corresponding exception</p>
@@ -161,48 +161,48 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Usage in Emulator:</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Arithmetic Grains:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Arithmetic Grains:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always check FPCR trap enables before raising an FP exception</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Update sticky bits if trap is not delivered (deferred/&quot;sticky&quot; exception)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Context Switch:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Context Switch:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>FPCR is always saved and restored along with processor state</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Emulator API:</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">FpcrRegister API: Enumerated Cases and Canonical Methods</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">FpcrRegister API: Enumerated Cases and Canonical Methods</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Exception Trap Enable Bits (per exception):</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Exception Trap Enable Bits (per exception):</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setTrapInvalidEnable(bool), isTrapInvalidEnabled()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setTrapDivideByZeroEnable(bool), isTrapDivideByZeroEnabled()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setTrapOverflowEnable(bool), isTrapOverflowEnabled()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setTrapUnderflowEnable(bool), isTrapUnderflowEnabled()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setTrapInexactEnable(bool), isTrapInexactEnabled()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Exception Occurred/Status Bits (sticky):</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Exception Occurred/Status Bits (sticky):</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setInvalidOccurred(bool), hasInvalidOccurred()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setDivideByZeroOccurred(bool), hasDivideByZeroOccurred()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setOverflowOccurred(bool), hasOverflowOccurred()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setUnderflowOccurred(bool), hasUnderflowOccurred()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setInexactOccurred(bool), hasInexactOccurred()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Rounding Modes:</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Rounding Modes:</em></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:13px;margin-left:-13px">o</span><span class="f_CodeExample">setRoundingMode(RoundingMode&nbsp;mode)</span></p>
-<p class="p_CodeExample" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:13px;margin-left:-13px">o</span><span class="f_CodeExample">getRoundingMode()</span>&nbsp;(<span style="font-style: italic;">Where&nbsp;RoundingMode&nbsp;is&nbsp;typically&nbsp;an&nbsp;enum:&nbsp;Nearest,&nbsp;PlusInfinity,&nbsp;MinusInfinity,&nbsp;Chopped/Zero</span>)</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:13px;margin-left:-13px">o</span><span class="f_CodeExample">getRoundingMode()</span>&nbsp;(<em style="font-style: italic;">Where&nbsp;RoundingMode&nbsp;is&nbsp;typically&nbsp;an&nbsp;enum:&nbsp;Nearest,&nbsp;PlusInfinity,&nbsp;MinusInfinity,&nbsp;Chopped/Zero</em>)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Floating-Point Condition Codes:</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Floating-Point Condition Codes:</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setFPConditionEqual(bool), getFPConditionEqual()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setFPConditionLessThan(bool), getFPConditionLessThan()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setFPConditionGreaterThan(bool), getFPConditionGreaterThan()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Other Canonical Methods (as typically seen in an FPCR class):</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Other Canonical Methods (as typically seen in an FPCR class):</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setDynamicMode(bool), isDynamicMode()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setStatusSummary(bool), hasStatusSummary()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setReservedOperandOccurred(bool), hasReservedOperandOccurred()</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setUnalignedAccessOccurred(bool), hasUnalignedAccessOccurred()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Bit/Mask Access (generic):</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Bit/Mask Access (generic):</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>setFlag(FpcrFlagBit, bool), hasFlag(FpcrFlagBit)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>getRawValue(), setRawValue(quint64)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Full Context/Copy Operations:</p>
@@ -210,7 +210,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>toString() (for debugging/diagnostics)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>clearStatusBits()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Explanation:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Explanation:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For each trap enable (e.g., Overflow, Underflow, etc.) you have both a setter and a getter.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For each exception occurred status (sticky), you have both a setter and a getter.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Rounding mode is typically set and retrieved with an enum.</p>
@@ -218,25 +218,25 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Additional status, reserved, and summary bits may have set/get as well.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Full flag/mask access supports bitfield logic for architectural emulation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Canonical Trap Model Integration:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Canonical Trap Model Integration:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For trap model &quot;Trap Only if Both&quot;:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain checks both exception occurred and FPCR trap enable before calling RaiseException.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">For &quot;Trap Always&quot;:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">For &quot;Trap Always&quot;:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only status is checked; FPCR is ignored (unmasked model).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">For &quot;Status Only&quot;:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">For &quot;Status Only&quot;:</strong></p>
 <p class="p_Normal">OptimizedExceptionStatusRegister and/or FPCR sticky bit is set; no trap is delivered.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Reference Table:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Reference Table:</strong></p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00CCFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Layer</span></p>
+<th style="vertical-align:top; background-color:#00CCFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Layer</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00CCFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Who Updates FPCR?</span></p>
+<th style="vertical-align:top; background-color:#00CCFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Who Updates FPCR?</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00CCFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Who Updates OptimizedExceptionStatusRegister?</span></p>
+<th style="vertical-align:top; background-color:#00CCFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Who Updates OptimizedExceptionStatusRegister?</strong></p>
 </th>
 </tr>
 </thead>

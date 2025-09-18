@@ -141,17 +141,17 @@
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Suffix / Variant</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Suffix / Variant</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">OptimizedExceptionStatusRegister Checked</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">OptimizedExceptionStatusRegister Checked</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">FPCR Trap Enable Checked</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">FPCR Trap Enable Checked</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Trap Always?</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Trap Always?</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Trap Only if Both?</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Trap Only if Both?</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Status Only?</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Status Only?</strong></p>
 </th>
 </tr>
 </thead>
@@ -230,14 +230,14 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Legend: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Legend: </strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>&quot;Trap Always?&quot; means an exception is always delivered if occurred, regardless of FPCR trap enables.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>&quot;Trap Only if Both?&quot; means exception delivered only if both exception occurred AND FPCR trap enable is set.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>&quot;Status Only?&quot; means exception status is updated, but never traps.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Canonical Code Patterns</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Case 1: Trap Only if Both (Masked/Conditional Model)</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Case 1: Trap Only if Both (Masked/Conditional Model)</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Trap&nbsp;only&nbsp;if&nbsp;both&nbsp;the&nbsp;exception&nbsp;status&nbsp;bit&nbsp;is&nbsp;set&nbsp;and&nbsp;the&nbsp;FPCR&nbsp;trap&nbsp;enable&nbsp;is&nbsp;set</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(status-&gt;hasInvalidOpOccurred()&nbsp;&amp;&amp;&nbsp;fpcr-&gt;hasFlag(ExceptionCategory::TRAP_INVALID_OP_ENABLE))&nbsp;{</span></p>
@@ -253,7 +253,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">cpu-&gt;RaiseException(ExceptionCategory::INEXACT,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Use this model for all grains with suffixes: (none), /C, /D, /SU, /SUI, /SUIC, /SUD, /SUID, /SUIM.</span></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Use this model for all grains with suffixes: (none), /C, /D, /SU, /SUI, /SUIC, /SUD, /SUID, /SUIM.</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Case 2: Trap Always (Unmasked Model)</span></h3>
 <p class="p_Normal">&nbsp;</p>
@@ -271,7 +271,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">cpu-&gt;RaiseException(ExceptionCategory::INEXACT,&nbsp;pc,&nbsp;0);&nbsp;return;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Use this model for all grains with suffixes: /U, /UM, /UC, /UD.</span></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Use this model for all grains with suffixes: /U, /UM, /UC, /UD.</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Case 3: Status Only (Masked/Summary-Only Model)</span></h3>
 <p class="p_Normal">&nbsp;</p>
@@ -282,11 +282,11 @@
 <p class="p_CodeExample"><span class="f_CodeExample">status-&gt;testInexactOccurred(dtA,&nbsp;dtResult);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;No&nbsp;RaiseException&nbsp;called&nbsp;in&nbsp;this&nbsp;case</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Use this model for all grains with suffixes: /M, /SUM, /SUID, or any summary-only grain per the Alpha AXP architecture.</span></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Use this model for all grains with suffixes: /M, /SUM, /SUID, or any summary-only grain per the Alpha AXP architecture.</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Reserved Operand and Non-Arithmetic Grains</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Reserved Operand Handling:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Reserved Operand Handling:</strong></p>
 <p class="p_Normal">Always check for reserved operand (e.g., NaN input) before arithmetic, and if detected, set the ReservedOperandOccurred flag in OptimizedExceptionStatusRegister and immediately trap:</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(std::isnan(srcA)&nbsp;||&nbsp;std::isnan(srcB))&nbsp;{</span></p>
@@ -295,10 +295,10 @@
 <p class="p_CodeExample"><span class="f_CodeExample">return;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Non-Arithmetic Grains:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Non-Arithmetic Grains:</strong></p>
 <p class="p_Normal">OptimizedExceptionStatusRegister is generally only updated by FP arithmetic and FP conversion instructions. For integer or memory instructions, do not update FP exception status unless the Alpha architecture explicitly requires it (e.g., for certain CVT instructions).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Implementation Checklist</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Implementation Checklist</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">For each arithmetic instruction grain:</p>
 <p class="p_Normal">&nbsp;</p>

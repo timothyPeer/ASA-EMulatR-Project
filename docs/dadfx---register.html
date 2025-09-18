@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design) &gt; Internal Processor Register &gt; DADFX- Data Access Fault Extension Register</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="clearDadfx,getDadfxExtension,getDadfxFaultType,getDadfxRaw,getDadfxSubcode,PAL$_DADFX,Register, DADFX,setDadfxExtension,setDadfxFaultType,setDadfxRaw,setDadfxSubcode" />
+   <meta name="description" content="The DADFX register (Data Access Fault Extension Register) is a synthetic processor register used by PALcode and the operating system on Alpha AXP systems to provide detailed..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "dadfx---register.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">DADFX- Data Access Fault Extension Register</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?dadfx---register.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="alpha-registers.html">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</a> &gt; <a href="internal-processor-register-architecture.html">Internal Processor Register</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">DADFX- Data Access Fault Extension Register</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="astsr---asynchronous-trap-stat.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="internal-processor-register-architecture.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="asn---address-space-number.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">The DADFX register (Data Access Fault Extension Register) is a synthetic processor register used by PALcode and the operating system on Alpha AXP systems to provide detailed information about data access faults (such as page faults, protection faults, unaligned references, etc.).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">1. On Data Access Faults/Exceptions</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Accessed by PALcode:</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>When a data access exception occurs (e.g., page miss, access violation, alignment fault), PALcode records additional information in DADFX.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>This typically happens before transferring control to the OS kernel’s exception handler or returning to a user-mode trap handler.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Accessed by OS Kernel:</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The kernel trap handler reads DADFX to determine:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The exact type of fault (e.g., TLB miss, protection, unaligned, etc.)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Any subcode or extended error info</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>The address extension or physical page number, if applicable</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">2. During Exception/Trap Handling</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Read on entry to exception/trap handler:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>When a data access fault vector is delivered, the OS reads DADFX (along with other fault registers like VA, MM_STAT, etc.) to determine how to recover, map a page, or deliver a signal to the application.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">3. Not Used During Normal Execution</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only accessed during fault or exception handling (never for ordinary memory reads/writes).</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;">Register Usage - Flow:</strong><span class="f_CodeExample"> </span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Instruction&nbsp;attempts&nbsp;to&nbsp;access&nbsp;data&nbsp;at&nbsp;VA</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Memory&nbsp;system&nbsp;detects&nbsp;page&nbsp;fault&nbsp;(or&nbsp;other&nbsp;data&nbsp;access&nbsp;fault)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PALcode&nbsp;exception&nbsp;handler&nbsp;invoked</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PALcode&nbsp;writes&nbsp;specific&nbsp;details&nbsp;to&nbsp;DADFX:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Fault&nbsp;type&nbsp;(bits&nbsp;0–7)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Subcode&nbsp;(bits&nbsp;8–15)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Extension&nbsp;(bits&nbsp;16–63,&nbsp;e.g.,&nbsp;address&nbsp;ext)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PALcode&nbsp;or&nbsp;OS&nbsp;kernel&nbsp;trap&nbsp;handler&nbsp;reads&nbsp;DADFX&nbsp;to&nbsp;analyze&nbsp;cause</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">↓</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">Kernel&nbsp;decides&nbsp;to&nbsp;map&nbsp;a&nbsp;page,&nbsp;deliver&nbsp;a&nbsp;signal,&nbsp;or&nbsp;panic</span></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Summary Table</strong></p>
+<div style="text-align: left; text-indent: 0; line-height: 1.0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Condition</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Is DADFX Accessed?</strong></p>
+</th>
+<th colspan="2"  style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="colgroup"><p class="p_Normal"><strong style="font-weight: bold;">Notes</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Normal load/store</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">No</p>
+</td>
+<td colspan="2"  style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Data TLB miss/fault</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Yes</p>
+</td>
+<td colspan="2"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">PALcode writes before handler</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Page protection fault</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Yes</p>
+</td>
+<td colspan="2"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">PALcode writes before handler</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Alignment error</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Yes</p>
+</td>
+<td colspan="2"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">If access triggers exception</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Unaligned/instruction</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Sometimes (rare)</p>
+</td>
+<td colspan="2"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">If data access involved</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Trap/exception delivery</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Yes</p>
+</td>
+<td colspan="2"  style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Kernel reads, analyzes</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt/soft AST</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">No</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Not a data access</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All getters and setters are atomic and SMP-safe (required for multi-threaded emulation).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Field updates use a CAS loop (compare-and-swap) to avoid races or lost updates.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always use .loadAcquire()/.storeRelease() for memory ordering when sharing data across threads.</p>
+<p class="p_CodeExample">&nbsp;&nbsp;<span class="f_CodeExample">Register&nbsp;layout&nbsp;(bits):</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;0-7&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Fault&nbsp;Type</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;8-15&nbsp;&nbsp;&nbsp;:&nbsp;Subcode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;16-63&nbsp;&nbsp;:&nbsp;Extension/Reserved&nbsp;(48&nbsp;bits)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Usage Example: </strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">setDadfxRaw(0x1234);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Set&nbsp;full&nbsp;register&nbsp;atomically</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setDadfxFaultType(0x42);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Update&nbsp;just&nbsp;the&nbsp;fault&nbsp;type&nbsp;bits&nbsp;atomically</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setDadfxSubcode(0x12);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Update&nbsp;subcode&nbsp;bits&nbsp;atomically</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setDadfxExtension(0xABCDEF123456);&nbsp;//&nbsp;Update&nbsp;extension&nbsp;field&nbsp;atomically</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">clearDadfx();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Clear&nbsp;entire&nbsp;register&nbsp;atomically</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint8&nbsp;ft&nbsp;=&nbsp;getDadfxFaultType();&nbsp;//&nbsp;Get&nbsp;current&nbsp;fault&nbsp;type</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint8&nbsp;sc&nbsp;=&nbsp;getDadfxSubcode();&nbsp;&nbsp;&nbsp;//&nbsp;Get&nbsp;current&nbsp;subcode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint64&nbsp;ex&nbsp;=&nbsp;getDadfxExtension();&nbsp;//&nbsp;Get&nbsp;current&nbsp;extension</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">Reference:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Sites &amp; Witek, Table 2-14: - “DADFX: Data Access Fault Extension Register. Contains extended error information for data access faults.”</p>
+<p class="p_Normal">Alpha AXP SRM Vol II, Exception Handling, TLB Fault Flow</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>OSF/1 / Tru64 PALcode sources:Look for &quot;data fault extension&quot;, &quot;PAL$_DADFX&quot; references</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>ASA-EMulatR -  <a href="fault-vector-handling.html" class="topiclink">Fault Vector Handling </a></p>
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

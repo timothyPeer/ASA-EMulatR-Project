@@ -129,10 +129,10 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">A robust, nearly ready for production, strict IEEE conformance, clarity, and edge-case handling. &nbsp;The dt_tfloat implements the Alpha AXP T_Float (quad precision), a 128-bit floating-point type (IEEE 754 binary128/quadruple), modeled for accurate Alpha emulation. It encapsulates two 64-bit words, with a full register-level interface and conversion helpers.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">File: </span>dt_tfloat.h</p>
+<p class="p_Normal"><strong style="font-weight: bold;">File: </strong>dt_tfloat.h</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">Field&nbsp;Layout&nbsp;(IEEE&nbsp;754&nbsp;Quad&nbsp;Precision)</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Field&nbsp;Layout&nbsp;(IEEE&nbsp;754&nbsp;Quad&nbsp;Precision)</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;127&nbsp;|&nbsp;126&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;112&nbsp;|&nbsp;111&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;|</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">+-----+----------------+--------------------------------------+</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;S&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Exponent&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
@@ -142,7 +142,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exponent: 15 bits (bias 16383)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Fraction: 112 bits (MSB implicit as in IEEE)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Data are stored as two words:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Data are stored as two words:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_high – bits 127:64</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_low – bits 63:0</p>
 <p class="p_Normal">&nbsp;</p>
@@ -158,40 +158,40 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Handles exponent bias conversion with IEEE double.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Handles subnormal, zero, infinity, and NaN correctly (see notes below).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;"> &nbsp; &nbsp;IEEE quad (128-bit)</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;"> &nbsp; &nbsp;IEEE quad (128-bit)</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Follows IEEE 754-2008: Sign (127), Exp (126:112, bias 16383), Fraction (111:0).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Handles endian issues with swap.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">3. Conversion and Edge Cases</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">fromFloat() and fromDouble():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">fromFloat() and fromDouble():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Properly converts subnormal/zero to T_floating zero.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Inf/NaN handled with helper, but for NaN, you use a canonical encoding (0x7FF8000000000000ULL).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>This is valid as a default quiet NaN; could expand to distinguish sNaN vs qNaN.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-weight: bold;">Overflow:</span> The mapped T_floating exponent overflows (exp_t &gt;= 2047), set to Inf.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><strong style="font-weight: bold;">Overflow:</strong> The mapped T_floating exponent overflows (exp_t &gt;= 2047), set to Inf.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">fromLongDouble() and fromIEEEQuad():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">fromLongDouble() and fromIEEEQuad():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Use of endian swap and memory copy.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>On some platforms, long double is not quad (128b). A fallback handles this case.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">fromInt64/fromUInt64:</span></p>
+<p class="p_Normal"><em style="font-style: italic;">fromInt64/fromUInt64:</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Handles sign and bias, includes correct rounding to fraction.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Finds the MSB to calculate unbiased exponent (standard technique).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Good use of rounding.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">toDouble(), toFloat():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">toDouble(), toFloat():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>T_floating exponent &lt;-&gt; IEEE handled by bias diff (±1).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Subnormals mapped to zero.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Inf/NaN preserved for IEEE double.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">isNaN(), isInf():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">isNaN(), isInf():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Both quad and T_floating handled per IEEE and Alpha conventions.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Checks for nonzero fraction for NaN, zero for Inf.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">isFinite(), isSignBitSet():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">isFinite(), isSignBitSet():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Simple and accurate.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Operator==/!=, reset, accessors:</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Operator==/!=, reset, accessors:</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Equal&amp;Not-Equality Override accessors. </p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">4. Special Value Creation</span></h3>
@@ -207,31 +207,31 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">6. Improvements/Edge Case Suggestions</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">fromFloat() and fromDouble():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">fromFloat() and fromDouble():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>When mapping subnormals, set to zero. Alpha T_floating does not use denormals—mapping to zero is architecturally compliant.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">fromInt64():</span></p>
+<p class="p_Normal"><em style="font-style: italic;">fromInt64():</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The fraction calculation is robust.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Endian handling for IEEE quad:</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Endian handling for IEEE quad:</em></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If targeting both big/little-endian hosts, always clarify which memory layout is canonical.</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">&nbsp;</span></h3>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Key Methods and Conversions</span></h3>
-<p class="p_Normal"><span style="font-weight: bold;">Construction</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Construction</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_tfloat() – zero</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_tfloat(quint64 low, quint64 high) – explicit</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Conversion from various smaller types: fromFloat, fromDouble, fromLongDouble, fromInt32, fromInt64, etc.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>static dt_tfloat fromFloat128(double upper, double lower = 0.0)</p>
 <p class="p_Normal">Accepts two doubles (for quad support; may require platform/compiler to actually use IEEE quad math).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Conversion to Native Types</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Conversion to Native Types</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>float toFloat() const – uses low 32 bits</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>double toDouble() const – uses low 64 bits</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>long double toLongDouble() const – full 128 bits if supported</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Various toInt32, toUInt64, etc.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Data/Range Utilities</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Data/Range Utilities</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isZero() const – checks if both words are zero</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isNaN() const, bool isInf() const – via double conversion</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Bit tests: hasHighWord(), fitsIn64Bits(), etc.</p>
@@ -239,7 +239,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>static dt_tfloat multiplySigned(qint64 a, qint64 b)</p>
 <p class="p_Normal">Returns a 128-bit signed multiply (for instructions like MULQ).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Status/Property Queries</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Status/Property Queries</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isReservedOperand() const</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>True if exponent == 0x7FFF and fraction != 0 (IEEE quad NaN/reserved operand).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Reference: IEEE 754-2008, ASA Vol I Table 2-7.</p>
@@ -250,12 +250,12 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isExactResult(long double a, long double b, long double result) const</p>
 <p class="p_Normal">True if result, when recoded as T_Float, exactly matches this value.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Raw Access</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Raw Access</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>quint64 low64() const, quint64 high64() const</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For register/memory writing</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>void setLow64(quint64), void setHigh64(quint64)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Display</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Display</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>QString toHexString() const</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Printable form (high:low)</p>
 <p class="p_Normal">&nbsp;</p>
@@ -263,7 +263,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>G_Float is used to model VAX/Alpha VMS compatibility. For &quot;real&quot; IEEE math, prefer S, T, or D float unless targeting VAX-legacy operations.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>T_Float (quad) is required for certain Alpha opcodes (see: ADTT, SUBT, etc.), for accurate trap, overflow, and inexact detection, especially for scientific and emulation contexts.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">When writing instruction grains:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">When writing instruction grains:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Always use the type matching the target Alpha opcode:</p>
 <p class="p_Normal">&nbsp;</p>

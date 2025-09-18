@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design) &gt; Internal Processor Register &gt; ASTSR - Asynchronous Trap Status Register</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="clearAllASTPending,getASTSRMask,isASTPendingExecutive,isASTPendingForMode,isASTPendingKernel,isASTPendingSupervisor,isASTPendingUser,Register, ASTSR,setASTPendingExecutive,setASTPendingKernel,setASTPendingSupervisor,setASTPendingUser,setASTSRAllPending,setASTSRExecOnlyPending,setASTSRExecSuperPending,setASTSRExecSuperUserPending,setASTSRExecUserPending,setASTSRKernelExecPending,setASTSRKernelExecSuperPending,setASTSRKernelExecUserPending,setASTSRKernelOnlyPending,setASTSRKernelSuperPending,setASTSRKernelSuperUserPending,setASTSRKernelUserPending,setASTSRMask,setASTSRMaskDirect,setASTSRNonePending,setASTSRRaw,setASTSRSuperOnlyPending,setASTSRSuperUserPending,setASTSRUserOnlyPending" />
+   <meta name="description" content="ASTSR Helper Functions and Constants (Alpha AXP-EMulatR)" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "astsr---asynchronous-trap-stat.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">ASTSR - Asynchronous Trap Status Register</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?astsr---asynchronous-trap-stat.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="alpha-registers.html">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</a> &gt; <a href="internal-processor-register-architecture.html">Internal Processor Register</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">ASTSR - Asynchronous Trap Status Register</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="asten---asynchronous-syste.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="internal-processor-register-architecture.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="dadfx---register.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">ASTSR Helper Functions and Constants (Alpha AXP-EMulatR)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**All helpers are SMP-safe, thread-safe, and match Alpha architectural AST model**</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">**Bit&nbsp;Constants&nbsp;&amp;&nbsp;Masks**</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_SHIFT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;position&nbsp;for&nbsp;Kernel&nbsp;mode&nbsp;(0)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_EXECUTIVE_SHIFT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;position&nbsp;for&nbsp;Executive&nbsp;mode&nbsp;(1)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_SUPERVISOR_SHIFT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;position&nbsp;for&nbsp;Supervisor&nbsp;mode&nbsp;(2)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_USER_SHIFT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;position&nbsp;for&nbsp;User&nbsp;mode&nbsp;(3)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_PENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Mask:&nbsp;Kernel&nbsp;AST&nbsp;pending&nbsp;(0x01)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_EXECUTIVE_PENDING&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Mask:&nbsp;Executive&nbsp;AST&nbsp;pending&nbsp;(0x02)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_SUPERVISOR_PENDING&nbsp;&nbsp;&nbsp;//&nbsp;Mask:&nbsp;Supervisor&nbsp;AST&nbsp;pending&nbsp;(0x04)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_USER_PENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Mask:&nbsp;User&nbsp;AST&nbsp;pending&nbsp;(0x08)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_ALL_MODES_MASK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Mask:&nbsp;All&nbsp;modes&nbsp;(0x0F)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_NONE_PENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;No&nbsp;modes&nbsp;pending&nbsp;(0x00)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_ONLY_PENDING&nbsp;&nbsp;//&nbsp;Only&nbsp;Kernel&nbsp;pending&nbsp;(0x01)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_EXEC_ONLY_PENDING&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;Executive&nbsp;pending&nbsp;(0x02)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_SUPER_ONLY_PENDING&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;Supervisor&nbsp;pending&nbsp;(0x04)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_USER_ONLY_PENDING&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;User&nbsp;pending&nbsp;(0x08)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_EXEC_PENDING&nbsp;&nbsp;//&nbsp;Kernel&nbsp;&amp;&nbsp;Executive&nbsp;pending&nbsp;(0x03)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_SUPER_PENDING&nbsp;//&nbsp;Kernel&nbsp;&amp;&nbsp;Supervisor&nbsp;pending&nbsp;(0x05)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_USER_PENDING&nbsp;&nbsp;//&nbsp;Kernel&nbsp;&amp;&nbsp;User&nbsp;pending&nbsp;(0x09)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_EXEC_SUPER_PENDING&nbsp;&nbsp;&nbsp;//&nbsp;Executive&nbsp;&amp;&nbsp;Supervisor&nbsp;pending&nbsp;(0x06)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_EXEC_USER_PENDING&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Executive&nbsp;&amp;&nbsp;User&nbsp;pending&nbsp;(0x0A)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_SUPER_USER_PENDING&nbsp;&nbsp;&nbsp;//&nbsp;Supervisor&nbsp;&amp;&nbsp;User&nbsp;pending&nbsp;(0x0C)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_EXEC_SUPER_PENDING&nbsp;//&nbsp;Kernel,&nbsp;Exec,&nbsp;Supervisor&nbsp;(0x07)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_EXEC_USER_PENDING&nbsp;&nbsp;//&nbsp;Kernel,&nbsp;Exec,&nbsp;User&nbsp;(0x0B)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_KERNEL_SUPER_USER_PENDING&nbsp;//&nbsp;Kernel,&nbsp;Super,&nbsp;User&nbsp;(0x0D)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_EXEC_SUPER_USER_PENDING&nbsp;&nbsp;&nbsp;//&nbsp;Exec,&nbsp;Super,&nbsp;User&nbsp;(0x0E)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ASTSR_ALL_PENDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;All&nbsp;modes&nbsp;pending&nbsp;(0x0F)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">**Atomic&nbsp;Setters**</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRRaw(quint64&nbsp;value)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;set&nbsp;all&nbsp;pending&nbsp;bits</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRMask(quint8&nbsp;mask,&nbsp;bool&nbsp;pending)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Set/clear&nbsp;bits&nbsp;(mask)&nbsp;atomically</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRMaskDirect(quint8&nbsp;mask)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;set&nbsp;bits&nbsp;to&nbsp;mask&nbsp;value</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRNonePending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Set&nbsp;no&nbsp;ASTs&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelOnlyPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;Kernel&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRExecOnlyPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;Executive&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRSuperOnlyPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;Supervisor&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRUserOnlyPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelExecPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;&amp;&nbsp;Exec&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelSuperPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;&amp;&nbsp;Super&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelUserPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;&amp;&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRExecSuperPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Exec&nbsp;&amp;&nbsp;Super&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRExecUserPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Exec&nbsp;&amp;&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRSuperUserPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Super&nbsp;&amp;&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelExecSuperPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel,&nbsp;Exec,&nbsp;Super&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelExecUserPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel,&nbsp;Exec,&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRKernelSuperUserPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel,&nbsp;Super,&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRExecSuperUserPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Exec,&nbsp;Super,&nbsp;User&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTSRAllPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;All&nbsp;modes&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">clearAllASTPending()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;clear&nbsp;all&nbsp;AST&nbsp;pending&nbsp;bits</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTPendingKernel(bool&nbsp;pending)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;set/clear&nbsp;kernel&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTPendingExecutive(bool&nbsp;pending)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;set/clear&nbsp;executive&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTPendingSupervisor(bool&nbsp;pending)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;set/clear&nbsp;supervisor&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">setASTPendingUser(bool&nbsp;pending)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Atomically&nbsp;set/clear&nbsp;user&nbsp;pending</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">**Atomic&nbsp;Getters**</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">quint8&nbsp;getASTSRMask()&nbsp;const&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Read&nbsp;lower&nbsp;4&nbsp;bits&nbsp;(mask)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isASTPendingForMode(quint8&nbsp;modeBit)&nbsp;const&nbsp;//&nbsp;Is&nbsp;AST&nbsp;pending&nbsp;for&nbsp;modeBit?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isASTPendingKernel()&nbsp;const&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Kernel&nbsp;pending?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isASTPendingExecutive()&nbsp;const&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Executive&nbsp;pending?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isASTPendingSupervisor()&nbsp;const&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Supervisor&nbsp;pending?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isASTPendingUser()&nbsp;const&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;User&nbsp;pending?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isAnyASTPending(quint8&nbsp;mask)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Any&nbsp;AST&nbsp;pending&nbsp;(mask)?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isOnlyUserASTPending(quint8&nbsp;mask)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Only&nbsp;user&nbsp;pending?</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isAllASTPending(quint8&nbsp;mask)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;All&nbsp;modes&nbsp;pending?</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_SeeAlso">Reference:</span> </p>
+<p class="p_Normal">Alpha AXP SRM Vol II, OSF/1 PALcode, Sites &amp; Witek Table 2-7</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

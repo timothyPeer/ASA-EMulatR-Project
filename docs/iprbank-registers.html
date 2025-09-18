@@ -127,13 +127,13 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">Alpha Emulator — Internal Processor Register (IPR) Bank Documentation</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">Alpha Emulator — Internal Processor Register (IPR) Bank Documentation</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🎯 Purpose of the IPR Bank</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🎯 Purpose of the IPR Bank</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">The IPR Bank models the Alpha AXP architecture’s Internal Processor Registers (IPRs) in the emulator. These registers are special-purpose processor state registers that control CPU operation, memory management, interrupts, PALcode, and debugging. They are architecturally distinct from general-purpose integer and floating-point registers.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Role and Responsibilities</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Role and Responsibilities</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Central storage of all IPRs for a given CPU.</span></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Provides synchronized (QReadWriteLock) read/write access to IPR values.</span></p>
@@ -141,7 +141,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Emits Qt signals when registers are updated, enabling UI or diagnostic tools to react.</span></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Handles special behaviors and side-effects for specific IPRs (e.g., writing to IPIR triggers an interprocessor interrupt).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Usage in VirtualASA</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Usage in VirtualASA</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Reading &amp; Writing</span></p>
 <p class="p_Normal">&nbsp;</p>
@@ -153,13 +153,13 @@
 <p class="p_CodeExample"><span class="f_CodeExample">quint64&nbsp;val&nbsp;=&nbsp;iprBank-&gt;readIpr(4);&nbsp;&nbsp;//&nbsp;PS&nbsp;register&nbsp;(ID=4)</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">iprBank-&gt;writeIpr(4,&nbsp;val&nbsp;|&nbsp;0x1);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; font-weight: bold; background-color: #ffffff;">Example in PAL Instruction</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; font-weight: bold; background-color: #ffffff;">Example in PAL Instruction</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">// From a PAL grain:</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">quint64&nbsp;value&nbsp;=&nbsp;regs-&gt;readIntReg(m_ra);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">iprBank-&gt;write(IPR::IPIR,&nbsp;value);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Structure</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Structure</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">IprBank</span></p>
 <p class="p_Normal">&nbsp;</p>
@@ -167,23 +167,23 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Maintains a pointer to the owning AlphaCPU for callbacks.</span></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Protects concurrent access with a QReadWriteLock.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">Emits signals:</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">Emits signals:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">sigRegisterChanged(IPR id, quint64 value)</span></p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">sigBatchChanged()</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Supported Registers</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Supported Registers</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">A few key IPRs (from ASA Section 5.3):</span></p>
 <p class="p_Normal">&nbsp;</p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">IPR</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">IPR</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Enumerated Value</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Enumerated Value</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Description</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Description</strong></p>
 </th>
 </tr>
 </thead>
@@ -296,11 +296,11 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; background-color: #ffffff;">Additional IPRs for TLB, PAL, etc.</span></p>
+<p class="p_Normal"><em style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; background-color: #ffffff;">Additional IPRs for TLB, PAL, etc.</em></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">For a full list, see /AEE/IprBank.h (over 200 IDs including reserved and implementation-specific).</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Special Considerations</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 Special Considerations</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Some writes trigger side-effects, implemented in:</span></p>
 <p class="p_Normal">&nbsp;</p>
@@ -311,25 +311,25 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Writing IPIR signals an IPI.</span></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-size:12px; font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Writing TBIA, TBIS, etc., invalidates TLB entries.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 References</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">🔷 References</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">📖 Alpha AXP System Reference Manual, Version 6 (1994):</span></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">Section 5.3 Internal Processor Registers, p.5-28 – p.5-41.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">📋 Benefits of Design</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">📋 Benefits of Design</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">✅ Architectural accuracy: models Alpha’s documented IPRs.</span></p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">✅ Thread-safe reads/writes.</span></p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">✅ Qt signals enable reactive UI or debugging.</span></p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">✅ Extensible for emulator-specific IPRs and synthetic registers.</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">📄 Attributions</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-weight: bold; background-color: #ffffff;">📄 Attributions</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; font-weight: bold; background-color: #ffffff;">This document was prepared collaboratively by:</span></p>
+<p class="p_Normal"><strong style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; font-weight: bold; background-color: #ffffff;">This document was prepared collaboratively by:</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; background-color: #ffffff;">✍️ Timothy Peer — design, implementation, and project leadership.</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; background-color: #ffffff;">🤖 ChatGPT (OpenAI) — technical writing, code review, and documentation assistance.</span></p>
+<p class="p_Normal"><em style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; background-color: #ffffff;">✍️ Timothy Peer — design, implementation, and project leadership.</em></p>
+<p class="p_Normal"><em style="font-size: 12px; font-family: 'Cascadia Mono'; font-style: italic; background-color: #ffffff;">🤖 ChatGPT (OpenAI) — technical writing, code review, and documentation assistance.</em></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">© 2024 Timothy Peer &amp; OpenAI. All rights reserved.&nbsp;</span></p>
 

@@ -196,7 +196,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Property-based Invalidation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Arguments: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Arguments: </strong></p>
 <p class="p_Normal">TLBEntry::Asn()</p>
 <p class="p_Normal">TLBEntry::virtualAddressPage &nbsp;:: &quot;address&quot;</p>
 <p class="p_Normal">&nbsp;</p>
@@ -208,9 +208,9 @@
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">InvalididateWhere conditions</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">InvalididateWhere conditions</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Description: </span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Description: </strong></p>
 </th>
 </tr>
 </thead>
@@ -249,21 +249,21 @@
 <p class="p_Normal">You have a very thorough and flexible set of invalidation functions, addressing almost every common Alpha AXP invalidation scenario.</p>
 <p class="p_Normal">Here is a summary grouped by function type:</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Global/CPU-based</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Global/CPU-based</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateTbiaAllCpus() — Invalidate all TLB entries on all CPUs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateTbia(quint16 cpuId) — Invalidate all TLB entries for a specific CPU.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateAllTLBs_PTE, invalidateAllTLBs_ITLB, invalidateAllTLBs_DTLB — Invalidate all entries by type and CPU.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-weight: bold;">You have invalidateByPa_PTE, but not a generic &quot;invalidate any TLB (ITLB/DTLB) by physical page.&quot;</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><strong style="font-weight: bold;">You have invalidateByPa_PTE, but not a generic &quot;invalidate any TLB (ITLB/DTLB) by physical page.&quot;</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">ASN-based</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">ASN-based</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateByASN(quint64 asn) — All entries with this ASN.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateByASN(quint16 cpuId, quint64 asn) — All entries for a CPU and ASN.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateTbiap(quint16 cpuId, quint64 asn) — TBIA for ASN on CPU.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateByAllAsnByCpuVa(quint16 cpuId, quint64 virtualAddr) -- All ASNs for a CPU and virtual address</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Single Entry (TBIS/TBISI/TBISD)</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Single Entry (TBIS/TBISI/TBISD)</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateTbis(quint16 cpuId, quint64 virtualAddr, quint64 asn) — TBIS: Single entry by CPU/VA/ASN.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateTbisi(quint16 cpuId, quint64 virtualAddr, quint64 asn) — TBISI: Single instruction entry.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateTbisd(quint16 cpuId, quint64 virtualAddr, quint64 asn) — TBISD: Single data entry.</p>
@@ -271,21 +271,21 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>BATCH: &nbsp;invalidateBatch(const QVector&lt;InvalidationRequest&gt;&amp; requests)</p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span> &nbsp; &nbsp; &nbsp; &nbsp;<span class="f_CodeExample">struct&nbsp;InvalidationRequest&nbsp;{quint16&nbsp;cpuId;quint64&nbsp;virtualAddr;quint64&nbsp;asn;&nbsp;};</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Type/Property/Condition-based</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Type/Property/Condition-based</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateInstructionEntries(quint16 cpuId) — All ITLB entries for a CPU.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateDataEntries(quint16 cpuId) — All DTLB entries for a CPU.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidatePageTableEntries(quint16 cpuId) — All PTE entries for a CPU.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateAllPending() — All pending entries.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Physical Address</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Physical Address</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateByPa_PTE(quint64 physicalPage) — PTEs by PA.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Legacy and Range Functions</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Legacy and Range Functions</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateByVa_Legacy, invalidateByVa — By virtual address.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateByPa_PTE_Legacy — By physical page (legacy).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>invalidateRange_PTE(...) — Range-based PTE invalidation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Compound and Flexible</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Compound and Flexible</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">invalidateByTypeAndCpu, invalidateByASNAndType, invalidateByVAAndConditions, invalidateByConditions, invalidateWhere (various overloads), performInvalidation</p>
 

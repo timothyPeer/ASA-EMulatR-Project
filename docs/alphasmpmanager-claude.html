@@ -144,32 +144,32 @@
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↑</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">AlphaMemorySystem&nbsp;→&nbsp;UnifiedDataCache&nbsp;→&nbsp;MMIO&nbsp;→&nbsp;Devices</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Responsibilities of AlphaSMPManager:</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">1️. CPU Lifecycle Management</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Responsibilities of AlphaSMPManager:</strong></p>
+<p class="p_Normal"><strong style="font-weight: bold;">1️. CPU Lifecycle Management</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Creates and initializes all AlphaCPU instances (e.g., 2–4 CPUs in an ES40 or ES45).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Tracks the number of active and halted CPUs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Starts, stops, halts, or resets CPUs on request.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">2️. Synchronization</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">2️. Synchronization</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Ensures correct ordering of memory operations across CPUs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Enforces memory barriers (MB, WMB, RMB) to prevent reordering of loads and stores.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Coordinates inter-CPU communication through shared queues, semaphores, or atomic operations.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">3️. Interrupt &amp; IPI Handling</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">3️. Interrupt &amp; IPI Handling</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Routes Interprocessor Interrupts (IPIs) between CPUs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Allows one CPU to signal another to flush TLBs, reschedule, halt, etc.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Ensures that hardware interrupts are delivered to the correct CPU(s).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">4️. Cache &amp; Coherency</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">4️. Cache &amp; Coherency</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Works with the cache subsystem (UnifiedDataCache, AlphaMemorySystem) to maintain cache coherency.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Ensures that caches are flushed or invalidated properly when required by one CPU for the benefit of others.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">5️. Performance Counters &amp; Profiling</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">5️. Performance Counters &amp; Profiling</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Optionally aggregates per-CPU performance data, cycle counters, and profiling information.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Useful for debugging and performance tuning in SMP scenarios.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Signal Stack:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Signal Stack:</strong></p>
 <p class="p_Normal">AlphaSMPManager</p>
 <p class="p_Normal"> &nbsp; &nbsp;└──&gt; connects to each AlphaCPU signals</p>
 <p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;└──&gt; halted() ─→ handleCpuHalted()</p>
@@ -177,7 +177,7 @@
 <p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;└──&gt; memoryAccessed() ─→ handleMemoryAccessed()</p>
 <p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;└──&gt; stateChanged() ─→ handleCpuStateChanged()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Memory Stack:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Memory Stack:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">AlphaSMPManager</p>
 <p class="p_Normal">└── AlphaCPU</p>
@@ -185,7 +185,7 @@
 <p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;└── SafeMemory (always internal)</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">AlphaSMPManager:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">AlphaSMPManager:</strong></p>
 <p class="p_Normal"> &nbsp; &nbsp;├── AlphaMemorySystem (shared)</p>
 <p class="p_Normal"> &nbsp; &nbsp;│ &nbsp; ├── SafeMemory (handles physical RAM)</p>
 <p class="p_Normal"> &nbsp; &nbsp;│ &nbsp; └── MMIOManager (handles memory-mapped devices)</p>

@@ -113,7 +113,7 @@
     <td class="topichead" id="idnav">
       
       <span class="hmbtnprev"></span>
-      <a href="visual-studio-2022---community.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
       <span class="hmbtnnext"></span>
       
     </td>
@@ -130,13 +130,13 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">LDQ   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <span class="f_CodeExample" style="font-size: 11px;">LDQ &nbsp;Ra.wq, disp.ab(Rb.ab) &nbsp;! Memory Format</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Address computation</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Address computation</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">va&nbsp;&nbsp;←&nbsp;&nbsp;Rbv&nbsp;+&nbsp;SEXT(disp)&nbsp;&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_Normal">Here Rbv is the contents of register Rb, and SEXT(disp) is the 16-bit displacement sign-extended to 64 bits. The result is the virtual address va.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Bit-field selection and register write</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Bit-field selection and register write</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">Ra&nbsp;&nbsp;←&nbsp;&nbsp;(va)&lt;63:0&gt;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
@@ -148,10 +148,10 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Putting it together, for LDQ (Load Quadword) the manual states:</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Format:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Format:</strong></p>
 <p class="p_Normal">  <span class="f_CodeExample" style="font-size: 11px;">LDQ &nbsp;Ra.wq, disp.ab(Rb.ab)</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Operation:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Operation:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;va&nbsp;&nbsp;←&nbsp;&nbsp;Rbv&nbsp;+&nbsp;SEXT(disp)</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 11px;">&nbsp;&nbsp;Ra&nbsp;&nbsp;←&nbsp;&nbsp;(va)&lt;63:0&gt;</span></p>
 <p class="p_Normal">&nbsp;</p>

@@ -127,14 +127,14 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal"><span style="font-weight: bold;">64-bit Floating Point: dt_gfloat (VAX G_Float) and dt_float (Unified)</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">64-bit Floating Point: dt_gfloat (VAX G_Float) and dt_float (Unified)</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Example usage and downcasting guidance are shown below.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_gfloat encapsulates VAX G_Float (64-bit, similar to IEEE double, different exponent bias and ordering).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_float is a unified floating-point class representing either IEEE double or VAX G_Float, with dynamic tagging.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Example:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Example:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">#include&nbsp;&quot;dt_gfloat.h&quot;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">dt_gfloat&nbsp;g&nbsp;=&nbsp;dt_gfloat::fromDouble(2.71828);</span></p>
@@ -147,20 +147,20 @@
 <p class="p_CodeExample"><span class="f_CodeExample">double&nbsp;d&nbsp;=&nbsp;f.toDouble();</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">dt_gfloat&nbsp;vax&nbsp;=&nbsp;f.toVaxG();</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">Downcasting:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Downcasting:</strong></p>
 <p class="p_Normal">For 128→64 bit conversion, use the .toDouble() or .toVaxG() methods; the conversion will use the low 64 bits and ignore overflow or high-precision loss by design. Downcast only when .fitsIn64Bits() or the value is known to be in range.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See: dt_float.h and dt_gfloat.h</span></p>
 <p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">Reference: ASA Vol I, 4.6.2 “G_Float” and 4.6.1 “F_Float”</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Downcasting: 128-bit to 64-bit, 32-bit, 16-bit, 8-bit</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Downcasting: 128-bit to 64-bit, 32-bit, 16-bit, 8-bit</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The classes provide explicit conversion routines for downcasting, with range-check helpers:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_tfloat::fitsIn64Bits() returns true if downcasting is safe (high == 0)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_tfloat::toInt64(), .toUInt64(), .toDouble() for numeric conversions</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_tfloat::fitsIn32Bits(), .fitsIn16Bits(), .fitsIn8Bits() for safe truncation checks</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All downcasts are truncating: high bits are discarded, user is responsible for semantic checks</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Example:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Example:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(tf.fitsIn32Bits())&nbsp;{</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;qint32&nbsp;v&nbsp;=&nbsp;tf.toInt32();</span></p>

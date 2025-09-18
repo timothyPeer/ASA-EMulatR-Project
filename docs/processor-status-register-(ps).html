@@ -114,7 +114,7 @@
       
       <a href="canonical-register-definitions-alphaaxpregister.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="alpha-registers.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="asa-emulator-initialization.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="register-namespaces.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -142,18 +142,18 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Purpose: Controls processor mode, interrupt enable, IPL (priority), floating-point enable, exception status, and more.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Canonical Bit Fields</span></h3>
-<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">(Reference: Alpha Architecture Reference Manual, Vol I, Section 3.2.5.2 and Table 3-10; OpenVMS Internals, SRM)</span></p>
+<p class="p_Normal"><em style="font-size: 9px; font-style: italic; vertical-align: sub;">(Reference: Alpha Architecture Reference Manual, Vol I, Section 3.2.5.2 and Table 3-10; OpenVMS Internals, SRM)</em></p>
 <p class="p_Normal">&nbsp;</p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Bits</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Bits</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Name</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Name</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Mask</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Mask</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-weight: bold;">Description</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Description</strong></p>
 </th>
 </tr>
 </thead>
@@ -302,7 +302,7 @@
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">Not all bits are defined on every implementation. The above covers all canonical fields through EV6/EV67. Lower bits (CM, IPL, IE, FEN, IV) are present on all implementations.</span></p>
+<p class="p_Normal"><em style="font-style: italic;">Not all bits are defined on every implementation. The above covers all canonical fields through EV6/EV67. Lower bits (CM, IPL, IE, FEN, IV) are present on all implementations.</em></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;PS&nbsp;Register&nbsp;Field&nbsp;Masks&nbsp;and&nbsp;Shifts&nbsp;(canonical)</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_CM_SHIFT&nbsp;&nbsp;&nbsp;=&nbsp;0;</span></p>
@@ -320,51 +320,51 @@
 <p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IV_SHIFT&nbsp;&nbsp;&nbsp;=&nbsp;17;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_IV_MASK&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0x1ULL&nbsp;&lt;&lt;&nbsp;PS_IV_SHIFT;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Bit&nbsp;17</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-style: italic;">// (todo Add SIE, AST, DZE, IRQL, DT, IT, SDE as above if modeling full SRM field set)</span></p>
+<p class="p_Normal"><em style="font-style: italic;">// (todo Add SIE, AST, DZE, IRQL, DT, IT, SDE as above if modeling full SRM field set)</em></p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">PS Register: Mode Values (CM field)</span></h3>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Mode</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Mode</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Value (bits 2:0)</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Value (bits 2:0)</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Description</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Description</strong></p>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">User</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">User</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0 (0b000)</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0 (0b000)</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">User mode</span></p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Supervisor</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">1 (0b001)</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Supervisor mode</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">User mode</em></p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Executive</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Supervisor</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">2 (0b010)</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">1 (0b001)</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Executive mode</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Supervisor mode</em></p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Kernel</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Executive</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">3 (0b011)</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">2 (0b010)</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Kernel mode</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Executive mode</em></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Kernel</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">3 (0b011)</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Kernel mode</em></p>
 </td>
 </tr>
 </tbody>
@@ -376,30 +376,30 @@
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic;">Register</span></p>
+<th style="vertical-align:top; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><em style="font-style: italic;">Register</em></p>
 </th>
-<th style="vertical-align:top; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic;">Reset Value</span></p>
+<th style="vertical-align:top; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><em style="font-style: italic;">Reset Value</em></p>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">PS</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">PS</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x0400_0000_0000_0000</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0x0400_0000_0000_0000</em></p>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">IPL = 31 (all interrupts masked)</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">CM = 3 (Kernel mode)</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">IE = 0 (interrupts disabled)</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">All other bits = 0</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><em style="font-style: italic;">IPL = 31 (all interrupts masked)</em> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><em style="font-style: italic;">CM = 3 (Kernel mode)</em> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><em style="font-style: italic;">IE = 0 (interrupts disabled)</em> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><em style="font-style: italic;">All other bits = 0</em></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">The class implementation performs bitwise setter/getter functions via helper functions.</span></p>
-<p class="p_Normal"><span style="font-style: italic;">&nbsp;</span></p>
+<p class="p_Normal"><em style="font-style: italic;">The class implementation performs bitwise setter/getter functions via helper functions.</em></p>
+<p class="p_Normal"><em style="font-style: italic;">&nbsp;</em></p>
 <p class="p_CodeExample"><span class="f_CodeExample">Example:&nbsp;Setting/Extracting&nbsp;PS&nbsp;Fields&nbsp;in&nbsp;C++</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Extract&nbsp;mode&nbsp;and&nbsp;IPL&nbsp;from&nbsp;PS</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">quint64&nbsp;ps&nbsp;=&nbsp;...;&nbsp;//&nbsp;Value&nbsp;from&nbsp;register</span></p>
@@ -408,82 +408,82 @@
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;interruptsEnabled&nbsp;=&nbsp;(ps&nbsp;&amp;&nbsp;PS_IE_MASK)&nbsp;!=&nbsp;0;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;fpEnabled&nbsp;=&nbsp;(ps&nbsp;&amp;&nbsp;PS_FEN_MASK)&nbsp;!=&nbsp;0;</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic;">// Set PS (example: set kernel mode, IPL=31)</span></p>
-<p class="p_Normal"><span style="font-style: italic;">ps = (3ULL &lt;&lt; PS_CM_SHIFT) | (31ULL &lt;&lt; PS_IPL_SHIFT);</span></p>
+<p class="p_Normal"><em style="font-style: italic;">// Set PS (example: set kernel mode, IPL=31)</em></p>
+<p class="p_Normal"><em style="font-style: italic;">ps = (3ULL &lt;&lt; PS_CM_SHIFT) | (31ULL &lt;&lt; PS_IPL_SHIFT);</em></p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Summary Table</span></h3>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Field</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Field</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Bits</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Bits</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Mask</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Mask</strong></p>
 </th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Description</span></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Description</strong></p>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">CM</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">CM</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">2:0</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">2:0</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x7</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0x7</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Current Mode</span></p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">IPL</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">7:3</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0xF8</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Interrupt Priority Level</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Current Mode</em></p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">IE</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">IPL</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">8</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">7:3</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x100</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0xF8</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Interrupt Enable</span></p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">FEN</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">15</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x8000</span></p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Floating-Point Enable</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Interrupt Priority Level</em></p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">IV</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">IE</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">17</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">8</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">0x20000</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0x100</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">Integer Overflow Trap Enable</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Interrupt Enable</em></p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">(others)</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">FEN</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">...</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">15</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">...</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0x8000</em></p>
 </td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-style: italic;">...</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Floating-Point Enable</em></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">IV</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">17</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">0x20000</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">Integer Overflow Trap Enable</em></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">(others)</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">...</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">...</em></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><em style="font-style: italic;">...</em></p>
 </td>
 </tr>
 </tbody>
@@ -501,10 +501,10 @@
 <p class="p_CodeExample"><span class="f_CodeExample">constexpr&nbsp;quint64&nbsp;PS_RESET_DEFAULT&nbsp;=&nbsp;0x0400000000000000ULL;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">References</span></p>
-<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">Alpha Architecture Reference Manual, Vol I, Table 3-10: Processor Status Register (PS)</span></p>
-<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">OpenVMS Alpha Internals and Data Structures</span></p>
-<p class="p_Normal"><span style="font-size: 9px; font-style: italic; vertical-align: sub;">Alpha SRM (System Reference Manual)</span></p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">References</span></p>
+<p class="p_Normal"><em style="font-size: 9px; font-style: italic; vertical-align: sub;">Alpha Architecture Reference Manual, Vol I, Table 3-10: Processor Status Register (PS)</em></p>
+<p class="p_Normal"><em style="font-size: 9px; font-style: italic; vertical-align: sub;">OpenVMS Alpha Internals and Data Structures</em></p>
+<p class="p_Normal"><em style="font-size: 9px; font-style: italic; vertical-align: sub;">Alpha SRM (System Reference Manual)</em></p>
 
 <!--ZOOMSTOP-->
 </div></div>

@@ -114,7 +114,7 @@
       
       <a href="overview-exceptionsinterruptsmachinechecks.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="tlbexception-class-dictionary.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="fault-vector-handling.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -129,7 +129,7 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">The SavedContext structure provides a canonical, architecture-compliant snapshot of the entire processor context for use during process context switches, PALcode operations, exception handling, and software save/restore routines in the ASA-EMulatR. It captures all general-purpose registers, floating-point registers, core status/control registers, and relevant OS/firmware context fields in a compact, validated object.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Key Features:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Key Features:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Stores all integer (GPR) and floating-point (FPR, as dt_tfloat) registers (32 each)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Saves core privileged registers: PS, FPCR, PTBR, ASN, PSL, PALMode, AST, ASTEN, ASTSR, MCES, PCC</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Tracks floating-point exception summary/status flags</p>
@@ -137,7 +137,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Designed for thread-safe, deep-copy, and stack usage (context stacks, trap frames, etc.)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Provides utility methods for register set validation, field access, and shape checks</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Fields and Bitmask:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Fields and Bitmask:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>intRegs [QVector&lt;quint64&gt;]: All 32 general-purpose integer registers</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>fpRegs [QVector&lt;dt_tfloat&gt;]: All 32 floating-point registers (T_Float or double/IEEE emulated)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_ps: Processor Status register</p>
@@ -152,33 +152,33 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_fpExceptionFlags: Floating-point exception summary/status</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>m_contextSaved: Bitmask indicating which context fields have been set/are valid</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Context Bitmask:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Context Bitmask:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each register or field in the context has a unique bit index.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The m_contextSaved bitmask records which fields are currently populated—useful for partial saves (e.g., lazy FPU restore) or validating context completeness.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Methods and Usage:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Methods and Usage:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>hasSavedContext(): Returns true if all required context fields (per CONTEXT_REQUIRED_MASK) are saved and valid.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Setters and getters for all registers and fields; each setter updates the contextSaved bitmask.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>clearContextSavedMask(): Resets the bitmask and clears the register state.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>clear(): Zeroes all GPRs/FPRs and resets all fields.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Static utility: validateShape() — Verifies register array sizes for architectural compliance.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Construction and Assignment:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Construction and Assignment:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Constructors ensure 32-entry GPR and FPR arrays for all snapshots.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Copy and move semantics are safe (deep-copy via QVector).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Designed for use in per-CPU stacks, context manager, or as a part of process/trap frame structures.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Typical Use Cases:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Typical Use Cases:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Process context switch: Save and restore complete CPU state (including integer, FP, and control registers).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PALcode/OS trap entry and exit: Populate from hardware frame and restore on exception/trap return.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception/interrupt recovery: Save context to software or hardware exception frame.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Emulator state snapshot: Diagnostic capture or checkpoint.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Compliance:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Compliance:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Fully matches the Alpha AXP architectural context model (see ASA Vol I, Ch. 3, 14).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Suitable for OpenVMS, Tru64 UNIX, and custom PALcode.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Example:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Example:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Save&nbsp;processor&nbsp;context</span></p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">SavedContext&nbsp;ctx;</span></p>
@@ -193,7 +193,7 @@
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">//&nbsp;Error:&nbsp;context&nbsp;incomplete</span></p>
 <p class="p_CodeExample" style="margin: 0 0 0 13px;"><span class="f_CodeExample">}</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">References:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">References:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">ASA-EMulatR: <a href="savedcontext-classdictionary.html" class="topiclink">SavedContext.h</a></p>
 <p class="p_Normal">Alpha AXP System Architecture, Ch. 3 (Processor Status), Ch. 14 (Exception Handling)</p>

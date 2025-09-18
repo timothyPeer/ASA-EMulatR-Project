@@ -131,20 +131,20 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Key Subtopics:</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Memory Management:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Memory Management:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The emulator supports full virtual memory abstraction, providing isolation, protection, and dynamic mapping of guest addresses. Memory management covers RAM, ROM, I/O regions, device windows, and all architectural constraints on valid address ranges.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Architectural Registers:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Architectural Registers:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All key registers involved in address translation are implemented, including the Page Table Base Register (PTBR), Address Space Number (ASN), MMU control/status fields, and privileged internal processor registers (IPRs). These are faithfully emulated to enable correct OS boot, process context switches, and page table traversal.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Address Translation and JIT:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Address Translation and JIT:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The address translation system integrates tightly with the execution core and JIT engine. The emulator supports efficient, thread-safe TLB (Translation Lookaside Buffer) operations, detects and handles TLB misses and page faults, and supports fast, cache-friendly address translation for JIT-compiled code.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Translation caches and address validation hooks allow the JIT engine to accelerate guest code execution while preserving architectural correctness.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">TLBEntry:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">TLBEntry:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each translation lookaside buffer (TLB) entry records a mapping from a guest virtual address (and ASN) to a physical page, along with permissions, validity, and usage bits. The TLB subsystem supports per-CPU and global TLBs, supports invalidation and refill per Alpha/VAX rules, and interacts with the page table walker on misses.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Page Tables (PTE):</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Page Tables (PTE):</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The emulator implements page table entry (PTE) structures as defined by Alpha and VAX architecture, supporting hierarchical page tables, multiple page sizes, and access/dirty/reference bits. The page table walker performs virtual-to-physical mapping, access validation, and exception signaling as needed, allowing correct OS and process address space management.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">This section serves as the architectural foundation for all guest memory accesses, exception delivery, context switching, and JIT execution in the emulator. The following subtopics provide detailed documentation and code reference for each aspect of the virtual memory system.</p>

@@ -127,7 +127,7 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal"><span style="font-weight: bold;">🎯 Overview</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🎯 Overview</strong></p>
 <p class="p_Normal">-----------</p>
 <p class="p_Normal">`SafeMemory` is the core abstraction of **physical RAM** in the ASA Alpha Emulator. &nbsp;</p>
 <p class="p_Normal">It provides a simple, thread-safe, bounds-checked interface for reading and writing </p>
@@ -143,7 +143,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">---</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">🧩 Responsibilities</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🧩 Responsibilities</strong></p>
 <p class="p_Normal">-------------------</p>
 <p class="p_Normal">✅ Allocate and manage the emulator’s physical memory space (RAM). &nbsp;</p>
 <p class="p_Normal">✅ Provide efficient, bounds-checked access to memory contents. &nbsp;</p>
@@ -153,10 +153,10 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">---</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">📋 Internal Design</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">📋 Internal Design</strong></p>
 <p class="p_Normal">-------------------</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">|&nbsp;Component&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;</span><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">|&nbsp;Component&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;</strong><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|---------------------------|---------------------------------------------------------|</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;Memory&nbsp;Buffer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;A&nbsp;contiguous&nbsp;`std::vector&lt;uint8_t&gt;`&nbsp;or&nbsp;equivalent&nbsp;array&nbsp;|</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Size&nbsp;of&nbsp;physical&nbsp;memory&nbsp;in&nbsp;bytes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
@@ -166,13 +166,13 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">---</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">📄 Example Responsibilities in Code</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">📄 Example Responsibilities in Code</strong></p>
 <p class="p_Normal">-----------------------------------</p>
-<p class="p_Normal"><span style="font-weight: bold;">✅ Allocation:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">✅ Allocation:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">SafeMemory memory(512 * 1024 * 1024); &nbsp;// 512 MB</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Illustrated As: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Illustrated As: </strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">+---------------------------+</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;&nbsp;AlphaCPU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
@@ -190,7 +190,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;(physical&nbsp;RAM)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">+---------------------------+</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">🚀&nbsp;Why&nbsp;It’s&nbsp;Important</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">🚀&nbsp;Why&nbsp;It’s&nbsp;Important</strong></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:20px;margin-left:-20px">1.</span><span class="f_CodeExample">Provides&nbsp;a&nbsp;clear&nbsp;separation&nbsp;between&nbsp;address&nbsp;translation&nbsp;(AlphaMemorySystem)and&nbsp;storage&nbsp;(SafeMemory).</span></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:20px;margin-left:-20px">2.</span><span class="f_CodeExample">Detects&nbsp;and&nbsp;prevents&nbsp;invalid&nbsp;memory&nbsp;accesses.</span></p>
 <p class="p_CodeExample" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:20px;margin-left:-20px">3.</span><span class="f_CodeExample">Simplifies&nbsp;debugging&nbsp;by&nbsp;isolating&nbsp;out-of-bounds&nbsp;errors.</span></p>

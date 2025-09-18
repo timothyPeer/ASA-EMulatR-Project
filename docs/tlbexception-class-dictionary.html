@@ -112,7 +112,7 @@
     </td>
     <td class="topichead" id="idnav">
       
-      <a href="savedcontext.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="fault-vector-handling.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
       <a href="canonical-trap-handling.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
@@ -131,29 +131,29 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">How TLB Exceptions are Detected and Handled:</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Detection:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Detection:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>During instruction execution, a memory access (load, store, fetch) triggers a virtual-to-physical address translation.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The TLB is consulted. If there is no valid matching entry (miss), or if the entry is invalid or permission-check fails, a TLB exception is signaled.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Exception Notification:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Exception Notification:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The exception is raised by the memory subsystem or by the instruction grain (e.g., on a load/store).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The grain or memory subsystem calls AlphaCPU::RaiseException, passing the exception category (typically MEMORY_FAULT) and the specific reason (TLB_MISS, PAGE_FAULT, or ACCESS_VIOLATION).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The exception detail includes the faulting virtual address, access type, and any relevant TLB state.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Context Save and Trap Vectoring:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Context Save and Trap Vectoring:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>AlphaCPU saves the current processor context, including the PC, privilege state, and (optionally) the virtual address and instruction type.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>A hardware-style trap frame (e.g., frameTLBException or HWStackFrame) is constructed and pushed to the exception stack.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Control is transferred (vectored) to the appropriate PALcode handler (such as the TLB miss or page fault handler).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">PALcode/OS Handling:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">PALcode/OS Handling:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PALcode or the OS inspects the exception details, examines the cause, and attempts to resolve the fault (e.g., by loading a page table entry into the TLB, updating access permissions, or terminating the process for a true access violation).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The handler may update TLB entries, reset the processor state, and resume execution at the faulting or next instruction as appropriate.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Status and Exception Recording:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Status and Exception Recording:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The OptimizedExceptionStatusRegister may be updated to indicate a memory or TLB fault.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Relevant IPRs (Internal Processor Registers), such as EXC_ADDR (faulting address), are updated for handler inspection.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Notes:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Notes:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>TLB exceptions are typically precise exceptions: the processor state at the moment of the fault is saved exactly, so software can retry or diagnose the instruction.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Unlike arithmetic exceptions, TLB exceptions almost always result in an immediate trap; “sticky” status bits are less common, but diagnostic flags may still be set.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>There is no architectural &quot;TLB Exception Frame&quot; in Alpha AXP; TLB exceptions use the standard hardware interrupt/trap frame, with additional software-specific data for diagnostics if desired.</p>

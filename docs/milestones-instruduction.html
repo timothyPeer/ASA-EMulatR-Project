@@ -162,7 +162,7 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Q1 2026: Fidelity, Performance, and Compatibility</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Began architectural conformance testing using OpenVMS and Tru64 installation media.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Begin architectural conformance testing using OpenVMS and Tru64 installation media.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Implemented performance optimizations for grain caching and memory access.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Integrated advanced features: PALcode emulation, TLBs, firmware boot, and system management interfaces.</p>
 <p class="p_Normal">&nbsp;</p>
@@ -182,49 +182,49 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The ASA-EMulatR project is architected for long-term evolution—not just accuracy, but performance and scalability. As the core emulation matures, several future initiatives are planned to enhance both speed and capability:</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">ASA Assembler Integration: JIT-Accelerated Grains</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">ASA Assembler Integration: JIT-Accelerated Grains</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">A major planned advance is the integration of the ASA Assembler class as a Just-In-Time (JIT) code generation engine for instruction grains. This approach enables each canonical grain (representing an Alpha instruction) to emit optimized x86-64 machine code sequences at runtime, leveraging the full capabilities of the host CPU for critical execution paths.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Key features and benefits:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Key features and benefits:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>JIT Compilation for Performance:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Using the Assembler and AssemblerBase classes, each grain will generate a host-native (x86-64) function corresponding to the Alpha instruction’s semantics.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>This allows “hot” grains—those frequently executed—to bypass interpreter overhead and execute at near-native speeds.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Grain-Aware Code Emission:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Grain-Aware Code Emission:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each AlphaInstructionGrain will be able to call into the assembler DSL to emit host instructions for its logic (e.g., addq, subq, movsd, etc.). Once emitted, the native code can be cached and invoked repeatedly via the “instantiate-once, execute-many” model.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Advanced Host Mapping:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Advanced Host Mapping:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The assembler class exposes a rich set of helpers for register management, memory access, floating-point (SSE2) operations, and branching. &nbsp;This enables direct mapping of Alpha integer, floating-point, and branch operations to efficient host machine code.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Thread Safety and SMP Scalability:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Thread Safety and SMP Scalability:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Code emission and caching are designed for thread-safe use, allowing multi-CPU VMs to JIT grains in parallel without conflicts.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Transparent Fallback:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Transparent Fallback:</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Grains not yet JIT-optimized can continue to run via interpreter logic, allowing incremental migration and validation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Extensible for Future Architectures:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Extensible for Future Architectures:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The assembler model allows for extension to other host architectures (e.g., ARM64) as required, by swapping in new code generators behind the grain interface.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Example Flow (Future):</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Instruction Grain Instantiation: </span>The emulator identifies a “hot” instruction grain (e.g., ADDQ).</p>
-<p class="p_Normal"><span style="font-weight: bold;">JIT Emission: </span>The grain calls its emitJit() method, invoking the assembler to generate x86-64 code using helpers like addq(dst, src), movq(dst, src), etc.</p>
-<p class="p_Normal"><span style="font-weight: bold;">Caching: </span>The resulting function pointer is stored with the grain for future direct execution.</p>
-<p class="p_Normal"><span style="font-weight: bold;">Execution: </span>On each subsequent dispatch, the grain’s native code is invoked directly—dramatically reducing execution overhead.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Instruction Grain Instantiation: </strong>The emulator identifies a “hot” instruction grain (e.g., ADDQ).</p>
+<p class="p_Normal"><strong style="font-weight: bold;">JIT Emission: </strong>The grain calls its emitJit() method, invoking the assembler to generate x86-64 code using helpers like addq(dst, src), movq(dst, src), etc.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Caching: </strong>The resulting function pointer is stored with the grain for future direct execution.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Execution: </strong>On each subsequent dispatch, the grain’s native code is invoked directly—dramatically reducing execution overhead.</p>
 <p class="p_Normal">&nbsp;</p>
 <hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">Reference Implementation:</span></p>
 <p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Project Files: </span></p>
 <p class="p_Normal">Assembler.h, assemblerBase.h, and assemblerExtensions.h &nbsp;for current implementation and future integration points.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Other Futures</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Other Futures</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">GUI Front-End: </span>Add an advanced configuration and visualization interface for building and managing guest systems, devices, and network configurations.</p>
-<p class="p_Normal"><span style="font-weight: bold;">Expanded Peripheral Support: </span>Integrate more device models (e.g., full PCI/PCIe bus, DE500/Tulip NIC, SCSI tape and disk emulation, MMIO devices).</p>
-<p class="p_Normal"><span style="font-weight: bold;">Full Console/Firmware Experience: </span>Accurately emulate SRM/ARC firmware, supporting system-level commands and boot environments for OpenVMS, Tru64, and Linux/NetBSD.</p>
-<p class="p_Normal"><span style="font-weight: bold;">Compatibility Certification: </span>Achieve full install and runtime support for OpenVMS, NetBSD/Alpha, and legacy Alpha applications.</p>
-<p class="p_Normal"><span style="font-weight: bold;">Dynamic SMP Scaling: </span>Support for scaling to 32 or more guest CPUs per VM, with accurate cache, TLB, and memory barrier behavior.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">GUI Front-End: </strong>Add an advanced configuration and visualization interface for building and managing guest systems, devices, and network configurations.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Expanded Peripheral Support: </strong>Integrate more device models (e.g., full PCI/PCIe bus, DE500/Tulip NIC, SCSI tape and disk emulation, MMIO devices).</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Full Console/Firmware Experience: </strong>Accurately emulate SRM/ARC firmware, supporting system-level commands and boot environments for OpenVMS, Tru64, and Linux/NetBSD.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Compatibility Certification: </strong>Achieve full install and runtime support for OpenVMS, NetBSD/Alpha, and legacy Alpha applications.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Dynamic SMP Scaling: </strong>Support for scaling to 32 or more guest CPUs per VM, with accurate cache, TLB, and memory barrier behavior.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The ASA Assembler integration represents a foundational shift—from interpreted emulation to hardware-accelerated, grain-specific native execution—ensuring the emulator is not only correct, but fast enough for real-world use and scalable to future architectures.</p>
 

@@ -128,33 +128,33 @@
 
 <!--ZOOMRESTART-->
 <p class="p_Normal">📄 Alpha Emulator — Interprocessor Interrupt (IPI) Stack Design</p>
-<p class="p_Normal"><span style="font-weight: bold;">🎯 Purpose of the IPI Stack</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🎯 Purpose of the IPI Stack</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The IPI (Interprocessor Interrupt) Stack is the mechanism by which one CPU in an SMP (Symmetric Multiprocessing) system can signal another CPU to perform an immediate or deferred action.</p>
 <p class="p_Normal">On Alpha hardware, this is accomplished via writing to the IPIR (Interprocessor Interrupt Register), which the target CPU monitors and responds to.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">In the emulator, this mechanism is fully modeled and encapsulated by a stack of components that deliver, queue, and handle IPIs correctly.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">🔷 Components of the IPI Stack</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">1️. Instruction Grain (PAL_MTPR_IPIR_InstructionGrain)</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🔷 Components of the IPI Stack</strong></p>
+<p class="p_Normal"><strong style="font-weight: bold;">1️. Instruction Grain (PAL_MTPR_IPIR_InstructionGrain)</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Executes the PAL MTPR IPIR instruction.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Decodes source CPU ID, target CPU ID, and IPI vector from the instruction.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Constructs an IpiRequest and calls AlphaCPU::sendIpi() (or directly AlphaSMPManager::sendIpi()).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">2️. AlphaCPU</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">2️. AlphaCPU</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The initiating CPU receives the IpiRequest in its execution of the grain.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Forwards the IpiRequest to AlphaSMPManager via sendIpi().</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For target CPUs, maintains a queue (m_pendingIpis) of incoming IPIs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Periodically (e.g., on instruction retire or via checkPendingIpis()) dequeues and processes pending IPIs by calling handleIpi().</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">3️. AlphaSMPManager</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">3️. AlphaSMPManager</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Acts as the dispatcher and coordinator for SMP operations.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Validates the source and target CPU IDs.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Logs and enqueues the IpiRequest in its internal queue.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Immediately delivers the IPI to the target CPU’s receiveIpi() method.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Optionally emits Qt signals or updates statistics counters for monitoring and diagnostics.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">4️. Target AlphaCPU</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">4️. Target AlphaCPU</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>receiveIpi() enqueues the incoming IpiRequest.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>handleIpi() interprets the IpiVector and performs the appropriate action:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>TLB_SHOOTDOWN → invalidates TLB.</p>
@@ -163,7 +163,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>DEBUG_BREAK → enters debug state.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Logs and optionally sends an acknowledgment to the originating CPU or manager.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">🔷 Data Types</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🔷 Data Types</strong></p>
 <p class="p_Normal">IpiVector</p>
 <p class="p_Normal">Strongly-typed enum class representing the type of IPI:</p>
 <p class="p_Normal">&nbsp;</p>
@@ -176,7 +176,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;INVALID&nbsp;=&nbsp;0xFF</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">};</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">IpiRequest</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">IpiRequest</strong></p>
 <p class="p_Normal">Encapsulates the IPI information:</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
@@ -187,17 +187,17 @@
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;quint64&nbsp;timestamp;&nbsp;//&nbsp;Optional&nbsp;for&nbsp;profiling</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">};</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">🔷 Flow of an IPI</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🔷 Flow of an IPI</strong></p>
 <p class="p_Normal">1️. Source CPU executes the PAL_MTPR_IPIR instruction.</p>
 <p class="p_Normal">2️. An IpiRequest is constructed and sent to the SMP Manager.</p>
 <p class="p_Normal">3️. SMP Manager delivers the IPI to the target CPU.</p>
 <p class="p_Normal">4️. Target CPU enqueues the IPI.</p>
 <p class="p_Normal">5️. Target CPU eventually calls handleIpi() to act on the IPI.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">🔷 Optional: Feedback Loop</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">🔷 Optional: Feedback Loop</strong></p>
 <p class="p_Normal">If required, the target CPU can notify the SMP Manager or the source CPU that the IPI has been handled, for example by sending a CUSTOM_ACK vector or setting a flag. This is optional and OS/PAL dependent.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">📋 Benefits of This Design</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">📋 Benefits of This Design</strong></p>
 <p class="p_Normal">✅ Strongly-typed vectors avoid magic numbers.</p>
 <p class="p_Normal">✅ Clearly-separated responsibilities (grain → CPU → manager → CPU).</p>
 <p class="p_Normal">✅ Safe, thread-aware queueing with QMutex protection.</p>

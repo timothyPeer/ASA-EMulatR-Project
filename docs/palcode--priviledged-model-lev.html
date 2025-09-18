@@ -113,7 +113,7 @@
     <td class="topichead" id="idnav">
       
       <span class="hmbtnprev"></span>
-      <a href="visual-studio-2022---community.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
       <span class="hmbtnnext"></span>
       
     </td>
@@ -144,19 +144,19 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>System calls (CALL_PAL)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Machine checks</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">How PAL is Invoked:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">How PAL is Invoked:</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-style: italic; font-weight: bold;">Startup</span></p>
+<p class="p_Normal"><strong style="font-style: italic; font-weight: bold;">Startup</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The emulator is initialized.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>AL binary is loaded into memory at its defined start address (typically 0x2000 or similar).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PC is set to PAL reset vector (e.g., 0x2000) — because upon reset, Alpha jumps into PAL to perform platform-specific setup.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The normal instruction loop begins at this PC.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Fetch–Decode–Execute</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Fetch–Decode–Execute</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>As long as PC (program counter) points inside the PAL memory range, the fetch–decode–execute loop works exactly the same — fetching instructions from PAL binary instead of OS/user code.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Because PAL is written in normal Alpha instructions and fully compliant with ASA, the corresponding <a href="instructiongrain-objectlibrary.html" class="topiclink">InstructionGrain</a> handles execution.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Traps into PAL</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Traps into PAL</strong></p>
 <p class="p_Normal">When running outside PALmode, exceptions (e.g., page fault, unaligned access) trigger a trap.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">The emulator:</p>
@@ -166,7 +166,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">PAL handles the fault, then executes <a href="pal-rei.html" class="topiclink">PAL-REI</a> or equivalent to return to previous mode &amp; PC.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Returning from PAL</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Returning from PAL</strong></p>
 <p class="p_Normal">PAL routines terminate by executing instructions like:</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><a href="pal-hw_rei-instructions.html" class="topiclink">PAL-HW_REI</a>, <a href="pal-rei.html" class="topiclink">PAL-REI</a> — return from exception</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>These instructions restore the previous mode &amp; PC from saved state.</p>

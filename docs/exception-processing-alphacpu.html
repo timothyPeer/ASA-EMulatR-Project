@@ -130,7 +130,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">It provides a foundation for implementing complex SMP behaviors like TLB shootdowns, scheduler load balancing, and other coordination tasks between CPUs.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">The key components are:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">The key components are:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception Frame Structure: For storing CPU state during exceptions</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception Frame Stack: For nested exception handling</p>
@@ -140,7 +140,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">These components integrate with the IPR system and interrupt handling methods we defined earlier, creating a comprehensive interrupt handling system for your Alpha emulator.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Usage Example</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Usage Example</strong></p>
 <p class="p_Normal">With this implementation, you can now use the interprocessor interrupt system like this:</p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Send&nbsp;a&nbsp;standard&nbsp;interrupt&nbsp;from&nbsp;CPU&nbsp;0&nbsp;to&nbsp;CPU&nbsp;1&nbsp;with&nbsp;vector&nbsp;5</span></p>
@@ -152,7 +152,7 @@
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Broadcast&nbsp;an&nbsp;interrupt&nbsp;from&nbsp;CPU&nbsp;0&nbsp;to&nbsp;all&nbsp;other&nbsp;CPUs&nbsp;with&nbsp;vector&nbsp;3</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">smpManager-&gt;broadcastInterprocessorInterrupt(0,&nbsp;3);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample" style="font-weight: bold;">Reference:&nbsp;</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Reference:&nbsp;</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample"><a href="fpexception-class-dictionary.html" class="topiclink">FPException</a></span></p>
 

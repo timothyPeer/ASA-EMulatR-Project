@@ -131,7 +131,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">In most implementations, this macro is intended to check all operands (A, B, possibly C) for being NaN or reserved operand, and to trap if any are.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">The prototype is often:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">The prototype is often:</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">ALPHA_FP_RESERVED_OPERAND_CHECK(srcA,&nbsp;srcB,&nbsp;status,&nbsp;regA,&nbsp;regB,&nbsp;pc,&nbsp;argCpu)</span></p>
 <p class="p_Normal">&nbsp;</p>
@@ -142,13 +142,13 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>status is the <a href="exceptionstatusregister-classlibrary.html" class="topiclink">OptimizedExceptionStatusRegister</a> </p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>pc, argCpu are for context and trap</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">If the Instruction is Unary (e.g., SQRTT):</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">If the Instruction is Unary (e.g., SQRTT):</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>srcA is valid (actual operand, e.g., double srcA = ...)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>srcB is not used, pass 0 &nbsp;as a placeholder.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Macro Considerations: </span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Macro Considerations: </strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The macro should ignore srcB if the instruction is unary. If the macro always checks both operands for NaN/reserved, passing 0 as a double (which is never NaN) means “no error”—that’s safe for unary. If the macro expects only to check srcA in unary context, this is entirely correct and is common in canonical DEC/VAX/Alpha-style emulator codebases.</p>
 <p class="p_Normal">&nbsp;</p>
 

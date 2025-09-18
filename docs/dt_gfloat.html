@@ -129,7 +129,7 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">dt_gfloat is a C++ class modeling the VAX G_Float format—a 64-bit floating-point representation used in VAX and supported for compatibility in Alpha AXP. It is similar to IEEE 754 double-precision but has unique encoding details (notably exponent bias and byte ordering).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">File:</span> dt_gfloat.h</p>
+<p class="p_Normal"><strong style="font-weight: bold;">File:</strong> dt_gfloat.h</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">Field&nbsp;Layout&nbsp;(bit-level,&nbsp;little-endian&nbsp;memory&nbsp;view)</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;63&nbsp;|&nbsp;62&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;52&nbsp;|&nbsp;51&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;|</span></p>
@@ -146,23 +146,23 @@
 <p class="p_Normal">VAX G_Float is NOT byte-wise identical to IEEE 754 double. It requires careful bit rearrangement during conversion.</p>
 <p class="p_Normal">Key Methods and Conversions</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Construction and Assignment</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Construction and Assignment</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_gfloat() – default (zero)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>dt_gfloat(quint64 raw) – construct from raw 64 bits</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>static dt_gfloat fromRaw(quint64) – explicit construction from a bit-pattern</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">IEEE Conversion</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">IEEE Conversion</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>static dt_gfloat fromDouble(double)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Converts an IEEE 754 double to a G_Float, remapping sign, exponent (with bias adjust), and mantissa bits. Non-finite values (zero, Inf, NaN) are mapped to zero or reserved as G_Float doesn't natively encode all IEEE states.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>double toDouble() const</p>
 <p class="p_Normal">Reconstructs an IEEE 754 double from the stored VAX G_Float bits (bias and fraction field mapping in reverse).</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Status/Property Queries</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Status/Property Queries</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isZero() const</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Checks if the value is exactly zero.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isReservedOperand() const</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Alpha/VAX compatibility: </span>Returns true for NaN/Reserved operands: All-ones exponent, fraction nonzero (exp == 0x7FF &amp;&amp; frac != 0). See ASA Vol I §4.7.7 Table 2-7.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Alpha/VAX compatibility: </strong>Returns true for NaN/Reserved operands: All-ones exponent, fraction nonzero (exp == 0x7FF &amp;&amp; frac != 0). See ASA Vol I §4.7.7 Table 2-7.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isOverflow() const</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exponent field is all-ones (0x7FF).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isUnderflow() const</p>
@@ -170,11 +170,11 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>bool isExactResult(double a, double b, double result) const</p>
 <p class="p_Normal">Utility for testing whether a result is exactly representable in G_Float.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Raw Bits</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Raw Bits</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>quint64 raw() const / setRaw(quint64)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Direct access/set for internal representation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Display</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Display</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>QString toHexString() const</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For debugging: printable hex string of the underlying 64 bits.</p>
 <!--ZOOMSTOP-->

@@ -136,7 +136,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Reservation granularity and invalidation for Alpha atomic instructions (LDx_L/STx_C)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Realistic statistics and event signaling for debug, analysis, and testing</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Core Features</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Core Features</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Full thread-safe memory (QReadWriteLock/QMutex-protected)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Per-CPU access tracking and statistics ([SMPStatistics], [CPUAccessInfo])</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Reservation and reservation invalidation (per CPU, per address)</p>
@@ -145,7 +145,7 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Legacy compatibility for direct memory access (as in classic VAX/Alpha RAM)</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Signal-based eventing for memory, reservation, and cache actions</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Key Classes and Structures</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Key Classes and Structures</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;SMP&nbsp;statistics&nbsp;record&nbsp;for&nbsp;memory&nbsp;accesses&nbsp;and&nbsp;reservation&nbsp;events</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">struct&nbsp;SMPStatistics</span></p>
@@ -171,13 +171,13 @@
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Major Interfaces and Methods</span></h3>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">CPU Registration and Tracking:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">CPU Registration and Tracking:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;registerCPU(AlphaCPU&nbsp;*argCpu,&nbsp;quint16&nbsp;cpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;deregisterCPU(quint16&nbsp;cpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">QVector&lt;AlphaCPU&nbsp;*&gt;&nbsp;getRegisteredCPUs()&nbsp;const;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">QHash&lt;quint16,&nbsp;CPUAccessInfo&gt;&nbsp;getCPUAccessInfo()&nbsp;const;</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">RAM Access (thread-safe):</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">RAM Access (thread-safe):</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">quint8&nbsp;readUInt8(quint64&nbsp;address,&nbsp;quint64&nbsp;pc,&nbsp;quint16&nbsp;cpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">quint16&nbsp;readUInt16(quint64&nbsp;address,&nbsp;quint64&nbsp;pc,&nbsp;quint16&nbsp;cpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">quint32&nbsp;readUInt32(quint64&nbsp;address,&nbsp;quint64&nbsp;pc,&nbsp;quint16&nbsp;cpuId);</span></p>
@@ -189,14 +189,14 @@
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;writeBytes(quint64&nbsp;address,&nbsp;const&nbsp;QByteArray&nbsp;&amp;data,&nbsp;quint64&nbsp;pc,&nbsp;quint16&nbsp;cpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;readPhysicalMemoryForCache(quint64&nbsp;addr,&nbsp;void&nbsp;*buf,&nbsp;qsizetype&nbsp;size);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Reservation and Atomic Operation Support:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Reservation and Atomic Operation Support:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;setReservation(quint16&nbsp;cpuId,&nbsp;quint64&nbsp;physicalAddr,&nbsp;int&nbsp;size);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;clearReservation(quint16&nbsp;cpuId,&nbsp;quint64&nbsp;physicalAddr&nbsp;=&nbsp;0);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;invalidateReservationForAll(quint64&nbsp;va,&nbsp;ReservationInvalidationReason&nbsp;reason);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;hasReservation(quint16&nbsp;cpuId,&nbsp;quint64&nbsp;physicalAddr)&nbsp;const;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;clearOverlappingReservations(quint64&nbsp;physicalAddr,&nbsp;int&nbsp;size,&nbsp;quint16&nbsp;excludeCpuId);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Cache Coherency &amp; Invalidation:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Cache Coherency &amp; Invalidation:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;attachL3Cache(UnifiedDataCache&nbsp;*cache);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;detachL3Cache(UnifiedDataCache&nbsp;*cache);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;invalidateCacheLines(quint64&nbsp;physicalAddr,&nbsp;int&nbsp;size,&nbsp;quint16&nbsp;sourceCpuId);</span></p>
@@ -205,11 +205,11 @@
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;flushCacheLines(quint64&nbsp;physicalAddr,&nbsp;int&nbsp;size,&nbsp;quint16&nbsp;sourceCpuId);</span></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Memory Barriers and SMP Events:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Memory Barriers and SMP Events:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;memoryBarrierSMP(int&nbsp;type,&nbsp;quint16&nbsp;sourceCpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;flushWritesForCPU(quint16&nbsp;cpuId);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Utility and Mapping:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Utility and Mapping:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;mapRegion(quint64&nbsp;address,&nbsp;quint64&nbsp;size,&nbsp;enumMemoryPerm&nbsp;perm);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;unmapRegion(quint64&nbsp;address,&nbsp;quint64&nbsp;size);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;isValidPhysicalAddress(quint64&nbsp;address,&nbsp;int&nbsp;size)&nbsp;const;</span></p>
@@ -218,11 +218,11 @@
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;writeBlock(quint64&nbsp;physicalAddr,&nbsp;const&nbsp;void*&nbsp;buffer,&nbsp;qsizetype&nbsp;size);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;readBlock(quint64&nbsp;physicalAddr,&nbsp;void*&nbsp;buffer,&nbsp;qsizetype&nbsp;size);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Statistics and Monitoring:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Statistics and Monitoring:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">SMPStatistics&nbsp;getSMPStatistics()&nbsp;const;</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;resetSMPStatistics();</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Signals (Qt):</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Signals (Qt):</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;sigMemoryRead(quint64&nbsp;address,&nbsp;quint64&nbsp;value,&nbsp;int&nbsp;size);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;sigMemoryWritten(quint64&nbsp;address,&nbsp;quint64&nbsp;value,&nbsp;int&nbsp;size);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;sigMemoryAccessSMP(quint64&nbsp;address,&nbsp;quint64&nbsp;value,&nbsp;int&nbsp;size,&nbsp;bool&nbsp;isWrite,&nbsp;quint16&nbsp;cpuId);</span></p>
@@ -241,10 +241,10 @@
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;clearOverlappingReservations(quint64&nbsp;physicalAddr,&nbsp;int&nbsp;size,&nbsp;quint16&nbsp;excludeCpuId);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;invalidateReservationForAll(quint64&nbsp;va,&nbsp;ReservationInvalidationReason&nbsp;reason);</span></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Cache Coherency</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Cache Coherency</strong></p>
 <p class="p_Normal">SafeMemory supports cache line invalidation, flushing, and explicit notification for all attached L3 caches, as well as per-CPU cache events and memory barriers, to enable full-system SMP and MOESI/MESI protocol simulation.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Signal/Event Driven Design</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Signal/Event Driven Design</strong></p>
 <p class="p_Normal">SafeMemory emits Qt signals for all significant memory, reservation, and cache events, allowing the CPU, cache, and device emulation layers to observe or react to memory actions in a decoupled way.</p>
 <p class="p_Normal">&nbsp;</p>
 <h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Appendix Notes</span></h3>
@@ -259,7 +259,7 @@
 <p class="p_Normal">Alpha AXP System Reference Manual, Ch. 5 (Memory, Caches, Atomicity)</p>
 <p class="p_Normal">VAX Architecture Reference Manual, Ch. 7 (Atomic Memory Reference)</p>
 <p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
-<p class="p_Normal"><span style="font-weight: bold;">Interface Support:</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Interface Support:</strong></p>
 <p class="p_CodeExample"><span class="f_CodeExample">UnifiedDataCache.h,&nbsp;AlphaCPU.h,&nbsp;IRQController.h,&nbsp;TLBSystem_Config.h</span></p>
 
 <!--ZOOMSTOP-->
