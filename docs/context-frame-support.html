@@ -1,13 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-   <title>Introduction &gt; Change Log</title>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design) &gt; Context frame Support</title>
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
    <meta name="keywords" content="" />
-   <meta name="description" content="This page hosts the documentation change log. &nbsp; Change/Notice/Description Date Author H&amp;M Authoring Software Attribution &nbsp;20250918 Tim Peer (TP) Tools &amp; References &nbsp;Platfo" />
+   <meta name="description" content="HWStackFrame - Lightweight hardware interrupt frame:" />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
 
@@ -85,7 +85,7 @@
    <script type="text/javascript" src="helpman_topicinit.js"></script>
 
    <script type="text/javascript">
-     HMSyncTOC("index.html", "update-notice-introduction.html");
+     HMSyncTOC("index.html", "context-frame-support.html");
    </script>
    <script type="text/javascript" src="highlight.js"></script>
    <script type="text/javascript">
@@ -95,26 +95,26 @@
 <body>
 
 
-<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Change Log</span></h1>
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Context frame Support</span></h1>
 </div>
 <div id="idheader">
 <div id="idheaderbg">
 <table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
   <tr>
     <td class="topichead" style="text-align:left; vertical-align:middle">
-      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?update-notice-introduction.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?context-frame-support.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
       <p class="crumbs"><b>Navigation:</b>&nbsp;
       
-      <a href="introduction.html">Introduction</a>&nbsp;&gt;</p>
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="alpha-registers.html">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</a>&nbsp;&gt;</p>
    
-      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Change Log</span></h1>
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Context frame Support</span></h1>
 
     </td>
     <td class="topichead" id="idnav">
       
-      <a href="introduction.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
-      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="developmentprioritiesandroadmap.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="fen---floating-point-enable.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="alpha-registers.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="palcode-integration.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -127,58 +127,21 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal">This page hosts the documentation change log. </p>
+<p class="p_Normal"><strong style="font-weight: bold;">HWStackFrame - Lightweight hardware interrupt frame:</strong></p>
 <p class="p_Normal">&nbsp;</p>
-<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
-<thead>
-<tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Change/Notice/Description</strong></p>
-</th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Date</strong></p>
-</th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Author</strong></p>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">H&amp;M Authoring Software Attribution </p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">20250918</p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Tim Peer (TP)</p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Tools &amp; References </p>
-<p class="p_Normal">Platform Architecture - Register Details</p>
-<p class="p_Normal">Table of Definitions</p>
-<p class="p_Normal">Code Standards and Conventions (CSC)</p>
-<p class="p_Normal">Implementation Patterns (IP)</p>
-<p class="p_Normal">Architecture Specific Hives - VAX, Tru64, Unix, Alpha</p>
-<p class="p_Normal">Floating Point Control Register bitwise (CSC and IP)</p>
-<p class="p_Normal">Topic Option Index Updates</p>
-<p class="p_Normal">Internal Processor Register Updates</p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">20250919</p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TP</p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
-</td>
-</tr>
-</tbody>
-</table>
-</div>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Basic state: PC, PS, FPCR, GPRs</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For quick interrupt/trap handling</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Missing comprehensive Alpha state</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">SavedContext - Complete processor context:</strong></p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Everything: Integer regs, FP regs, all IPRs (PTBR, ASN, PSL, AST*, MCES, PCC, etc.)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Full floating-point support with dt_tfloat</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Complete Alpha AXP architectural state</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">See Also. &nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">PALcode Integration</p>
 
 <!--ZOOMSTOP-->
 </div></div>

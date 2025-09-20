@@ -6,7 +6,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
-   <meta name="keywords" content="ASN,GENERAL_ENTRY,IKSP,INTERRUPT_ENTRY,IPR,KGP,Machine Check,MCES,MEM_MGMT_ENTRY,PAL_BASE,PALcode,PANIC_ENTRY,PCR,PDR,PSR,Register, Internal Processor,Restart Processor,RESTART_ADDRESS,RESTART_VECTOR,SIRR,SUPERPAGE_BASE,SYSCALL_ENTRY,TEB,THREAD" />
+   <meta name="keywords" content="“Which CPU am I?”,Address space number,Alternate MM handler vector,ASN,ASN,AST enable mask,AST pending summary,ASTEN,ASTSR,D_CTL,DADFX,Data address translation extension,Data cache control (impl.-specific),Data cache test control,Data cache test control (window 1),Data TLB control,DC_TEST_CTL,DC_TEST_CTL_W1,Debugger entry vector,DEBUGGER_VECTOR,DTB_CTL,ENTRY_0,ENTRY_1,ENTRY_2,ENTRY_3,ENTRY_4,ENTRY_5,ENTRY_6,ENTRY_7,ESP,EXC_ADDR,EXC_ADDR_EXT,EXC_MASK,EXC_PC,EXC_PS,EXC_SUM,EXC_SYNDROME,Exception address,Exception entry point 0,Exception entry point 1,Exception entry point 2,Exception entry point 3,Exception entry point 4,Exception entry point 5,Exception entry point 6,Exception entry point 7,Exception mask,Exception PC,Exception PS,Exception summary,Exception syndrome,Executive stack pointer,Extended exception address,FEN,Floating-point control,Floating-point enable,FPCR,GEN_EXC_HANDLER,General exception handler vector,GENERAL_ENTRY,I_CTL,I-cache control/status,ICCSR,IKSP,Initial VPT base (boot),Instruction cache control (impl.-specific),Instruction TLB control,INT_EXC_HANDLER,Interrupt entry vector,Interrupt exception handler vector,Interrupt ID (delivery),Interrupt priority level (alias/PS mediated),INTERRUPT_ENTRY,INTERRUPT_ENTRY,INTID,Invalidate ASN-specific TLB (deferred),Invalidate D-TLB entry,Invalidate entire TLB,Invalidate I-TLB entry,Invalidate single TLB entry,IPLR,IPR,ITB_CTL,IVPTBR,Kernel global base,Kernel global pointer,Kernel stack pointer,KGB,KGP,KGP,KSP,Linux/BSD,Machine Check,Machine check error summary,MCES,MCES,MEM_MGMT_ENTRY,MEM_MGMT_ENTRY,Memory management entry (synthetic),MM control/status,MM control/status (window 1),MM exception handler vector,MM_EXC_HANDLER,MM_EXC_HANDLER2,MM_FAULT_ADDR,MM_STAT,MMCSR,MMCSR_W1,MMU fault status,MMU fault VA,OpenVMS,OSF/1 /Tru64,Page directory base (synthetic),Page table base (physical),PAL_BASE,PAL_BASE,PALcode,PALcode base address,PALcode HW (DEC),Panic entry (architected vector),Panic handler vector,PANIC_ENTRY,PANIC_ENTRY,PANIC_EXC_HANDLER,PCBB,PCR,PCR,PCR_BASE,PDR,PDR,PERFMON_0,PERFMON_1,PERFMON_2,PERFMON_3,PERFMON_4,PERFMON_5,PERFMON_6,PERFMON_7,PERFMON_CTRL,PERFMON_MASK,Performance counter 0,Performance counter 1,Performance counter 2,Performance counter 3,Performance counter 4,Performance counter 5,Performance counter 6,Performance counter 7,Performance monitor control,Performance monitor mask,PROCESS,Process context scratch,Process control block base,Processor control region (synthetic),Processor control region base (vector),Processor Status (architected PS),PS,PSR,PTBR,Register, Internal Processor,Restart Processor,Restart vector,RESTART_ADDRESS,RESTART_VECTOR,RESTART_VECTOR,SCBB,SIRR,SIRR,Software interrupt request,SSP,SUPERPAGE_BASE,Supervisor stack pointer,SYSCALL entry vector,SYSCALL_ENTRY,SYSCALL_ENTRY,SYSPTBR,System control block base,System page table base,TBIA,TBIAP,TBIS,TBISD,TBISI,TEB,TEB_BASE,THREAD,Thread environment block base,User stack pointer,USP,VA,VALIDATION-Required,VIRBND,Virtual address boundary,Virtual address scratch,Virtual page table base,VPTB,WHAMI" />
    <meta name="description" content="The following registers are maintained and controlled by the IprBank class:" />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
@@ -95,7 +95,7 @@
 <body>
 
 
-<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Internal Processor Register</span></h1>
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Internal Processor Register </span></h1>
 </div>
 <div id="idheader">
 <div id="idheaderbg">
@@ -107,7 +107,7 @@
       
       <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="alpha-registers.html">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</a>&nbsp;&gt;</p>
    
-      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Internal Processor Register</span></h1>
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Internal Processor Register </span></h1>
 
     </td>
     <td class="topichead" id="idnav">
@@ -129,303 +129,1396 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">The following registers are maintained and controlled by the IprBank class:</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Internal Processor Register</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">===============================================================================</p>
-<p class="p_Normal">Alpha AXP Internal Processor Registers – Platform Usage Table</p>
-<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;Register&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;OSF/1&nbsp;/&nbsp;Tru64&nbsp;|&nbsp;OpenVMS&nbsp;|&nbsp;Linux/BSD&nbsp;|&nbsp;PALcode&nbsp;HW&nbsp;(DEC)&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|--------------------|:-------------:|:-------:|:---------:|:----------------:|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;ASN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;GENERAL_ENTRY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;IKSP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;INTERRUPT_ENTRY&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;KGP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;MCES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;MEM_MGMT_ENTRY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;PAL_BASE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;PANIC_ENTRY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x†&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✗-*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;PCR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;PDR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;PSR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;RESTART_ADDRESS&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;SIRR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;SYSCALL_ENTRY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;TEB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;THREAD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
-<p class="p_CodeExample"><span class="f_CodeExample">-------------------------------------------------------------------------------</span></p>
-<p class="p_Normal"><strong style="font-weight: bold;">LEGEND:</strong></p>
-<p class="p_Normal"> &nbsp;x &nbsp;= Used/implemented on this OS/platform</p>
-<p class="p_Normal"> &nbsp;x* = May be used (if running OSF/1 PALcode)</p>
-<p class="p_Normal"> &nbsp;x† = Linux/BSD only if running under OSF/1 PALcode compatibility</p>
-<p class="p_Normal"> &nbsp;✗-* &nbsp;= Not present as actual hardware register (synthetic PALcode only)</p>
-<p class="p_Normal">-------------------------------------------------------------------------------</p>
-<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">References:</span></p>
-<p class="p_Normal">- DEC Alpha AXP SRM Vol I/II (Processor Internal Registers)</p>
-<p class="p_Normal">- Digital UNIX / Tru64 PALcode sources (Sites &amp; Witek, Table 2-4)</p>
-<p class="p_Normal">- OpenVMS Alpha Internals, VMS PALcode</p>
-<p class="p_Normal">- Linux/NetBSD Alpha kernel and PALcode compatibility notes</p>
-<p class="p_Normal">===============================================================================</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Internal Processor Register.</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Internal Processor Registers</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;"> Alpha AXP Internal Processor Registers – Platform Usage Table</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
-<th style="vertical-align:top; width:268px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Function</strong></p>
+<th style="vertical-align:top; width:218px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Register</strong></p>
 </th>
-<th style="vertical-align:top; width:143px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Field</strong></p>
+<th style="vertical-align:top; width:371px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Processor Status (architected PS)</strong></p>
 </th>
-<th style="vertical-align:top; width:750px; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Description</strong></p>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Offset</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">OSF/1 /Tru64</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">OpenVMS</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Linux/BSD</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">PALcode HW (DEC)</strong></p>
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">getASN()</p>
-<p class="p_Normal">setASN()</p>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ASN</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">ASN</p>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Address space number</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal"> Address Space number of owning process of current thread. </p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x08</p>
 </td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">getGeneralEntry()</p>
-<p class="p_Normal">setGeneralEntry</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">GENERAL_ENTRY</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">General Exception class kernel handler address.</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
-<p class="p_Normal"> Privileged: Readable/writable only in kernel mode (CM=0).</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">getIKSP()</p>
-<p class="p_Normal">setIKSP()</p>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">ASTEN</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">IKSP</p>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">AST enable mask</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">IKSP (Initial Kernel Stack Pointer)</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
-<p class="p_Normal"> Privileged: Readable/writable only in kernel mode (CM=0).</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x10</p>
 </td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; height:72px; padding:0; border:solid thin #000000;"><p class="p_Normal">getInterruptEntry()</p>
-<p class="p_Normal">setInterruptEntry()</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:143px; height:72px; padding:0; border:solid thin #000000;"><p class="p_Normal">INTERRUPT_ENTRY</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; height:72px; padding:0; border:solid thin #000000;"><p class="p_Normal">INTERRUPT_ENTRY (Interrupt Exception Class Kernel Handler Address)</p>
-<p class="p_Normal">Synthetic IPR, used to store the kernel entry point for handling interrupt exceptions.</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
-<p class="p_Normal"> Privileged: Readable/writable only in kernel mode (CM=0).</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">getProcessorModeString()</p>
-<p class="p_Normal">setKernelContext(quint64)</p>
-<p class="p_Normal">setExecutiveContext(quint64)</p>
-<p class="p_Normal">setSupervisorContext(quint64)</p>
-<p class="p_Normal">setUserContext(quint64)</p>
-<p class="p_Normal">&nbsp;</p>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ASTSR</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">KGP</p>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">AST pending summary</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">KGB (Kernel Global Pointer)</p>
-<p class="p_Normal">Synthetic IPR, used by PALcode/OS for the kernel mode global pointer (GP) value.</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
-<p class="p_Normal">Privileged: Readable/writable only in kernel mode (CM=0).</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x09</p>
 </td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getMCES</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()&nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setMCES</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getMIP</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">() &nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getSCEEnable</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getPCEEnable</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getMCESum</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()&nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getSCESum</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">() &nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getPCESum</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">() &nbsp;&nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setSCEEnable</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()&nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setPCEEnable</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setMCESum</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()&nbsp;</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setSCESum</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setPCESum</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">clearMCES</span><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">()</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">MCES</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">Machine Check Error Summary. </p>
-<p class="p_Normal">32-bit Superpage support.</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getMemMgmtEntry()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setMemMgmtEntry()</span></p>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">SIRR</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">MEM_MGMT_ENTRY</p>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Software interrupt request</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">MEM_MGMT_ENTRY (Memory Management Exception Class Kernel Handler Address)</p>
-<p class="p_Normal"> Synthetic IPR used to store the kernel entry point for handling memory management (MMU, TLB, page fault, etc.) exceptions.</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p></td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setPALBase()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getPALBase()</span></p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x11</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">PAL_BASE</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">PAL_BASE (IPR 3)</p>
-<p class="p_Normal">Holds the base address for PALcode routines in the kernel super-page region.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Used to vector to PAL and exception handler code: full address = PAL_BASE + (vector_offset &lt;&lt; 13).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Typically initialized at boot and never changed, but is writable in privileged mode.</p></td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">readPanicEntry()</p>
-<p class="p_Normal">writePanicEntry()</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">PANIC_ENTRY</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">PANIC_ENTRY (Panic Exception Class Kernel Handler Address)</p>
-<p class="p_Normal">Synthetic IPR holding the entry point for kernel panic exception handlers.</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations. </strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only bits [31:0] are significant (32-bit superpage format); full address is composed as:</p>
-<p class="p_Normal"> &nbsp; &nbsp; &nbsp;0xFFFF_FFFF_8000_0000 | (PANIC_ENTRY &amp; 0xFFFFFFFF)</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">getPCR()</p>
-<p class="p_Normal">setPCR()</p>
-<p class="p_Normal">getPCRAddress()</p>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">IPLR</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">PCR</p>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt priority level (alias/PS mediated)</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">PCR (Processor Control Region base address)</p>
-<p class="p_Normal">Synthetic IPR holding the base address of the per-CPU control region (PCR).</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only bits [31:0] are significant (32-bit superpage format); full address is composed as:</p>
-<p class="p_Normal"> &nbsp; &nbsp;0xFFFF_FFFF_8000_0000 | (PCR &amp; 0xFFFFFFFF)</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>see also: <span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">SUPERPAGE_BASE</span></p></td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">getPDR()</p>
-<p class="p_Normal">setPDR()</p>
-<p class="p_Normal">getPDRAddress()</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x12</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">PDR</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">PDR (Processor Data Region)</p>
-<p class="p_Normal">Synthetic IPR holding the base address of the per-CPU control region (PDR).</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only bits [31:0] are significant (32-bit superpage format); full address is composed as:</p>
-<p class="p_Normal"> &nbsp; &nbsp;0xFFFF_FFFF_8000_0000 | (PCR &amp; 0xFFFFFFFF)</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>see also: <span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">SUPERPAGE_BASE</span></p></td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal">Refer to topic</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">PSR</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">Processor Status Register See Topic: <a href="processor-status-namespaceversion.html" class="topiclink">Processor Status</a></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getRestartVector()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setRestartVector()</span></p>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">VPTB</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">RESTART_ADDRESS</p>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Virtual page table base</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">RESTART_VECTOR (Restart Execution Address, IPR 0x150 / 336)</p>
-<p class="p_Normal">This register is written by PALcode or the OS during error handling or special traps. Upon a restart operation, the processor loads the PC from the RESTART_VECTOR register. Holds the address to which execution resumes after a machine check,</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>correctable error, or certain PALcode routines requiring restart.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Bits 43:13 contain the restart page address (physical page number).</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Bits 12:2 contain the offset within the page.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Bits 1:0 are zero (alignment).</p></td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getSyscallEntry()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setSyscallEntry()</span></p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x13</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">SIRR</p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">SYSCALL_ENTRY (System Call Handler Address)</p>
-<p class="p_Normal">Synthetic IPR holding the kernel entry address for system call dispatch.</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only bits [31:0] are significant (32-bit superpage format);</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>full address is composed as:</p>
-<p class="p_Normal"> &nbsp;0xFFFF_FFFF_8000_0000 | (SYSCALL_ENTRY &amp; 0xFFFFFFFF)</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p>
-<p class="p_Normal">See also: <span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">SUPERPAGE_BASE</span></p>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getSyscallEntry()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setSyscallEntry()</span></p>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">USP</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">SYSCALL_ENTRY</p>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">User stack pointer</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">SYSCALL_ENTRY (System Call Handler Address)</p>
-<p class="p_Normal">Synthetic IPR holding the kernel entry address for system call dispatch.</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only bits [31:0] are significant (32-bit superpage format);</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span> &nbsp;full address is composed as:</p>
-<p class="p_Normal"> &nbsp; &nbsp; 0xFFFF_FFFF_8000_0000 | (SYSCALL_ENTRY &amp; 0xFFFFFFFF)</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p>
-<p class="p_Normal">See also: <span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #000080; background-color: #ffffff;">SUPERPAGE_BASE</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x14</p>
 </td>
-</tr>
-<tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getTEB()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setTEB()</span></p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">TEB</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal">TEB (Thread Environment Block base address)</p>
-<p class="p_Normal">Synthetic IPR holding the base address of the current thread's environment block.</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Only bits [31:0] are significant (32-bit superpage format); full address is:</p>
-<p class="p_Normal"> &nbsp; &nbsp; 0xFFFF_FFFF_8000_0000 | (TEB &amp; 0xFFFFFFFF)</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p>
-<p class="p_Normal">See also: SUPERPAGE_BASE</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; width:268px; padding:0; border:solid thin #000000;"><p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">getThread()</span></p>
-<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #880000; background-color: #ffffff;">setThread()</span></p>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">KSP</p>
 </td>
-<td style="vertical-align:top; width:143px; padding:0; border:solid thin #000000;"><p class="p_Normal">THREAD</p>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Kernel stack pointer</p>
 </td>
-<td style="vertical-align:top; width:750px; padding:0; border:solid thin #000000;"><p class="p_Normal"> THREAD (Thread Unique Value, Kernel Thread Address, IPR 27)</p>
-<p class="p_Normal"> Holds the 64-bit address or identifier of the currently executing thread.</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span> Used by OS/PALcode for per-thread data access, kernel thread management, and as a unique context pointer.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Privileged: Readable/writable only in kernel mode (CM=0).</p></td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x15</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">SSP</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Supervisor stack pointer</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x16</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">ESP</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Executive stack pointer</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x17</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">SCBB</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">System control block base</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x18</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PTBR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Page table base (physical)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x21</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x*</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PCBB</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Process control block base</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x22</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">MCES</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Machine check error summary</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x23</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">WHAMI</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">“Which CPU am I?”</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x25</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PS</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Processor Status (architected PS)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x04</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">FEN</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Floating-point enable</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x05</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">FPCR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Floating-point control</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x42</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ICCSR</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">I-cache control/status</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x35</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_ADDR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception address</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x100</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_SUM</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception summary</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x101</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_MASK</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception mask</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x102</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_SYNDROME</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception syndrome</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x103</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_PC</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception PC</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x104</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_PS</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception PS</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x105</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">MM_FAULT_ADDR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">MMU fault VA</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x110</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">MM_STAT</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">MMU fault status</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x111</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">DTB_CTL</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Data TLB control</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x112</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ITB_CTL</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Instruction TLB control</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x113</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_CTRL</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance monitor control</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x120</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_MASK</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance monitor mask</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x121</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_0</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 0</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x130</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_1</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 1</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x131</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_2</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 2</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x132</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_3</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 3</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x133</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_4</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 4</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x134</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_5</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 5</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x135</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_6</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 6</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x136</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PERFMON_7</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Performance counter 7</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x137</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_0</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 0</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x140</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_1</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 1</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x141</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_2</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 2</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x142</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_3</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 3</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x143</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_4</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 4</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x144</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_5</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 5</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x145</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_6</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 6</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x146</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">ENTRY_7</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Exception entry point 7</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x147</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">RESTART_VECTOR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Restart vector</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x150</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">DEBUGGER_VECTOR</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Debugger entry vector</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x151</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PROCESS</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Process context scratch</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x152</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">VA</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Virtual address scratch</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x153</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">INTID</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt ID (delivery)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x154</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">TBIA</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Invalidate entire TLB</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x160</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">TBIAP</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Invalidate ASN-specific TLB (deferred)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x161</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">TBIS</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Invalidate single TLB entry</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x162</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">TBISD</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Invalidate D-TLB entry</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x163</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">TBISI</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Invalidate I-TLB entry</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x164</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">DADFX</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Data address translation extension</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x180</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">I_CTL</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Instruction cache control (impl.-specific)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x181</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">D_CTL</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Data cache control (impl.-specific)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x182</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">EXC_ADDR_EXT</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Extended exception address</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x183</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">SYSPTBR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">System page table base</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x193</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">VIRBND</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Virtual address boundary</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x197</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">KGP</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Kernel global pointer</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x200</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PCR_BASE</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Processor control region base (vector)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x201</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">SYSCALL_ENTRY</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">SYSCALL entry vector</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x202</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">GEN_EXC_HANDLER</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">General exception handler vector</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x203</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">INT_EXC_HANDLER</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt exception handler vector</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x204</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">MM_EXC_HANDLER</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">MM exception handler vector</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x205</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PANIC_EXC_HANDLER</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Panic handler vector</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x206</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">TEB_BASE</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Thread environment block base</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x207</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PANIC_ENTRY</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Panic entry (architected vector)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x208</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">INTERRUPT_ENTRY</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Interrupt entry vector</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x210</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">KGB</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Kernel global base</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x212</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">MM_EXC_HANDLER2</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Alternate MM handler vector</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x213</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">MEM_MGMT_ENTRY</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Memory management entry (synthetic)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x214</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PCR</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Processor control region (synthetic)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x215</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">PDR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Page directory base (synthetic)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x216</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">DC_TEST_CTL</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">Data cache test control</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x0B2</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">DC_TEST_CTL_W1</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Data cache test control (window 1)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x1B2</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">&nbsp;</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x†</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">MMCSR</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">MM control/status</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x0B4</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">MMCSR_W1</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">MM control/status (window 1)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0x1B4</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; padding:0; border:solid thin #000000;"><p class="p_Normal">PAL_BASE</p>
+</td>
+<td style="vertical-align:top; width:371px; padding:0; border:solid thin #000000;"><p class="p_Normal">PALcode base address</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">0x03</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; width:218px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">IVPTBR</p>
+</td>
+<td style="vertical-align:top; width:371px; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">Initial VPT base (boot)</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">0xF1</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
+<td style="vertical-align:top; background-color:#CCFFCC; padding:0; border:solid thin #000000;"><p class="p_Normal">x</p>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Legend:</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_CodeExample">x&nbsp;=&nbsp;supported/used&nbsp;on&nbsp;that&nbsp;platform.</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_CodeExample">x*&nbsp;=&nbsp;supported&nbsp;on&nbsp;SRM-console&nbsp;Alpha&nbsp;systems&nbsp;(typical&nbsp;for&nbsp;Linux/BSD&nbsp;on&nbsp;SRM).</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_CodeExample">x†&nbsp;=&nbsp;present/used&nbsp;when&nbsp;the&nbsp;specific&nbsp;hardware/firmware&nbsp;implements&nbsp;the&nbsp;feature&nbsp;(e.g.,&nbsp;perfmon&nbsp;or&nbsp;extended&nbsp;fields).</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Key implementation references in your source:</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The read/write switch handling for many of the above (ASN, ASTEN read, ENTRY_0..7, EXC_* set/get, FPCR, ICCSR, PERFMON_CTRL/MASK, INTERRUPT_ENTRY, IVPTBR, KGB, KSP, MCES, MEM_MGMT_ENTRY, MMCSR/W1, PAL_BASE, PANIC_ENTRY, PCR, PDR, PS, SIRR, SYSCALL_ENTRY, TEB_BASE, VA, WHAMI) is in IprBank::readIpr/writeIpr.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Architectural defaults and perf/entry initialization (PERFMON_0..7, PERFMON_CTRL/MASK, ENTRY_0..7) are set in initializeDefaults().</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Backing fields and accessors for EXC_* and PERFMON/ENTRY arrays are in the header.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>As Registers are validated - the register name links to an implementation page for the register.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Future SMP support: define the PS register is <span class="f_CodeExample">QAtomicInteger&lt;quint64&gt;</span> atomic. &nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Platform architectures should implement accessor functions for all changes to the status register. </p>
-<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also. </span></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also. </span></p>
 <p class="p_Normal"><a href="register-namespaces.html" class="topiclink">Register Namespaces</a> <a href="iprbank-classdictionary.html" class="topiclink">IprBank</a></p>
+<p class="p_Normal">- DEC Alpha AXP SRM Vol I/II (Processor Internal Registers)</p>
+<p class="p_Normal">- Digital UNIX / Tru64 PALcode sources (Sites &amp; Witek, Table 2-4)</p>
+<p class="p_Normal">- OpenVMS Alpha Internals, VMS PALcode</p>
+<p class="p_Normal">- Linux/NetBSD Alpha kernel and PALcode compatibility notes</p>
 <p class="p_Normal">&nbsp;</p>
 
 <!--ZOOMSTOP-->

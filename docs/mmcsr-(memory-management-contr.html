@@ -1,13 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-   <title>Introduction &gt; Change Log</title>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design) &gt; Internal Processor Register &gt; MMCSR (Memory Management Control/Status Register</title>
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
    <meta name="keywords" content="" />
-   <meta name="description" content="This page hosts the documentation change log. &nbsp; Change/Notice/Description Date Author H&amp;M Authoring Software Attribution &nbsp;20250918 Tim Peer (TP) Tools &amp; References &nbsp;Platfo" />
+   <meta name="description" content="MMCSR (Memory Management Control/Status Register) is present on EV6/EV67/EV7+ and later Alpha platforms. It's required for full PALcode, SRM, OpenVMS, and Tru64..." />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
 
@@ -85,7 +85,7 @@
    <script type="text/javascript" src="helpman_topicinit.js"></script>
 
    <script type="text/javascript">
-     HMSyncTOC("index.html", "update-notice-introduction.html");
+     HMSyncTOC("index.html", "mmcsr-(memory-management-contr.html");
    </script>
    <script type="text/javascript" src="highlight.js"></script>
    <script type="text/javascript">
@@ -95,26 +95,26 @@
 <body>
 
 
-<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Change Log</span></h1>
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">MMCSR (Memory Management Control/Status Register</span></h1>
 </div>
 <div id="idheader">
 <div id="idheaderbg">
 <table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
   <tr>
     <td class="topichead" style="text-align:left; vertical-align:middle">
-      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?update-notice-introduction.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?mmcsr-(memory-management-contr.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
       <p class="crumbs"><b>Navigation:</b>&nbsp;
       
-      <a href="introduction.html">Introduction</a>&nbsp;&gt;</p>
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="alpha-registers.html">Alpha AXP Register Architecture (Modernized for Unified/128-bit Emulator Design)</a> &gt; <a href="internal-processor-register-architecture.html">Internal Processor Register</a>&nbsp;&gt;</p>
    
-      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Change Log</span></h1>
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">MMCSR (Memory Management Control/Status Register</span></h1>
 
     </td>
     <td class="topichead" id="idnav">
       
-      <a href="introduction.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
-      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="developmentprioritiesandroadmap.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="dc_test_ctl---data-cache-test-.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="internal-processor-register-architecture.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="ptbr-(interrupt-vector-page-ta.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -127,58 +127,23 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal">This page hosts the documentation change log. </p>
+<p class="p_Normal">MMCSR (Memory Management Control/Status Register) is present on EV6/EV67/EV7+ and later Alpha platforms. It's required for full PALcode, SRM, OpenVMS, and Tru64 bring-up—especially for page fault handling, error reporting, and MMU control/diagnostics.</p>
 <p class="p_Normal">&nbsp;</p>
-<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
-<thead>
-<tr>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Change/Notice/Description</strong></p>
-</th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Date</strong></p>
-</th>
-<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Author</strong></p>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">H&amp;M Authoring Software Attribution </p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">20250918</p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Tim Peer (TP)</p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Tools &amp; References </p>
-<p class="p_Normal">Platform Architecture - Register Details</p>
-<p class="p_Normal">Table of Definitions</p>
-<p class="p_Normal">Code Standards and Conventions (CSC)</p>
-<p class="p_Normal">Implementation Patterns (IP)</p>
-<p class="p_Normal">Architecture Specific Hives - VAX, Tru64, Unix, Alpha</p>
-<p class="p_Normal">Floating Point Control Register bitwise (CSC and IP)</p>
-<p class="p_Normal">Topic Option Index Updates</p>
-<p class="p_Normal">Internal Processor Register Updates</p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">20250919</p>
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">TP</p>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
-</td>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
-</td>
-</tr>
-</tbody>
-</table>
-</div>
+<p class="p_Normal">Controls and reports MMU status, page fault conditions, error flags, TLB miss state, and can be used to enable/disable certain MMU features.</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Index: EV6/EV7: MMCSR is typically at 0xB4 (base window) and also at 0x1B4 (window 1).</p>
+<p class="p_Normal">Access: Read/Write (privileged)</p>
+<p class="p_Normal">Width: 64 bits.</p>
+<p class="p_Normal">Required: Yes, for accurate SRM/PALcode operation and for later OpenVMS/Tru64 features.</p>
+<p class="p_Normal">Emulator: Stubbing is fine for now—SRM/PALcode/OS just expect this register to exist and allow R/W.</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Considerations.</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For fine-grained MMU/diagnostics, this is where you’ll parse and act on the MMCSR bitfields.</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">Reference</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Alpha 21264 (EV6) &amp; 21364 (EV7) docs:</p>
+<p class="p_Normal">“MMCSR (Memory Management Control/Status Register)” at IPR 0xB4 (and windowed 0x1B4).</p>
 
 <!--ZOOMSTOP-->
 </div></div>

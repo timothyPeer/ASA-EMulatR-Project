@@ -114,7 +114,7 @@
       
       <a href="alphasmpmanager-claude.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="alphasmpmanager-claude.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="alphatelnetconsoleserver-class-dictionary.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="alphacpu-launch-and-handling.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -127,24 +127,24 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal"><span style="font-weight: bold;">Use of GlobalLockTracker &amp; CPU invalidations</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Use of GlobalLockTracker &amp; CPU invalidations</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">LDx_L/STx_C semantics</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The Alpha architecture guarantees that if CPUA does an LDQ_L addr, and then no intervening store to that 16-byte block by any CPU occurs, then CPUA’s subsequent STQ_C addr, val will succeed.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>To model “any intervening store,” you must tear down all reservation bits (per‐CPU) and record a global “this block was touched” bit on every store.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Why are per-CPU flags and a global tracker needed: <span style="font-style: italic;">Alpha’s LDx_L/STx_C atomic idiom is a two-part dance:</span></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Why are per-CPU flags and a global tracker needed: <em style="font-style: italic;">Alpha’s LDx_L/STx_C atomic idiom is a two-part dance:</em></p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Instruction:</span> &nbsp;LDx_L</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Instruction:</strong> &nbsp;LDx_L</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each CPU sets its own lockFlag = true and records lockedPhysicalAddress in its <a href="alphacpustate-alphacpu.html" class="topiclink">AlphaCPUState</a>.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The hardware (or in our case, PendingLoad + AlphaCPU) relies on this flag to know “I’ve got a reservation on that 16-byte block”.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><span style="font-weight: bold;">Other stores</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Other stores</strong></p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Any store—whether from this CPU (another instruction) or from any other CPU—must tear down all reservations to that same 16-byte block.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">Per-CPU invalidation:</span> We walk m_attachedCpus and call each cpu-&gt;invalidateReservation(physicalAddr, size) so that their lockFlag is cleared.</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span style="font-style: italic;">Global invalidation: </span>We call GlobalLockTracker::invalidate(physicalAddr) so that future stores (and PendingStore::checkLockValidity()) will see the block was touched by somebody and fail the STx_C if someone tried to sneak in a write.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><em style="font-style: italic;">Per-CPU invalidation:</em> We walk m_attachedCpus and call each cpu-&gt;invalidateReservation(physicalAddr, size) so that their lockFlag is cleared.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><em style="font-style: italic;">Global invalidation: </em>We call GlobalLockTracker::invalidate(physicalAddr) so that future stores (and PendingStore::checkLockValidity()) will see the block was touched by somebody and fail the STx_C if someone tried to sneak in a write.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also.</span></p>
 <p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso"><a href="alphacpustate-alphacpu.html" class="topiclink">AlphaCPUState</a></span></p>
