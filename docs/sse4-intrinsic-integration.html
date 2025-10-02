@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Appendix &gt; SSE4 Intrinsic Considerations</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="Alpha System Architecture,arithmetic,bitfield,bitwise mapping,C++,cfenv,conversion,cross-format conversion,CVTGD,CVTGF,CVTQS,CVTQT,CVTTQ,CVTxx,DEC Alpha,double precision,emulator,exception,exception detection,exception model,exponent bias,fesetround,floating-point,floating-point control,floating-point exceptions,FP arithmetic engine,FPArithmetic,FPCR,grain,header-only,IEEE,inexact,infinity,instruction grain,invalid,multi-threaded,MXCSR,NaN,nearbyint,OptimizedExceptionStatusRegister,overflow,performance,per-operation rounding,portable,Qt,reserved operand,rounding,scalar fallback,scalar operations,SIMD,single precision,SSE2,SSE4.1,status flag,status register,thread safety,trap enable,underflow,VAX,VAX G_float,x64,x86" />
+   <meta name="description" content="The FPArithmetic module provides a high-performance, architecture-faithful implementation of Alpha AXP floating-point arithmetic, conversion, and rounding primitives. It acts..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "sse4-intrinsic-integration.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">SSE4 Intrinsic Considerations</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?sse4-intrinsic-integration.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      Appendix&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">SSE4 Intrinsic Considerations</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="fparithmetic-module-overview.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <span class="hmbtnnext"></span>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">The FPArithmetic module provides a high-performance, architecture-faithful implementation of Alpha AXP floating-point arithmetic, conversion, and rounding primitives. It acts as the core arithmetic engine for all floating-point instruction grains in the Virtual ASA Alpha Emulator, ensuring that results and exception status conform precisely to the Alpha System Architecture (ASA), including FPCR control, exception flagging, and VAX/IEEE cross-format conversions.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Key Features</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">FPCR-driven rounding and exception semantics</strong></p>
+<p class="p_Normal">All arithmetic and conversion routines take Alpha FPCR rounding mode and trap enable bits into account. This ensures the emulator matches real Alpha hardware, rather than relying on the host platform’s floating-point environment (MXCSR, FPU, etc.). Exception conditions (inexact, overflow, underflow, invalid) are detected and flagged in software, not signaled by host hardware. Emulator code (grain logic) is responsible for updating the OptimizedExceptionStatusRegister and raising traps as per FPCR settings.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">SIMD acceleration with strict architectural conformance</strong></p>
+<p class="p_Normal">Where available, SSE4.1 intrinsics (such as _mm_round_sd/ss, _mm_cvttsd_si64) are used to provide per-operation rounding and fast FP/INT conversions.</p>
+<p class="p_Normal">All SSE usage is strictly controlled:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Per-operation rounding is set via intrinsic immediates, never via global MXCSR state (which is invisible to Alpha guest code).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception detection uses software classification; host exceptions are never relied on or signaled to guest context.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>When SSE4.1 is not present, scalar fallbacks using &lt;cfenv&gt; and fesetround/nearbyint are used, restoring the host rounding mode after each operation to avoid state leakage.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Precise type conversion for Alpha and VAX floating-point formats</strong></p>
+<p class="p_Normal">Conversion helpers are provided for all combinations required by the Alpha and VAX instruction set (CVTQS, CVTQT, CVTTQ, CVTGF, CVTGD, etc.).</p>
+<p class="p_Normal">These helpers include:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Rounding and overflow/inexact detection for INT &lt;-&gt; FP conversions.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Special value detection (NaN, Inf, reserved operand).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Bitfield and bias adjustment for VAX G_float and IEEE interchange.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>See OptimizedExceptionStatusRegister_Conversions.H for result structures and API examples.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Header-only, portable, thread-safe</strong></p>
+<p class="p_Normal">All routines are inline and header-only, requiring no .CPP implementation.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>No global/static state is mutated, ensuring safe use in multi-threaded emulator scenarios.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Design Notes and ASA References</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><strong style="font-weight: bold;">Rounding Modes</strong></p>
+<p class="p_Normal">Alpha FPCR supports RN (round-to-nearest-even), RM (toward -Inf), RP (toward +Inf), and RZ (toward zero). The FPArithmetic class translates these to SSE4.1 rounding immediates (see ASA Vol. I, Ch. 4, Table 4-4), and to C99 &lt;cfenv&gt; constants for scalar fallback.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">2. Exception Model</strong></p>
+<p class="p_Normal">All status detection (inexact, overflow, underflow, invalid) is performed in software, and the calling grain is responsible for updating the status register and invoking trap logic per FPCR trap enables (see ASA Vol. I, “Floating-Point Exceptions and Traps”).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">3. SIMD Policy</strong></p>
+<p class="p_Normal">SIMD (SSE2/SSE4.1) is used for per-operation speed, but only when the CPU supports it (gated by CPUFeatures::hasSSE41()). No host exceptions are relied on, and global MXCSR is never modified. SIMD rounding is always controlled per-instruction via immediate, so each Alpha FP operation is independent of host state.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">4. VAX/IEEE Conversions</strong></p>
+<p class="p_Normal">Bitfield, exponent bias, and special-value mappings between IEEE and VAX G_float are performed according to DEC/VAX and Alpha AXP manuals, using helper routines in dt_gfloat and the conversion helpers defined in OptimizedExceptionStatusRegister_Conversions.H.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">5. Example Integration (CVTQS, CVTTQ, CVTGD, etc.)</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">INT64&nbsp;→&nbsp;FLOAT:&nbsp;Use&nbsp;int64_to_float(),&nbsp;passing&nbsp;FPCR&nbsp;rounding&nbsp;mode.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FLOAT/DOUBLE&nbsp;→&nbsp;INT64:&nbsp;Use&nbsp;cvt_*_to_int_chopped()&nbsp;or&nbsp;cvt_*_to_int_fpcr(),&nbsp;with&nbsp;explicit&nbsp;rounding&nbsp;control&nbsp;and&nbsp;exception&nbsp;classification.</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">VAX&nbsp;↔&nbsp;IEEE:&nbsp;Use&nbsp;dt_gfloat&nbsp;and&nbsp;conversion&nbsp;helpers&nbsp;as&nbsp;in&nbsp;checkCvtgdConversion()&nbsp;and&nbsp;checkCvtdgConversion().</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Usage Pattern</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">float&nbsp;rounded&nbsp;=&nbsp;FPArithmetic::round_float(val,&nbsp;fpcr.getRoundingMode());</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">double&nbsp;result&nbsp;=&nbsp;FPArithmetic::round_double(src,&nbsp;fpcr.getRoundingMode());</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">float&nbsp;fval&nbsp;=&nbsp;FPArithmetic::int64_to_float(ival,&nbsp;fpcr.getRoundingMode());</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">All conversions should check inexact, overflow, and invalid as per the result bundle in the conversion helper, and set emulator status bits accordingly.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Summary</span></h3>
+<p class="p_Normal">FPArithmetic ensures that the Alpha emulator produces faithful, performant floating-point and conversion results on all modern CPUs, using SIMD when possible, and always upholding the architectural contract defined by DEC’s Alpha AXP (and VAX) reference manuals.</p>
+<p class="p_Normal">All rounding and exception behaviors are controlled by the Alpha FPCR and emulated in software, independent of the host floating-point environment.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See also</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Alpha System Architecture Vol. I (v6, 1994), Ch. 4</p>
+<p class="p_Normal">FP_SSE4_Arithmetic.h (this header)</p>
+<p class="p_Normal">OptimizedExceptionStatusRegister_Conversions.H (result bundle API)</p>
+<p class="p_Normal">dt_gfloat.h (VAX G_float conversion helpers)</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

@@ -7,7 +7,7 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
    <meta name="keywords" content="Interrupt, Devices,Interrupt, Interprocessor,Interrupt, Interval clock,Interrupt, Performance Monitor,Interrupt, Release,Interrupts, Software,IPL 0,IPL 1–15,IPL 20–23,IPL 22,IPL 29,IPL 30,IPL 31,Machine check.,OpenVMS,Power fail,Tru64,User mode" />
-   <meta name="description" content="Alpha AXP interrupt classes by type and their assigned IPLs (Interrupt Priority Levels). The official IPL values are mostly in the range 1–31, but not all IPLs are used, and..." />
+   <meta name="description" content="The Alpha AXP architecture provides a sophisticated and highly flexible interrupt subsystem designed for high performance, SMP scalability, and architectural compatibility with..." />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
 
@@ -114,7 +114,7 @@
       
       <a href="exception-source-bitmask-maski.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="interrupt-life-cycle.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="interrupts---configuration-and.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -127,6 +127,8 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
+<p class="p_Normal">The Alpha AXP architecture provides a sophisticated and highly flexible interrupt subsystem designed for high performance, SMP scalability, and architectural compatibility with VMS, Tru64 UNIX, and other operating systems. In the ASA EmulatR, the interrupt system closely mirrors the hardware implementation described in the Alpha System Architecture Reference Manual (ASA Vol I, Ch. 4.4, 6.4, 14), providing both device (hardware) and software (SIRR) interrupts, support for interprocessor interrupts (IPI), programmable IPL (Interrupt Priority Level) masking, vectored delivery, and full emulation of PALcode/SCB vector dispatch.</p>
+<p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Alpha AXP interrupt classes by type and their assigned IPLs (Interrupt Priority Levels). The official IPL values are mostly in the range 1–31, but not all IPLs are used, and assignment is by DEC conventions (see also PALcode and OpenVMS docs).</p>
 <p class="p_Normal">&nbsp;</p>
 <div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">

@@ -1,0 +1,501 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Exceptions, Faults, Interrupts, and MachineChecks &gt; Exception and Trap Handling</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Overview This document outlines the detailed architecture and implementation steps for exception and trap handling in the Alpha Architecture emulator. The system follows the PAL" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "exception-and-trap-handling.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Exception and Trap Handling</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?exception-and-trap-handling.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="exceptionsinterruptsandmachinechecks.html">Exceptions, Faults, Interrupts, and MachineChecks</a>&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Exception and Trap Handling</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="interval-timers.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="exceptionsinterruptsandmachinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="firmware-(srm-ev59)---es40.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Overview</strong></p>
+<p class="p_Normal">This document outlines the detailed architecture and implementation steps for exception and trap handling in the Alpha Architecture emulator. The system follows the PALcode (Privileged Architecture Library) convention used in Alpha processors. Architecture Foundation Exception Vector Table (EVT) Structure. The EVT maintains a standardized set of entry points for exception handling, organized as offsets from a PAL base address. Each exception type has a designated entry point separated by 128-byte (0x80) boundaries, providing sufficient space for short handler stubs or dispatch logic.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Exception Categories</span></h3>
+<p class="p_Normal"><strong style="font-weight: bold;">Hardware Exceptions:</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">RESET&nbsp;(0x0000)&nbsp;-&nbsp;System&nbsp;initialization&nbsp;and&nbsp;processor&nbsp;reset</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MACHINE_CHECK&nbsp;(0x0080)&nbsp;-&nbsp;Hardware&nbsp;errors,&nbsp;unrecoverable&nbsp;conditions</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">INTERRUPT&nbsp;(0x0100)&nbsp;-&nbsp;External&nbsp;hardware&nbsp;interrupts</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ACCESS_VIOLATION&nbsp;(0x0180)&nbsp;-&nbsp;Memory&nbsp;protection&nbsp;violations</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">TRANSLATION_NOT_VALID&nbsp;(0x0200)&nbsp;-&nbsp;Invalid&nbsp;page&nbsp;table&nbsp;entries</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">TLB_MISS&nbsp;(0x0280)&nbsp;-&nbsp;Translation&nbsp;lookaside&nbsp;buffer&nbsp;miss</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">PTE_TLB_MISS&nbsp;(0x0300)&nbsp;-&nbsp;Page&nbsp;table&nbsp;entry&nbsp;TLB&nbsp;miss</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">MEMORY_FAULT&nbsp;(0x0380)&nbsp;-&nbsp;Memory&nbsp;access&nbsp;errors</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">UNALIGNED_ACCESS&nbsp;(0x0400)&nbsp;-&nbsp;Misaligned&nbsp;memory&nbsp;operations</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Instruction Exceptions:</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">OPCDEC_FAULT&nbsp;(0x0480)&nbsp;-&nbsp;Illegal/undefined&nbsp;opcodes</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">ARITHMETIC&nbsp;(0x0500)&nbsp;-&nbsp;Integer&nbsp;arithmetic&nbsp;exceptions&nbsp;(overflow,&nbsp;divide&nbsp;by&nbsp;zero)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">FLOATING_POINT&nbsp;(0x0580)&nbsp;-&nbsp;FP&nbsp;exceptions&nbsp;(underflow,&nbsp;overflow,&nbsp;invalid&nbsp;operation)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">Software Traps:</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">BREAKPOINT&nbsp;(0x0600)&nbsp;-&nbsp;Debugger&nbsp;breakpoints</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">GENTRAP&nbsp;(0x0680)&nbsp;-&nbsp;General&nbsp;software&nbsp;traps</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Emulator-Specific:</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">EMULATOR&nbsp;(0x0700)&nbsp;-&nbsp;Emulation-specific&nbsp;conditions</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">CONTEXT_SWITCH&nbsp;(0x0780)&nbsp;-&nbsp;Thread/process&nbsp;context&nbsp;switching</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Detailed Implementation Tasks</strong></p>
+<p class="p_Normal">Phase 1: Exception Detection and Classification</p>
+<p class="p_Normal">Task 1.1: Instruction Execution Monitoring</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Integrate exception detection into the instruction decode/execute pipeline; Identify conditions that trigger each exception type during instruction execution; Determine priority levels when multiple exceptions occur simultaneously; Define exception precedence rules (e.g., machine check &gt; access violation &gt; arithmetic fault)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Task 1.2: Exception Context Capture</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Design data structure to capture processor state at exception time:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Program Counter (PC) at fault</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Faulting instruction address</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Faulting virtual address (for memory exceptions)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Exception-specific parameters (error codes, fault types)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Register snapshot (caller-save registers)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Processor status flags</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Task 1.3: Exception Source Identification</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Memory subsystem exceptions (alignment, protection, translation)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>ALU exceptions (overflow, divide by zero)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>FPU exceptions (all IEEE 754 conditions)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Instruction decoder exceptions (illegal opcodes)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>External interrupt sources</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 2: PALcode Interface Design</p>
+<p class="p_Normal">Task 2.1: PALcode Entry Mechanism</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define the transition from user/kernel mode to PAL mode</p>
+<p class="p_Normal">Specify register conventions for passing exception information to PAL handlers</p>
+<p class="p_Normal">Determine which registers are preserved vs. clobbered during PAL entry</p>
+<p class="p_Normal">Design the privilege level transition mechanism</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 2.2: Exception Parameter Passing</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Establish registers used for exception parameters:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Exception type/vector number</p>
+<p class="p_Normal">Faulting address</p>
+<p class="p_Normal">Error syndrome information</p>
+<p class="p_Normal">Return address (exception PC)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Document the calling convention for each exception type</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 2.3: PALcode Exit Mechanism</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Design return-from-exception instruction (RTI/REI equivalent)</p>
+<p class="p_Normal">Handle restoration of processor state</p>
+<p class="p_Normal">Manage privilege level transitions back to interrupted code</p>
+<p class="p_Normal">Support for exception chaining (exception during exception handling)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 3: Memory Management Integration</p>
+<p class="p_Normal">Task 3.1: TLB Miss Handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define TLB structure and lookup mechanism</p>
+<p class="p_Normal">Implement fast-path TLB miss resolution</p>
+<p class="p_Normal">Handle multi-level page table walks</p>
+<p class="p_Normal">Design software TLB fill procedures</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 3.2: Access Violation Detection</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement protection bit checking (read/write/execute)</p>
+<p class="p_Normal">Handle user/kernel mode access distinctions</p>
+<p class="p_Normal">Support for copy-on-write and page fault mechanisms</p>
+<p class="p_Normal">Design access violation syndrome reporting</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 3.3: Translation Validation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Check page table entry validity bits</p>
+<p class="p_Normal">Handle address space identifiers (ASID)</p>
+<p class="p_Normal">Implement virtual-to-physical address translation</p>
+<p class="p_Normal">Detect and report translation faults</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 4: Arithmetic and FP Exception Handling</p>
+<p class="p_Normal">Task 4.1: Integer Arithmetic Exceptions</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Detect overflow conditions in ADD, SUB, MUL instructions</p>
+<p class="p_Normal">Implement divide-by-zero detection</p>
+<p class="p_Normal">Handle trap-on-overflow variants (/V modifier)</p>
+<p class="p_Normal">Design arithmetic exception syndrome format</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 4.2: Floating-Point Exception Handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement IEEE 754 exception detection:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Invalid operation</p>
+<p class="p_Normal">Division by zero</p>
+<p class="p_Normal">Overflow</p>
+<p class="p_Normal">Underflow</p>
+<p class="p_Normal">Inexact result</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Design FP exception enable/disable masks</p>
+<p class="p_Normal">Implement FP trap barriers and synchronization</p>
+<p class="p_Normal">Handle denormalized numbers and special values (NaN, Infinity)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 4.3: Exception Masking and Control</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement per-exception enable/disable controls</p>
+<p class="p_Normal">Design exception summary registers</p>
+<p class="p_Normal">Support for deferred exception handling</p>
+<p class="p_Normal">Implement exception prioritization when multiple FP exceptions occur</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 5: Software Trap Implementation</p>
+<p class="p_Normal">Task 5.1: GENTRAP Implementation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define GENTRAP codes and their meanings</p>
+<p class="p_Normal">Implement GENTRAP instruction handling</p>
+<p class="p_Normal">Design parameter passing for software traps</p>
+<p class="p_Normal">Support for debugger integration via GENTRAP</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 5.2: Breakpoint Handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement breakpoint instruction (CALL_PAL BPT)</p>
+<p class="p_Normal">Design breakpoint exception context</p>
+<p class="p_Normal">Support for hardware breakpoint assistance</p>
+<p class="p_Normal">Integration with debugger interface</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 5.3: System Call Mechanism</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define system call trap entry (CALL_PAL CALLSYS)</p>
+<p class="p_Normal">Design system call parameter passing conventions</p>
+<p class="p_Normal">Implement privilege level checking</p>
+<p class="p_Normal">Support for system call return path</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 6: Interrupt Handling</p>
+<p class="p_Normal">Task 6.1: External Interrupt Interface</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define interrupt request (IRQ) interface</p>
+<p class="p_Normal">Implement interrupt priority levels</p>
+<p class="p_Normal">Design interrupt masking mechanism</p>
+<p class="p_Normal">Handle interrupt acknowledgment and clearing</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 6.2: Interrupt Vectoring</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement interrupt vector dispatch</p>
+<p class="p_Normal">Support for multiple interrupt sources</p>
+<p class="p_Normal">Design interrupt latency minimization</p>
+<p class="p_Normal">Handle interrupt nesting (if supported)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 6.3: Timer and Performance Interrupts</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement cycle counter and timer facilities</p>
+<p class="p_Normal">Design performance counter interrupt mechanism</p>
+<p class="p_Normal">Support for periodic timer interrupts</p>
+<p class="p_Normal">Handle timer overflow conditions</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 7: Exception State Management</p>
+<p class="p_Normal">Task 7.1: Exception Stack Design</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define exception stack structure</p>
+<p class="p_Normal">Implement nested exception handling</p>
+<p class="p_Normal">Design exception stack overflow detection</p>
+<p class="p_Normal">Support for exception unwinding</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 7.2: Processor State Preservation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Save minimal required state on exception entry</p>
+<p class="p_Normal">Implement lazy state saving for efficiency</p>
+<p class="p_Normal">Design state restoration on exception return</p>
+<p class="p_Normal">Handle state conflicts in nested exceptions</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 7.3: Exception History and Logging</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Design exception history buffer for debugging</p>
+<p class="p_Normal">Implement exception statistics tracking</p>
+<p class="p_Normal">Support for exception trace recording</p>
+<p class="p_Normal">Create diagnostic interfaces for exception analysis</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 8: Custom Handler Support</p>
+<p class="p_Normal">Task 8.1: SetCustomHandler Implementation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Complete the TODO in SetCustomHandler method</p>
+<p class="p_Normal">Validate handler addresses before installation</p>
+<p class="p_Normal">Implement handler address bounds checking</p>
+<p class="p_Normal">Support for handler chaining or replacement</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 8.2: Handler Registration Interface</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Design API for registering custom exception handlers</p>
+<p class="p_Normal">Implement handler priority/ordering</p>
+<p class="p_Normal">Support for temporary handler installation (scope-based)</p>
+<p class="p_Normal">Provide handler deregistration mechanism</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 8.3: Default Handler Behavior</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement default handlers for each exception type</p>
+<p class="p_Normal">Design fallback behavior for unhandled exceptions</p>
+<p class="p_Normal">Create exception reporting for unhandled cases</p>
+<p class="p_Normal">Support for &quot;last chance&quot; exception handling</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 9: Emulator-Specific Features</p>
+<p class="p_Normal">Task 9.1: Emulation Trap Implementation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Define conditions that trigger emulator-specific traps</p>
+<p class="p_Normal">Handle instructions not directly executable on host</p>
+<p class="p_Normal">Implement helper function invocation via traps</p>
+<p class="p_Normal">Design efficient trap-and-emulate mechanism</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 9.2: Context Switch Support</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement full processor state save/restore</p>
+<p class="p_Normal">Design register file context switching</p>
+<p class="p_Normal">Handle TLB and cache context management</p>
+<p class="p_Normal">Support for fast context switch paths</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 9.3: Debugging and Instrumentation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Implement single-step execution support</p>
+<p class="p_Normal">Design instruction trace mechanism</p>
+<p class="p_Normal">Support for watchpoints and conditional breakpoints</p>
+<p class="p_Normal">Create exception injection for testing</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Phase 10: Testing and Validation</p>
+<p class="p_Normal">Task 10.1: Exception Test Suite</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Create test cases for each exception type</p>
+<p class="p_Normal">Implement exception trigger scenarios</p>
+<p class="p_Normal">Validate exception context accuracy</p>
+<p class="p_Normal">Test exception priority and precedence</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 10.2: Stress Testing</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Test nested exception handling</p>
+<p class="p_Normal">Validate high-frequency exception scenarios</p>
+<p class="p_Normal">Test exception handling under resource constraints</p>
+<p class="p_Normal">Verify exception handling during edge cases</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Task 10.3: Performance Validation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Measure exception handling overhead</p>
+<p class="p_Normal">Optimize hot paths (TLB miss, common faults)</p>
+<p class="p_Normal">Profile exception handling performance</p>
+<p class="p_Normal">Compare against real Alpha hardware timing</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Integration Points</p>
+<p class="p_Normal">With CPU Core</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Instruction execution pipeline integration</p>
+<p class="p_Normal">Register file access during exception processing</p>
+<p class="p_Normal">Program counter management</p>
+<p class="p_Normal">Processor mode transitions</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">With Memory Subsystem</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">TLB management</p>
+<p class="p_Normal">Page table access</p>
+<p class="p_Normal">Memory protection enforcement</p>
+<p class="p_Normal">Address translation coordination</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">With I/O System</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Interrupt delivery mechanism</p>
+<p class="p_Normal">Device exception reporting</p>
+<p class="p_Normal">DMA fault handling</p>
+<p class="p_Normal">I/O address space protection</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">With Debugger Interface</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Breakpoint installation/removal</p>
+<p class="p_Normal">Single-step control</p>
+<p class="p_Normal">Register/memory inspection during exceptions</p>
+<p class="p_Normal">Exception event notification</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Documentation Deliverables</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Exception Handling Specification - Formal specification of all exception types and behaviors</p>
+<p class="p_Normal">PALcode Calling Convention - Register usage and parameter passing rules</p>
+<p class="p_Normal">Exception Priority Matrix - Priority and precedence rules for simultaneous exceptions</p>
+<p class="p_Normal">Timing Diagrams - Exception entry/exit timing and pipeline behavior</p>
+<p class="p_Normal">Test Specification - Comprehensive test cases for validation</p>
+<p class="p_Normal">Performance Characterization - Expected performance metrics and optimization opportunities</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Open Questions to Resolve</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Should the emulator support precise vs. imprecise exceptions for FP operations?</p>
+<p class="p_Normal">What level of hardware interrupt simulation is required?</p>
+<p class="p_Normal">Should exception handling be optimized for common cases (e.g., TLB misses)?</p>
+<p class="p_Normal">How should exceptions during PALcode execution be handled?</p>
+<p class="p_Normal">What debugging features should be built into the exception system?</p>
+<p class="p_Normal">Should the emulator support exception injection for testing purposes?</p>
+<p class="p_Normal">How should the emulator handle exceptions that can't occur in software (e.g., machine check)?</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

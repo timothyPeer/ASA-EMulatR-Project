@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Appendix &gt; Interrupt Hander - Best Practices&nbsp;</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="Best Practices,Deadlock,Interrupt, Deadlock,Interrupt, LiveLock,Interrupt, WaitCondition,Interrupt, Wakeup,Interrupts,IRQ,LiveLock,QAtomic,QMutex,QWaitCondition" />
+   <meta name="description" content="Overview: &nbsp;Correct interrupt handling is crucial to SMP, device, PALcode, and OS stability. This guide captures best practices for structuring all AlphaCPU interrupt and wakeup..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "interrupt-hander---best-practi.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Interrupt Hander - Best Practices </span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?interrupt-hander---best-practi.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      Appendix&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Interrupt Hander - Best Practices </span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="compiler-options.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="conversion-helper-functions.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Overview:</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Correct interrupt handling is crucial to SMP, device, PALcode, and OS stability. This guide captures best practices for structuring all AlphaCPU interrupt and wakeup handlers—whether for device IRQ, IPI, broadcast, SIRR, or context-sensitive events—using Qt (QAtomic, QMutex, QWaitCondition) and modern C++.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><strong style="font-weight: bold;">ALWAYS Wake the CPU First (WTINT/Wait-for-Interrupt Semantics)</strong></p>
+<p class="p_Normal">-----------------------------------------------------------------</p>
+<p class="p_Normal">• Every handler MUST start by clearing the &quot;waiting for interrupt&quot; (WTINT) flag and waking all waiters before any other logic.</p>
+<p class="p_Normal">• This ensures that CPUs halted in WTINT (by PALcode or idle loops) immediately resume on ANY interrupt delivery.</p>
+<p class="p_Normal">• Failure to wake first can deadlock the CPU, even if a valid interrupt arrives.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><strong class="f_CodeExample" style="font-weight: bold;">Example:</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">--------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;AlphaCPU::handleInterrupt(int&nbsp;cpuId,&nbsp;quint64&nbsp;vector,&nbsp;int&nbsp;ipl)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wakeIfWaiting();&nbsp;//&nbsp;Always&nbsp;FIRST!</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(cpuId&nbsp;!=&nbsp;m_cpuId)&nbsp;return;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!canDeliverInterrupts())&nbsp;return;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;...&nbsp;process&nbsp;or&nbsp;deliver&nbsp;the&nbsp;interrupt&nbsp;...</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;AlphaCPU::wakeIfWaiting()</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(m_waitingForInterrupt.fetchAndStoreOrdered(false))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QMutexLocker&nbsp;locker(&amp;m_mutexWaitCondition);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_resumeCondition.wakeAll();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m_interruptCondition.wakeAll();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal"><strong style="font-weight: bold;">2. Keep Handlers Short, Deterministic, and Non-Blocking</strong></p>
+<p class="p_Normal">• Perform only wakeup, validation, and handoff to main interrupt delivery.</p>
+<p class="p_Normal">• Do NOT perform long-running, blocking, or device I/O work inside handlers.</p>
+<p class="p_Normal">• Return early on &quot;not for me&quot;, masking, or spurious delivery.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">3. Validate Target and Deliverability AFTER Wakeup</strong></p>
+<p class="p_Normal">• Validate that the interrupt is for the correct CPU (if applicable).</p>
+<p class="p_Normal">• Check that interrupts are not masked or disabled (canDeliverInterrupts()).</p>
+<p class="p_Normal">• Build and deliver the appropriate InterruptRequest or equivalent.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">4. ALWAYS Use Mutexes When Waking WaitConditions</strong></p>
+<p class="p_Normal">• Qt requires that QMutex be locked before calling wakeAll() on a QWaitCondition.</p>
+<p class="p_Normal">• Always lock the same mutex for all corresponding wait/wake sites.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">5. Pass Context Parameters with Care</strong></p>
+<p class="p_Normal">• For context or device-specific interrupts, always pass context as quintptr, and restore as pointer only at the final delivery site (using reinterpret_cast).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">6. Use Strong Logging for Debug and Race Analysis</strong></p>
+<p class="p_Normal">• Log every handled interrupt with CPU#, vector, IPL, and any key delivery data.</p>
+<p class="p_Normal">• Use WARN or DEBUG level logs for all unexpected or out-of-band cases.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">7. Minimize Duplicate Logic with Helper Methods</strong></p>
+<p class="p_Normal">• Factor common code (like wakeIfWaiting()) into protected methods.</p>
+<p class="p_Normal">• Update in one place if future design changes are needed.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">8. Broadcast Handling: Wake First, Then Filter</strong></p>
+<p class="p_Normal">• Even if a broadcast interrupt is not intended for this CPU, wake up from WTINT (WTINT_InstructionGrain()).</p>
+<p class="p_Normal">• Then, filter/deliver or discard as needed.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">9. Deadlock and Livelock Prevention</strong></p>
+<p class="p_Normal">• Never leave a CPU in WTINT state after an interrupt.</p>
+<p class="p_Normal">• Always guarantee at least one wakeup per deliverable interrupt.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">Reference:</span></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">• Alpha AXP System Reference Manual, Vol I &amp; II, Ch. 14 (Exception/Interrupt)</p>
+<p class="p_Normal">• DEC OSF/1, OpenVMS, WinNT Alpha PALcode &amp; SMP design notes</p>
+<p class="p_Normal">• Qt 6 QAtomicInteger, QMutex, QWaitCondition best practices</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">Summary&nbsp;Table:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">--------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;Handler&nbsp;Step&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|----------------------|----------------------------------------------|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;1.&nbsp;Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;call&nbsp;wakeIfWaiting()&nbsp;FIRST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;2.&nbsp;Validate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;check&nbsp;cpuId,&nbsp;canDeliverInterrupts(),&nbsp;etc.&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;3.&nbsp;Deliver/Handoff&nbsp;&nbsp;&nbsp;|&nbsp;build&nbsp;InterruptRequest,&nbsp;call&nbsp;deliverInterrupt|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;4.&nbsp;Log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;DEBUG_LOG/WARN_LOG&nbsp;with&nbsp;CPU/vector/IPL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

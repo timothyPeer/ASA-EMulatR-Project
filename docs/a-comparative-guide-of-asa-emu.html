@@ -1,0 +1,319 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Appendix &gt; A Virtual-Physical Hardware Guide of ASA EmulatR to Windows/Linux&nbsp;</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Comparative Guide: Alpha (ASA EmulatR) vs. Windows &amp; Linux Bus Models" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "a-comparative-guide-of-asa-emu.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">A Virtual-Physical Hardware Guide of ASA EmulatR to Windows/Linux </span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?a-comparative-guide-of-asa-emu.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      Appendix&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">A Virtual-Physical Hardware Guide of ASA EmulatR to Windows/Linux </span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="ready-to-use-configuration.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="exception-handling-reference.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;"> &nbsp; &nbsp; Comparative Guide: Alpha (ASA EmulatR) vs. Windows &amp; Linux Bus Models</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">I. Architectural Context</span></h3>
+<p class="p_Normal">-------------------------</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Alpha/ASA Bus Hierarchy:</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">AlphaServer and related DEC hardware (and thus the ASA EmulatR configuration) represent the bus/device tree with explicit, deeply nested topology:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;cabinet (cabN) &gt; drawer (drwN) &gt; io (ioN) &gt; hose (hoseN) &gt; bus (busN) &gt; slot (slotN) &gt; function</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Every device** is assigned a *precise physical* or *logical* path.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>This reflects physical system backplanes, modular cabinets, multi-bus/bridge layouts.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Example (Alpha ES40, GS1280):</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;cab0/drw0/io0/hose0/bus3/slot1/function0</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Windows &amp; Linux Bus Models:</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">Modern Windows and Linux enumerate devices primarily by the **PCI domain:bus:slot:function** tuple, typically expressed as:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;domain:bus:device.function</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Domain:** Rarely used outside multi-root/NUMA systems (often 0000).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Bus:** PCI bus number (00–FF, hex).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Device/Slot:** PCI slot/device number on that bus (0–1F, hex).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Function:** Sub-device for multifunction cards (0–7).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Device mapping is *flat* after PCIe root complexes or bridges.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Example (common format): &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span> &nbsp; &nbsp;- Windows: &nbsp;PCI Bus 3, Device 1, Function 0 &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span> &nbsp; &nbsp;- Linux: &nbsp; &nbsp;0000:03:01.0</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">II. Concrete Comparative Examples</span></h3>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">1. **Alpha/ASA EmulatR Device Configuration**</strong></p>
+<p class="p_Normal">---------------------------------------------</p>
+<p class="p_Normal">Example: SCSI controller in ES40 I/O bus layout</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;[Device.PKA0]</p>
+<p class="p_Normal"> &nbsp; &nbsp;type = SCSI</p>
+<p class="p_Normal"> &nbsp; &nbsp;location = cab0/drw0/io0/hose0/bus3/slot1</p>
+<p class="p_Normal"> &nbsp; &nbsp;pci_bus = 3</p>
+<p class="p_Normal"> &nbsp; &nbsp;pci_slot = 1</p>
+<p class="p_Normal"> &nbsp; &nbsp;pci_function = 0</p>
+<p class="p_Normal"> &nbsp; &nbsp;scsi_id = 7</p>
+<p class="p_Normal"> &nbsp; &nbsp;irq = auto</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**location** specifies the deep system path (matches DEC/Compaq doc diagrams).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**pci_bus/slot/function** correspond to hardware PCI identifiers.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">2. **Windows Device Model**</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Windows Device Manager shows device as:</p>
+<p class="p_Normal"> &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;PCI bus 3, device 1, function 0</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">- Registry path (simplified):</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\PCI\VEN_1077&amp;DEV_1020&amp;SUBSYS...&nbsp;(QLogic&nbsp;SCSI&nbsp;example)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Device detail view:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;Bus Number: 3</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;Device Number: 1</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;Function Number: 0</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**No direct &quot;cabinet/drawer/hose&quot;** mapping is visible; only bus/device/function.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">3. **Linux Device Model**</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Use `lspci` for PCI devices:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$&nbsp;lspci&nbsp;-nn</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;03:01.0&nbsp;SCSI&nbsp;storage&nbsp;controller:&nbsp;QLogic&nbsp;Corp.&nbsp;ISP1020&nbsp;Fast-wide&nbsp;SCSI&nbsp;(rev&nbsp;01)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">- Tree output (`lspci -tv`):</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;+-01.0-[03]----01.0 &nbsp;QLogic ISP1020 Fast-wide SCSI</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">- Sysfs path:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;/sys/bus/pci/devices/0000:03:01.0/</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Domain (0000)** is usually omitted except on systems with multiple PCI domains (rare on desktops).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Again, no explicit nesting**—the topology is flattened after enumeration.</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">III. Mapping: How They Correspond</span></h3>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">Alpha/ASA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;Windows/Linux</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">------------------&nbsp;|&nbsp;&nbsp;-------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">cabN/drwN/ioN/...&nbsp;&nbsp;|&nbsp;&nbsp;(Not&nbsp;exposed;&nbsp;reflects&nbsp;chassis/backplane)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">hoseN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;(Rare;&nbsp;sometimes&nbsp;maps&nbsp;to&nbsp;a&nbsp;PCI&nbsp;domain&nbsp;or&nbsp;root&nbsp;complex)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">busN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;PCI&nbsp;bus&nbsp;number</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">slotN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;PCI&nbsp;device/slot&nbsp;number</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;PCI&nbsp;function</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The **Alpha hierarchy** is superset; it maps onto the bus/slot/function numbers that Windows and Linux expose, but also encodes *physical* backplane structure.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The **PCI tuple** (bus, slot, function) is universal and matches the `pci_bus`, &nbsp;`pci_slot`, and `pci_function` in your ASAEmulatr.ini.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>**Nested fields** (cabinet, drawer, hose) are relevant for:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Accurate device enumeration/ordering in Alpha OS (OpenVMS, Tru64, SRM).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Large SMP/multi-cabinet platforms (GS1280, ES47, etc.)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Host OS (Windows/Linux) does **not** expose these; physical info is lost.</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">IV. Illustrative Example Table</span></h3>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">Alpha/ASA&nbsp;EmulatR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;Windows&nbsp;Device&nbsp;Manager&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;Linux&nbsp;lspci/sysfs</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">--------------------------------------------------+---------------------------------+----------------------------------</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">cab0/drw0/io0/hose0/bus3/slot1/function0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;PCI&nbsp;bus&nbsp;3,&nbsp;device&nbsp;1,&nbsp;function&nbsp;0&nbsp;|&nbsp;0000:03:01.0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_bus=3,&nbsp;pci_slot=1,&nbsp;pci_function=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Bus=3,&nbsp;Device=1,&nbsp;Function=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;/sys/bus/pci/devices/0000:03:01.0/</span></p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">V. Example ASAEmulatr.ini vs. Real Hardware</span></h3>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">**ASAEmulatr.ini:**</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;[Device.PKA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;type=SCSI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;controller_type=KZPBA</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;location=cab0/drw0/io0/hose0/bus3/slot1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;pci_bus=3</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;pci_slot=1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;pci_function=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;scsi_id=7</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;irq=56</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_Normal">**Windows/LINUX:**</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Device as seen in Device Manager or lspci:</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;PCI bus 3, device 1, function 0</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">VI. Additional Notes</span></h3>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>On real Alpha hardware, *console commands* like `SHOW DEVICE` or `SHOW CONFIG` &nbsp;will report full cabinet/drawer/hose hierarchy. On Windows/Linux, only bus/slot/function is visible.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Large Alpha servers use this hierarchy to support &gt;32 PCI buses or &gt;256 slots, far beyond most x86 systems.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>For accurate emulation or OS install/boot testing, configure both the full Alpha location **and** the correct PCI bus/slot/function.</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">References:</span></p>
+<p class="p_Normal">- Alpha System Architecture (ASA), Vol. I/II (esp. Ch. 12: PCI, Ch. 13: I/O Buses)</p>
+<p class="p_Normal">- Windows Device Manager PCI documentation</p>
+<p class="p_Normal">- Linux `lspci`, `sysfs` hardware documentation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

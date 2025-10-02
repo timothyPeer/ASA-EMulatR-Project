@@ -1,0 +1,678 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; Platform Architectures &gt; SSE4.1 Floating-Point Optimization Reference</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="__M128,__M128D,_Mm_Fround_Cur_Direction,_Mm_Fround_No_Exc,_Mm_Fround_To_Nearest_Int,_Mm_Fround_To_Neg_Inf,_Mm_Fround_To_Pos_Inf,_Mm_Fround_To_Zero,Addition,Alpha Axp,Alpha Trap Semantics,Arithmetic Operations,Cpu Support,Cycle Latency,Data Conversion Intrinsics,Division,Double-Precision Intrinsics,Exception Detection,Exception Trapping,Fallback,Float,Floating-Point Arithmetic,Global Fpu State,Immintrin.H,Instruction,Intel,Intel, Fesetround,Multiplication,Rounding,Rounding Mode,Runtime,Scalar Operations,Single-Precision Intrinsics,Sse4.1,Streaming Simd Extensions 4.1,Subtraction,Usage" />
+   <meta name="description" content="This document provides a reference for using SSE4.1 intrinsics to optimize floating-point arithmetic in the Alpha AXP CPU emulator. SSE4.1 (Streaming SIMD Extensions 4.1) was..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "sse4-optimizations.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">SSE4.1 Floating-Point Optimization Reference</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?sse4-optimizations.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">SSE4.1 Floating-Point Optimization Reference</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="fpcr---32-bit-.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="sse4-rounding-modes.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<p class="p_Normal">This document provides a reference for using SSE4.1 intrinsics to optimize floating-point arithmetic in the Alpha AXP CPU emulator. SSE4.1 (Streaming SIMD Extensions 4.1) was introduced by Intel in 2006 and provides hardware-accelerated floating-point operations with explicit rounding mode control.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">What SSE4.1 Provides</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Capabilities</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Fast arithmetic operations** with explicit rounding mode control</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Single instruction** for operation + rounding (no control register modification)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>1-4 cycle latency** vs 30-50 cycles for `fesetround()` approach</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Per-operation rounding** without affecting global FPU state</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Limitations</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>No exception detection** - you must manually inspect results</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>No exception trapping** - Alpha trap semantics must be implemented separately</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Single scalar operations** - one value at a time (not vectorized in our use case)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Requires SSE4.1 CPU support** - must detect at runtime and provide fallback</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Core Intrinsics</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Header</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">#include&nbsp;&lt;immintrin.h&gt;&nbsp;&nbsp;//&nbsp;SSE4.1&nbsp;intrinsics</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Single-Precision (float) Intrinsics</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Addition&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128&nbsp;_mm_add_round_ss(__m128&nbsp;a,&nbsp;__m128&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Subtraction&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128&nbsp;_mm_sub_round_ss(__m128&nbsp;a,&nbsp;__m128&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Multiplication&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128&nbsp;_mm_mul_round_ss(__m128&nbsp;a,&nbsp;__m128&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Division&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128&nbsp;_mm_div_round_ss(__m128&nbsp;a,&nbsp;__m128&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Double-Precision (double) Intrinsics</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Addition&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128d&nbsp;_mm_add_round_sd(__m128d&nbsp;a,&nbsp;__m128d&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Subtraction&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128d&nbsp;_mm_sub_round_sd(__m128d&nbsp;a,&nbsp;__m128d&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Multiplication&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128d&nbsp;_mm_mul_round_sd(__m128d&nbsp;a,&nbsp;__m128d&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Division&nbsp;with&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128d&nbsp;_mm_div_round_sd(__m128d&nbsp;a,&nbsp;__m128d&nbsp;b,&nbsp;int&nbsp;rounding);</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Rounding Mode Constants</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">_MM_FROUND_TO_NEAREST_INT&nbsp;&nbsp;//&nbsp;Round&nbsp;to&nbsp;nearest,&nbsp;ties&nbsp;to&nbsp;even&nbsp;(RN)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">_MM_FROUND_TO_NEG_INF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Round&nbsp;toward&nbsp;-∞&nbsp;(RM)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">_MM_FROUND_TO_POS_INF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Round&nbsp;toward&nbsp;+∞&nbsp;(RP)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">_MM_FROUND_TO_ZERO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Round&nbsp;toward&nbsp;zero&nbsp;-&nbsp;chopped&nbsp;(RZ)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">_MM_FROUND_CUR_DIRECTION&nbsp;&nbsp;&nbsp;//&nbsp;Use&nbsp;current&nbsp;MXCSR&nbsp;setting</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">_MM_FROUND_NO_EXC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Suppress&nbsp;exceptions&nbsp;(should&nbsp;be&nbsp;ORed)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">**<strong style="font-weight: bold;">Standard usage:** Always OR with `_MM_FROUND_NO_EXC`:</strong></p>
+<p class="p_CodeExample"><span class="f_CodeExample">int&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_ZERO&nbsp;|&nbsp;_MM_FROUND_NO_EXC;</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Data Conversion Intrinsics</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;float&nbsp;to&nbsp;__m128</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128&nbsp;_mm_set_ss(float&nbsp;value);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;__m128&nbsp;to&nbsp;float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">float&nbsp;_mm_cvtss_f32(__m128&nbsp;value);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;double&nbsp;to&nbsp;__m128d</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">__m128d&nbsp;_mm_set_sd(double&nbsp;value);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;__m128d&nbsp;to&nbsp;double</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">double&nbsp;_mm_cvtsd_f64(__m128d&nbsp;value);</span></p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Complete Usage Example</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Single-Precision Addition with Chopped Rounding</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">float&nbsp;add_chopped(float&nbsp;a,&nbsp;float&nbsp;b)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Convert&nbsp;float&nbsp;to&nbsp;SSE&nbsp;register</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__m128&nbsp;va&nbsp;=&nbsp;_mm_set_ss(a);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__m128&nbsp;vb&nbsp;=&nbsp;_mm_set_ss(b);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Perform&nbsp;addition&nbsp;with&nbsp;chopped&nbsp;(toward&nbsp;zero)&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_ZERO&nbsp;|&nbsp;_MM_FROUND_NO_EXC;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__m128&nbsp;vr&nbsp;=&nbsp;_mm_add_round_ss(va,&nbsp;vb,&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Extract&nbsp;result&nbsp;back&nbsp;to&nbsp;float</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;_mm_cvtss_f32(vr);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Double-Precision Multiplication with Dynamic Rounding</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">double&nbsp;mul_dynamic(double&nbsp;a,&nbsp;double&nbsp;b,&nbsp;FpRoundingMode&nbsp;mode)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__m128d&nbsp;va&nbsp;=&nbsp;_mm_set_sd(a);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__m128d&nbsp;vb&nbsp;=&nbsp;_mm_set_sd(b);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Map&nbsp;Alpha&nbsp;rounding&nbsp;mode&nbsp;to&nbsp;SSE&nbsp;constant</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;rounding;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;switch&nbsp;(mode)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;FpRoundingMode::RN:&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_NEAREST_INT&nbsp;|&nbsp;_MM_FROUND_NO_EXC;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;FpRoundingMode::RM:&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_NEG_INF&nbsp;|&nbsp;_MM_FROUND_NO_EXC;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;FpRoundingMode::RP:&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_POS_INF&nbsp;|&nbsp;_MM_FROUND_NO_EXC;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;FpRoundingMode::RZ:&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_ZERO&nbsp;|&nbsp;_MM_FROUND_NO_EXC;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rounding&nbsp;=&nbsp;_MM_FROUND_TO_NEAREST_INT&nbsp;|&nbsp;_MM_FROUND_NO_EXC;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__m128d&nbsp;vr&nbsp;=&nbsp;_mm_mul_round_sd(va,&nbsp;vb,&nbsp;rounding);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;_mm_cvtsd_f64(vr);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">&nbsp;</span></h3>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">CPU Feature Detection</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">CPUID Check</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">#include&nbsp;&lt;cpuid.h&gt;&nbsp;&nbsp;//&nbsp;GCC/Clang</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;hasSSE41()&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;unsigned&nbsp;int&nbsp;eax,&nbsp;ebx,&nbsp;ecx,&nbsp;edx;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(__get_cpuid(1,&nbsp;&amp;eax,&nbsp;&amp;ebx,&nbsp;&amp;ecx,&nbsp;&amp;edx))&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(ecx&nbsp;&amp;&nbsp;bit_SSE4_1)&nbsp;!=&nbsp;0;&nbsp;&nbsp;//&nbsp;ECX&nbsp;bit&nbsp;19</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;false;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">MSVC Version</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">#include&nbsp;&lt;intrin.h&gt;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">bool&nbsp;hasSSE41()&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;cpuInfo[4];</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;__cpuid(cpuInfo,&nbsp;1);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;(cpuInfo[2]&nbsp;&amp;&nbsp;(1&nbsp;&lt;&lt;&nbsp;19))&nbsp;!=&nbsp;0;&nbsp;&nbsp;//&nbsp;ECX&nbsp;bit&nbsp;19</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">FPArithmetic Helper Functions</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Provided Functions</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The `FPArithmetic` namespace provides optimized wrappers:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">namespace&nbsp;FPArithmetic&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Initialize&nbsp;CPU&nbsp;feature&nbsp;detection&nbsp;(call&nbsp;once&nbsp;at&nbsp;startup)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;CPUFeatures::initialize();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Single-precision&nbsp;operations</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;add(float&nbsp;a,&nbsp;float&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;sub(float&nbsp;a,&nbsp;float&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;mul(float&nbsp;a,&nbsp;float&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;div(float&nbsp;a,&nbsp;float&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Double-precision&nbsp;operations</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;add(double&nbsp;a,&nbsp;double&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;sub(double&nbsp;a,&nbsp;double&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;mul(double&nbsp;a,&nbsp;double&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;div(double&nbsp;a,&nbsp;double&nbsp;b,&nbsp;FpRoundingMode&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Usage in Instruction Grains</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Initialize: </strong></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">int main(int argc, char* argv[]) {</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;&nbsp; &nbsp;// Initialize CPU feature detection</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;&nbsp; &nbsp;FPArithmetic::CPUFeatures::initialize();</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;&nbsp; &nbsp;</span></p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">&nbsp;&nbsp; &nbsp;// ASA-EmulatR initialization...</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span style="font-size: 12px; font-family: 'Cascadia Mono'; background-color: #ffffff;">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;ADDS_C_InstructionGrain::execute(...)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Convert&nbsp;G_floating&nbsp;to&nbsp;IEEE&nbsp;single</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;srcA&nbsp;=&nbsp;static_cast&lt;float&gt;(gA.toDouble());</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;srcB&nbsp;=&nbsp;static_cast&lt;float&gt;(gB.toDouble());</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Perform&nbsp;addition&nbsp;with&nbsp;chopped&nbsp;rounding</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Uses&nbsp;SSE4.1&nbsp;if&nbsp;available,&nbsp;fesetround()&nbsp;otherwise</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;float&nbsp;result&nbsp;=&nbsp;FPArithmetic::add(srcA,&nbsp;srcB,&nbsp;FpRoundingMode::RZ);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Continue&nbsp;with&nbsp;exception&nbsp;checking...</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">void&nbsp;ADD_D_InstructionGrain::execute(...)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Dynamic&nbsp;rounding&nbsp;from&nbsp;FPCR</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;FpRoundingMode&nbsp;roundMode&nbsp;=&nbsp;fpcr-&gt;getRoundingMode();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;srcA&nbsp;=&nbsp;gA.toDouble();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;srcB&nbsp;=&nbsp;gB.toDouble();</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Uses&nbsp;FPCR&nbsp;rounding&nbsp;mode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;double&nbsp;result&nbsp;=&nbsp;FPArithmetic::add(srcA,&nbsp;srcB,&nbsp;roundMode);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Continue&nbsp;with&nbsp;exception&nbsp;checking...</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Alpha Instruction Qualifier Mapping</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Rounding Qualifiers (SSE4.1 Optimizable)</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Alpha Qualifier</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Meaning</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">FpRoundingMode</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">SSE4.1 Constant</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/C or _C</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Chopped (toward zero)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">RZ</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">_MM_FROUND_TO_ZERO</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/M or _M</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Minus infinity (down)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">RM</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">_MM_FROUND_TO_NEG_INF</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/D or _D</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Dynamic (use FPCR)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">fpcr-&gt;getRoundingMode()</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Varies</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/P</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Plus infinity (up)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">RP</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">_MM_FROUND_TO_POS_INF</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">(none)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Normal (nearest)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">RN</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">_MM_FROUND_TO_NEAREST_INT</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Trap Qualifiers (NOT SSE4.1 Optimizable)</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">These qualifiers control exception behavior and must be implemented in grain logic:</p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Alpha Qualifier</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Meaning</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Implementation</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/U</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Underflow enable</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Check result, trap if underflow</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/S</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Software completion</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Disable inexact traps</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SU</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Software + underflow</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Complex trap logic</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/SUI</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Software + underflow + inexact</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Complex trap logic</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Exception Detection</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Callouts"><span class="f_Callouts">**Critical:** SSE4.1 does NOT detect exceptions. You must manually check results:</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;After&nbsp;arithmetic&nbsp;operation</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">dt_sfloat&nbsp;result&nbsp;=&nbsp;dt_sfloat::fromFloat(ieeeResult);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Manual&nbsp;exception&nbsp;checks&nbsp;required:</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(result.isReservedOperand())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Invalid&nbsp;operation&nbsp;(NaN)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(StatusBit::InvalidOpOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(result.isOverflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Overflow&nbsp;(exponent&nbsp;=&nbsp;0xFF)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(StatusBit::OverflowOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(result.isUnderflow())&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Underflow&nbsp;(denormal:&nbsp;exp=0,&nbsp;frac!=0)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(StatusBit::UnderflowOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Inexact&nbsp;detection&nbsp;requires&nbsp;comparing&nbsp;exact&nbsp;vs&nbsp;rounded&nbsp;result</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">double&nbsp;exactSum&nbsp;=&nbsp;static_cast&lt;double&gt;(srcA)&nbsp;+&nbsp;static_cast&lt;double&gt;(srcB);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">if&nbsp;(static_cast&lt;double&gt;(result)&nbsp;!=&nbsp;exactSum)&nbsp;{</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;status-&gt;setFlag(StatusBit::InexactOccurred,&nbsp;true);</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">}</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Performance Comparison</span></p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Method</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Cycles (approx)</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Notes</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">SSE4.1 intrinsics</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">1-4</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Hardware accelerated</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">fesetround()</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">30-50</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Control register modification overhead</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Manual rounding</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">10-20</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Software implementation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">For a CPU emulator executing millions of FP operations, SSE4.1 provides significant speedup.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Compiler Flags</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">GCC/Clang</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Enable SSE4.1</strong></p>
+<p class="p_Normal">g++ -msse4.1 -o emulator emulator.cpp</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Auto-detect CPU features</strong></p>
+<p class="p_Normal">g++ -march=native -o emulator emulator.cpp</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> <strong style="font-weight: bold;">MSVC</strong></p>
+<p class="p_Normal"><strong style="font-weight: bold;"> SSE4.1 enabled by default on x64</strong></p>
+<p class="p_Normal">cl /O2 emulator.cpp</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_Heading3">Platform Compatibility</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Intel:** Core 2 &quot;Penryn&quot; (2008) and later</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>AMD:** Phenom II (2009) and later &nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>x86-64:** Nearly universal (2008+)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>ARM/RISC-V:** Not supported, uses `fesetround()` fallback</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Best Practices</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">1. **Always initialize feature detection** at program startup</p>
+<p class="p_Normal">2. **Always OR rounding mode with `_MM_FROUND_NO_EXC`**</p>
+<p class="p_Normal">3. **Manually check all exceptions** after arithmetic</p>
+<p class="p_Normal">4. **Provide `fesetround()` fallback** for portability</p>
+<p class="p_Normal">5. **Test on both SSE4.1 and non-SSE4.1 paths**</p>
+<p class="p_Normal">6. **Don't assume SSE4.1 availability** - detect at runtime</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> <span class="f_Heading3">Common Pitfalls</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Incorrect: Assuming exception detection</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">float result = FPArithmetic::add(a, b, FpRoundingMode::RZ);</p>
+<p class="p_Normal">// SSE4.1 will NOT tell you if overflow occurred!</p>
+<p class="p_Normal">```</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Correct: Manual exception checking</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">float result = FPArithmetic::add(a, b, FpRoundingMode::RZ);</p>
+<p class="p_Normal">dt_sfloat sResult = dt_sfloat::fromFloat(result);</p>
+<p class="p_Normal">if (sResult.isOverflow()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Handle overflow</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> Incorrect: Forgetting _MM_FROUND_NO_EXC</p>
+<p class="p_Normal">__m128 vr = _mm_add_round_ss(va, vb, _MM_FROUND_TO_ZERO); // May trigger x86 FP exceptions</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Correct: Suppress x86 exceptions</p>
+<p class="p_Normal">__m128 vr = _mm_add_round_ss(va, vb, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC);</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> Incorrect: Compile-time only check</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">#ifdef __SSE4_1__</p>
+<p class="p_Normal"> &nbsp; &nbsp;// This only checks if compiler supports SSE4.1, not CPU!</p>
+<p class="p_Normal">#endif</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Correct: Runtime CPU detection</p>
+<p class="p_Normal">if (CPUFeatures::hasSSE41()) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// CPU actually supports SSE4.1</p>
+<p class="p_Normal">}</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_SeeAlso">References</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">- Intel Intrinsics Guide: https://www.intel.com/content/www/us/en/docs/intrinsics-guide/</p>
+<p class="p_Normal">- SSE4.1 Specification: Intel® 64 and IA-32 Architectures Software Developer's Manual</p>
+<p class="p_Normal">- Alpha Architecture Reference Manual: Section 4.7 (Floating-Point Instructions)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_SeeAlso">See Also</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">- `FP_SEE4_Arithmetic.h` - Complete implementation</p>
+<p class="p_Normal">- `FpcrRegister.h` - Alpha FPCR register emulation</p>
+<p class="p_Normal">- `dt_sfloat.h`, `dt_gfloat.h` - Alpha floating-point data types</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

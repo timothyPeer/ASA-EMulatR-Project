@@ -1,13 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Exceptions, Faults, Interrupts, and MachineChecks &gt; Interrupts &gt; Interrupt Life-Cycle</title>
+   <title>Introduction &gt; Platform Architectures &gt; Alpha on ASA-EmulatR &gt; Exceptions, Faults, Interrupts, and MachineChecks &gt; Interrupts &gt; Configuration and Setup &gt; Interrupt Life-Cycle</title>
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
-   <meta name="keywords" content="" />
-   <meta name="description" content="// External device/timer/etc raises interrupt InterruptController::PostInterrupt(InterruptLevel::IPL_CLOCK, TIMER_VECTOR, context) ↓ // Controller queues interrupt in QMultiHash" />
+   <meta name="keywords" content="AlphaCPU,Device Manager,Interrupt,InterruptRequest.h,IPL,IRQ,IRQController,MMIO,SMP" />
+   <meta name="description" content="The ASA-EmulatR processes interrupts using the following general flow:" />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
 
@@ -105,16 +105,16 @@
       <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?interrupt-life-cycle.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
       <p class="crumbs"><b>Navigation:</b>&nbsp;
       
-      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="exceptionsinterruptsandmachinechecks.html">Exceptions, Faults, Interrupts, and MachineChecks</a> &gt; <a href="interrupts-exceptions-faults-machinechecks.html">Interrupts</a>&nbsp;&gt;</p>
+      <a href="introduction.html">Introduction</a> &gt; Platform Architectures &gt; <a href="architecture.html">Alpha on ASA-EmulatR</a> &gt; <a href="exceptionsinterruptsandmachinechecks.html">Exceptions, Faults, Interrupts, and MachineChecks</a> &gt; <a href="interrupts-exceptions-faults-machinechecks.html">Interrupts</a> &gt; <a href="interrupts---configuration-and.html">Configuration and Setup</a>&nbsp;&gt;</p>
    
       <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Interrupt Life-Cycle</span></h1>
 
     </td>
     <td class="topichead" id="idnav">
       
-      <a href="interrupts-exceptions-faults-machinechecks.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
-      <a href="interrupts-exceptions-faults-machinechecks.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="machine-check---hardware-error.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="interrupts---configuration-and.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="interrupts---configuration-and.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="irq-interrupt-fabric.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -127,38 +127,175 @@
 <!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
 
 <!--ZOOMRESTART-->
-<p class="p_Normal">// External device/timer/etc raises interrupt</p>
+<p class="p_Normal">The ASA-EmulatR processes interrupts using the following general flow:</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">External device/timer/etc raises interrupt</p>
 <p class="p_Normal">InterruptController::PostInterrupt(InterruptLevel::IPL_CLOCK, TIMER_VECTOR, context)</p>
 <p class="p_Normal">↓</p>
-<p class="p_Normal">// Controller queues interrupt in QMultiHash</p>
+<p class="p_Normal"> Controller queues interrupt in QMultiHash</p>
 <p class="p_Normal">interrupt_queue.insert(priority_key, request)</p>
 <p class="p_Normal">↓</p>
-<p class="p_Normal">// If interrupt can be delivered (IPL &gt; current IPL)</p>
+<p class="p_Normal">If interrupt can be delivered (IPL &gt; current IPL)</p>
 <p class="p_Normal">SignalInterruptPending()</p>
 <p class="p_Normal">↓</p>
-<p class="p_Normal">// Sets IP bit and emits signal</p>
+<p class="p_Normal">Sets IP bit and emits signal</p>
 <p class="p_Normal">emit interruptPending()</p>
 <p class="p_Normal">↓</p>
-<p class="p_Normal">// CPU receives signal and checks for deliverable interrupts</p>
+<p class="p_Normal">CPU receives signal and checks for deliverable interrupts</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">then - </p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// 1. Device raises interrupt</p>
+<p class="p_Normal">1. Device raises interrupt</p>
 <p class="p_Normal">timer-&gt;timeout() → PostInterrupt(IPL_CLOCK, TIMER_VECTOR, nullptr)</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// 2. Controller signals CPU &nbsp;</p>
+<p class="p_Normal">2. Controller signals CPU &nbsp;</p>
 <p class="p_Normal">SignalInterruptPending() → emit interruptPending()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// 3. CPU services interrupt</p>
+<p class="p_Normal">3. CPU services interrupt</p>
 <p class="p_Normal">AlphaCpu::onInterruptPending() → deliverInterrupt()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// 4. Software services interrupt</p>
+<p class="p_Normal">4. Software services interrupt</p>
 <p class="p_Normal">ISR runs → RTI instruction</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// 5. CPU returns from interrupt &nbsp;</p>
+<p class="p_Normal">5. CPU returns from interrupt &nbsp;</p>
 <p class="p_Normal">executeRTI() → SignalInterruptCheck()</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// 6. Cycle repeats for any newly deliverable interrupts</p>
+<p class="p_Normal">6. Cycle repeats for any newly deliverable interrupts</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;"> ASA EmulatR – IRQ Subsystem Architecture Diagram (ASCII, UTF-8)</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"> &nbsp; Illustrates wiring and API flow for: MMIO, IPI, AlphaCPU, PAL entrypoints</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"> &nbsp; Architecture Reference: Alpha System Reference Manual (ASA Vol II-A, §6.4)</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;- MMIO device interrupts: &nbsp; &nbsp; &nbsp;§6.4.4</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;- Interprocessor (IPI): &nbsp; &nbsp; &nbsp; &nbsp;§6.4.5</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;- Software interrupts: &nbsp; &nbsp; &nbsp; &nbsp; §6.4.1.2</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;- PALcode interrupt entry: &nbsp; &nbsp; §6.5</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp;- Machine Check, Power Fail: &nbsp; §6.4.7, §6.2.3</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">  <span class="f_SeeAlso"> Code References: </span> IRQController.h/cpp, InterruptRequest.h</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;MMIO&nbsp;Device&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;Timer&nbsp;]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;Other&nbsp;CPUs&nbsp;]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;sigInterruptRequest()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;sigTimeout()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;sigIPI()</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;+-------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+--------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;|&nbsp;InterruptFabric&nbsp;&nbsp;&nbsp;|&lt;-----&gt;|&nbsp;&nbsp;&nbsp;IRQController&nbsp;&nbsp;&nbsp;&nbsp;|&lt;------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;(QObject)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;(QObject)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;+---+-----------+---+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----+-----------+---+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sigDeliverInterruptToCpu()&nbsp;&nbsp;&nbsp;sigDeliverIPI()</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;+----------------+--------+&nbsp;&nbsp;&nbsp;+-----------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;|&nbsp;&nbsp;&nbsp;AlphaCPU[0..N]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;AlphaCPU[0..N]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;|&nbsp;(QObject,&nbsp;ISA&nbsp;core)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;(receives&nbsp;IPIs)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;+---------+---------------+&nbsp;&nbsp;&nbsp;+-----------+-----------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;PAL&nbsp;interrupt&nbsp;entry&nbsp;(CALL_PAL)&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleInterrupt()&nbsp;and&nbsp;PALcode</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(e.g.,&nbsp;raises&nbsp;new&nbsp;IPL,&nbsp;sets</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exception&nbsp;vectors,&nbsp;delivers</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;OS&nbsp;handler&nbsp;via&nbsp;SCB)</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;"> Key Data Flows / APIs:</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>MMIO/Device (sigInterruptRequest) --&gt; InterruptFabric::connectDevice() </p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>--&gt; IRQController::postDeviceInterrupt() --&gt; Enqueue/dispatch</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>System Timer (QTimer) --&gt; IRQController::processInterruptTick()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>IPI (sigIPI) --&gt; IRQController::postIPI() --&gt; sigDeliverIPI()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>AlphaCPU[ ]: slot for handleInterrupt(), handleIPI(), checkInterruptDelivery()</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>PAL: AlphaCPU invokes PAL entrypoints on interrupt delivery (see §6.5)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span> Machine Check/PowerFail: IRQController::postMachineCheck() (IPL 31/30)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Dispatch Process (Simplified):</strong></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">1. Device, MMIO, or software posts InterruptRequest to IRQController (via signals/slots).</p>
+<p class="p_Normal">2. IRQController enqueues InterruptRequest by (dstCpu, IPL).</p>
+<p class="p_Normal">3. On each timer tick (QTimer), IRQController emits sigDeliverInterruptToCpu() for deliverable requests (respects IPL, IE).</p>
+<p class="p_Normal">4. AlphaCPU receives and calls handleInterrupt(), which triggers PAL entry (interrupt vectoring and context switch as per ASA §6.5).</p>
+<p class="p_Normal">5. For IPI, sigDeliverIPI() directly calls AlphaCPU::handleIPI().</p>
+<p class="p_Normal">6. On interrupt completion, stats/latency recorded, pending bits updated.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">PAL Integration Points:</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Software interrupts: CALL_PAL MTPR_SIRR (Alpha AXP SRM §6.4.1.2)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>IPI: CALL_PAL MTPR_IPIR (SRM §6.4.5.1)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Machine Check: Delivered via PAL mechanism (§6.2.3, §6.5)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">IRQ Wiring and Signals</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Considerations</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-------------------------------------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYSTEM&nbsp;CLOCK&nbsp;(QTimer)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------------------------+---------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout()&nbsp;&nbsp;|&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----------+---------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;IRQController&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----------+---------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;+-------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-----------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;InterruptFabric&nbsp;&nbsp;|&lt;-----------+--------------+--+&nbsp;&nbsp;&nbsp;&nbsp;[Other&nbsp;Devices]&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sigDeliverInterruptToCpu()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;+-------------------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sigDeliverIPI()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MMIO&nbsp;&nbsp;&nbsp;-----------/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;connectDevice()&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sigInterruptRequest()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------------------------------------------------------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">+---------+-----+&nbsp;&nbsp;&nbsp;+-------+------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;AlphaCPU&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;AlphaCPU&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;...</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">|&nbsp;&nbsp;&nbsp;(ISA&nbsp;core)&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;(ISA&nbsp;core)&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">+----+----------+&nbsp;&nbsp;&nbsp;+-------+------+</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;PAL&nbsp;entry&nbsp;on&nbsp;IRQ/IPI&nbsp;|</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----------------------+</span></p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span><span class="f_CodeExample">&nbsp;The&nbsp;clock&nbsp;will&nbsp;execute&nbsp;from&nbsp;the&nbsp;AlphaSMPLauncher&nbsp;Class.&nbsp;&nbsp;HW&nbsp;clock&nbsp;interrupts&nbsp;will&nbsp;emit&nbsp;to&nbsp;all&nbsp;CPUs&nbsp;at&nbsp;regular&nbsp;intervals</span></p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All&nbsp;device-generated&nbsp;interrupts&nbsp;(MMIO,&nbsp;etc)&nbsp;are&nbsp;connected&nbsp;to&nbsp;InterruptFabric,&nbsp;which&nbsp;posts&nbsp;them&nbsp;into&nbsp;the&nbsp;IRQController.</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>IRQController&nbsp;centrally&nbsp;manages&nbsp;all&nbsp;priorities&nbsp;(IPL),&nbsp;queues,&nbsp;and&nbsp;&nbsp;&nbsp;per-CPU&nbsp;interrupt&nbsp;pending&nbsp;bits.</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Inter-CPU&nbsp;IPIs&nbsp;are&nbsp;modeled&nbsp;as&nbsp;a&nbsp;signal:&nbsp;sigIPI()&nbsp;emitted&nbsp;from&nbsp;any&nbsp;CPU&nbsp;or&nbsp;MMIO&nbsp;logic,&nbsp;delivered&nbsp;directly&nbsp;(at&nbsp;IPL&nbsp;22)&nbsp;to&nbsp;the&nbsp;target&nbsp;AlphaCPU.</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_CodeExample" style="display:inline-block;width:13px;margin-left:-13px">o</span>AlphaCPU::handleInterrupt()&nbsp;and&nbsp;::handleIPI()&nbsp;execute&nbsp;PALcode&nbsp;interrupt&nbsp;vectoring&nbsp;per&nbsp;ASA&nbsp;(§6.5).</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Software&nbsp;and&nbsp;timer&nbsp;interrupts&nbsp;are&nbsp;posted&nbsp;by&nbsp;MMIO&nbsp;or&nbsp;PAL&nbsp;using&nbsp;the&nbsp;same&nbsp;wiring.</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Machine&nbsp;checks&nbsp;and&nbsp;power&nbsp;fail&nbsp;are&nbsp;posted&nbsp;at&nbsp;highest&nbsp;IPLs&nbsp;(30,&nbsp;31).</p>
+<p class="p_CodeExample" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_CodeExample" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All&nbsp;delivery&nbsp;to&nbsp;CPU&nbsp;happens&nbsp;by&nbsp;Qt&nbsp;signal/slot.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Legend:</strong></p>
+<p class="p_Normal"> [ ] &nbsp; = object/class/module</p>
+<p class="p_Normal"> ---&gt; &nbsp;= Qt signal/slot or direct API call</p>
+<p class="p_Normal"> PAL &nbsp; = entry to PAL handler (emulator models this in AlphaCPU/PAL subsystem)</p>
+<p class="p_Normal"> MMIO &nbsp;= any device mapped to memory I/O (e.g. SCSI, NIC, Timer)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">References:</span></p>
+<p class="p_Normal">- IRQController.h/.cpp &nbsp; &nbsp;[central arbiter, queue logic, IPI, stats]</p>
+<p class="p_Normal">- InterruptRequest.h &nbsp; &nbsp; &nbsp;[interrupt envelope, source/type]</p>
+<p class="p_Normal">- Alpha System Reference Manual II-A, §6.4, §6.5</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
 
 <!--ZOOMSTOP-->
 </div></div>

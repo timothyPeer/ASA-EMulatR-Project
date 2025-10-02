@@ -6,7 +6,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
-   <meta name="keywords" content="128-bit,16-bit,32-bit,64-bit,8-bit,double,double, dt_gfloat,double,dt_gfloat,dt_float,dt_float,dt_float,dt_float (double),dt_float.h,dt_float.h,dt_gfloat (VAX),dt_gfloat.h,dt_gfloat.h,dt_int128,dt_int128.h,dt_int128.h,dt_tfloat,dt_tfloat,dt_tfloat.h,dt_tfloat.h,endian-ness, datatype,float (S_Float),float VAX,g_float,h_float,int,Internal,longword,qfloat16,qint&lt;size&gt;,qint16,qint32,qint32,qint64,qint8,QString,qt-datatypes,QtEndian,QtEndian,QtGlobal,quadword,quint,quint&lt;size&gt;,quint16,quint32,quint32,quint64,quint64,quint8" />
+   <meta name="keywords" content="128-bit,128-bit floating point,128-bit integer,16-bit,32-bit,64-bit,64-bit floating point,8-bit,Alpha Architecture Reference Manual,Alpha AXP,Alpha System Architecture,AlphaEmulatr,AlphaFloatingPoint,architectural compliance,architectural fidelity,arithmetic checks,AVX,AVX2,BestPractices,bitfield alignment,canonical data types,chopped rounding,CVTTQ conversion,D_Float,data type conventions,DataTypeConversion,debug output,double,double, dt_gfloat,double,dt_gfloat,downcasting,dt_float,dt_float,dt_float,dt_float,dt_float (double),dt_float.h,dt_float.h,dt_float.h,dt_gfloat,dt_gfloat (VAX),dt_gfloat.h,dt_gfloat.h,dt_gfloat.h,dt_int128,dt_int128,dt_int128.h,dt_int128.h,dt_int128.h,dt_tfloat,dt_tfloat,dt_tfloat,dt_tfloat.h,dt_tfloat.h,dt_tfloat.h,endian safety,Endianness,endian-ness, datatype,explicit conversion,explicit widths,fitsIn64Bits,fixed-width integer,float (S_Float),float VAX,floating-point conversion,floating-point format,from* helpers,g_float,grain instruction,h_float,hardware acceleration,IEEE754,IEEE-754,int,Internal,logging,longword,memory operation,OpenVMS,operator overloads,performance optimization,precision safety,processor compliance,QDataStream,qfloat16,qfloat16,qint&lt;size&gt;,qint16,qint16,qint32,qint32,qint32,qint64,qint64,qint8,qint8,QString,QString,Qt data types,Qt Documentation,qt-datatypes,QtEndian,QtEndian,QtEndian,QtGlobal,QtTypeIntegration,quad precision,QuadPrecision,quadword,quint,quint&lt;size&gt;,quint16,quint16,quint32,quint32,quint32,quint64,quint64,quint64,quint8,quint8,QVariant,range safety,register operation,rounding mode,S_Float,safe conversion,serialization,SIMD,SSE4.1,SSE4_AVX_Optimization,static helper,storage safety,T_Float,to* helpers,toDouble,toVaxG,Tru64 UNIX,Tru64Support,truncation,type tagging,unified float,UnifiedFloat,upcasting,VAX,VAX G_Float,VAXGFloat,vectorized arithmetic" />
    <meta name="description" content="The ASA-EMulatR uses specialized floating-point classes to accurately represent all Alpha/VAX floating-point formats and provide safe conversions between them. &nbsp;dt_gfloat..." />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
@@ -139,9 +139,51 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Endian conversions (when mapping to memory or I/O) use QtEndian utilities (qToBigEndian, qFromBigEndian) to maintain architectural fidelity.</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Bitfields, masks, and direct memory operations prefer Qt types for compatibility with QDataStream and QVariant serialization.</p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal"><strong style="font-weight: bold;">TODO:  </strong> &nbsp;</p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Unify and Refactor All Datatypes in a 128-bit structure. </p>
-<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>As Qt does not support native <span class="f_CodeExample">int128__ </span>bit types. &nbsp;This unification extends the Qt 64-bit data type to 128-bit.</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Data Type Conversion / Truncation / Rounding:</strong></p>
+<p class="p_Normal">When performing arithmetic checks on Grain instructions, the ASA framework will check for SSE4 processor compliance and perform the arithmetic operation, or will revert to the slower C++ standard library. </p>
+<p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Type</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Use SSE4.1/AVX?</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Best Practice</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">float/double</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Yes</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Use SSE4.1 if available, fallback to C++ std library</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">dt_tfloat (quad)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">No</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Use portable C++ floor/ceil/cast</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">Performance TODO - </strong>Evaluate and add support for: </p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>AVX (Advanced Vector Extensions)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>AVX is an extension to the x86 instruction set architecture, introduced by Intel (and supported by AMD) CPUs.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>It provides 256-bit SIMD (Single Instruction, Multiple Data) registers and instructions, meaning it can process 8 floats or 4 doubles in parallel per instruction, improving performance for applications involving heavy math, scientific computing, or media processing.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>AVX introduced new instructions and registers (YMM registers, which are 256 bits wide vs. the 128-bit XMM of SSE/SSE2/SSE4.1).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>AVX2</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>AVX2 builds on AVX and adds even more instructions, particularly for integer operations (AVX1 only added floating-point).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Introduced in Intel's Haswell CPUs (circa 2013), AVX2 enables full 256-bit parallelism for integer math as well as floating point.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 26px; margin-left: 0;"><span class="f_Normal" style="font-family: 'Courier New';display:inline-block;width:13px;margin-left:-13px">o</span>Features include: gather instructions, FMA (fused multiply-add), and more.</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><strong style="font-weight: bold;">Implementation Guidance and Best Practices</strong></p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Always validate before downcasting from 128→64 bits.</p>

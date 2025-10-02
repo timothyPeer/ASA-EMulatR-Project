@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Introduction &gt; System Configuration &gt; Device Section</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="ASA Emulator Configuration Guide — [Device.*] Sections" />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "device-section-asa-emulatr.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Device Section</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?device-section-asa-emulatr.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      <a href="introduction.html">Introduction</a> &gt; System Configuration&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Device Section</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="property-and-setting-reference.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="uart-device-section-asa-emulatr.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ASA Emulator Configuration Guide — [Device.*] Sections</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Overview</p>
+<p class="p_Normal">-------------------------------------------------------------------------------</p>
+<p class="p_Normal">Each [Device.*] section describes a single virtual device on the Alpha system's I/O bus, mapping it to its logical position within the emulated system (PCI, SCSI, IDE, Ethernet, UART, etc.). This mirrors Alpha hardware, where devices are attached via a hierarchy of cabinets, drawers, hoses, buses, and slots (see ASA Vol. I/II and AlphaServer ES40/GS series docs).</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This section controls SCSI host adapters, disks/tapes, PCI cards, network interfaces, and UARTs. Proper device tree and bus nesting is essential for accurate OS probing, booting, and hardware emulation.</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;">Key Settings (with Minimums, Types, and Scale)</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<thead>
+<tr>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Key Name</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Type</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Scale</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Description / Example</strong></p>
+</th>
+<th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Minimum / Notes</strong></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">type</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Device type (&quot;SCSI&quot;, &quot;NIC&quot;, &quot;IDE&quot;, &quot;SCSI_DISK&quot;, &quot;IDE_DISK&quot;, &quot;SCSI_TAPE&quot;, &quot;UART&quot;, etc.)</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required; Must be one of supported types; see ASA platform documentation.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">controller_type</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Controller model (e.g., &quot;KZPBA&quot;, &quot;SYM53C875&quot;, &quot;DECchip 21143&quot;).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for controllers; Optional for disks/tapes.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">model</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Product or variant model (e.g., &quot;QLogic ISP1020&quot;, &quot;DE500&quot;).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Optional.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">description</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Human-readable description (e.g., &quot;Fast Ethernet&quot;, &quot;DAT Tape&quot;).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Optional; for documentation.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">parent</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Parent device's logical name (e.g., &quot;PKA0&quot; for disks/tapes).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for child devices (SCSI/IDE disks/tapes).</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">location</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Physical/virtual nesting, e.g., &quot;cab0/drw0/io0/hose0/bus2/slot1&quot;.</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required; reflects device tree; must match Alpha hardware topology.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">pci_bus</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">int</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Number</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">PCI bus number (e.g., 2).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for PCI devices; 0-based index.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">pci_slot</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">int</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Number</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">PCI slot number (e.g., 1).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for PCI devices; 0-based index.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">pci_function</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">int</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Number</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">PCI function number (e.g., 0).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Usually 0; multi-function cards may use 1–7.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">scsi_id</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">int</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Number</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">SCSI bus ID (e.g., 0–7).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for SCSI controllers/disks/tapes.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">unit</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">int</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Number</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Unit number on controller/bus (e.g., 0 for master, 1 for slave on IDE).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for disks/tapes.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">image</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Path</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Path to disk/tape image (e.g., &quot;dka0.vdisk&quot;, &quot;tape0.vtap&quot;).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for storage media; must exist at runtime.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">serial</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Serial number of device/media (e.g., &quot;ST136475LC&quot;).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Optional.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">mac_address</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">MAC address (for NICs) (e.g., &quot;00-68-EB-AA-9E-63&quot;).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required for NICs; must be unique.</p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">irq</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">string or int</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Text/Number</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">IRQ assignment (&quot;auto&quot; for emulator-assigned, or explicit number).</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Required; &quot;auto&quot; for typical usage.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;">Alpha Bus Nesting and Device Hierarchy</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">Alpha systems organize I/O with a deeply nested bus structure:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">cabinet (cabN) </p>
+<p class="p_Normal"> &nbsp;-&gt; drawer (drwN) </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; -&gt; io (ioN) </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt; hose (hoseN) </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -&gt; bus (busN) </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt; slot (slotN) </p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -&gt; function</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Each layer may contain multiple instances (e.g., multiple drawers or hoses).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Devices are attached at the appropriate slot/function on the bus, reflecting the &nbsp;physical layout.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>This model allows the emulator to match the device enumeration, boot ordering, &nbsp;and interrupt routing as seen on actual AlphaServer/GS/DS/AlphaStation platforms.</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;">Example Device Configurations</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;PCI&nbsp;SCSI&nbsp;Host&nbsp;Adapter&nbsp;in&nbsp;Drawer&nbsp;0,&nbsp;Hose&nbsp;0,&nbsp;Bus&nbsp;2,&nbsp;Slot&nbsp;1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.PKA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=SCSI</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">controller_type=KZPBA</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">model=QLogic&nbsp;ISP1020</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">location=cab0/drw0/io0/hose0/bus2/slot1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_bus=2</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_slot=1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_function=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">scsi_id=7</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=56</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;SCSI&nbsp;Disk&nbsp;on&nbsp;PKA0,&nbsp;ID&nbsp;0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.DKA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=SCSI_DISK</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">parent=PKA0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">scsi_id=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">unit=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">image=G:\SomeDir\PaDS20\dka0.vdisk</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">serial=ST136475LC</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=auto</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;PCI&nbsp;Ethernet&nbsp;Card&nbsp;(DE500)</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.EWA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=NIC</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">description=DE500&nbsp;Fast&nbsp;Ethernet</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">location=cab0/drw0/io0/hose0/bus1/slot1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_bus=1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_slot=1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_function=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">mac_address=00-68-EB-AA-9E-63</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=auto</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;SCSI&nbsp;Tape&nbsp;on&nbsp;PKA0,&nbsp;ID&nbsp;6</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.MKA600]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=SCSI_TAPE</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">parent=PKA0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">scsi_id=6</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">unit=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">image=G:\SomeDir\PaDS20\tape0.vtap</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">serial=EXABYTE</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=auto</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;IDE&nbsp;Controller</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.PQA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=IDE</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">description=ALi&nbsp;1553C&nbsp;Integrated&nbsp;IDE&nbsp;Controller</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">location=cab0/drw0/io0/hose0/bus15/slot0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_bus=15</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_slot=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">pci_function=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=auto</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;IDE&nbsp;Disk&nbsp;(unit&nbsp;0)&nbsp;on&nbsp;PQA0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.DQA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=IDE_DISK</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">parent=PQA0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">unit=0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">image=G:\SomeDir\PaDS20\dqa0.vdisk</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">serial=RD52-P3</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=auto</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">&nbsp;</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">;&nbsp;UART&nbsp;device&nbsp;mapped&nbsp;to&nbsp;COM1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">[Device.OPA0]</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">type=UART</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">location=cab0/drw0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">iface=com1</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">iface_port=1234</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">application=putty&nbsp;-load&nbsp;opa0</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">irq=auto</span></p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal"><strong style="font-weight: bold;">Alpha Architecture Context &amp; Best Practices</strong></p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Devices must be assigned to unique locations in the bus topology. Refer to your platform’s SRM or service manual for canonical layouts (ES40, DS20, GS1280).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Child devices (SCSI_DISK, SCSI_TAPE, IDE_DISK) must specify a valid parent controller (e.g., &quot;parent=PKA0&quot;).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>All devices must have a unique [Device.*] section key (e.g., PKA0, DKA0, EWA0).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The &quot;location&quot; field is crucial for proper OS enumeration and matches the DEC/Compaq numbering (cabN/drwN/ioN/hoseN/busN/slotN).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>SCSI IDs (0–7) and unit numbers must match controller type and OS expectations.</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">References:</span></p>
+<p class="p_Normal">- Alpha System Architecture (ASA), Vol. I/II, Ch. 9–12 (I/O, PCI, SCSI, Device Trees)</p>
+<p class="p_Normal">- AlphaServer ES40, GS1280, DS20 platform service manuals</p>
+<p class="p_Normal">- ASAHardwareConfig.h, ASAHardwareConfigLoader.h (project source)</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

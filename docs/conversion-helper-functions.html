@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <title>Appendix &gt; Conversion Helper Functions</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="generator" content="Help &amp; Manual" />
+   <meta name="keywords" content="" />
+   <meta name="description" content="Scope and goals &nbsp;This chapter standardizes how conversions set IEEE/VAX floating-point exception semantics, feed the emulator’s status/trap machinery, and surface rounding..." />
+   <link type="text/css" href="default.css" rel="stylesheet" />
+   <link type="text/css" href="custom.css" rel="stylesheet" />
+
+   <style TYPE="text/css" media="screen"> 
+      html, body { margin:0; 
+        padding:0; 
+        background: #ffffff; 
+      } 
+      div#printheader { display: none; }
+      #idheader { 
+        width:100%; 
+        min-height: 60px; 
+        padding: 0; 
+        margin: 0;
+        position: fixed;
+        top: 0;
+        background: #2C5D88;
+        z-index: 2;
+      } 
+      /* The "min-height" for "#idheader table" ensures that the (blue) header of the topic
+         has at least the same height as the header of the navigation panel left of it */
+      #idheader table { min-height: 59px;}             
+      #idheader h1 span { color: #FFF }     
+      #idnav {
+        text-align: right;
+        width: 126px;
+        vertical-align: middle;        
+      } 
+      #idnav a { text-decoration: none }
+      #idnav span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 4px;
+        background:url('hm_webhelp_buttons_grey.png') top left no-repeat;
+      } 
+      #idnav a span {
+        background-image:url('hm_webhelp_buttons_white.png');
+      } 
+      #idnav a span:hover {
+        background-image:url('hm_webhelp_buttons_orange.png');
+      } 
+      #idnav span.hmbtnprev { background-position: 0 -32px }
+      #idnav span.hmbtnnext { background-position: -24px -32px }
+      #idnav span.hmbtntop  { background-position: -48px -32px }
+      #idnav span.hmbtntoggle  { width: 20px; background-position: -70px -32px }
+      #idnav span.hmbtnprint  { background-position: -88px -32px }
+
+      #callout-table, #overview-table {display:block; position:relative; top:0; left:0;}
+      #callout-icon {display:block; position:absolute; top:-11px; left:-11px;}
+      #callout-icon-flag {display:block; position:absolute; top:-11px; left:-8px;}
+      #callout-table a {text-decoration: none; color: blue;}
+      #callout-table a:visited {text-decoration: none; color: blue;}
+      #overview-table a {text-decoration: none; color: black;}
+      #overview-table a:visited {text-decoration: none; color: black;}
+      #callout-table a:hover, #overview-table a:hover {text-decoration: underline;}       
+      p.help-url { margin: 20px 0 5px 0; text-align: center; }
+	  p.help-url a:link { font-size: 50%; text-decoration: none; color: black; }
+	  p.help-url a:visited { color: black; }
+	  p.help-url a:hover { font-size: 95%; text-decoration: underline; }
+      #switchtoggles { text-align: right; padding: 0 2px 0 0; font-size: 90%; } 
+      .sync-toc { color: #FFF; font-size: 8pt; font-weight: bold; display: none; }
+      .sync-toc a { color: #FFF; text-decoration: none; font-weight: bold;}
+      .sync-toc a:visited { color: #FFF; }
+      .sync-toc a:hover { text-decoration: underline; }
+	  a#printbuttonlink { cursor: pointer; }
+      a.hmanchor { display: inline-block; margin-top: -4em; padding-top: 4em; }  
+   </style>
+   <style TYPE="text/css" media="print">
+      div#idheader, img.dropdown-toggle-icon, p.help-url { display:none } 
+   </style>
+   
+   <script type="text/javascript" src="jquery.js"></script>
+   <script type="text/javascript" src="helpman_settings.js"></script>
+   <script type="text/javascript" src="helpman_topicinit.js"></script>
+
+   <script type="text/javascript">
+     HMSyncTOC("index.html", "conversion-helper-functions.html");
+   </script>
+   <script type="text/javascript" src="highlight.js"></script>
+   <script type="text/javascript">
+     $(document).ready(function(){highlight();});
+   </script>
+</head>
+<body>
+
+
+<div id="printheader"><h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Conversion Helper Functions</span></h1>
+</div>
+<div id="idheader">
+<div id="idheaderbg">
+<table style="width:100%;border:none;margin:0px;" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td class="topichead" style="text-align:left; vertical-align:middle">
+      <p class="sync-toc">&lt;&lt; <a rel="nofollow" href="index.html?conversion-helper-functions.html" target="_top">Click to Display Table of Contents</a> &gt;&gt;</p>
+      <p class="crumbs"><b>Navigation:</b>&nbsp;
+      
+      Appendix&nbsp;&gt;</p>
+   
+      <h1 class="p_Heading1" style="page-break-after: avoid;"><span class="f_Heading1">Conversion Helper Functions</span></h1>
+
+    </td>
+    <td class="topichead" id="idnav">
+      
+      <a href="interrupt-hander---best-practi.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
+      <a href="introduction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
+      <a href="conversion-function---resultbu.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      
+    </td>
+  </tr>  
+</table>
+</div>
+</div>  
+
+<div id="idcontent"><div id="innerdiv">
+<!-- Ask Internet Explorer 6.users to update their obsolete and dangerous browser --> 
+<!--[if lt IE 7]><div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div><![endif]-->
+
+<!--ZOOMRESTART-->
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Scope and goals</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">This chapter standardizes how conversions set IEEE/VAX floating-point exception semantics, feed the emulator’s status/trap machinery, and surface rounding results. The helpers are designed to be:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Deterministic and architecture-faithful</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Header-only, noexcept, and usable from instruction grains without allocations</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>FPCR-aware (rounding mode, trap enables, and status flags)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Suitable for both “check only” (flagging) and “compute &amp; pack” (produce final value) call sites</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The functions are organized around common Alpha/VAX conversion flows that occur in CVTxx instructions and in integer&lt;-&gt;FP boundaries. They compute a canonical result bundle that your instruction grains can consume to set flags, raise traps (if enabled), and write back the converted value.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Background: architectural rules that drive conversion</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Alpha AXP floating-point behavior is IEEE-754 conformant for S and T formats with Alpha-specific FPCR and exception semantics. VAX formats (notably G_float) follow VAX rules for exponent biasing, encoded fraction layout, reserved operands, and mapping to IEEE values during conversion.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Key behavioral anchors used by these helpers:</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="font-weight:bold;display:inline-block;width:20px;margin-left:-20px">1.</span><strong style="font-weight: bold;">Rounding modes</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>Alpha FPCR supports rounding modes compatible with IEEE roundTiesToEven and directed modes. For CVTxx conversions, honor the active FPCR rounding mode unless the instruction variant prescribes an override.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>ASA reference: Floating-Point Control Register (FPCR) — rounding mode field; FP exception model. See ASA Vol. I, Floating-Point Architecture sections (rounding and exceptions).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">2.</span><strong style="font-weight: bold;">Inexact, overflow, underflow, invalid</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>Conversions can set these flags. For example, FP-&gt;INT can be invalid (NaN, infinity, or magnitude out of range), and INT-&gt;FP can be inexact when the integer magnitude cannot be represented exactly in the destination FP format.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>// ASA reference: Exception flag behavior for conversions; integer conversion invalid rules; NaN propagation.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">3.</span><strong style="font-weight: bold;">NaN, Infinity, Zero, Subnormal handling</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>IEEE S/T: preserve NaN payload sign and quietness where required; infinities out of range for integer conversions set invalid; subnormals can trigger underflow/inexact.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>VAX G_float: “reserved operand” encodes exceptional value; map reserved operand to IEEE NaN on G-&gt;IEEE, and map IEEE NaN to a reasonable VAX reserved operand encoding on IEEE-&gt;G.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">c.</span>ASA reference: IEEE NaN/infinity mapping; VAX reserved operand rules (Digital/VAX FP specs).</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 20px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">4.</span><strong style="font-weight: bold;">VAX G_float particulars</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">a.</span>G_float: 64-bit, exponent bias 1024, different fraction bit ordering vs. IEEE double. Conversions must reorder bits, adjust bias, and detect reserved operands correctly.</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 40px; margin-left: 0;"><span class="f_Normal" style="display:inline-block;width:20px;margin-left:-20px">b.</span>VAX G_float definition: exponent bias, fraction layout, and reserved operand identification.</p>
+<p class="p_Normal">&nbsp;</p>
+<h3 class="p_Heading3" style="page-break-after: avoid;"><span class="f_Heading3">Summary</span></h3>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">The conversion helpers defined in this chapter give the emulator a single, consistent place to apply Alpha/VAX rules for rounding and exception classification across INT&lt;-&gt;FP and IEEE&lt;-&gt;VAX boundaries. Using these helpers from instruction grains ensures that exception flags and traps are set correctly, results are rounded as the ISA dictates, and special values (NaN, Inf, reserved operands) are handled faithfully.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_SeeAlso" style="page-break-after: avoid;"><span class="f_SeeAlso">See Also.</span></p>
+<p class="p_Normal"><a href="conversion-function---resultbu.html" class="topiclink">Conversion Function - ResultBundles</a> <a href="conversion-function---catalog.html" class="topiclink">Conversion Function - Catalog</a> <a href="conversion-function---header-s.html" class="topiclink">Conversion Function - Header Snippet</a> <a href="integration-helpers-conversionfunctions.html" class="topiclink">Integration Helpers</a> <a href="rounding-notes---conversion-fu.html" class="topiclink">Rounding Notes - Conversion Functions</a> <a href="integration-helpers-conversionfunctions.html" class="topiclink">Integration</a> <a href="nan-and-reserved-operand-conve.html" class="topiclink">Nan and Reserved Operand Conventions</a> <a href="usage-exampleconversionfunctions.html" class="topiclink">Usage Example</a></p>
+
+<!--ZOOMSTOP-->
+</div></div>
+<script type="text/javascript">
+
+
+
+function normHeaders() {
+ var topicHeadHeight =  $("#idheaderbg > table").first().height() + 1,
+	 $topicHeaderBox = $("#idheader"),
+	 $topicContentBox = $("#idcontent"),
+	 $navHeader = $("#navbar", parent.document),			 
+	$navBox = $("div#hmnavframe", parent.document),
+	 navHeaderHeight = $navHeader.height();
+ if (topicHeadHeight != navHeaderHeight) {
+	 $navHeader.css("height",topicHeadHeight + "px");
+	 $navBox.css("top", topicHeadHeight + "px");
+	 $topicHeaderBox.css("height", topicHeadHeight + "px");
+		if ($topicHeaderBox.css("position") == "fixed"){
+			$topicContentBox.css("margin-top", topicHeadHeight + "px");
+			}
+		}
+    }
+			 
+  $(document).ready(function(){
+    $(window).on('resize', function() {
+      var y = $('#idheader').height(); 
+      $('#idcontent').css('margin-top', y);
+      var par = window.parent;
+      if ($( par ).width() <= $( window ).width()+20) {
+        $('#idheader').css('position', 'relative');
+        $('#idcontent').css('margin-top', 0);
+        $('#idbacktotop').css('display', 'block');
+        $('.hmanchor').css('margin-top', -20);
+	$('.hmanchor').css('padding-top', 20);
+      }
+      else {
+        $('#idheader').css('position', 'fixed');
+        $('#idcontent').css('margin-top', $('#idheader').height());
+        $('#idbacktotop').css('display', 'none');
+        $('.hmanchor').css('margin-top', -y-20);
+		$('.hmanchor').css('padding-top', y+20);
+		$("div#hmsplitter", parent.document).css('width', '3px');
+      }
+	normHeaders();
+    });
+    
+	 $(window).resize(); //trigger event for initially small displays
+  });
+ 
+
+if ((!parent.hmNavigationFrame) && (parent.location) && (parent.location.href)) { $('.sync-toc').show();$('p.crumbs').hide();}
+
+</script>
+</body>
+</html>

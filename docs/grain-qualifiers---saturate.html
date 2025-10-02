@@ -114,7 +114,7 @@
       
       <a href="grain-exception-fixups.html" title="Previous Topic"><span class="hmbtnprev"></span></a>
       <a href="qualifiers-instruction.html" title="Parent Chapter"><span class="hmbtntop"></span></a>
-      <a href="instruction-memory-barriers.html" title="Next Topic"><span class="hmbtnnext"></span></a>
+      <a href="tableofoperationscvt.html" title="Next Topic"><span class="hmbtnnext"></span></a>
       
     </td>
   </tr>  
@@ -141,6 +141,29 @@
 <p class="p_Normal">D = Dynamic (use FPCR rounding mode)</p>
 <p class="p_Normal">M = Minus infinity (floor rounding)</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">/S - Software Completion</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Disables inexact exceptions</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Allows denormal results without trapping</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If overflow/underflow occurs, the OS trap handler fixes it in software</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>The instruction completes with a &quot;software-corrected&quot; result</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">/U - Underflow Enable</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Enables underflow trapping</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>If a denormal result occurs, trap immediately</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Requires checking the result after computation</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">/SUI - Software + Underflow + Inexact</strong></p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Combination of behaviors</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Complex trap enable/disable logic</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><strong style="font-weight: bold;">SSE4 Optimizations:</strong> <span style="font-size: 12px; font-family: 'Cascadia Mono'; color: #0000ff; background-color: #ffffff;">FPArithmetic::&nbsp;</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;====================&nbsp;FLOAT&nbsp;(Single-Precision)&nbsp;====================</span></p>
+<p class="p_CodeExample"><span class="f_CodeExample">//&nbsp;Handles&nbsp;/C,&nbsp;/M,&nbsp;/D,&nbsp;/P&nbsp;automatically&nbsp;via&nbsp;roundMode&nbsp;parameter</span></p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal"><span class="f_SeeAlso">See Also. </span> FP_SSE4_Arithmetic.h</p>
+<p class="p_Normal">&nbsp;</p>
+<hr style="height:1px; color:#000000; border-width:0; background-color:#000000;" /><p class="p_Normal">&nbsp;</p>
 <p class="p_Normal"><strong style="font-weight: bold;">Rounding Hierarchy:</strong> Only one rounding mode can be active:</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">If C is present → truncate</p>
@@ -158,7 +181,7 @@
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
-<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="border:none; border-spacing:0; border-collapse:collapse;">
+<div style="text-align: left; text-indent: 0; padding: 0 0 0 0; margin: 0 0 0 0;"><table style="width:100%; border:none; border-spacing:0; border-collapse:collapse;">
 <thead>
 <tr>
 <th style="vertical-align:top; background-color:#00FFFF; padding:0; border:solid thin #000000;" scope="col"><p class="p_Normal"><strong style="font-weight: bold;">Qualifier</strong></p>
@@ -242,7 +265,7 @@
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/C (Chopped/Truncate)</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">/C (Chopped/Truncate)</strong></p>
 </td>
 <td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Forces rounding mode to &quot;round toward zero&quot; (truncate) for this instruction only, overriding the FPCR dynamic rounding mode.</p>
 <p class="p_Normal">&nbsp;</p>
@@ -263,7 +286,7 @@
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/D (Dynamic)</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">/D (Dynamic)</strong></p>
 <p class="p_Normal">&nbsp;</p>
 </td>
 <td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Uses the current rounding mode specified in the FPCR register. This is typically the default behavior when no rounding qualifier is specified.</p>
@@ -283,7 +306,7 @@
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/M (Minus Infinity/Round Down)</p>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal"><strong style="font-weight: bold;">/M (Minus Infinity/Round Down)</strong></p>
 <p class="p_Normal">&nbsp;</p>
 </td>
 <td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">Behavior: Forces rounding mode to &quot;round toward minus infinity&quot; (floor) for this instruction only.</p>
@@ -449,6 +472,14 @@
 <td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">RoundingMode&nbsp;operationMode&nbsp;=&nbsp;RoundingMode::TOWARD_MINUS_INFINITY;&nbsp;&nbsp;//&nbsp;/M</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">double&nbsp;result&nbsp;=&nbsp;performOperation(srcA,&nbsp;srcB,&nbsp;operationMode);</span></p>
 <p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">//&nbsp;/SU&nbsp;underflow&nbsp;handling,&nbsp;/I&nbsp;inexact&nbsp;suppression</span></p>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_Normal">/P</p>
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><br />
+</td>
+<td style="vertical-align:top; padding:0; border:solid thin #000000;"><p class="p_CodeExample"><span class="f_CodeExample" style="font-size: 12px;">TODO</span></p>
 </td>
 </tr>
 </tbody>

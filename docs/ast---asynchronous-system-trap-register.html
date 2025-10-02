@@ -6,7 +6,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="generator" content="Help &amp; Manual" />
-   <meta name="keywords" content="Register, AST" />
+   <meta name="keywords" content="Asynchronous System Trap,I/O Delivery, Asynchronous,Register, AST,Scheduling, Process &amp; Threads,Signals, Delivery,Thread, Cancellation" />
    <meta name="description" content="An AST is a software-triggered interrupt delivered at a safe point in process execution, often used for signal delivery, software preemption, or deferred procedure calls. &nbsp;In..." />
    <link type="text/css" href="default.css" rel="stylesheet" />
    <link type="text/css" href="custom.css" rel="stylesheet" />
@@ -128,6 +128,24 @@
 
 <!--ZOOMRESTART-->
 <p class="p_Normal">An AST is a software-triggered interrupt delivered at a safe point in process execution, often used for signal delivery, software preemption, or deferred procedure calls. &nbsp;In Alpha AXP, ASTs allow the OS (or PALcode) to deliver events to user or kernel code asynchronously, but only when ASTs are “enabled” for the current processor mode.</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">ASTs are Alpha's mechanism for delivering asynchronous software notifications to processes, typically used by operating systems for:</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Signal delivery (UNIX signals)</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Thread cancellation</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Asynchronous I/O completion</p>
+<p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Process/thread scheduling events</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">struct ASTState {</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool kernelASTEnable;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool executiveASTEnable;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool supervisorASTEnable;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool userASTEnable;</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool kernelASTPending;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool executiveASTPending;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool supervisorASTPending;</p>
+<p class="p_Normal"> &nbsp; &nbsp;bool userASTPending;</p>
+<p class="p_Normal">};</p>
 
 <!--ZOOMSTOP-->
 </div></div>

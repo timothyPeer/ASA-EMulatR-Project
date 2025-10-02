@@ -129,6 +129,9 @@
 <!--ZOOMRESTART-->
 <p class="p_Normal">The `GrainResolver` is the **instruction dispatch registry and lookup engine** &nbsp;in the ASA-EMulatR. &nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">&nbsp;</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Maps raw decoded instruction opcodes &amp; function codes to their corresponding `InstructionGrain` objects, which implement the behavior of each Alpha AXP instruction (including standard, PALcode, and platform-specific grains).</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Provides a clean, efficient way to find the correct handler for a given instruction word during emulation.</p>
 <p class="p_Normal">&nbsp;</p>
@@ -144,15 +147,30 @@
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>No mutation after threads start</p>
 <p class="p_Normal" style="text-indent: 0; padding-left: 13px; margin-left: 0;"><span class="f_Normal" style="font-family: Arial,'Lucida Sans Unicode','Lucida Grande','Lucida Sans';display:inline-block;width:13px;margin-left:-13px">&#8226;</span>Destruction Saftey &lt;QGlobalStatic&gt;</p>
 <p class="p_Normal">&nbsp;</p>
+<p class="p_Normal">Aggressive speed for “hot” instructions (which are almost always re-used).</p>
+<p class="p_Normal">Bounded memory use: cold entries are trimmed automatically.</p>
+<p class="p_Normal">Preloading gives minimal first-use delay; pruning keeps memory from exploding.</p>
+<p class="p_Normal">Use QDateTime for wall-clock “last used.”</p>
+<p class="p_Normal">Or, for lock-free/pruner-free systems, use a generation/epoch counter.</p>
+<p class="p_Normal">Don’t try to prune during main instruction execution; use a dedicated thread or timer.</p>
+<p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">Boot Sequence: </p>
 <p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// Single-threaded boot:</p>
-<p class="p_Normal">auto&amp; gr = GrainResolver::instance();</p>
-<p class="p_Normal">gr.setSinglePlatform(ProcessorArchMode::Alpha); &nbsp; // choose EXACTLY one</p>
-<p class="p_Normal">gr.initialize(); &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// builds and freezes registry</p>
-<p class="p_Normal">&nbsp;</p>
-<p class="p_Normal">// Now start vCPUs; they may call resolve() concurrently, lock-free.</p>
-<p class="p_Normal">startAllVcpus();</p>
+<p class="p_Normal">// In main() or system initialization:</p>
+<p class="p_Normal">void initializeEmulator(ProcessorArchMode platform) {</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Set platform ONCE at boot</p>
+<p class="p_Normal"> &nbsp; &nbsp;GrainResolver::instance().setSinglePlatform(platform);</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Enable strict mode for VAX (no cross-platform fallbacks)</p>
+<p class="p_Normal"> &nbsp; &nbsp;if (platform == ProcessorArchMode::VAX) {</p>
+<p class="p_Normal"> &nbsp; &nbsp; &nbsp; &nbsp;GrainResolver::instance().setStrictPlatformMode(true);</p>
+<p class="p_Normal"> &nbsp; &nbsp;}</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Initialize grain registry</p>
+<p class="p_Normal"> &nbsp; &nbsp;GrainResolver::instance().initialize();</p>
+<p class="p_Normal"> &nbsp; &nbsp;</p>
+<p class="p_Normal"> &nbsp; &nbsp;// Now all CPUs will use the correct platform grains</p>
+<p class="p_Normal">}</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">&nbsp;</p>
 <p class="p_Normal">🧩 Responsibilities</p>
